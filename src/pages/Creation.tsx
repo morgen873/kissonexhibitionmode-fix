@@ -9,8 +9,9 @@ import NavigationControls from '@/components/creation/NavigationControls';
 import ControlsScreen from '@/components/creation/ControlsScreen';
 import TimelineScreen from '@/components/creation/TimelineScreen';
 import RecipeResultScreen from '@/components/creation/RecipeResultScreen';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Home } from 'lucide-react';
 import { useCreationForm } from '@/hooks/useCreationForm';
+import { Link } from "react-router-dom";
 
 const Creation = () => {
     const {
@@ -39,7 +40,11 @@ const Creation = () => {
     
     return (
         <div className={`min-h-screen bg-gradient-to-br ${theme.bg} text-white p-4 sm:p-6 md:p-8 flex items-center justify-center transition-all duration-500`}>
-            <Card className={`w-full ${recipeResult ? 'max-w-4xl' : 'max-w-2xl'} bg-black/30 backdrop-blur-xl border-2 border-white/20 shadow-2xl ${theme.cardShadow} transition-all duration-500`}>
+            <Card className={`relative w-full ${recipeResult ? 'max-w-4xl' : 'max-w-2xl'} bg-black/30 backdrop-blur-xl border-2 border-white/20 shadow-2xl ${theme.cardShadow} transition-all duration-500`}>
+                <Link to="/" className="absolute top-4 right-4 text-white/50 hover:text-white transition-colors z-20">
+                    <Home className="h-6 w-6" />
+                    <span className="sr-only">Home</span>
+                </Link>
                 <CardHeader>
                     <ProgressBar progress={progress} theme={theme} />
                     {!recipeResult && !isCreatingRecipe && (
