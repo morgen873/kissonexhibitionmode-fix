@@ -92,7 +92,7 @@ serve(async (req) => {
     // In a background step, generate and upload the image.
     // This uses a try/catch so that if image generation fails, the recipe is still returned.
     try {
-        const imagePrompt = `A photorealistic, gourmet food photography style image of a plate of "${recipeContent.title}". Description: ${recipeContent.description}. The dumplings have a shape of "${Object.values(payload.controls)[0]?.shape || 'classic'}". The overall mood should reflect the memory of: ${Object.values(payload.timeline)[0] || 'a cherished moment'}. The image should be vibrant, appetizing, and presented beautifully on a plate with a clean, slightly out-of-focus background.`;
+        const imagePrompt = `A holographic fan projection of a single dumpling: "${recipeContent.title}". The dumpling should be glowing with vivid, ethereal colors, floating against a pure pitch-black background. There should be no other objects, plates, or scenery. The focus is solely on the hyper-realistic, luminous dumpling. The dumpling's shape is "${Object.values(payload.controls)[0]?.shape || 'classic'}". For context, the dumpling is described as: ${recipeContent.description}.`;
         
         const imageResponse = await openai.images.generate({
             model: 'dall-e-3',
