@@ -51,3 +51,9 @@ export interface TimelineStep {
 }
 
 export type Step = QuestionStep | ExplanationStep | ControlsStep | TimelineStep;
+
+export interface RecipeResult {
+    name: string;
+    imageUrl: string;
+    qrData: string;
+}

@@ -2,12 +2,7 @@ import React from 'react';
 import { QRCodeSVG as QRCode } from 'qrcode.react';
 import { Button } from '@/components/ui/button';
 import { Printer, Save, Mail, RotateCcw } from 'lucide-react';
-
-interface RecipeResult {
-    name: string;
-    imageUrl: string;
-    qrData: string;
-}
+import { RecipeResult } from '@/types/creation';
 
 interface RecipeResultScreenProps {
     recipe: RecipeResult;
