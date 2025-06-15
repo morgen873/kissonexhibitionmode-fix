@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ChefHat, Heart, Sparkles, ArrowRight, Zap, Star } from "lucide-react";
@@ -28,34 +27,14 @@ const Index = () => {
 
       {/* Hero Section */}
       <div className="relative z-10">
-        <div className="container mx-auto px-6 py-20">
+        <div className="container mx-auto px-6 flex items-center justify-center" style={{minHeight: '80vh'}}>
           <div className="text-center max-w-6xl mx-auto">
-            {/* Main Title */}
-            <h1 className="text-7xl md:text-9xl font-black mb-8 leading-none tracking-tighter">
-              <div className="bg-gradient-to-r from-cyan-300 via-pink-300 to-yellow-300 bg-clip-text text-transparent drop-shadow-2xl animate-pulse">
-                KissOn
-              </div>
-            </h1>
-            
             {/* Tagline */}
             <div className="relative mb-12">
-              <p className="text-3xl md:text-5xl font-black bg-gradient-to-r from-green-300 to-blue-300 bg-clip-text text-transparent drop-shadow-lg animate-pulse">
+              <p className="text-5xl md:text-7xl font-black bg-gradient-to-r from-green-300 to-blue-300 bg-clip-text text-transparent drop-shadow-lg animate-pulse">
                 From Feeling To Filling
               </p>
             </div>
-            
-            {/* Neon CTA Button */}
-            <Button 
-              size="lg" 
-              className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 hover:from-pink-400 hover:via-purple-400 hover:to-cyan-400 text-white text-xl font-black px-12 py-8 rounded-full shadow-2xl hover:shadow-pink-500/25 transition-all duration-300 transform hover:scale-110 border-4 border-white/20 backdrop-blur-sm"
-              asChild
-            >
-              <Link to="/creation">
-                <Sparkles className="mr-3 h-6 w-6 animate-spin" />
-                START CREATING
-                <ArrowRight className="ml-3 h-6 w-6 animate-bounce" />
-              </Link>
-            </Button>
           </div>
         </div>
       </div>
