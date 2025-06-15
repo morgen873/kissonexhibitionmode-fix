@@ -12,7 +12,7 @@ import TimelineScreen from '@/components/creation/TimelineScreen';
 import RecipeResultScreen from '@/components/creation/RecipeResultScreen';
 import { Loader2 } from 'lucide-react';
 import { useCreationForm } from '@/hooks/useCreationForm';
-import LandingScreen from "@/components/creation/LandingScreen";
+import IntroFlow from "@/components/creation/IntroFlow";
 
 const Creation = () => {
     const {
@@ -38,7 +38,7 @@ const Creation = () => {
     const [hasStarted, setHasStarted] = useState(false);
 
     if (!hasStarted) {
-        return <LandingScreen onStart={() => setHasStarted(true)} />;
+        return <IntroFlow onComplete={() => setHasStarted(true)} />;
     }
 
     const progress = recipeResult ? 100 : ((currentStep + 1) / steps.length) * 100;
