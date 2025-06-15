@@ -39,4 +39,15 @@ export interface ControlsStep {
     };
 }
 
-export type Step = QuestionStep | ExplanationStep | ControlsStep;
+export interface TimelineStep {
+    type: 'timeline';
+    id: number;
+    title: string;
+    description: string;
+    options: {
+        title: string;
+        description: string;
+    }[];
+}
+
+export type Step = QuestionStep | ExplanationStep | ControlsStep | TimelineStep;

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { steps, stepThemes } from '@/data/creation';
-import { QuestionStep, ControlsStep } from '@/types/creation';
+import { QuestionStep, ControlsStep, TimelineStep } from '@/types/creation';
 import ProgressBar from '@/components/creation/ProgressBar';
 import ExplanationScreen from '@/components/creation/ExplanationScreen';
 import QuestionScreen from '@/components/creation/QuestionScreen';
 import NavigationControls from '@/components/creation/NavigationControls';
 import ControlsScreen from '@/components/creation/ControlsScreen';
+import TimelineScreen from '@/components/creation/TimelineScreen';
 
 const Creation = () => {
     const [currentStep, setCurrentStep] = useState(0);
@@ -33,7 +34,7 @@ const Creation = () => {
 
     const handleAnswerSelect = (optionTitle: string) => {
         const step = steps[currentStep];
-        if (step.type === 'question') {
+        if (step.type === 'question' || step.type === 'timeline') {
             setAnswers({ ...answers, [step.id]: optionTitle });
         }
     };
@@ -111,18 +112,28 @@ const Creation = () => {
     };
     
     const handleSubmit = () => {
-        const finalAnswersPayload = Object.entries(answers).reduce((acc, [stepId, answer]) => {
-            const step = steps.find(s => s.type === 'question' && s.id === Number(stepId)) as QuestionStep | undefined;
-            if (step && step.customOption && answer === step.customOption.title) {
-                acc[stepId] = customAnswers[Number(stepId)] || '';
-            } else {
-                acc[stepId] = answer;
+        const questionAnswers: { [key: string]: string } = {};
+        const timelineAnswers: { [key: string]: string } = {};
+
+        Object.entries(answers).forEach(([stepId, answer]) => {
+            const step = steps.find(s => 'id' in s && s.id === Number(stepId));
+            if (step) {
+                if (step.type === 'question') {
+                    const questionStep = step as QuestionStep;
+                    if (questionStep.customOption && answer === questionStep.customOption.title) {
+                        questionAnswers[stepId] = customAnswers[Number(stepId)] || '';
+                    } else {
+                        questionAnswers[stepId] = answer;
+                    }
+                } else if (step.type === 'timeline') {
+                    timelineAnswers[stepId] = answer;
+                }
             }
-            return acc;
-        }, {} as { [key: string]: string });
+        });
 
         const finalPayload = {
-            questions: finalAnswersPayload,
+            questions: questionAnswers,
+            timeline: timelineAnswers,
             controls: controlValues,
         };
 
@@ -142,6 +153,10 @@ const Creation = () => {
                 const customAnswer = customAnswers[currentStepData.id];
                 return !customAnswer || !customAnswer.trim();
             }
+        }
+        if (currentStepData.type === 'timeline') {
+            const answer = answers[currentStepData.id];
+            if (!answer) return true;
         }
         return false;
     })();
@@ -165,6 +180,13 @@ const Creation = () => {
                             handleAnswerSelect={handleAnswerSelect}
                             customAnswers={customAnswers}
                             handleCustomAnswerChange={handleCustomAnswerChange}
+                            theme={theme}
+                        />
+                    ) : currentStepData.type === 'timeline' ? (
+                        <TimelineScreen
+                            stepData={currentStepData as TimelineStep}
+                            selectedValue={answers[currentStepData.id] || ''}
+                            onSelect={handleAnswerSelect}
                             theme={theme}
                         />
                     ) : (currentStepData.type === 'controls' && controlValues[currentStepData.id]) ? (

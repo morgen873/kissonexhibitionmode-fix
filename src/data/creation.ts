@@ -71,6 +71,16 @@ export const stepThemes = [
         optionSelectedShadow: "shadow-emerald-400/30",
         optionHover: "hover:border-emerald-500",
         textAreaFocus: "focus:ring-emerald-500 focus:border-emerald-500",
+    },
+    { // Indigo theme for timeline step
+        bg: "from-indigo-900 via-purple-900 to-slate-800",
+        cardShadow: "shadow-indigo-500/20",
+        progress: "from-purple-500 to-indigo-500",
+        title: "from-indigo-300 via-purple-300 to-slate-300",
+        optionSelectedBorder: "border-indigo-400",
+        optionSelectedShadow: "shadow-indigo-400/30",
+        optionHover: "hover:border-purple-500",
+        textAreaFocus: "focus:ring-purple-500 focus:border-purple-500",
     }
 ];
 
@@ -164,5 +174,18 @@ export const steps: Step[] = [
                 defaultValue: "savory",
             },
         }
+    },
+    {
+        type: 'timeline' as const,
+        id: 5,
+        title: "Presentation and Final Emotion",
+        description: "Your dish is almost ready.\nIt has been created with memory, emotion, and care. If this dish could be served in a specific time period, when would that be?",
+        options: [
+            { title: "Distant Past", description: "Traditional recipes featuring ancestral techniques, heritage ingredients, and time-honored methods passed down through generations." },
+            { title: "Recent Past", description: "Classic approaches with familiar ingredients and established cooking methods, celebrating culinary traditions from the last century." },
+            { title: "Present Day", description: "Contemporary cooking balancing traditional techniques with modern innovations, using seasonally available ingredients." },
+            { title: "Near Future", description: "Forward-thinking recipes incorporating emerging techniques, sustainable practices, and novel ingredient combinations." },
+            { title: "Distant Future", description: "Experimental cuisine featuring innovative proteins, molecular gastronomy, cutting-edge techniques, and unexpected flavor pairings." }
+        ]
     }
 ];
