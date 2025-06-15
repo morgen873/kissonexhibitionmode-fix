@@ -1,0 +1,93 @@
+
+import { Step } from "@/types/creation";
+
+export const stepThemes = [
+    { // Original theme for step 0
+        bg: "from-purple-900 via-pink-900 to-orange-900",
+        cardShadow: "shadow-purple-500/20",
+        progress: "from-pink-500 to-cyan-500",
+        title: "from-cyan-300 via-pink-300 to-yellow-300",
+        optionSelectedBorder: "border-cyan-400",
+        optionSelectedShadow: "shadow-cyan-400/30",
+        optionHover: "hover:border-pink-500",
+        textAreaFocus: "focus:ring-pink-500 focus:border-pink-500",
+    },
+    { // Red theme for step 1
+        bg: "from-red-900 via-rose-900 to-orange-800",
+        cardShadow: "shadow-red-500/20",
+        progress: "from-rose-500 to-red-500",
+        title: "from-red-300 via-rose-300 to-orange-300",
+        optionSelectedBorder: "border-red-400",
+        optionSelectedShadow: "shadow-red-400/30",
+        optionHover: "hover:border-rose-500",
+        textAreaFocus: "focus:ring-rose-500 focus:border-rose-500",
+    },
+    { // Blue theme for step 2
+        bg: "from-blue-900 via-cyan-900 to-teal-800",
+        cardShadow: "shadow-blue-500/20",
+        progress: "from-cyan-500 to-blue-500",
+        title: "from-blue-300 via-cyan-300 to-teal-300",
+        optionSelectedBorder: "border-cyan-400",
+        optionSelectedShadow: "shadow-cyan-400/30",
+        optionHover: "hover:border-cyan-500",
+        textAreaFocus: "focus:ring-cyan-500 focus:border-cyan-500",
+    },
+    { // Orange theme for step 3
+        bg: "from-orange-900 via-amber-900 to-yellow-800",
+        cardShadow: "shadow-orange-500/20",
+        progress: "from-amber-500 to-orange-500",
+        title: "from-orange-300 via-amber-300 to-yellow-300",
+        optionSelectedBorder: "border-orange-400",
+        optionSelectedShadow: "shadow-orange-400/30",
+        optionHover: "hover:border-amber-500",
+        textAreaFocus: "focus:ring-amber-500 focus:border-amber-500",
+    }
+];
+
+export const steps: Step[] = [
+    {
+        type: 'explanation' as const,
+        title: "A Moment of Reflection",
+        description: "Before we start cooking, let's pause for a moment. Imagine you're standing in front of an empty table. You can choose any type of dumpling and any emotional connection."
+    },
+    {
+        type: 'question' as const,
+        id: 1,
+        question: "What kind of memory are you ready to transform into a recipe?",
+        options: [
+            { title: "A childhood memory", description: "Revisit the flavors and emotions of your early years." },
+            { title: "A feeling you want to cherish", description: "Preserve an emotion that brings you warmth." },
+            { title: "A profound emotional event", description: "Transform a meaningful life moment into taste." },
+            { title: "A story you'd like to pass on to someone", description: "Share wisdom or experience through flavor." },
+            { title: "Write your own memory", description: "Express your memory in your own words." },
+        ],
+        customOption: {
+            title: "Write your own memory",
+            placeholder: "Describe the memory that inspires your dumpling..."
+        }
+    },
+    {
+        type: 'explanation' as const,
+        title: "Preparing the Ingredients",
+        description: "You've chosen what we're going to cook together.\nNow it's time to prepare the ingredients that will give your story its flavors."
+    },
+    {
+        type: 'question' as const,
+        id: 2,
+        question: "What emotional ingredients are in your dumpling?",
+        options: [
+            { title: "Warmth", description: "A comforting and gentle feeling." },
+            { title: "Nostalgia", description: "A fond remembrance of the past." },
+            { title: "Adventure", description: "A thrilling sense of the unknown." },
+            { title: "Curiosity", description: "A desire to explore and understand." },
+            { title: "Bittersweet sadness", description: "A beautiful ache of what was." },
+            { title: "Silence", description: "A peaceful and contemplative state." },
+            { title: "Love", description: "A deep and affectionate connection." },
+            { title: "Add your own emotional ingredient", description: "Define a unique emotion for your recipe." },
+        ],
+        customOption: {
+            title: "Add your own emotional ingredient",
+            placeholder: "Enter an emotion not listed above..."
+        }
+    }
+];

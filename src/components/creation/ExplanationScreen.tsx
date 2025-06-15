@@ -1,0 +1,18 @@
+
+import React from 'react';
+
+interface ExplanationScreenProps {
+    description: string;
+}
+
+const ExplanationScreen: React.FC<ExplanationScreenProps> = ({ description }) => {
+    return (
+        <div className="text-center my-8">
+            <p className="text-lg text-white/80 leading-relaxed max-w-prose mx-auto whitespace-pre-line">
+                {description}
+            </p>
+        </div>
+    );
+};
+
+export default ExplanationScreen;
