@@ -67,8 +67,7 @@ serve(async (req) => {
 
     const recipeContent = JSON.parse(response.choices[0].message.content);
 
-    const imageUrl = '/placeholder.svg';
-
+    // Insert recipe first to get an ID, starting with a placeholder image
     const { data: newRecipe, error: insertError } = await supabaseAdmin
         .from('recipes')
         .insert({
@@ -77,13 +76,72 @@ serve(async (req) => {
             description: recipeContent.description,
             ingredients: recipeContent.ingredients,
             cooking_recipe: recipeContent.cooking_recipe,
-            image_url: imageUrl,
+            image_url: '/placeholder.svg',
         })
         .select()
         .single();
     
     if (insertError) {
+        console.error('Error inserting recipe:', insertError);
         throw insertError;
+    }
+
+    if (!newRecipe) {
+        throw new Error("Failed to create and retrieve recipe.");
+    }
+
+    // In a background step, generate and upload the image.
+    // This uses a try/catch so that if image generation fails, the recipe is still returned.
+    try {
+        const imagePrompt = `A photorealistic, gourmet food photography style image of a plate of "${recipeContent.title}". Description: ${recipeContent.description}. The dumplings have a shape of "${Object.values(payload.controls)[0]?.shape || 'classic'}". The overall mood should reflect the memory of: ${Object.values(payload.timeline)[0] || 'a cherished moment'}. The image should be vibrant, appetizing, and presented beautifully on a plate with a clean, slightly out-of-focus background.`;
+        
+        const imageResponse = await openai.images.generate({
+            model: 'dall-e-3',
+            prompt: imagePrompt,
+            n: 1,
+            size: '1024x1024',
+            response_format: 'b64_json',
+        });
+        
+        const imageB64 = imageResponse.data[0].b64_json;
+        if (imageB64) {
+            const imageBlob = await(await fetch(`data:image/png;base64,${imageB64}`)).blob();
+            const imagePath = `public/${newRecipe.id}.png`;
+
+            const { error: uploadError } = await supabaseAdmin.storage
+                .from('recipe_images')
+                .upload(imagePath, imageBlob, {
+                    contentType: 'image/png',
+                    upsert: true,
+                });
+
+            if (uploadError) {
+                console.error('Error uploading image:', uploadError);
+            } else {
+                const { data: urlData } = supabaseAdmin.storage
+                    .from('recipe_images')
+                    .getPublicUrl(imagePath);
+                
+                if (urlData.publicUrl) {
+                    // Update the recipe object that will be returned to the client
+                    newRecipe.image_url = urlData.publicUrl;
+                    
+                    // Asynchronously update the database record
+                    supabaseAdmin
+                        .from('recipes')
+                        .update({ image_url: urlData.publicUrl })
+                        .eq('id', newRecipe.id)
+                        .then(({ error: updateError }) => {
+                            if (updateError) {
+                                console.error('Error updating recipe with image URL:', updateError);
+                            }
+                        });
+                }
+            }
+        }
+    } catch (e) {
+        console.error("Error generating/uploading image:", e.message);
+        // Do not re-throw, let the response succeed with the placeholder image.
     }
 
     return new Response(JSON.stringify({ recipe: newRecipe }), {
