@@ -32,7 +32,7 @@ const IntroFlow = ({
                                 {step.title}
                             </p>
                         </div>
-                        <p className="text-xl md:text-2xl text-white font-bold max-w-3xl mx-auto drop-shadow-lg mb-12">
+                        <p className="text-xl text-white font-bold max-w-3xl mx-auto drop-shadow-lg mb-12 md:text-xl">
                             {step.description}
                         </p>
                         <Button onClick={nextStep} size="lg" className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 hover:from-pink-400 hover:via-purple-400 hover:to-cyan-400 text-white font-bold shadow-lg hover:shadow-pink-500/25 transition-all duration-300 transform hover:scale-105 border-2 border-white/20 backdrop-blur-sm px-10 py-6 text-2xl rounded-2xl bg-inherit">
