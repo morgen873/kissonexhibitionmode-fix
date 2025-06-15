@@ -1,4 +1,3 @@
-
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { corsHeaders } from '../_shared/cors.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
@@ -99,7 +98,14 @@ serve(async (req) => {
     // In a background step, generate and upload the image.
     // This uses a try/catch so that if image generation fails, the recipe is still returned.
     try {
-        const imagePrompt = `A holographic fan projection of a single dumpling: "${recipeContent.title}". The dumpling should be glowing with vivid, ethereal colors, floating against a pure pitch-black background. There should be no other objects, plates, or scenery. The focus is solely on the hyper-realistic, luminous dumpling. The dumpling's shape is "${Object.values(payload.controls)[0]?.shape || 'classic'}". For context, the dumpling is described as: ${recipeContent.description}.`;
+        const imagePrompt = `A photorealistic, high-end food photography image of a single, unique dumpling.
+**Background:** The dumpling must be presented against a completely black, non-reflective, solid background. There should be absolutely no other objects, props, or scenery.
+**Subject:** The focus is a single, perfect dumpling.
+- **Title:** The dumpling is called: "${recipeContent.title}".
+- **Shape:** The dumpling's shape is explicitly "${Object.values(payload.controls)[0]?.shape || 'classic'}". This shape is critical.
+- **Appearance:** The dumpling must look delicious and edible. Its skin should have realistic food textures, like a delicate sheen from being steamed or a slight crispiness if fried. The colors, while potentially unusual due to the recipe's theme, must look like they belong to food ingredients. It should appear to be a real, tangible food item.
+- **Context:** For inspiration on its appearance, the dumpling is described as: ${recipeContent.description}.
+- **Style:** The image should be a dramatic, studio-lit macro shot. Avoid any digital, holographic, or non-food-related visual effects.`;
         
         const imageResponse = await openai.images.generate({
             model: 'dall-e-3',
