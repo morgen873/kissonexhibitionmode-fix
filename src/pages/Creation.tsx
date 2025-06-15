@@ -4,6 +4,29 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, ArrowRight, Zap } from 'lucide-react';
 
+const stepThemes = [
+    { // Original theme for step 0
+        bg: "from-purple-900 via-pink-900 to-orange-900",
+        cardShadow: "shadow-purple-500/20",
+        progress: "from-pink-500 to-cyan-500",
+        title: "from-cyan-300 via-pink-300 to-yellow-300",
+        optionSelectedBorder: "border-cyan-400",
+        optionSelectedShadow: "shadow-cyan-400/30",
+        optionHover: "hover:border-pink-500",
+        textAreaFocus: "focus:ring-pink-500 focus:border-pink-500",
+    },
+    { // Red theme for step 1
+        bg: "from-red-900 via-rose-900 to-orange-800",
+        cardShadow: "shadow-red-500/20",
+        progress: "from-rose-500 to-red-500",
+        title: "from-red-300 via-rose-300 to-orange-300",
+        optionSelectedBorder: "border-red-400",
+        optionSelectedShadow: "shadow-red-400/30",
+        optionHover: "hover:border-rose-500",
+        textAreaFocus: "focus:ring-rose-500 focus:border-rose-500",
+    }
+];
+
 const steps = [
     {
         type: 'explanation' as const,
@@ -61,18 +84,19 @@ const Creation = () => {
 
     const progress = ((currentStep + 1) / steps.length) * 100;
     const currentStepData = steps[currentStep];
+    const theme = stepThemes[currentStep] || stepThemes[0]; // Fallback to the first theme
     const isNextDisabled = currentStepData.type === 'question' 
         ? !answers[currentStepData.id] || (answers[currentStepData.id] === 'Write your own memory' && !customMemory.trim())
         : false;
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-purple-900 via-pink-900 to-orange-900 text-white p-4 sm:p-6 md:p-8 flex items-center justify-center">
-            <Card className="w-full max-w-2xl bg-black/30 backdrop-blur-xl border-2 border-white/20 shadow-2xl shadow-purple-500/20">
+        <div className={`min-h-screen bg-gradient-to-br ${theme.bg} text-white p-4 sm:p-6 md:p-8 flex items-center justify-center transition-all duration-500`}>
+            <Card className={`w-full max-w-2xl bg-black/30 backdrop-blur-xl border-2 border-white/20 shadow-2xl ${theme.cardShadow} transition-all duration-500`}>
                 <CardHeader>
                     <div className="w-full bg-gray-700/50 rounded-full h-2.5 mb-4">
-                        <div className="bg-gradient-to-r from-pink-500 to-cyan-500 h-2.5 rounded-full transition-all duration-500" style={{ width: `${progress}%` }}></div>
+                        <div className={`bg-gradient-to-r ${theme.progress} h-2.5 rounded-full transition-all duration-500`} style={{ width: `${progress}%` }}></div>
                     </div>
-                    <CardTitle className="text-2xl md:text-3xl font-black text-center bg-gradient-to-r from-cyan-300 via-pink-300 to-yellow-300 bg-clip-text text-transparent drop-shadow-lg min-h-[100px] flex items-center justify-center">
+                    <CardTitle className={`text-2xl md:text-3xl font-black text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent drop-shadow-lg min-h-[100px] flex items-center justify-center transition-all duration-500`}>
                         {currentStepData.type === 'question' ? currentStepData.question : currentStepData.title}
                     </CardTitle>
                 </CardHeader>
@@ -93,8 +117,8 @@ const Creation = () => {
                                         className={`
                                             p-6 rounded-lg transition-all duration-300 h-full cursor-pointer
                                             ${answers[currentStepData.id] === option.title
-                                                ? 'bg-white/20 border-2 border-cyan-400 scale-105 shadow-lg shadow-cyan-400/30'
-                                                : 'bg-white/10 border-2 border-white/20 hover:border-pink-500'
+                                                ? `bg-white/20 border-2 ${theme.optionSelectedBorder} scale-105 shadow-lg ${theme.optionSelectedShadow}`
+                                                : `bg-white/10 border-2 border-white/20 ${theme.optionHover}`
                                             }
                                         `}
                                     >
@@ -111,7 +135,7 @@ const Creation = () => {
                                     <textarea
                                         id="custom-memory"
                                         rows={4}
-                                        className="w-full bg-white/10 border-white/20 rounded-lg p-2 text-white focus:ring-pink-500 focus:border-pink-500 block transition"
+                                        className={`w-full bg-white/10 border-white/20 rounded-lg p-2 text-white block transition ${theme.textAreaFocus}`}
                                         value={customMemory}
                                         onChange={(e) => setCustomMemory(e.target.value)}
                                         placeholder="Describe the memory that inspires your dumpling..."
