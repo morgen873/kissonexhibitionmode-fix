@@ -3,36 +3,32 @@ import { introSteps, IntroStepData } from '@/data/introSteps';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-
 interface IntroFlowProps {
-    onComplete: () => void;
+  onComplete: () => void;
 }
-
-const IntroFlow = ({ onComplete }: IntroFlowProps) => {
-    const [currentStep, setCurrentStep] = useState(0);
-    const stepData = introSteps[currentStep];
-
-    const nextStep = () => {
-        if (currentStep < introSteps.length - 1) {
-            setCurrentStep(currentStep + 1);
-        } else {
-            onComplete();
-        }
-    };
-
-    const prevStep = () => {
-        if (currentStep > 0) {
-            setCurrentStep(currentStep - 1);
-        }
-    };
-
-    const renderStepContent = (step: IntroStepData) => {
-        switch (step.type) {
-            case 'hero':
-                return (
-                    <div className="text-center max-w-6xl mx-auto">
+const IntroFlow = ({
+  onComplete
+}: IntroFlowProps) => {
+  const [currentStep, setCurrentStep] = useState(0);
+  const stepData = introSteps[currentStep];
+  const nextStep = () => {
+    if (currentStep < introSteps.length - 1) {
+      setCurrentStep(currentStep + 1);
+    } else {
+      onComplete();
+    }
+  };
+  const prevStep = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+  const renderStepContent = (step: IntroStepData) => {
+    switch (step.type) {
+      case 'hero':
+        return <div className="text-center max-w-6xl mx-auto">
                         <div className="relative z-20 mb-12 py-4">
-                            <p className="text-5xl md:text-7xl font-black bg-gradient-to-r from-green-300 to-blue-300 bg-clip-text text-transparent drop-shadow-lg animate-pulse leading-snug">
+                            <p className="text-5xl md:text-7xl font-black bg-gradient-to-r from-green-300 to-blue-300 bg-clip-text text-transparent drop-shadow-lg animate-pulse leading-snug py-0">
                                 {step.title}
                             </p>
                         </div>
@@ -43,12 +39,10 @@ const IntroFlow = ({ onComplete }: IntroFlowProps) => {
                             {step.buttonText}
                             <ArrowRight className="ml-3 h-6 w-6" />
                         </Button>
-                    </div>
-                );
-            case 'explanation':
-                const Icon = step.icon;
-                return (
-                    <Card className={`bg-transparent border-4 ${step.theme?.border} backdrop-blur-md transition-all duration-300 shadow-2xl ${step.theme?.shadow} w-full max-w-md`}>
+                    </div>;
+      case 'explanation':
+        const Icon = step.icon;
+        return <Card className={`bg-transparent border-4 ${step.theme?.border} backdrop-blur-md transition-all duration-300 shadow-2xl ${step.theme?.shadow} w-full max-w-md`}>
                         <CardContent className="p-10 text-center">
                             {Icon && <div className={`w-20 h-20 bg-gradient-to-r ${step.theme?.iconGradient} rounded-full flex items-center justify-center mx-auto mb-8`}>
                                 <Icon className="h-10 w-10 text-white" />
@@ -64,11 +58,9 @@ const IntroFlow = ({ onComplete }: IntroFlowProps) => {
                                 {step.description}
                             </p>
                         </CardContent>
-                    </Card>
-                );
-            case 'quote':
-                return (
-                     <div className="text-center max-w-4xl mx-auto">
+                    </Card>;
+      case 'quote':
+        return <div className="text-center max-w-4xl mx-auto">
                         <blockquote className="text-4xl md:text-6xl font-black leading-tight mb-8">
                             <span className="bg-gradient-to-r from-yellow-300 via-pink-300 to-cyan-300 bg-clip-text text-transparent drop-shadow-2xl">
                                 {step.title}
@@ -77,15 +69,12 @@ const IntroFlow = ({ onComplete }: IntroFlowProps) => {
                         <p className="text-2xl text-white font-black mb-12">
                             {step.description}
                         </p>
-                    </div>
-                );
-            default:
-                return null;
-        }
-    };
-
-    return (
-        <div className="min-h-screen bg-gradient-to-br from-purple-900 via-pink-900 to-orange-900 text-white flex flex-col items-center p-4 relative">
+                    </div>;
+      default:
+        return null;
+    }
+  };
+  return <div className="min-h-screen bg-gradient-to-br from-purple-900 via-pink-900 to-orange-900 text-white flex flex-col items-center p-4 relative">
             <div className="absolute inset-0 opacity-30 overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 animate-gradient"></div>
                 <div className="absolute top-20 left-20 w-40 h-40 bg-gradient-to-r from-yellow-400 to-pink-500 rounded-full blur-3xl animate-pulse"></div>
@@ -98,31 +87,25 @@ const IntroFlow = ({ onComplete }: IntroFlowProps) => {
                 {renderStepContent(stepData)}
             </main>
 
-            {stepData.type !== 'hero' && (
-                <div className="relative z-10 w-full max-w-2xl mt-8">
+            {stepData.type !== 'hero' && <div className="relative z-10 w-full max-w-2xl mt-8">
                     <div className="flex justify-between items-center">
                         <Button onClick={prevStep} variant="ghost" className="text-white hover:bg-white/10 disabled:opacity-50" disabled={currentStep === 0}>
                             <ArrowLeft className="mr-2" /> Back
                         </Button>
                         <div className="flex items-center space-x-2">
-                            {introSteps.slice(1, 4).map((_, index) => (
-                                <div key={index} className={`w-3 h-3 rounded-full transition-colors ${currentStep === index + 1 ? 'bg-white' : 'bg-white/30'}`} />
-                            ))}
+                            {introSteps.slice(1, 4).map((_, index) => <div key={index} className={`w-3 h-3 rounded-full transition-colors ${currentStep === index + 1 ? 'bg-white' : 'bg-white/30'}`} />)}
                         </div>
                         <Button onClick={nextStep} className="bg-gradient-to-r from-pink-500 to-purple-500 text-white">
                             {currentStep === introSteps.length - 1 ? stepData.buttonText : 'Next'} <ArrowRight className="ml-2" />
                         </Button>
                     </div>
-                </div>
-            )}
+                </div>}
             
             <footer className="relative z-10 bg-black/50 backdrop-blur-md text-white py-6 mt-8 w-full text-center border-t-2 border-white/20">
                 <p className="text-lg font-black">
                     A <span className="bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent mx-1">GRAD SCHOOL</span> PROJECT
                 </p>
             </footer>
-        </div>
-    );
+        </div>;
 };
-
 export default IntroFlow;
