@@ -3,6 +3,7 @@ import React from 'react';
 import { QRCodeSVG as QRCode } from 'qrcode.react';
 import { Button } from '@/components/ui/button';
 import { Printer, Save, Mail, RotateCcw } from 'lucide-react';
+import kissonLogo from '/kisson-logo.png';
 
 interface RecipeResult {
     name: string;
@@ -57,7 +58,7 @@ const RecipeResultScreen: React.FC<RecipeResultScreenProps> = ({ recipe, onReset
                           <QRCode value={recipe.qrData} size={200} />
                      </div>
                      <div style={{textAlign: 'center'}}>
-                         <img src="/kisson-logo.png" alt="KissOn Logo" style={{height: '1in', margin: '0 auto'}} />
+                         <img src={kissonLogo} alt="KissOn Logo" style={{height: '1in', margin: '0 auto'}} />
                      </div>
                  </div>
             </div>
@@ -78,7 +79,7 @@ const RecipeResultScreen: React.FC<RecipeResultScreenProps> = ({ recipe, onReset
                              <QRCode value={recipe.qrData} size={128} />
                         </div>
                         <div className="text-center">
-                            <img src="/kisson-logo.png" alt="KissOn Logo" className="h-8 mx-auto" />
+                            <img src={kissonLogo} alt="KissOn Logo" className="h-8 mx-auto" />
                         </div>
                     </div>
                 </div>
