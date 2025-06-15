@@ -3,6 +3,7 @@ import React from 'react';
 import { ControlsStep } from '@/types/creation';
 import Knob from '@/components/ui/Knob';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 
 interface ControlsScreenProps {
     stepData: ControlsStep;
@@ -10,10 +11,12 @@ interface ControlsScreenProps {
         temperature: number;
         shape: string;
         flavor: string;
+        enhancer: string;
     };
     onTemperatureChange: (value: number) => void;
     onShapeChange: (value: number) => void;
     onFlavorChange: (value: number) => void;
+    onEnhancerChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 const ControlsScreen: React.FC<ControlsScreenProps> = ({
@@ -22,6 +25,7 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
     onTemperatureChange,
     onShapeChange,
     onFlavorChange,
+    onEnhancerChange,
 }) => {
     const { controls } = stepData;
     const shapeIndex = controls.shape.options.indexOf(controlValues.shape);
@@ -70,6 +74,19 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
                     />
                     <span className="w-28 capitalize text-center p-2 rounded-md bg-black/20 font-mono">{controlValues.flavor}</span>
                 </div>
+            </div>
+
+            <div className="flex flex-col items-center gap-2 pt-4">
+                <Label htmlFor="enhancer" className="font-bold text-lg text-center">What spice or condiment would enhance this experience?</Label>
+                <p className="text-sm text-center text-white/70 max-w-md">Salt, pepper, cinnamon, honey... This will add the final touch of flavor to your memory recipe.</p>
+                <Textarea
+                    id="enhancer"
+                    value={controlValues.enhancer}
+                    onChange={onEnhancerChange}
+                    placeholder="e.g., A pinch of cinnamon"
+                    className="mt-2 w-full max-w-sm bg-black/20 border-white/20 text-white placeholder:text-white/50 focus:ring-cyan-500 focus:border-cyan-500"
+                    rows={2}
+                />
             </div>
         </div>
     );

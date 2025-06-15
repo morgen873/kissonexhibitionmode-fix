@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { steps, stepThemes } from '@/data/creation';
@@ -13,7 +12,7 @@ const Creation = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const [answers, setAnswers] = useState<{ [key: number]: string }>({});
     const [customAnswers, setCustomAnswers] = useState<{ [key: number]: string }>({});
-    const [controlValues, setControlValues] = useState<{ [key: number]: { temperature: number; shape: string; flavor: string; } }>({});
+    const [controlValues, setControlValues] = useState<{ [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } }>({});
 
     const currentStepData = steps[currentStep];
 
@@ -26,6 +25,7 @@ const Creation = () => {
                     temperature: controls.temperature.defaultValue,
                     shape: controls.shape.defaultValue,
                     flavor: controls.flavor.defaultValue,
+                    enhancer: '',
                 }
             }));
         }
@@ -45,6 +45,18 @@ const Creation = () => {
                 ...customAnswers,
                 [step.id]: e.target.value,
             });
+        }
+    };
+
+    const handleEnhancerChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        if (currentStepData.type === 'controls') {
+            setControlValues(prev => ({
+                ...prev,
+                [currentStepData.id]: {
+                    ...prev[currentStepData.id],
+                    enhancer: e.target.value
+                }
+            }));
         }
     };
 
@@ -162,6 +174,7 @@ const Creation = () => {
                             onTemperatureChange={handleTemperatureChange}
                             onShapeChange={handleShapeChange}
                             onFlavorChange={handleFlavorChange}
+                            onEnhancerChange={handleEnhancerChange}
                         />
                     ) : null}
                     <NavigationControls
