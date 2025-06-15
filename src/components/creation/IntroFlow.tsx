@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { introSteps, IntroStepData } from '@/data/introSteps';
 import { Card, CardContent } from '@/components/ui/card';
@@ -27,6 +28,7 @@ const IntroFlow = ({
     switch (step.type) {
       case 'hero':
         return <div className="text-center max-w-6xl mx-0 px-0 py-[17px] my-[19px] bg-inherit">
+                        <img src="/lovable-uploads/64d3de25-5e40-498e-8a21-28d15db9a050.png" alt="KissOn Logo" className="mx-auto mb-8 w-64 mix-blend-screen" />
                         <div className="relative z-20 mb-12 py-4">
                             <p className="text-5xl font-black bg-gradient-to-r from-green-300 to-blue-300 bg-clip-text text-transparent drop-shadow-lg animate-pulse leading-snug py-[5px] md:text-4xl">
                                 {step.title}
