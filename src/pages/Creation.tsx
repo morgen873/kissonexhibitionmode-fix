@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -54,15 +53,15 @@ const stepThemes = [
         optionHover: "hover:border-cyan-500",
         textAreaFocus: "focus:ring-cyan-500 focus:border-cyan-500",
     },
-    { // Green theme for step 3
-        bg: "from-green-900 via-emerald-900 to-teal-800",
-        cardShadow: "shadow-green-500/20",
-        progress: "from-emerald-500 to-green-500",
-        title: "from-green-300 via-emerald-300 to-teal-300",
-        optionSelectedBorder: "border-emerald-400",
-        optionSelectedShadow: "shadow-emerald-400/30",
-        optionHover: "hover:border-emerald-500",
-        textAreaFocus: "focus:ring-emerald-500 focus:border-emerald-500",
+    { // Orange theme for step 3
+        bg: "from-orange-900 via-amber-900 to-yellow-800",
+        cardShadow: "shadow-orange-500/20",
+        progress: "from-amber-500 to-orange-500",
+        title: "from-orange-300 via-amber-300 to-yellow-300",
+        optionSelectedBorder: "border-orange-400",
+        optionSelectedShadow: "shadow-orange-400/30",
+        optionHover: "hover:border-amber-500",
+        textAreaFocus: "focus:ring-amber-500 focus:border-amber-500",
     }
 ];
 
