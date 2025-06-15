@@ -1,3 +1,4 @@
+
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { corsHeaders } from '../_shared/cors.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
@@ -43,19 +44,25 @@ serve(async (req) => {
 
     const prompt = `
       You are a creative chef specializing in "Memory KissOn" dumplings. A user has provided the following inputs to create a unique recipe.
-      Based on these inputs, generate a dumpling recipe.
-      
+      Your task is to generate a dumpling recipe that meticulously incorporates all the user's choices.
+
       User Inputs:
       - Questions & Answers: ${JSON.stringify(payload.questions, null, 2)}
       - Timeline selection: ${JSON.stringify(payload.timeline, null, 2)}
       - Control settings: ${JSON.stringify(payload.controls, null, 2)}
 
+      **Crucial Instructions:**
+      The "Timeline selection" is the most important input. It defines the entire theme of the dumpling.
+      - If the timeline is futuristic (e.g., "Distant Future"), the recipe must be avant-garde. Use experimental ingredients like lab-grown proteins, nutrient pastes, or molecular gastronomy techniques. The description and title should sound futuristic.
+      - If the timeline is historical (e.g., "Ancient Past"), the recipe must be traditional, using ingredients and methods authentic to that period.
+      - All other inputs (questions, controls) should be interpreted through the lens of the selected timeline. For example, a "spicy" flavor in a futuristic context might mean using a synthetic capsaicin extract, while in a historical context it would be a specific type of chili pepper.
+
       Generate the following information in a JSON format. Do not include any text outside of the JSON object.
       The JSON object should have these exact keys: "title", "description", "ingredients", "cooking_recipe".
-      - "title": A creative and appealing name for the dumpling recipe.
-      - "description": A short, one-paragraph description of the dumplings, capturing their essence.
-      - "ingredients": A JSON object where keys are categories (e.g., "Dough", "Filling") and values are arrays of strings, with each string being an ingredient (e.g., "1 cup all-purpose flour").
-      - "cooking_recipe": A string containing numbered, step-by-step instructions for preparing and cooking the dumplings. Use \\n for newlines between steps.
+      - "title": A creative and appealing name for the dumpling recipe, fitting the timeline.
+      - "description": A short, one-paragraph description of the dumplings, capturing their essence and strongly reflecting the chosen timeline.
+      - "ingredients": A JSON object where keys are categories (e.g., "Dough", "Filling") and values are arrays of strings, with each string being an ingredient (e.g., "1 cup all-purpose flour"). The ingredients MUST match the timeline's theme.
+      - "cooking_recipe": A string containing numbered, step-by-step instructions for preparing and cooking the dumplings. The steps should also reflect the timeline. Use \\n for newlines between steps.
     `;
 
     const response = await openai.chat.completions.create({
