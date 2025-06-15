@@ -5,6 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Database } from '@/integrations/supabase/types';
 import { Loader2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import IngredientsList from '@/components/recipe/IngredientsList';
 
 type Recipe = Database['public']['Tables']['recipes']['Row'];
 
@@ -70,7 +71,7 @@ const RecipePage = () => {
                     </div>
                      <div>
                         <h3 className="text-2xl font-semibold mb-2 border-b-2 border-white/20 pb-2">Ingredients</h3>
-                        <pre className="text-white/80 bg-black/20 p-4 rounded-md whitespace-pre-wrap font-sans mt-4">{JSON.stringify(recipe.ingredients, null, 2)}</pre>
+                        <IngredientsList ingredients={recipe.ingredients} />
                     </div>
                     <div>
                         <h3 className="text-2xl font-semibold mb-2 border-b-2 border-white/20 pb-2">Cooking Instructions</h3>

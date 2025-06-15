@@ -1,4 +1,3 @@
-
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { corsHeaders } from '../_shared/cors.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
@@ -60,7 +59,7 @@ serve(async (req) => {
     `;
 
     const response = await openai.chat.completions.create({
-        model: 'gpt-4-turbo-preview',
+        model: 'gpt-4o-mini',
         messages: [{ role: 'user', content: prompt }],
         response_format: { type: 'json_object' },
     });
@@ -126,16 +125,15 @@ serve(async (req) => {
                     // Update the recipe object that will be returned to the client
                     newRecipe.image_url = urlData.publicUrl;
                     
-                    // Asynchronously update the database record
-                    supabaseAdmin
+                    // Update the database record and wait for it.
+                    const { error: updateError } = await supabaseAdmin
                         .from('recipes')
                         .update({ image_url: urlData.publicUrl })
-                        .eq('id', newRecipe.id)
-                        .then(({ error: updateError }) => {
-                            if (updateError) {
-                                console.error('Error updating recipe with image URL:', updateError);
-                            }
-                        });
+                        .eq('id', newRecipe.id);
+
+                    if (updateError) {
+                        console.error('Error updating recipe with image URL:', updateError);
+                    }
                 }
             }
         }
