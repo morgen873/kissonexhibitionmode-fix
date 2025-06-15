@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { QRCodeSVG as QRCode } from 'qrcode.react';
 import { Button } from '@/components/ui/button';
@@ -57,7 +56,7 @@ const RecipeResultScreen: React.FC<RecipeResultScreenProps> = ({ recipe, onReset
                           <QRCode value={recipe.qrData} size={200} />
                      </div>
                      <div style={{textAlign: 'center'}}>
-                         <img src="/lovable-uploads/64d3de25-5e40-498e-8a21-28d15db9a050.png" alt="" style={{height: '1in', margin: '0 auto'}} />
+                         <img src="/lovable-uploads/64d3de25-5e40-498e-8a21-28d15db9a050.png" alt="" style={{height: '1.2in', margin: '0 auto'}} />
                      </div>
                  </div>
             </div>
@@ -78,7 +77,7 @@ const RecipeResultScreen: React.FC<RecipeResultScreenProps> = ({ recipe, onReset
                              <QRCode value={recipe.qrData} size={128} />
                         </div>
                         <div className="text-center">
-                            <img src="/lovable-uploads/64d3de25-5e40-498e-8a21-28d15db9a050.png" alt="" className="h-8 mx-auto" />
+                            <img src="/lovable-uploads/64d3de25-5e40-498e-8a21-28d15db9a050.png" alt="" className="h-12 mx-auto" />
                         </div>
                     </div>
                 </div>
