@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { steps, stepThemes } from '@/data/creation';
@@ -47,39 +48,39 @@ const Creation = () => {
         }
     };
 
-    const handleTemperatureChange = (value: number[]) => {
+    const handleTemperatureChange = (value: number) => {
         if (currentStepData.type === 'controls') {
             setControlValues(prev => ({
                 ...prev,
                 [currentStepData.id]: {
                     ...prev[currentStepData.id],
-                    temperature: value[0]
+                    temperature: value
                 }
             }));
         }
     };
     
-    const handleShapeChange = (value: number[]) => {
+    const handleShapeChange = (value: number) => {
         if (currentStepData.type === 'controls') {
             const step = currentStepData as ControlsStep;
             setControlValues(prev => ({
                 ...prev,
                 [currentStepData.id]: {
                     ...prev[currentStepData.id],
-                    shape: step.controls.shape.options[value[0]]
+                    shape: step.controls.shape.options[value]
                 }
             }));
         }
     };
 
-    const handleFlavorChange = (value: number[]) => {
+    const handleFlavorChange = (value: number) => {
         if (currentStepData.type === 'controls') {
             const step = currentStepData as ControlsStep;
             setControlValues(prev => ({
                 ...prev,
                 [currentStepData.id]: {
                     ...prev[currentStepData.id],
-                    flavor: step.controls.flavor.options[value[0]]
+                    flavor: step.controls.flavor.options[value]
                 }
             }));
         }
