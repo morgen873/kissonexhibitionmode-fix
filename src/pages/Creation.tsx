@@ -1,4 +1,6 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
+import { useOutletContext } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { steps, stepThemes } from '@/data/creation';
 import { QuestionStep, ControlsStep, TimelineStep } from '@/types/creation';
@@ -12,6 +14,10 @@ import RecipeResultScreen from '@/components/creation/RecipeResultScreen';
 import { Loader2 } from 'lucide-react';
 import { useCreationForm } from '@/hooks/useCreationForm';
 import IntroFlow from "@/components/creation/IntroFlow";
+
+interface OutletContextType {
+    setHeaderVisible: (visible: boolean) => void;
+}
 
 const Creation = () => {
     const {
@@ -35,6 +41,18 @@ const Creation = () => {
         handleReset,
     } = useCreationForm();
     const [hasStarted, setHasStarted] = useState(false);
+    const { setHeaderVisible } = useOutletContext<OutletContextType>() || {};
+
+    useEffect(() => {
+        if (setHeaderVisible) {
+            setHeaderVisible(!hasStarted);
+        }
+        return () => {
+            if (setHeaderVisible) {
+                setHeaderVisible(true);
+            }
+        };
+    }, [hasStarted, setHeaderVisible]);
 
     if (!hasStarted) {
         return <IntroFlow onComplete={() => setHasStarted(true)} />;

@@ -1,14 +1,19 @@
 
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
+import { useState } from "react";
 
-const MainLayout = () => (
-    <div>
-        <Header />
-        <main>
-            <Outlet />
-        </main>
-    </div>
-);
+const MainLayout = () => {
+    const [headerVisible, setHeaderVisible] = useState(true);
+
+    return (
+        <div>
+            {headerVisible && <Header />}
+            <main>
+                <Outlet context={{ setHeaderVisible }} />
+            </main>
+        </div>
+    );
+};
 
 export default MainLayout;
