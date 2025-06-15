@@ -17,7 +17,7 @@ const NavigationControls: React.FC<NavigationControlsProps> = ({
   handleSubmit,
   isNextDisabled
 }) => {
-  return <div className="flex justify-between mt-8">
+  return <div className="flex justify-between mt-8 my-[30px]">
             <Button onClick={prevStep} disabled={currentStep === 0} variant="ghost" className="text-white hover:bg-white/10 disabled:opacity-50">
                 <ArrowLeft className="mr-2" /> Back
             </Button>
