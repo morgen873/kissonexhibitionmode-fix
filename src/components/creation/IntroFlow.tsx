@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { introSteps, IntroStepData } from '@/data/introSteps';
 import { Card, CardContent } from '@/components/ui/card';
@@ -33,7 +32,7 @@ const IntroFlow = ({ onComplete }: IntroFlowProps) => {
                 return (
                     <div className="text-center max-w-6xl mx-auto">
                         <div className="relative mb-12">
-                            <p className="text-5xl md:text-7xl font-black bg-gradient-to-r from-green-300 to-blue-300 bg-clip-text text-transparent drop-shadow-lg animate-pulse">
+                            <p className="text-5xl md:text-7xl font-black bg-gradient-to-r from-green-300 to-blue-300 bg-clip-text text-transparent drop-shadow-lg animate-pulse leading-snug">
                                 {step.title}
                             </p>
                         </div>
