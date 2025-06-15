@@ -1,4 +1,3 @@
-
 import { Step } from "@/types/creation";
 
 export const stepThemes = [
@@ -41,6 +40,26 @@ export const stepThemes = [
         optionSelectedShadow: "shadow-orange-400/30",
         optionHover: "hover:border-amber-500",
         textAreaFocus: "focus:ring-amber-500 focus:border-amber-500",
+    },
+    { // Yellow theme for new steps
+        bg: "from-yellow-900 via-amber-800 to-zinc-900",
+        cardShadow: "shadow-yellow-500/20",
+        progress: "from-amber-500 to-yellow-400",
+        title: "from-yellow-300 via-amber-200 to-slate-300",
+        optionSelectedBorder: "border-yellow-400",
+        optionSelectedShadow: "shadow-yellow-400/30",
+        optionHover: "hover:border-yellow-500",
+        textAreaFocus: "focus:ring-yellow-500 focus:border-yellow-500",
+    },
+    { // Same yellow theme for consistency
+        bg: "from-yellow-900 via-amber-800 to-zinc-900",
+        cardShadow: "shadow-yellow-500/20",
+        progress: "from-amber-500 to-yellow-400",
+        title: "from-yellow-300 via-amber-200 to-slate-300",
+        optionSelectedBorder: "border-yellow-400",
+        optionSelectedShadow: "shadow-yellow-400/30",
+        optionHover: "hover:border-yellow-500",
+        textAreaFocus: "focus:ring-yellow-500 focus:border-yellow-500",
     }
 ];
 
@@ -88,6 +107,29 @@ export const steps: Step[] = [
         customOption: {
             title: "Add your own emotional ingredient",
             placeholder: "Enter an emotion not listed above..."
+        }
+    },
+    {
+        type: 'explanation' as const,
+        title: "Cooking and Dedication",
+        description: "Your ingredients are ready. Now it's time to combine, season, and transform.\nThis step is not just about following instructions. It's about temperature, time, intention, and most importantly, who you choose to share it with.\nEvery gesture in this mixture carries the essence of that special person, pet, or soul who will receive this creation."
+    },
+    {
+        type: 'question' as const,
+        id: 3,
+        question: "Who would you like to dedicate this recipe to?",
+        options: [
+            { title: "To my grandmother", description: "For the warmth and wisdom she shared." },
+            { title: "To a love that is no longer here", description: "Cherishing a bond that transcends presence." },
+            { title: "To my past self", description: "Honoring the journey and growth you've experienced." },
+            { title: "To someone I haven't met yet", description: "An open invitation of flavor and kindness." },
+            { title: "To myself", description: "A delicious act of self-care and appreciation." },
+            { title: "To whoever comes next", description: "A welcoming taste for a future connection." },
+            { title: "Someone specific", description: "This will personalize your recipe with their special essence." }
+        ],
+        customOption: {
+            title: "Someone specific",
+            placeholder: "A name, pet, or someone special..."
         }
     }
 ];
