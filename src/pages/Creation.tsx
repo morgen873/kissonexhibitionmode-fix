@@ -10,6 +10,7 @@ import ControlsScreen from '@/components/creation/ControlsScreen';
 import TimelineScreen from '@/components/creation/TimelineScreen';
 import RecipeResultScreen from '@/components/creation/RecipeResultScreen';
 import { Loader2 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 interface RecipeResult {
     name: string;
@@ -150,18 +151,33 @@ const Creation = () => {
 
         console.log("Final payload:", finalPayload);
         
-        // This is where you'll call your API.
-        // For now, we simulate a delay and use mock data.
-        await new Promise(resolve => setTimeout(resolve, 3000));
+        try {
+            const { data, error } = await supabase.functions.invoke('generate-recipe', {
+                body: finalPayload,
+            });
 
-        const mockRecipe: RecipeResult = {
-            name: "Spicy Sichuan Wontons",
-            imageUrl: "/placeholder.svg", // Replace with actual image URL from API
-            qrData: "https://example.com/recipe/spicy-sichuan-wontons" // Replace with data for QR code
-        };
+            if (error) {
+                throw error;
+            }
 
-        setRecipeResult(mockRecipe);
-        setIsCreatingRecipe(false);
+            const newRecipe = data.recipe;
+
+            if (!newRecipe) {
+                throw new Error("Recipe generation failed. The function did not return a recipe.");
+            }
+
+            setRecipeResult({
+                name: newRecipe.title,
+                imageUrl: newRecipe.image_url || "/placeholder.svg",
+                qrData: `${window.location.origin}/recipe/${newRecipe.id}`
+            });
+
+        } catch (error) {
+            console.error('Error creating recipe:', error);
+            // In a real app, you'd show a user-facing error here.
+        } finally {
+            setIsCreatingRecipe(false);
+        }
     };
 
     const handleReset = () => {

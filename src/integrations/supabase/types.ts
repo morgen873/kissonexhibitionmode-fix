@@ -44,7 +44,7 @@ export type Database = {
           recipe_data: Json
           title: string
           updated_at: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           cooking_recipe?: string | null
@@ -56,7 +56,7 @@ export type Database = {
           recipe_data: Json
           title: string
           updated_at?: string
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           cooking_recipe?: string | null
@@ -68,7 +68,7 @@ export type Database = {
           recipe_data?: Json
           title?: string
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: []
       }
