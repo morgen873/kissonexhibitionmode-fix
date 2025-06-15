@@ -1,121 +1,178 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ChefHat, Heart, Sparkles, ArrowRight } from "lucide-react";
+import { ChefHat, Heart, Sparkles, ArrowRight, Zap, Star } from "lucide-react";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-pink-50 to-yellow-50">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-pink-900 to-orange-900 relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 animate-gradient"></div>
+        <div className="absolute top-20 left-20 w-40 h-40 bg-gradient-to-r from-yellow-400 to-pink-500 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-60 right-10 w-60 h-60 bg-gradient-to-r from-green-400 to-blue-500 rounded-full blur-3xl animate-bounce"></div>
+        <div className="absolute bottom-20 left-1/3 w-32 h-32 bg-gradient-to-r from-red-400 to-yellow-500 rounded-full blur-2xl animate-float"></div>
+        <div className="absolute top-1/2 right-1/4 w-48 h-48 bg-gradient-to-r from-indigo-400 to-purple-600 rounded-full blur-3xl animate-pulse"></div>
+      </div>
+
+      {/* Floating Geometric Shapes */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-32 left-16 w-8 h-8 bg-yellow-400 transform rotate-45 animate-spin"></div>
+        <div className="absolute top-48 right-32 w-6 h-16 bg-pink-400 rounded-full animate-bounce"></div>
+        <div className="absolute bottom-40 left-20 w-12 h-4 bg-cyan-400 animate-pulse"></div>
+        <div className="absolute top-2/3 right-16 w-10 h-10 border-4 border-green-400 rounded-full animate-spin"></div>
+        <Star className="absolute top-20 left-1/2 w-6 h-6 text-yellow-300 animate-pulse" />
+        <Zap className="absolute bottom-32 right-1/3 w-8 h-8 text-purple-300 animate-bounce" />
+      </div>
+
       {/* Hero Section */}
-      <div className="relative overflow-hidden">
-        {/* Decorative shapes */}
-        <div className="absolute top-10 left-10 w-20 h-20 bg-pink-300 rounded-full opacity-60 animate-pulse"></div>
-        <div className="absolute top-32 right-20 w-16 h-16 bg-yellow-300 rounded-full opacity-50 animate-bounce"></div>
-        <div className="absolute bottom-20 left-1/4 w-12 h-12 bg-orange-300 rounded-full opacity-70"></div>
-        
+      <div className="relative z-10">
         <div className="container mx-auto px-6 py-20">
-          <div className="text-center max-w-4xl mx-auto">
+          <div className="text-center max-w-6xl mx-auto">
             {/* Main Title */}
-            <h1 className="text-6xl md:text-8xl font-bold mb-6 leading-tight">
-              <span className="bg-gradient-to-r from-pink-500 via-orange-500 to-yellow-500 bg-clip-text text-transparent">
-                Flavor
-              </span>
-              <br />
-              <span className="text-gray-800">Memory</span>
-              <br />
-              <span className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 bg-clip-text text-transparent">
-                Forge
-              </span>
+            <h1 className="text-7xl md:text-9xl font-black mb-8 leading-none tracking-tighter">
+              <div className="bg-gradient-to-r from-cyan-300 via-pink-300 to-yellow-300 bg-clip-text text-transparent drop-shadow-2xl animate-pulse">
+                FLAVOR
+              </div>
+              <div className="bg-gradient-to-r from-lime-300 via-purple-300 to-red-300 bg-clip-text text-transparent drop-shadow-2xl transform -rotate-1">
+                MEMORY
+              </div>
+              <div className="bg-gradient-to-r from-orange-300 via-indigo-300 to-pink-300 bg-clip-text text-transparent drop-shadow-2xl transform rotate-1">
+                FORGE
+              </div>
             </h1>
             
-            {/* Subtitle */}
-            <p className="text-xl md:text-2xl text-gray-600 mb-8 font-medium">
-              Transform your memories and emotions into 
-              <span className="text-orange-500 font-bold"> delicious dumpling recipes</span>
-            </p>
+            {/* Glitch Effect Subtitle */}
+            <div className="relative mb-12">
+              <p className="text-2xl md:text-4xl font-black text-white mb-4 drop-shadow-lg">
+                TRANSFORM YOUR 
+                <span className="bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent mx-3">
+                  MEMORIES
+                </span>
+                INTO
+              </p>
+              <p className="text-3xl md:text-5xl font-black bg-gradient-to-r from-green-300 to-blue-300 bg-clip-text text-transparent drop-shadow-lg animate-pulse">
+                PSYCHEDELIC DUMPLINGS
+              </p>
+            </div>
             
-            {/* CTA Button */}
+            {/* Neon CTA Button */}
             <Button 
               size="lg" 
-              className="bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white text-lg px-8 py-6 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 hover:from-pink-400 hover:via-purple-400 hover:to-cyan-400 text-white text-xl font-black px-12 py-8 rounded-full shadow-2xl hover:shadow-pink-500/25 transition-all duration-300 transform hover:scale-110 border-4 border-white/20 backdrop-blur-sm"
             >
-              Start Creating Magic
-              <ArrowRight className="ml-2 h-5 w-5" />
+              <Sparkles className="mr-3 h-6 w-6 animate-spin" />
+              ENTER THE MATRIX
+              <ArrowRight className="ml-3 h-6 w-6 animate-bounce" />
             </Button>
           </div>
         </div>
       </div>
 
       {/* Features Section */}
-      <div className="container mx-auto px-6 py-16">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-800 mb-4">
-            How It <span className="text-pink-500">Works</span>
+      <div className="relative z-10 container mx-auto px-6 py-20">
+        <div className="text-center mb-16">
+          <h2 className="text-5xl md:text-7xl font-black mb-6">
+            <span className="bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent drop-shadow-lg">
+              HOW IT
+            </span>
+            <br />
+            <span className="bg-gradient-to-r from-cyan-300 to-purple-300 bg-clip-text text-transparent drop-shadow-lg">
+              WORKS
+            </span>
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Our AI transforms your personal stories into unique dumpling recipes that capture the essence of your memories
+          <p className="text-xl md:text-2xl text-white font-bold max-w-3xl mx-auto drop-shadow-lg">
+            Our AI TRANSCENDS REALITY to transform your consciousness into 
+            <span className="text-yellow-300 font-black"> FLAVOR DIMENSIONS</span>
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {/* Step 1 */}
-          <Card className="bg-white/70 backdrop-blur-sm border-2 border-pink-200 hover:border-pink-300 transition-all duration-300 hover:shadow-lg transform hover:-translate-y-2">
-            <CardContent className="p-8 text-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-pink-400 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Heart className="h-8 w-8 text-white" />
+        <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          {/* Step 1 - Radical Card */}
+          <Card className="bg-transparent border-4 border-pink-400/50 backdrop-blur-md hover:border-pink-300 transition-all duration-300 hover:shadow-2xl hover:shadow-pink-500/25 transform hover:-translate-y-4 hover:rotate-1">
+            <CardContent className="p-10 text-center">
+              <div className="w-20 h-20 bg-gradient-to-r from-pink-400 via-purple-500 to-cyan-400 rounded-full flex items-center justify-center mx-auto mb-8 animate-spin">
+                <Heart className="h-10 w-10 text-white animate-pulse" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">Share Your Story</h3>
-              <p className="text-gray-600">
-                Tell us about a memory, emotion, or experience that's meaningful to you
+              <h3 className="text-3xl font-black text-white mb-6 drop-shadow-lg">
+                DOWNLOAD YOUR
+                <br />
+                <span className="bg-gradient-to-r from-pink-300 to-yellow-300 bg-clip-text text-transparent">
+                  SOUL DATA
+                </span>
+              </h3>
+              <p className="text-white font-bold text-lg">
+                Upload your deepest memories and emotions into our QUANTUM FLAVOR ENGINE
               </p>
             </CardContent>
           </Card>
 
-          {/* Step 2 */}
-          <Card className="bg-white/70 backdrop-blur-sm border-2 border-orange-200 hover:border-orange-300 transition-all duration-300 hover:shadow-lg transform hover:-translate-y-2">
-            <CardContent className="p-8 text-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-orange-400 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Sparkles className="h-8 w-8 text-white" />
+          {/* Step 2 - AI Processing */}
+          <Card className="bg-transparent border-4 border-purple-400/50 backdrop-blur-md hover:border-purple-300 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/25 transform hover:-translate-y-4 hover:-rotate-1">
+            <CardContent className="p-10 text-center">
+              <div className="w-20 h-20 bg-gradient-to-r from-purple-400 via-indigo-500 to-pink-400 rounded-full flex items-center justify-center mx-auto mb-8 animate-pulse">
+                <Sparkles className="h-10 w-10 text-white animate-spin" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">AI Magic</h3>
-              <p className="text-gray-600">
-                Our AI analyzes your story and creates a unique dumpling recipe inspired by your emotions
+              <h3 className="text-3xl font-black text-white mb-6 drop-shadow-lg">
+                AI NEURAL
+                <br />
+                <span className="bg-gradient-to-r from-purple-300 to-cyan-300 bg-clip-text text-transparent">
+                  FUSION
+                </span>
+              </h3>
+              <p className="text-white font-bold text-lg">
+                Our AI DISSECTS your consciousness and reconstructs it as EDIBLE POETRY
               </p>
             </CardContent>
           </Card>
 
-          {/* Step 3 */}
-          <Card className="bg-white/70 backdrop-blur-sm border-2 border-yellow-200 hover:border-yellow-300 transition-all duration-300 hover:shadow-lg transform hover:-translate-y-2">
-            <CardContent className="p-8 text-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                <ChefHat className="h-8 w-8 text-white" />
+          {/* Step 3 - Creation */}
+          <Card className="bg-transparent border-4 border-cyan-400/50 backdrop-blur-md hover:border-cyan-300 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/25 transform hover:-translate-y-4 hover:rotate-1">
+            <CardContent className="p-10 text-center">
+              <div className="w-20 h-20 bg-gradient-to-r from-cyan-400 via-green-500 to-yellow-400 rounded-full flex items-center justify-center mx-auto mb-8 animate-bounce">
+                <ChefHat className="h-10 w-10 text-white animate-pulse" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">Cook & Remember</h3>
-              <p className="text-gray-600">
-                Follow your personalized recipe and create dumplings that taste like your memories
+              <h3 className="text-3xl font-black text-white mb-6 drop-shadow-lg">
+                MANIFEST
+                <br />
+                <span className="bg-gradient-to-r from-cyan-300 to-green-300 bg-clip-text text-transparent">
+                  REALITY
+                </span>
+              </h3>
+              <p className="text-white font-bold text-lg">
+                Cook your INTERDIMENSIONAL dumplings and taste your own EXISTENCE
               </p>
             </CardContent>
           </Card>
         </div>
       </div>
 
-      {/* Quote Section */}
-      <div className="bg-gradient-to-r from-pink-100 to-orange-100 py-16">
+      {/* Psychedelic Quote Section */}
+      <div className="relative z-10 bg-gradient-to-r from-indigo-900/80 via-purple-900/80 to-pink-900/80 backdrop-blur-md py-20 border-y-4 border-white/20">
         <div className="container mx-auto px-6 text-center">
-          <blockquote className="text-3xl md:text-4xl font-bold text-gray-800 max-w-4xl mx-auto leading-relaxed">
-            "Every dumpling tells a story, every bite holds a memory"
+          <blockquote className="text-4xl md:text-6xl font-black leading-tight max-w-6xl mx-auto mb-8">
+            <span className="bg-gradient-to-r from-yellow-300 via-pink-300 to-cyan-300 bg-clip-text text-transparent drop-shadow-2xl">
+              "EVERY DUMPLING IS A PORTAL,
+              <br />
+              EVERY BITE A TIME MACHINE"
+            </span>
           </blockquote>
-          <p className="text-lg text-gray-600 mt-4 font-medium">
-            - A Graduate Exhibition Experience
+          <p className="text-2xl text-white font-black">
+            - FROM THE <span className="text-yellow-300">FLAVOR MULTIVERSE</span>
           </p>
         </div>
       </div>
 
       {/* Footer */}
-      <div className="bg-gray-800 text-white py-8">
+      <div className="relative z-10 bg-black/50 backdrop-blur-md text-white py-12 border-t-4 border-white/20">
         <div className="container mx-auto px-6 text-center">
-          <p className="text-lg">
-            Created with ❤️ for the Graduate School Exhibition
+          <p className="text-xl font-black">
+            CREATED WITH 
+            <span className="text-pink-400 mx-2 text-2xl">⚡</span>
+            FOR THE GRAD SCHOOL 
+            <span className="bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent">
+              EXHIBITION
+            </span>
           </p>
         </div>
       </div>
