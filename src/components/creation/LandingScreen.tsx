@@ -1,11 +1,15 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ChefHat, Heart, Sparkles, ArrowRight, Zap, Star } from "lucide-react";
-import { Link } from "react-router-dom";
 
-const Index = () => {
+interface LandingScreenProps {
+  onStart: () => void;
+}
+
+const LandingScreen = ({ onStart }: LandingScreenProps) => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-pink-900 to-orange-900 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-pink-900 to-orange-900 relative overflow-hidden text-white">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 opacity-30">
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 animate-gradient"></div>
@@ -27,7 +31,7 @@ const Index = () => {
 
       {/* Hero Section */}
       <div className="relative z-10">
-        <div className="container mx-auto px-6 flex items-center justify-center" style={{minHeight: '80vh'}}>
+        <div className="container mx-auto px-6 flex flex-col items-center justify-center" style={{minHeight: '80vh', paddingTop: '10vh' }}>
           <div className="text-center max-w-6xl mx-auto">
             {/* Tagline */}
             <div className="relative mb-12">
@@ -35,6 +39,10 @@ const Index = () => {
                 From Feeling To Filling
               </p>
             </div>
+            <Button onClick={onStart} size="lg" className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 hover:from-pink-400 hover:via-purple-400 hover:to-cyan-400 text-white font-bold rounded-full shadow-lg hover:shadow-pink-500/25 transition-all duration-300 transform hover:scale-105 border-2 border-white/20 backdrop-blur-sm text-xl px-10 py-6">
+              Start The Experience
+              <ArrowRight className="ml-3 h-6 w-6" />
+            </Button>
           </div>
         </div>
       </div>
@@ -148,4 +156,5 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default LandingScreen;
+

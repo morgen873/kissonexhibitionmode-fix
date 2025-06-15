@@ -1,3 +1,5 @@
+
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { steps, stepThemes } from '@/data/creation';
 import { QuestionStep, ControlsStep, TimelineStep } from '@/types/creation';
@@ -10,6 +12,7 @@ import TimelineScreen from '@/components/creation/TimelineScreen';
 import RecipeResultScreen from '@/components/creation/RecipeResultScreen';
 import { Loader2 } from 'lucide-react';
 import { useCreationForm } from '@/hooks/useCreationForm';
+import LandingScreen from "@/components/creation/LandingScreen";
 
 const Creation = () => {
     const {
@@ -32,6 +35,11 @@ const Creation = () => {
         handleSubmit,
         handleReset,
     } = useCreationForm();
+    const [hasStarted, setHasStarted] = useState(false);
+
+    if (!hasStarted) {
+        return <LandingScreen onStart={() => setHasStarted(true)} />;
+    }
 
     const progress = recipeResult ? 100 : ((currentStep + 1) / steps.length) * 100;
     const theme = stepThemes[currentStep] || stepThemes[0];
