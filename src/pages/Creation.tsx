@@ -4,6 +4,25 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, ArrowRight, Zap } from 'lucide-react';
 
+interface QuestionStep {
+    type: 'question';
+    id: number;
+    question: string;
+    options: { title: string; description: string; }[];
+    customOption?: {
+        title: string;
+        placeholder: string;
+    };
+}
+
+interface ExplanationStep {
+    type: 'explanation';
+    title: string;
+    description: string;
+}
+
+type Step = QuestionStep | ExplanationStep;
+
 const stepThemes = [
     { // Original theme for step 0
         bg: "from-purple-900 via-pink-900 to-orange-900",
@@ -24,10 +43,30 @@ const stepThemes = [
         optionSelectedShadow: "shadow-red-400/30",
         optionHover: "hover:border-rose-500",
         textAreaFocus: "focus:ring-rose-500 focus:border-rose-500",
+    },
+    { // Blue theme for step 2
+        bg: "from-blue-900 via-cyan-900 to-teal-800",
+        cardShadow: "shadow-blue-500/20",
+        progress: "from-cyan-500 to-blue-500",
+        title: "from-blue-300 via-cyan-300 to-teal-300",
+        optionSelectedBorder: "border-cyan-400",
+        optionSelectedShadow: "shadow-cyan-400/30",
+        optionHover: "hover:border-cyan-500",
+        textAreaFocus: "focus:ring-cyan-500 focus:border-cyan-500",
+    },
+    { // Green theme for step 3
+        bg: "from-green-900 via-emerald-900 to-teal-800",
+        cardShadow: "shadow-green-500/20",
+        progress: "from-emerald-500 to-green-500",
+        title: "from-green-300 via-emerald-300 to-teal-300",
+        optionSelectedBorder: "border-emerald-400",
+        optionSelectedShadow: "shadow-emerald-400/30",
+        optionHover: "hover:border-emerald-500",
+        textAreaFocus: "focus:ring-emerald-500 focus:border-emerald-500",
     }
 ];
 
-const steps = [
+const steps: Step[] = [
     {
         type: 'explanation' as const,
         title: "A Moment of Reflection",
@@ -44,18 +83,56 @@ const steps = [
             { title: "A story you'd like to pass on to someone", description: "Share wisdom or experience through flavor." },
             { title: "Write your own memory", description: "Express your memory in your own words." },
         ],
+        customOption: {
+            title: "Write your own memory",
+            placeholder: "Describe the memory that inspires your dumpling..."
+        }
+    },
+    {
+        type: 'explanation' as const,
+        title: "Preparing the Ingredients",
+        description: "You've chosen what we're going to cook together.\nNow it's time to prepare the ingredients that will give your story its flavors."
+    },
+    {
+        type: 'question' as const,
+        id: 2,
+        question: "What emotional ingredients are in your dumpling?",
+        options: [
+            { title: "Warmth", description: "A comforting and gentle feeling." },
+            { title: "Nostalgia", description: "A fond remembrance of the past." },
+            { title: "Adventure", description: "A thrilling sense of the unknown." },
+            { title: "Curiosity", description: "A desire to explore and understand." },
+            { title: "Bittersweet sadness", description: "A beautiful ache of what was." },
+            { title: "Silence", description: "A peaceful and contemplative state." },
+            { title: "Love", description: "A deep and affectionate connection." },
+            { title: "Add your own emotional ingredient", description: "Define a unique emotion for your recipe." },
+        ],
+        customOption: {
+            title: "Add your own emotional ingredient",
+            placeholder: "Enter an emotion not listed above..."
+        }
     }
 ];
 
 const Creation = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const [answers, setAnswers] = useState<{ [key: number]: string }>({});
-    const [customMemory, setCustomMemory] = useState('');
+    const [customAnswers, setCustomAnswers] = useState<{ [key: number]: string }>({});
 
     const handleAnswerSelect = (optionTitle: string) => {
         const step = steps[currentStep];
         if (step.type === 'question') {
             setAnswers({ ...answers, [step.id]: optionTitle });
+        }
+    };
+
+    const handleCustomAnswerChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const step = steps[currentStep];
+        if (step.type === 'question') {
+            setCustomAnswers({
+                ...customAnswers,
+                [step.id]: e.target.value,
+            });
         }
     };
 
@@ -72,22 +149,37 @@ const Creation = () => {
     };
     
     const handleSubmit = () => {
-        const finalAnswers = { ...answers };
-        const currentStepData = steps[currentStep];
-        if (currentStepData.type === 'question' && answers[currentStepData.id] === 'Write your own memory' && customMemory) {
-            finalAnswers[currentStepData.id] = customMemory;
-        }
-        console.log("Final answers:", finalAnswers);
-        // Here we would call the AI to generate the recipe
+        const finalAnswersPayload = Object.entries(answers).reduce((acc, [stepId, answer]) => {
+            const step = steps.find(s => s.type === 'question' && s.id === Number(stepId)) as QuestionStep | undefined;
+            if (step && step.customOption && answer === step.customOption.title) {
+                acc[stepId] = customAnswers[Number(stepId)] || '';
+            } else {
+                acc[stepId] = answer;
+            }
+            return acc;
+        }, {} as { [key: string]: string });
+
+        console.log("Final answers:", finalAnswersPayload);
         alert("Recipe is being created with your answers!");
     };
 
     const progress = ((currentStep + 1) / steps.length) * 100;
     const currentStepData = steps[currentStep];
     const theme = stepThemes[currentStep] || stepThemes[0]; // Fallback to the first theme
-    const isNextDisabled = currentStepData.type === 'question' 
-        ? !answers[currentStepData.id] || (answers[currentStepData.id] === 'Write your own memory' && !customMemory.trim())
-        : false;
+    
+    const isNextDisabled = (() => {
+        if (currentStepData.type !== 'question') return false;
+
+        const answer = answers[currentStepData.id];
+        if (!answer) return true;
+
+        if (currentStepData.customOption && answer === currentStepData.customOption.title) {
+            const customAnswer = customAnswers[currentStepData.id];
+            return !customAnswer || !customAnswer.trim();
+        }
+
+        return false;
+    })();
 
     return (
         <div className={`min-h-screen bg-gradient-to-br ${theme.bg} text-white p-4 sm:p-6 md:p-8 flex items-center justify-center transition-all duration-500`}>
@@ -103,7 +195,7 @@ const Creation = () => {
                 <CardContent>
                     {currentStepData.type === 'explanation' ? (
                         <div className="text-center my-8">
-                            <p className="text-lg text-white/80 leading-relaxed max-w-prose mx-auto">
+                            <p className="text-lg text-white/80 leading-relaxed max-w-prose mx-auto whitespace-pre-line">
                                 {currentStepData.description}
                             </p>
                         </div>
@@ -127,18 +219,18 @@ const Creation = () => {
                                     </div>
                                 ))}
                             </div>
-                            {currentStepData.type === 'question' && answers[currentStepData.id] === 'Write your own memory' && (
+                            {currentStepData.type === 'question' && currentStepData.customOption && answers[currentStepData.id] === currentStepData.customOption.title && (
                                 <div className="my-4">
-                                    <label htmlFor="custom-memory" className="block text-sm font-medium text-white/80 mb-2">
-                                        Express your memory in your own words:
+                                    <label htmlFor="custom-answer" className="block text-sm font-medium text-white/80 mb-2">
+                                        {currentStepData.customOption.title}:
                                     </label>
                                     <textarea
-                                        id="custom-memory"
+                                        id="custom-answer"
                                         rows={4}
                                         className={`w-full bg-white/10 border-white/20 rounded-lg p-2 text-white block transition ${theme.textAreaFocus}`}
-                                        value={customMemory}
-                                        onChange={(e) => setCustomMemory(e.target.value)}
-                                        placeholder="Describe the memory that inspires your dumpling..."
+                                        value={customAnswers[currentStepData.id] || ''}
+                                        onChange={handleCustomAnswerChange}
+                                        placeholder={currentStepData.customOption.placeholder}
                                     />
                                 </div>
                             )}
