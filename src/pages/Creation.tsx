@@ -8,12 +8,22 @@ import QuestionScreen from '@/components/creation/QuestionScreen';
 import NavigationControls from '@/components/creation/NavigationControls';
 import ControlsScreen from '@/components/creation/ControlsScreen';
 import TimelineScreen from '@/components/creation/TimelineScreen';
+import RecipeResultScreen from '@/components/creation/RecipeResultScreen';
+import { Loader2 } from 'lucide-react';
+
+interface RecipeResult {
+    name: string;
+    imageUrl: string;
+    qrData: string;
+}
 
 const Creation = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const [answers, setAnswers] = useState<{ [key: number]: string }>({});
     const [customAnswers, setCustomAnswers] = useState<{ [key: number]: string }>({});
     const [controlValues, setControlValues] = useState<{ [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } }>({});
+    const [recipeResult, setRecipeResult] = useState<RecipeResult | null>(null);
+    const [isCreatingRecipe, setIsCreatingRecipe] = useState(false);
 
     const currentStepData = steps[currentStep];
 
@@ -111,8 +121,9 @@ const Creation = () => {
         }
     };
     
-    const handleSubmit = () => {
-        const questionAnswers: { [key: string]: string } = {};
+    const handleSubmit = async () => {
+        setIsCreatingRecipe(true);
+        const questionAnswers: { [key:string]: string } = {};
         const timelineAnswers: { [key: string]: string } = {};
 
         Object.entries(answers).forEach(([stepId, answer]) => {
@@ -138,10 +149,31 @@ const Creation = () => {
         };
 
         console.log("Final payload:", finalPayload);
-        alert("Recipe is being created with your answers!");
+        
+        // This is where you'll call your API.
+        // For now, we simulate a delay and use mock data.
+        await new Promise(resolve => setTimeout(resolve, 3000));
+
+        const mockRecipe: RecipeResult = {
+            name: "Spicy Sichuan Wontons",
+            imageUrl: "/placeholder.svg", // Replace with actual image URL from API
+            qrData: "https://example.com/recipe/spicy-sichuan-wontons" // Replace with data for QR code
+        };
+
+        setRecipeResult(mockRecipe);
+        setIsCreatingRecipe(false);
     };
 
-    const progress = ((currentStep + 1) / steps.length) * 100;
+    const handleReset = () => {
+        setCurrentStep(0);
+        setAnswers({});
+        setCustomAnswers({});
+        setControlValues({});
+        setRecipeResult(null);
+        setIsCreatingRecipe(false);
+    };
+
+    const progress = recipeResult ? 100 : ((currentStep + 1) / steps.length) * 100;
     const theme = stepThemes[currentStep] || stepThemes[0];
     
     const isNextDisabled = (() => {
@@ -163,50 +195,63 @@ const Creation = () => {
 
     return (
         <div className={`min-h-screen bg-gradient-to-br ${theme.bg} text-white p-4 sm:p-6 md:p-8 flex items-center justify-center transition-all duration-500`}>
-            <Card className={`w-full max-w-2xl bg-black/30 backdrop-blur-xl border-2 border-white/20 shadow-2xl ${theme.cardShadow} transition-all duration-500`}>
+            <Card className={`w-full ${recipeResult ? 'max-w-4xl' : 'max-w-2xl'} bg-black/30 backdrop-blur-xl border-2 border-white/20 shadow-2xl ${theme.cardShadow} transition-all duration-500`}>
                 <CardHeader>
                     <ProgressBar progress={progress} theme={theme} />
-                    <CardTitle className={`text-2xl md:text-3xl font-black text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent drop-shadow-lg min-h-[100px] flex items-center justify-center transition-all duration-500`}>
-                        {currentStepData.type === 'question' ? currentStepData.question : currentStepData.title}
-                    </CardTitle>
+                    {!recipeResult && !isCreatingRecipe && (
+                        <CardTitle className={`text-2xl md:text-3xl font-black text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent drop-shadow-lg min-h-[100px] flex items-center justify-center transition-all duration-500`}>
+                            {currentStepData.type === 'question' ? currentStepData.question : currentStepData.title}
+                        </CardTitle>
+                    )}
                 </CardHeader>
                 <CardContent>
-                    {currentStepData.type === 'explanation' ? (
-                        <ExplanationScreen description={currentStepData.description} />
-                    ) : currentStepData.type === 'question' ? (
-                        <QuestionScreen
-                            stepData={currentStepData as QuestionStep}
-                            answers={answers}
-                            handleAnswerSelect={handleAnswerSelect}
-                            customAnswers={customAnswers}
-                            handleCustomAnswerChange={handleCustomAnswerChange}
-                            theme={theme}
-                        />
-                    ) : currentStepData.type === 'timeline' ? (
-                        <TimelineScreen
-                            stepData={currentStepData as TimelineStep}
-                            selectedValue={answers[currentStepData.id] || ''}
-                            onSelect={handleAnswerSelect}
-                            theme={theme}
-                        />
-                    ) : (currentStepData.type === 'controls' && controlValues[currentStepData.id]) ? (
-                        <ControlsScreen
-                            stepData={currentStepData as ControlsStep}
-                            controlValues={controlValues[currentStepData.id]}
-                            onTemperatureChange={handleTemperatureChange}
-                            onShapeChange={handleShapeChange}
-                            onFlavorChange={handleFlavorChange}
-                            onEnhancerChange={handleEnhancerChange}
-                        />
-                    ) : null}
-                    <NavigationControls
-                        currentStep={currentStep}
-                        stepsLength={steps.length}
-                        prevStep={prevStep}
-                        nextStep={nextStep}
-                        handleSubmit={handleSubmit}
-                        isNextDisabled={isNextDisabled}
-                    />
+                    {isCreatingRecipe ? (
+                        <div className="flex flex-col items-center justify-center h-96 space-y-4">
+                            <Loader2 className="h-16 w-16 animate-spin text-white" />
+                            <p className="text-2xl font-semibold text-white/80">Creating your recipe...</p>
+                        </div>
+                    ) : recipeResult ? (
+                        <RecipeResultScreen recipe={recipeResult} onReset={handleReset} />
+                    ) : (
+                        <>
+                            {currentStepData.type === 'explanation' ? (
+                                <ExplanationScreen description={currentStepData.description} />
+                            ) : currentStepData.type === 'question' ? (
+                                <QuestionScreen
+                                    stepData={currentStepData as QuestionStep}
+                                    answers={answers}
+                                    handleAnswerSelect={handleAnswerSelect}
+                                    customAnswers={customAnswers}
+                                    handleCustomAnswerChange={handleCustomAnswerChange}
+                                    theme={theme}
+                                />
+                            ) : currentStepData.type === 'timeline' ? (
+                                <TimelineScreen
+                                    stepData={currentStepData as TimelineStep}
+                                    selectedValue={answers[currentStepData.id] || ''}
+                                    onSelect={handleAnswerSelect}
+                                    theme={theme}
+                                />
+                            ) : (currentStepData.type === 'controls' && controlValues[currentStepData.id]) ? (
+                                <ControlsScreen
+                                    stepData={currentStepData as ControlsStep}
+                                    controlValues={controlValues[currentStepData.id]}
+                                    onTemperatureChange={handleTemperatureChange}
+                                    onShapeChange={handleShapeChange}
+                                    onFlavorChange={handleFlavorChange}
+                                    onEnhancerChange={handleEnhancerChange}
+                                />
+                            ) : null}
+                            <NavigationControls
+                                currentStep={currentStep}
+                                stepsLength={steps.length}
+                                prevStep={prevStep}
+                                nextStep={nextStep}
+                                handleSubmit={handleSubmit}
+                                isNextDisabled={isNextDisabled}
+                            />
+                        </>
+                    )}
                 </CardContent>
             </Card>
         </div>
