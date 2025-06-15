@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -86,21 +87,20 @@ const Creation = () => {
                         <>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-8">
                                 {currentStepData.options.map((option) => (
-                                    <Button
+                                    <div
                                         key={option.title}
                                         onClick={() => handleAnswerSelect(option.title)}
-                                        variant={answers[currentStepData.id] === option.title ? "default" : "outline"}
                                         className={`
-                                            text-left p-6 rounded-lg transition-all duration-300 h-full flex flex-col justify-between items-start
+                                            p-6 rounded-lg transition-all duration-300 h-full cursor-pointer
                                             ${answers[currentStepData.id] === option.title
-                                                ? 'bg-gradient-to-r from-pink-500 to-cyan-500 text-white border-transparent scale-105 shadow-lg shadow-pink-500/30'
-                                                : 'bg-white/10 border-white/20 hover:bg-white/20 text-white'
+                                                ? 'bg-white/20 border-2 border-cyan-400 scale-105 shadow-lg shadow-cyan-400/30'
+                                                : 'bg-white/10 border-2 border-white/20 hover:border-pink-500'
                                             }
                                         `}
                                     >
-                                        <span className="font-bold text-lg">{option.title}</span>
-                                        <span className="font-normal text-base text-white/80">{option.description}</span>
-                                    </Button>
+                                        <h4 className="font-bold text-lg text-white">{option.title}</h4>
+                                        <p className="text-base text-white/80 mt-2">{option.description}</p>
+                                    </div>
                                 ))}
                             </div>
                             {currentStepData.type === 'question' && answers[currentStepData.id] === 'Write your own memory' && (
