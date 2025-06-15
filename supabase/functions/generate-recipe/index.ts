@@ -98,14 +98,11 @@ serve(async (req) => {
     // In a background step, generate and upload the image.
     // This uses a try/catch so that if image generation fails, the recipe is still returned.
     try {
-        const imagePrompt = `A photorealistic, high-end food photography image of a single, unique dumpling.
-**Background:** The dumpling must be presented against a completely black, non-reflective, solid background. There should be absolutely no other objects, props, or scenery.
-**Subject:** The focus is a single, perfect dumpling.
-- **Title:** The dumpling is called: "${recipeContent.title}".
-- **Shape:** The dumpling's shape is explicitly "${Object.values(payload.controls)[0]?.shape || 'classic'}". This shape is critical.
-- **Appearance:** The dumpling must look delicious and edible. Its skin should have realistic food textures, like a delicate sheen from being steamed or a slight crispiness if fried. The colors, while potentially unusual due to the recipe's theme, must look like they belong to food ingredients. It should appear to be a real, tangible food item.
-- **Context:** For inspiration on its appearance, the dumpling is described as: ${recipeContent.description}.
-- **Style:** The image should be a dramatic, studio-lit macro shot. Avoid any digital, holographic, or non-food-related visual effects.`;
+        const imagePrompt = `Photorealistic food photography of a single dumpling.
+- The dumpling shape is: "${Object.values(payload.controls)[0]?.shape || 'classic'}".
+- The dumpling must look delicious and edible, with realistic food textures.
+- The background must be solid, non-reflective black.
+- The image must not contain any text, props, or scenery. Just the single dumpling.`;
         
         const imageResponse = await openai.images.generate({
             model: 'dall-e-3',
@@ -113,6 +110,7 @@ serve(async (req) => {
             n: 1,
             size: '1024x1024',
             response_format: 'b64_json',
+            style: 'natural',
         });
         
         const imageB64 = imageResponse.data[0].b64_json;
