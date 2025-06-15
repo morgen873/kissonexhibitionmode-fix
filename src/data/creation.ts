@@ -1,3 +1,4 @@
+
 import { Step } from "@/types/creation";
 
 export const stepThemes = [
@@ -60,6 +61,16 @@ export const stepThemes = [
         optionSelectedShadow: "shadow-yellow-400/30",
         optionHover: "hover:border-yellow-500",
         textAreaFocus: "focus:ring-yellow-500 focus:border-yellow-500",
+    },
+    { // Green theme for the new step
+        bg: "from-green-900 via-emerald-900 to-teal-800",
+        cardShadow: "shadow-green-500/20",
+        progress: "from-emerald-500 to-green-500",
+        title: "from-green-300 via-emerald-300 to-teal-300",
+        optionSelectedBorder: "border-emerald-400",
+        optionSelectedShadow: "shadow-emerald-400/30",
+        optionHover: "hover:border-emerald-500",
+        textAreaFocus: "focus:ring-emerald-500 focus:border-emerald-500",
     }
 ];
 
@@ -130,6 +141,28 @@ export const steps: Step[] = [
         customOption: {
             title: "Someone specific",
             placeholder: "A name, pet, or someone special..."
+        }
+    },
+    {
+        type: 'controls' as const,
+        id: 4,
+        title: "Adjusting the Intensity",
+        description: "How intensely should this memory be experienced? Drag the knobs to adjust temperature, shape, and flavor.",
+        controls: {
+            temperature: {
+                min: 0,
+                max: 250,
+                unit: "°C",
+                defaultValue: 125,
+            },
+            shape: {
+                options: ["star", "triangle", "oval", "bundle", "organic"],
+                defaultValue: "oval",
+            },
+            flavor: {
+                options: ["savory", "sweet"],
+                defaultValue: "savory",
+            },
         }
     }
 ];

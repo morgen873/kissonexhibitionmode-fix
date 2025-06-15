@@ -1,17 +1,34 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { steps, stepThemes } from '@/data/creation';
-import { QuestionStep } from '@/types/creation';
+import { QuestionStep, ControlsStep } from '@/types/creation';
 import ProgressBar from '@/components/creation/ProgressBar';
 import ExplanationScreen from '@/components/creation/ExplanationScreen';
 import QuestionScreen from '@/components/creation/QuestionScreen';
 import NavigationControls from '@/components/creation/NavigationControls';
+import ControlsScreen from '@/components/creation/ControlsScreen';
 
 const Creation = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const [answers, setAnswers] = useState<{ [key: number]: string }>({});
     const [customAnswers, setCustomAnswers] = useState<{ [key: number]: string }>({});
+    const [controlValues, setControlValues] = useState<{ [key: number]: { temperature: number; shape: string; flavor: string; } }>({});
+
+    const currentStepData = steps[currentStep];
+
+    useEffect(() => {
+        if (currentStepData.type === 'controls' && !controlValues[currentStepData.id]) {
+            const { controls } = currentStepData as ControlsStep;
+            setControlValues(prev => ({
+                ...prev,
+                [currentStepData.id]: {
+                    temperature: controls.temperature.defaultValue,
+                    shape: controls.shape.defaultValue,
+                    flavor: controls.flavor.defaultValue,
+                }
+            }));
+        }
+    }, [currentStep, currentStepData, controlValues]);
 
     const handleAnswerSelect = (optionTitle: string) => {
         const step = steps[currentStep];
@@ -27,6 +44,44 @@ const Creation = () => {
                 ...customAnswers,
                 [step.id]: e.target.value,
             });
+        }
+    };
+
+    const handleTemperatureChange = (value: number[]) => {
+        if (currentStepData.type === 'controls') {
+            setControlValues(prev => ({
+                ...prev,
+                [currentStepData.id]: {
+                    ...prev[currentStepData.id],
+                    temperature: value[0]
+                }
+            }));
+        }
+    };
+    
+    const handleShapeChange = (value: number[]) => {
+        if (currentStepData.type === 'controls') {
+            const step = currentStepData as ControlsStep;
+            setControlValues(prev => ({
+                ...prev,
+                [currentStepData.id]: {
+                    ...prev[currentStepData.id],
+                    shape: step.controls.shape.options[value[0]]
+                }
+            }));
+        }
+    };
+
+    const handleFlavorChange = (value: number[]) => {
+        if (currentStepData.type === 'controls') {
+            const step = currentStepData as ControlsStep;
+            setControlValues(prev => ({
+                ...prev,
+                [currentStepData.id]: {
+                    ...prev[currentStepData.id],
+                    flavor: step.controls.flavor.options[value[0]]
+                }
+            }));
         }
     };
 
@@ -53,25 +108,28 @@ const Creation = () => {
             return acc;
         }, {} as { [key: string]: string });
 
-        console.log("Final answers:", finalAnswersPayload);
+        const finalPayload = {
+            questions: finalAnswersPayload,
+            controls: controlValues,
+        };
+
+        console.log("Final payload:", finalPayload);
         alert("Recipe is being created with your answers!");
     };
 
     const progress = ((currentStep + 1) / steps.length) * 100;
-    const currentStepData = steps[currentStep];
     const theme = stepThemes[currentStep] || stepThemes[0];
     
     const isNextDisabled = (() => {
-        if (currentStepData.type !== 'question') return false;
+        if (currentStepData.type === 'question') {
+            const answer = answers[currentStepData.id];
+            if (!answer) return true;
 
-        const answer = answers[currentStepData.id];
-        if (!answer) return true;
-
-        if (currentStepData.customOption && answer === currentStepData.customOption.title) {
-            const customAnswer = customAnswers[currentStepData.id];
-            return !customAnswer || !customAnswer.trim();
+            if (currentStepData.customOption && answer === currentStepData.customOption.title) {
+                const customAnswer = customAnswers[currentStepData.id];
+                return !customAnswer || !customAnswer.trim();
+            }
         }
-
         return false;
     })();
 
@@ -87,7 +145,7 @@ const Creation = () => {
                 <CardContent>
                     {currentStepData.type === 'explanation' ? (
                         <ExplanationScreen description={currentStepData.description} />
-                    ) : (
+                    ) : currentStepData.type === 'question' ? (
                         <QuestionScreen
                             stepData={currentStepData as QuestionStep}
                             answers={answers}
@@ -96,7 +154,15 @@ const Creation = () => {
                             handleCustomAnswerChange={handleCustomAnswerChange}
                             theme={theme}
                         />
-                    )}
+                    ) : (currentStepData.type === 'controls' && controlValues[currentStepData.id]) ? (
+                        <ControlsScreen
+                            stepData={currentStepData as ControlsStep}
+                            controlValues={controlValues[currentStepData.id]}
+                            onTemperatureChange={handleTemperatureChange}
+                            onShapeChange={handleShapeChange}
+                            onFlavorChange={handleFlavorChange}
+                        />
+                    ) : null}
                     <NavigationControls
                         currentStep={currentStep}
                         stepsLength={steps.length}
