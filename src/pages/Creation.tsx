@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { steps, stepThemes } from '@/data/creation';
@@ -45,7 +44,7 @@ const Creation = () => {
     const theme = stepThemes[currentStep] || stepThemes[0];
     
     return (
-        <div className={`min-h-screen bg-gradient-to-br ${theme.bg} text-white p-4 sm:p-6 md:p-8 flex items-center justify-center transition-all duration-500`}>
+        <div className={`min-h-screen bg-gradient-to-br ${theme.bg} text-white p-4 sm:p-6 md:p-8 flex items-center justify-center transition-all duration-500 pt-24`}>
             <Card className={`relative w-full ${recipeResult ? 'max-w-4xl' : 'max-w-2xl'} bg-black/30 backdrop-blur-xl border-2 border-white/20 shadow-2xl ${theme.cardShadow} transition-all duration-500`}>
                 <CardHeader>
                     <ProgressBar progress={progress} theme={theme} />
