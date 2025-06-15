@@ -7,49 +7,32 @@ import { ArrowLeft, ArrowRight, Zap } from 'lucide-react';
 const steps = [
     {
         type: 'explanation' as const,
-        title: "Choosing the Memory",
-        description: "Every dumpling tells a story. What will yours be? Start by choosing a memory that's been on your mind. This memory will be the heart and soul of your unique dumpling recipe, guiding its flavors, textures, and even its shape. Let's begin the journey from memory to mouthful."
+        title: "A Moment of Reflection",
+        description: "Before we start cooking, let's pause for a moment. Imagine you're standing in front of an empty table. You can choose any type of dumpling and any emotional connection."
     },
     {
         type: 'question' as const,
         id: 1,
-        question: "How are you feeling today?",
-        options: ["Joyful", "Melancholy", "Adventurous", "Nostalgic"],
-    },
-    {
-        type: 'question' as const,
-        id: 2,
-        question: "What kind of memory does this feeling evoke?",
-        options: ["A childhood birthday party", "A quiet evening with a book", "Traveling to a new city", "A dinner with old friends"],
-    },
-    {
-        type: 'question' as const,
-        id: 3,
-        question: "Choose a primary flavor profile:",
-        options: ["Sweet", "Savory", "Spicy", "Sour"],
-    },
-    {
-        type: 'question' as const,
-        id: 4,
-        question: "Select a texture:",
-        options: ["Crispy", "Chewy", "Soft", "Juicy"],
-    },
-    {
-        type: 'question' as const,
-        id: 5,
-        question: "What's your desired 'dumpling personality'?",
-        options: ["Comforting & Familiar", "Bold & Daring", "Elegant & Refined", "Playful & Surprising"],
+        question: "What kind of memory are you ready to transform into a recipe?",
+        options: [
+            { title: "A childhood memory", description: "Revisit the flavors and emotions of your early years." },
+            { title: "A feeling you want to cherish", description: "Preserve an emotion that brings you warmth." },
+            { title: "A profound emotional event", description: "Transform a meaningful life moment into taste." },
+            { title: "A story you'd like to pass on to someone", description: "Share wisdom or experience through flavor." },
+            { title: "Write your own memory", description: "Express your memory in your own words." },
+        ],
     }
 ];
 
 const Creation = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const [answers, setAnswers] = useState<{ [key: number]: string }>({});
+    const [customMemory, setCustomMemory] = useState('');
 
-    const handleAnswerSelect = (option: string) => {
+    const handleAnswerSelect = (optionTitle: string) => {
         const step = steps[currentStep];
         if (step.type === 'question') {
-            setAnswers({ ...answers, [step.id]: option });
+            setAnswers({ ...answers, [step.id]: optionTitle });
         }
     };
 
@@ -66,14 +49,21 @@ const Creation = () => {
     };
     
     const handleSubmit = () => {
-        console.log("Final answers:", answers);
+        const finalAnswers = { ...answers };
+        const currentStepData = steps[currentStep];
+        if (currentStepData.type === 'question' && answers[currentStepData.id] === 'Write your own memory' && customMemory) {
+            finalAnswers[currentStepData.id] = customMemory;
+        }
+        console.log("Final answers:", finalAnswers);
         // Here we would call the AI to generate the recipe
         alert("Recipe is being created with your answers!");
     };
 
     const progress = ((currentStep + 1) / steps.length) * 100;
     const currentStepData = steps[currentStep];
-    const isNextDisabled = currentStepData.type === 'question' ? !answers[currentStepData.id] : false;
+    const isNextDisabled = currentStepData.type === 'question' 
+        ? !answers[currentStepData.id] || (answers[currentStepData.id] === 'Write your own memory' && !customMemory.trim())
+        : false;
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-purple-900 via-pink-900 to-orange-900 text-white p-4 sm:p-6 md:p-8 flex items-center justify-center">
@@ -94,24 +84,42 @@ const Creation = () => {
                             </p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-8">
-                            {currentStepData.options.map((option) => (
-                                <Button
-                                    key={option}
-                                    onClick={() => handleAnswerSelect(option)}
-                                    variant={answers[currentStepData.id] === option ? "default" : "outline"}
-                                    className={`
-                                        text-lg font-bold p-8 rounded-lg transition-all duration-300 h-auto
-                                        ${answers[currentStepData.id] === option
-                                            ? 'bg-gradient-to-r from-pink-500 to-cyan-500 text-white border-transparent scale-105 shadow-lg shadow-pink-500/30'
-                                            : 'bg-white/10 border-white/20 hover:bg-white/20 text-white'
-                                        }
-                                    `}
-                                >
-                                    {option}
-                                </Button>
-                            ))}
-                        </div>
+                        <>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-8">
+                                {currentStepData.options.map((option) => (
+                                    <Button
+                                        key={option.title}
+                                        onClick={() => handleAnswerSelect(option.title)}
+                                        variant={answers[currentStepData.id] === option.title ? "default" : "outline"}
+                                        className={`
+                                            text-left p-6 rounded-lg transition-all duration-300 h-auto flex flex-col items-start
+                                            ${answers[currentStepData.id] === option.title
+                                                ? 'bg-gradient-to-r from-pink-500 to-cyan-500 text-white border-transparent scale-105 shadow-lg shadow-pink-500/30'
+                                                : 'bg-white/10 border-white/20 hover:bg-white/20 text-white'
+                                            }
+                                        `}
+                                    >
+                                        <span className="font-bold text-lg">{option.title}</span>
+                                        <span className="font-normal text-base text-white/80 mt-1">{option.description}</span>
+                                    </Button>
+                                ))}
+                            </div>
+                            {currentStepData.type === 'question' && answers[currentStepData.id] === 'Write your own memory' && (
+                                <div className="my-4">
+                                    <label htmlFor="custom-memory" className="block text-sm font-medium text-white/80 mb-2">
+                                        Express your memory in your own words:
+                                    </label>
+                                    <textarea
+                                        id="custom-memory"
+                                        rows={4}
+                                        className="w-full bg-white/10 border-white/20 rounded-lg p-2 text-white focus:ring-pink-500 focus:border-pink-500 block transition"
+                                        value={customMemory}
+                                        onChange={(e) => setCustomMemory(e.target.value)}
+                                        placeholder="Describe the memory that inspires your dumpling..."
+                                    />
+                                </div>
+                            )}
+                        </>
                     )}
                     <div className="flex justify-between mt-8">
                         <Button onClick={prevStep} disabled={currentStep === 0} variant="ghost" className="text-white hover:bg-white/10 disabled:opacity-50">
