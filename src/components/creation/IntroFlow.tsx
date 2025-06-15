@@ -103,7 +103,7 @@ const IntroFlow = ({
             
             <footer className="relative z-10 bg-black/50 backdrop-blur-md text-white py-6 mt-8 w-full text-center border-t-2 border-white/20">
                 <p className="text-lg font-black">
-                    A <span className="bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent mx-1">OREN/LUPE</span> PROJECT
+                    A DESIGN PROJECT BY <span className="bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent mx-1">OREN/LUPE</span>
                 </p>
             </footer>
         </div>;
