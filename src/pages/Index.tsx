@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ChefHat, Heart, Sparkles, ArrowRight, Zap, Star } from "lucide-react";
@@ -32,27 +31,14 @@ const Index = () => {
             {/* Main Title */}
             <h1 className="text-7xl md:text-9xl font-black mb-8 leading-none tracking-tighter">
               <div className="bg-gradient-to-r from-cyan-300 via-pink-300 to-yellow-300 bg-clip-text text-transparent drop-shadow-2xl animate-pulse">
-                FLAVOR
-              </div>
-              <div className="bg-gradient-to-r from-lime-300 via-purple-300 to-red-300 bg-clip-text text-transparent drop-shadow-2xl transform -rotate-1">
-                MEMORY
-              </div>
-              <div className="bg-gradient-to-r from-orange-300 via-indigo-300 to-pink-300 bg-clip-text text-transparent drop-shadow-2xl transform rotate-1">
-                FORGE
+                KissOn
               </div>
             </h1>
             
-            {/* Glitch Effect Subtitle */}
+            {/* Tagline */}
             <div className="relative mb-12">
-              <p className="text-2xl md:text-4xl font-black text-white mb-4 drop-shadow-lg">
-                TRANSFORM YOUR 
-                <span className="bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent mx-3">
-                  MEMORIES
-                </span>
-                INTO
-              </p>
               <p className="text-3xl md:text-5xl font-black bg-gradient-to-r from-green-300 to-blue-300 bg-clip-text text-transparent drop-shadow-lg animate-pulse">
-                PSYCHEDELIC DUMPLINGS
+                From Feeling To Filling
               </p>
             </div>
             
@@ -62,7 +48,7 @@ const Index = () => {
               className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 hover:from-pink-400 hover:via-purple-400 hover:to-cyan-400 text-white text-xl font-black px-12 py-8 rounded-full shadow-2xl hover:shadow-pink-500/25 transition-all duration-300 transform hover:scale-110 border-4 border-white/20 backdrop-blur-sm"
             >
               <Sparkles className="mr-3 h-6 w-6 animate-spin" />
-              ENTER THE MATRIX
+              START CREATING
               <ArrowRight className="ml-3 h-6 w-6 animate-bounce" />
             </Button>
           </div>
@@ -82,65 +68,64 @@ const Index = () => {
             </span>
           </h2>
           <p className="text-xl md:text-2xl text-white font-bold max-w-3xl mx-auto drop-shadow-lg">
-            Our AI TRANSCENDS REALITY to transform your consciousness into 
-            <span className="text-yellow-300 font-black"> FLAVOR DIMENSIONS</span>
+            Our AI transforms your feelings into delicious, one-of-a-kind dumpling recipes.
           </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
-          {/* Step 1 - Radical Card */}
+          {/* Step 1 - Share a feeling */}
           <Card className="bg-transparent border-4 border-pink-400/50 backdrop-blur-md hover:border-pink-300 transition-all duration-300 hover:shadow-2xl hover:shadow-pink-500/25 transform hover:-translate-y-4 hover:rotate-1">
             <CardContent className="p-10 text-center">
               <div className="w-20 h-20 bg-gradient-to-r from-pink-400 via-purple-500 to-cyan-400 rounded-full flex items-center justify-center mx-auto mb-8 animate-spin">
                 <Heart className="h-10 w-10 text-white animate-pulse" />
               </div>
               <h3 className="text-3xl font-black text-white mb-6 drop-shadow-lg">
-                DOWNLOAD YOUR
+                SHARE A
                 <br />
                 <span className="bg-gradient-to-r from-pink-300 to-yellow-300 bg-clip-text text-transparent">
-                  SOUL DATA
+                  FEELING
                 </span>
               </h3>
               <p className="text-white font-bold text-lg">
-                Upload your deepest memories and emotions into our QUANTUM FLAVOR ENGINE
+                Share a feeling, a memory, or a dream with our AI.
               </p>
             </CardContent>
           </Card>
 
-          {/* Step 2 - AI Processing */}
+          {/* Step 2 - AI Translation */}
           <Card className="bg-transparent border-4 border-purple-400/50 backdrop-blur-md hover:border-purple-300 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/25 transform hover:-translate-y-4 hover:-rotate-1">
             <CardContent className="p-10 text-center">
               <div className="w-20 h-20 bg-gradient-to-r from-purple-400 via-indigo-500 to-pink-400 rounded-full flex items-center justify-center mx-auto mb-8 animate-pulse">
                 <Sparkles className="h-10 w-10 text-white animate-spin" />
               </div>
               <h3 className="text-3xl font-black text-white mb-6 drop-shadow-lg">
-                AI NEURAL
+                AI
                 <br />
                 <span className="bg-gradient-to-r from-purple-300 to-cyan-300 bg-clip-text text-transparent">
-                  FUSION
+                  TRANSLATION
                 </span>
               </h3>
               <p className="text-white font-bold text-lg">
-                Our AI DISSECTS your consciousness and reconstructs it as EDIBLE POETRY
+                Our AI translates your input into a unique dumpling recipe.
               </p>
             </CardContent>
           </Card>
 
-          {/* Step 3 - Creation */}
+          {/* Step 3 - Create & Taste */}
           <Card className="bg-transparent border-4 border-cyan-400/50 backdrop-blur-md hover:border-cyan-300 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/25 transform hover:-translate-y-4 hover:rotate-1">
             <CardContent className="p-10 text-center">
               <div className="w-20 h-20 bg-gradient-to-r from-cyan-400 via-green-500 to-yellow-400 rounded-full flex items-center justify-center mx-auto mb-8 animate-bounce">
                 <ChefHat className="h-10 w-10 text-white animate-pulse" />
               </div>
               <h3 className="text-3xl font-black text-white mb-6 drop-shadow-lg">
-                MANIFEST
+                CREATE &
                 <br />
                 <span className="bg-gradient-to-r from-cyan-300 to-green-300 bg-clip-text text-transparent">
-                  REALITY
+                  TASTE
                 </span>
               </h3>
               <p className="text-white font-bold text-lg">
-                Cook your INTERDIMENSIONAL dumplings and taste your own EXISTENCE
+                Create your KissOn dumpling and taste the feeling.
               </p>
             </CardContent>
           </Card>
@@ -158,7 +143,7 @@ const Index = () => {
             </span>
           </blockquote>
           <p className="text-2xl text-white font-black">
-            - FROM THE <span className="text-yellow-300">FLAVOR MULTIVERSE</span>
+            - <span className="text-yellow-300">KissOn</span>
           </p>
         </div>
       </div>
@@ -167,12 +152,11 @@ const Index = () => {
       <div className="relative z-10 bg-black/50 backdrop-blur-md text-white py-12 border-t-4 border-white/20">
         <div className="container mx-auto px-6 text-center">
           <p className="text-xl font-black">
-            CREATED WITH 
-            <span className="text-pink-400 mx-2 text-2xl">⚡</span>
-            FOR THE GRAD SCHOOL 
-            <span className="bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent">
-              EXHIBITION
+            A 
+            <span className="bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent mx-2">
+              GRAD SCHOOL
             </span>
+            PROJECT
           </p>
         </div>
       </div>
