@@ -28,7 +28,7 @@ const IntroFlow = ({
       case 'hero':
         return <div className="text-center max-w-6xl mx-0 px-0 py-[17px] my-[19px] bg-inherit">
                         <div className="relative z-20 mb-12 py-4">
-                            <p className="text-5xl font-black bg-gradient-to-r from-green-300 to-blue-300 bg-clip-text text-transparent drop-shadow-lg animate-pulse leading-snug md:text-2xl py-[5px]">
+                            <p className="text-5xl font-black bg-gradient-to-r from-green-300 to-blue-300 bg-clip-text text-transparent drop-shadow-lg animate-pulse leading-snug py-[5px] md:text-5xl">
                                 {step.title}
                             </p>
                         </div>
