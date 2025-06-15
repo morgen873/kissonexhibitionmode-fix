@@ -1,6 +1,8 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ChefHat, Heart, Sparkles, ArrowRight, Zap, Star } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   return (
@@ -46,10 +48,13 @@ const Index = () => {
             <Button 
               size="lg" 
               className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 hover:from-pink-400 hover:via-purple-400 hover:to-cyan-400 text-white text-xl font-black px-12 py-8 rounded-full shadow-2xl hover:shadow-pink-500/25 transition-all duration-300 transform hover:scale-110 border-4 border-white/20 backdrop-blur-sm"
+              asChild
             >
-              <Sparkles className="mr-3 h-6 w-6 animate-spin" />
-              START CREATING
-              <ArrowRight className="ml-3 h-6 w-6 animate-bounce" />
+              <Link to="/creation">
+                <Sparkles className="mr-3 h-6 w-6 animate-spin" />
+                START CREATING
+                <ArrowRight className="ml-3 h-6 w-6 animate-bounce" />
+              </Link>
             </Button>
           </div>
         </div>
