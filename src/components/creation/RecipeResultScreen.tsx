@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { QRCodeSVG as QRCode } from 'qrcode.react';
 import { Button } from '@/components/ui/button';
@@ -38,7 +39,7 @@ const RecipeResultScreen: React.FC<RecipeResultScreenProps> = ({ recipe, onReset
     };
 
     return (
-        <div className="w-full flex flex-col items-center space-y-8 text-white/90">
+        <div className="w-full flex flex-col items-center space-y-8 text-white/90 pb-8">
             <h2 className="text-3xl font-bold text-center">Your Memory KissOn Recipe</h2>
 
             {/* This is a hidden version for printing */}
@@ -56,22 +57,24 @@ const RecipeResultScreen: React.FC<RecipeResultScreenProps> = ({ recipe, onReset
                  </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8 w-full">
+            <div className="grid md:grid-cols-2 gap-8 w-full max-w-4xl">
                 <div className="flex flex-col items-center gap-4">
                     <h3 className="text-xl font-semibold">Generated Dumpling</h3>
-                    <img src={recipe.imageUrl} alt="Generated Dumpling" className="rounded-lg shadow-lg w-full aspect-square object-cover" />
+                    <div className="w-full max-w-[300px]">
+                        <img src={recipe.imageUrl} alt="Generated Dumpling" className="rounded-lg shadow-lg w-full aspect-square object-cover" />
+                    </div>
                 </div>
 
                 <div className="flex flex-col items-center gap-4">
                     <h3 className="text-xl font-semibold">Label Preview</h3>
-                    <div className="w-full max-w-[250px] aspect-[4/6] p-2 bg-white text-black flex flex-col justify-between rounded-lg shadow-lg">
-                        <div className="text-center">
-                            <h4 className="text-sm font-bold truncate">{recipe.name}</h4>
+                    <div className="w-full max-w-[300px] aspect-square p-2 bg-white text-black flex flex-col justify-between rounded-lg shadow-lg">
+                        <div className="text-center pt-2">
+                            <h4 className="text-sm font-bold truncate px-2">{recipe.name}</h4>
                         </div>
-                        <div className="flex-grow flex items-center justify-center p-2">
-                             <QRCode value={recipe.qrData} size={128} />
+                        <div className="flex-grow flex items-center justify-center p-4">
+                             <QRCode value={recipe.qrData} size={140} />
                         </div>
-                        <div className="text-center">
+                        <div className="text-center pb-2">
                             <img src="/lovable-uploads/64d3de25-5e40-498e-8a21-28d15db9a050.png" alt="" className="h-12 mx-auto" />
                         </div>
                     </div>
@@ -83,7 +86,7 @@ const RecipeResultScreen: React.FC<RecipeResultScreenProps> = ({ recipe, onReset
                 <Button variant="secondary"> <Save/> Save Recipe</Button>
                 <Button variant="secondary"><Mail/> Email Recipe</Button>
             </div>
-             <Button onClick={onReset} variant="outline" className="bg-transparent hover:bg-white/10 text-white">
+             <Button onClick={onReset} variant="outline" className="bg-transparent hover:bg-white/10 text-white mb-8">
                 <RotateCcw className="mr-2" /> Create Another
             </Button>
         </div>
