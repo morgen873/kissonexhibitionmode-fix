@@ -73,7 +73,7 @@ const IntroFlow = ({
   };
   return <div className="min-h-screen bg-gradient-to-br from-purple-900 via-pink-900 to-orange-900 text-white flex flex-col items-center p-4 relative">
             <div className="absolute inset-0 opacity-30 overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 animate-gradient"></div>
+                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 animate-gradient py-0 px-0 my-0 mx-0"></div>
                 <div className="absolute top-20 left-20 w-40 h-40 bg-gradient-to-r from-yellow-400 to-pink-500 rounded-full blur-3xl animate-pulse"></div>
                 <div className="absolute top-60 right-10 w-60 h-60 bg-gradient-to-r from-green-400 to-blue-500 rounded-full blur-3xl animate-bounce"></div>
                 <div className="absolute bottom-20 left-1/3 w-32 h-32 bg-gradient-to-r from-red-400 to-yellow-500 rounded-full blur-2xl animate-float"></div>
