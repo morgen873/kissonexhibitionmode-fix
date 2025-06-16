@@ -40,7 +40,7 @@ const IntroFlow = ({
       case 'explanation':
         const Icon = step.icon;
         return <Card className={`bg-transparent border-4 ${step.theme?.border} backdrop-blur-md transition-all duration-300 shadow-2xl ${step.theme?.shadow} w-full max-w-md`}>
-                        <CardContent className="p-10 text-center my-0 mx-0 px-[10px] py-[10px]">
+                        <CardContent className="p-10 text-center mx-[6px] my-[3px] py-[11px] px-[9px]">
                             {Icon && <div className={`w-20 h-20 bg-gradient-to-r ${step.theme?.iconGradient} rounded-full flex items-center justify-center mx-auto mb-8`}>
                                 <Icon className="h-10 w-10 text-white" />
                             </div>}
@@ -80,7 +80,7 @@ const IntroFlow = ({
                 <div className="absolute top-1/2 right-1/4 w-48 h-48 bg-gradient-to-r from-indigo-400 to-purple-600 rounded-full blur-3xl animate-pulse"></div>
             </div>
 
-            <main className="relative z-10 flex flex-col items-center justify-center flex-grow w-full my-[50px]">
+            <main className="relative z-10 flex flex-col items-center justify-center flex-grow w-full my-[30px]">
                 {renderStepContent(stepData)}
             </main>
 
