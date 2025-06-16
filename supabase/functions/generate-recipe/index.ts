@@ -10,7 +10,6 @@ import { ReadableStream } from "node:stream/web";
 // @ts-ignore
 globalThis.ReadableStream = ReadableStream;
 
-
 interface RecipePayload {
   questions: { [key: string]: string };
   timeline: { [key: string]: string };
@@ -98,11 +97,24 @@ serve(async (req) => {
     // In a background step, generate and upload the image.
     // This uses a try/catch so that if image generation fails, the recipe is still returned.
     try {
-        const imagePrompt = `Photorealistic food photography of a single dumpling.
-- The dumpling shape is: "${Object.values(payload.controls)[0]?.shape || 'classic'}".
-- The dumpling must look delicious and edible, with realistic food textures.
-- The background must be solid, non-reflective black.
-- The image must not contain any text, props, or scenery. Just the single dumpling.`;
+        const dumplingShape = Object.values(payload.controls)[0]?.shape || 'classic';
+        
+        const imagePrompt = `Professional food photography of a single ${dumplingShape} dumpling on a solid black background.
+
+REQUIREMENTS:
+- ONE dumpling only, no multiples
+- Photorealistic food photography style
+- The dumpling must look completely edible and appetizing
+- Solid black background with no reflections, shadows, or textures
+- No text, words, letters, or numbers anywhere in the image
+- No faces, eyes, lips, or any human features on the dumpling
+- No props, utensils, plates, or decorative elements
+- No steam, sauce, or garnishes
+- The dumpling should have realistic food texture and appearance
+- Clean, simple composition with the dumpling centered
+- Professional lighting that highlights the dumpling's natural texture
+
+The dumpling should appear as actual food that someone would want to eat, with proper dough texture and realistic appearance.`;
         
         const imageResponse = await openai.images.generate({
             model: 'dall-e-3',
