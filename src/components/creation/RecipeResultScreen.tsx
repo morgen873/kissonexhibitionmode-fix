@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { QRCodeSVG as QRCode } from 'qrcode.react';
 import { Button } from '@/components/ui/button';
@@ -22,8 +21,15 @@ const RecipeResultScreen: React.FC<RecipeResultScreenProps> = ({ recipe, onReset
                     <head>
                         <title>Print Recipe</title>
                         <style>
-                            @page { size: 4in 6in; margin: 0; }
-                            body { margin: 0; }
+                            @page { size: 4in 6in; margin: 0.1in; }
+                            body { 
+                                margin: 0; 
+                                font-family: Arial, sans-serif;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                height: 100vh;
+                            }
                         </style>
                     </head>
                     <body>${printContents}</body>
@@ -44,15 +50,42 @@ const RecipeResultScreen: React.FC<RecipeResultScreenProps> = ({ recipe, onReset
 
             {/* This is a hidden version for printing */}
             <div className="hidden">
-                 <div id="recipe-label-print" style={{width: '4in', height: '6in', padding: '0.25in', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxSizing: 'border-box'}}>
-                     <div style={{textAlign: 'center'}}>
-                         <h4 style={{fontSize: '24pt', fontWeight: 'bold', margin: '0'}}>{recipe.name}</h4>
+                 <div id="recipe-label-print" style={{
+                     width: '3.8in', 
+                     height: '5.8in', 
+                     padding: '0.3in 0.2in', 
+                     display: 'flex', 
+                     flexDirection: 'column', 
+                     justifyContent: 'space-between', 
+                     boxSizing: 'border-box',
+                     backgroundColor: 'white',
+                     color: 'black',
+                     textAlign: 'center'
+                 }}>
+                     <div style={{paddingTop: '0.2in'}}>
+                         <h4 style={{
+                             fontSize: '18pt', 
+                             fontWeight: 'bold', 
+                             margin: '0',
+                             lineHeight: '1.2',
+                             wordWrap: 'break-word'
+                         }}>{recipe.name}</h4>
                      </div>
-                     <div style={{flexGrow: 1, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                          <QRCode value={recipe.qrData} size={200} />
+                     <div style={{
+                         flexGrow: 1, 
+                         display: 'flex', 
+                         alignItems: 'center', 
+                         justifyContent: 'center',
+                         padding: '0.3in 0'
+                     }}>
+                          <QRCode value={recipe.qrData} size={180} />
                      </div>
-                     <div style={{textAlign: 'center'}}>
-                         <img src="/lovable-uploads/64d3de25-5e40-498e-8a21-28d15db9a050.png" alt="" style={{height: '1.2in', margin: '0 auto'}} />
+                     <div style={{paddingBottom: '0.2in'}}>
+                         <img src="/lovable-uploads/64d3de25-5e40-498e-8a21-28d15db9a050.png" alt="" style={{
+                             height: '0.8in', 
+                             margin: '0 auto',
+                             display: 'block'
+                         }} />
                      </div>
                  </div>
             </div>
