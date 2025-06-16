@@ -80,7 +80,7 @@ const IntroFlow = ({
                 <div className="absolute top-1/2 right-1/4 w-48 h-48 bg-gradient-to-r from-indigo-400 to-purple-600 rounded-full blur-3xl animate-pulse"></div>
             </div>
 
-            <main className="relative z-10 flex flex-col items-center justify-center flex-grow w-full my-[30px]">
+            <main className="relative z-10 flex flex-col items-center justify-center flex-grow w-full my-[29px]">
                 {renderStepContent(stepData)}
             </main>
 
