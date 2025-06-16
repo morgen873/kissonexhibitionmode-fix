@@ -44,14 +44,14 @@ const IntroFlow = ({
                             {Icon && <div className={`w-20 h-20 bg-gradient-to-r ${step.theme?.iconGradient} rounded-full flex items-center justify-center mx-auto mb-8`}>
                                 <Icon className="h-10 w-10 text-white" />
                             </div>}
-                            <h3 className="text-3xl font-black text-white mb-6 drop-shadow-lg">
+                            <h3 className="font-black text-white mb-6 drop-shadow-lg text-3xl">
                                 {(step.title as string[])[0]}
                                 <br />
                                 <span className={`bg-gradient-to-r ${step.theme?.titleGradient} bg-clip-text text-transparent`}>
                                     {(step.title as string[])[1]}
                                 </span>
                             </h3>
-                            <p className="text-white font-bold text-lg py-[10px]">
+                            <p className="text-white font-bold py-[10px] text-base">
                                 {step.description}
                             </p>
                         </CardContent>
