@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { QRCodeSVG as QRCode } from 'qrcode.react';
 import { Button } from '@/components/ui/button';
@@ -13,7 +14,6 @@ const RecipeResultScreen: React.FC<RecipeResultScreenProps> = ({ recipe, onReset
     
     const printRecipe = () => {
         const printContents = document.getElementById('recipe-label-print')?.innerHTML;
-        const originalContents = document.body.innerHTML;
         if (printContents) {
             const printWindow = window.open('', '_blank');
             printWindow?.document.write(`
@@ -21,14 +21,61 @@ const RecipeResultScreen: React.FC<RecipeResultScreenProps> = ({ recipe, onReset
                     <head>
                         <title>Print Recipe</title>
                         <style>
-                            @page { size: 4in 6in; margin: 0.1in; }
+                            @page { 
+                                size: 4in 6in; 
+                                margin: 0.1in; 
+                            }
                             body { 
                                 margin: 0; 
                                 font-family: Arial, sans-serif;
+                                width: 100%;
+                                height: 100%;
                                 display: flex;
                                 align-items: center;
                                 justify-content: center;
-                                height: 100vh;
+                            }
+                            .print-container {
+                                width: 3.8in;
+                                height: 5.8in;
+                                display: flex;
+                                flex-direction: column;
+                                justify-content: space-between;
+                                align-items: center;
+                                padding: 0.3in 0.2in;
+                                box-sizing: border-box;
+                                background-color: white;
+                                color: black;
+                                text-align: center;
+                            }
+                            .title-section {
+                                flex: 0 0 auto;
+                                padding-top: 0.1in;
+                                width: 100%;
+                            }
+                            .title-section h4 {
+                                font-size: 16pt;
+                                font-weight: bold;
+                                margin: 0;
+                                line-height: 1.2;
+                                word-wrap: break-word;
+                                hyphens: auto;
+                            }
+                            .qr-section {
+                                flex: 1;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                width: 100%;
+                            }
+                            .logo-section {
+                                flex: 0 0 auto;
+                                padding-bottom: 0.1in;
+                                width: 100%;
+                            }
+                            .logo-section img {
+                                height: 0.7in;
+                                width: auto;
+                                max-width: 100%;
                             }
                         </style>
                     </head>
@@ -48,46 +95,21 @@ const RecipeResultScreen: React.FC<RecipeResultScreenProps> = ({ recipe, onReset
         <div className="w-full flex flex-col items-center space-y-8 text-white/90 pb-8">
             <h2 className="text-3xl font-bold text-center">Your Memory KissOn Recipe</h2>
 
-            {/* This is a hidden version for printing */}
+            {/* Hidden print version with proper vertical layout */}
             <div className="hidden">
-                 <div id="recipe-label-print" style={{
-                     width: '3.8in', 
-                     height: '5.8in', 
-                     padding: '0.3in 0.2in', 
-                     display: 'flex', 
-                     flexDirection: 'column', 
-                     justifyContent: 'space-between', 
-                     boxSizing: 'border-box',
-                     backgroundColor: 'white',
-                     color: 'black',
-                     textAlign: 'center'
-                 }}>
-                     <div style={{paddingTop: '0.2in'}}>
-                         <h4 style={{
-                             fontSize: '18pt', 
-                             fontWeight: 'bold', 
-                             margin: '0',
-                             lineHeight: '1.2',
-                             wordWrap: 'break-word'
-                         }}>{recipe.name}</h4>
-                     </div>
-                     <div style={{
-                         flexGrow: 1, 
-                         display: 'flex', 
-                         alignItems: 'center', 
-                         justifyContent: 'center',
-                         padding: '0.3in 0'
-                     }}>
-                          <QRCode value={recipe.qrData} size={180} />
-                     </div>
-                     <div style={{paddingBottom: '0.2in'}}>
-                         <img src="/lovable-uploads/64d3de25-5e40-498e-8a21-28d15db9a050.png" alt="" style={{
-                             height: '0.8in', 
-                             margin: '0 auto',
-                             display: 'block'
-                         }} />
-                     </div>
-                 </div>
+                <div id="recipe-label-print">
+                    <div className="print-container">
+                        <div className="title-section">
+                            <h4>{recipe.name}</h4>
+                        </div>
+                        <div className="qr-section">
+                            <QRCode value={recipe.qrData} size={160} />
+                        </div>
+                        <div className="logo-section">
+                            <img src="/lovable-uploads/64d3de25-5e40-498e-8a21-28d15db9a050.png" alt="KISS ON logo" />
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div className="grid md:grid-cols-2 gap-8 w-full max-w-4xl">
