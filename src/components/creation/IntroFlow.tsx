@@ -26,7 +26,7 @@ const IntroFlow = ({
   const renderStepContent = (step: IntroStepData) => {
     switch (step.type) {
       case 'hero':
-        return <div className="text-center max-w-6xl mx-0 px-0 bg-inherit py-[15px] my-0">
+        return <div className="text-center max-w-6xl mx-0 px-0 bg-inherit my-0 py-0">
                         <img src="/lovable-uploads/64d3de25-5e40-498e-8a21-28d15db9a050.png" alt="KissOn Logo" className="mx-auto mb-8 w-64 mix-blend-screen" />
                         
                         <p className="text-xl text-white font-bold max-w-3xl mx-auto drop-shadow-lg mb-12 md:text-xl">
