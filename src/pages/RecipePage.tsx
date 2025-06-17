@@ -1,5 +1,6 @@
+
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Database } from '@/integrations/supabase/types';
 import { Loader2 } from 'lucide-react';
@@ -10,11 +11,15 @@ type Recipe = Database['public']['Tables']['recipes']['Row'];
 
 const RecipePage = () => {
     const { id } = useParams<{ id: string }>();
+    const [searchParams] = useSearchParams();
     const [recipe, setRecipe] = useState<Recipe | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [imageError, setImageError] = useState(false);
     const [imageLoading, setImageLoading] = useState(true);
+
+    // Get image URL from query parameter as fallback
+    const imageFromUrl = searchParams.get('img');
 
     useEffect(() => {
         const fetchRecipe = async () => {
@@ -36,12 +41,13 @@ const RecipePage = () => {
             } else {
                 setRecipe(data);
                 console.log('Recipe image_url:', data?.image_url);
+                console.log('Image from URL parameter:', imageFromUrl);
             }
             setLoading(false);
         };
 
         fetchRecipe();
-    }, [id]);
+    }, [id, imageFromUrl]);
 
     const handleImageLoad = () => {
         setImageLoading(false);
@@ -51,12 +57,12 @@ const RecipePage = () => {
     const handleImageError = () => {
         setImageLoading(false);
         setImageError(true);
-        console.error('Failed to load recipe image:', recipe?.image_url);
+        console.error('Failed to load recipe image');
     };
 
-    // Show image if we have a URL and it's not a placeholder, OR if it failed to load show placeholder
-    const shouldShowImage = recipe?.image_url && recipe.image_url.trim() !== '';
-    const isPlaceholder = recipe?.image_url === '/placeholder.svg' || recipe?.image_url === 'placeholder.svg';
+    // Use image from database first, then fall back to URL parameter
+    const imageUrl = recipe?.image_url || imageFromUrl;
+    const shouldShowImage = imageUrl && imageUrl.trim() !== '' && imageUrl !== '/placeholder.svg' && imageUrl !== 'placeholder.svg';
 
     if (loading) {
         return (
@@ -81,15 +87,15 @@ const RecipePage = () => {
                     <CardTitle className="text-3xl md:text-4xl font-bold text-center text-white drop-shadow-lg">{recipe.title}</CardTitle>
                     {shouldShowImage && (
                         <div className="flex justify-center mt-6">
-                            {imageLoading && !isPlaceholder && (
+                            {imageLoading && (
                                 <div className="flex items-center justify-center w-full max-w-md h-96 bg-black/20 rounded-lg">
                                     <Loader2 className="h-8 w-8 animate-spin text-white/60" />
                                 </div>
                             )}
                             <img 
-                                src={imageError ? '/placeholder.svg' : recipe.image_url} 
+                                src={imageError ? '/placeholder.svg' : imageUrl} 
                                 alt={recipe.title} 
-                                className={`rounded-lg w-full h-auto max-h-96 max-w-md object-cover shadow-lg ${imageLoading && !isPlaceholder ? 'hidden' : 'block'}`}
+                                className={`rounded-lg w-full h-auto max-h-96 max-w-md object-cover shadow-lg ${imageLoading ? 'hidden' : 'block'}`}
                                 onLoad={handleImageLoad}
                                 onError={handleImageError}
                             />
