@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -55,10 +54,9 @@ const RecipePage = () => {
         console.error('Failed to load recipe image:', recipe?.image_url);
     };
 
-    const shouldShowImage = recipe?.image_url && 
-                           recipe.image_url !== '/placeholder.svg' && 
-                           recipe.image_url !== 'placeholder.svg' &&
-                           !imageError;
+    // Show image if we have a URL and it's not a placeholder, OR if it failed to load show placeholder
+    const shouldShowImage = recipe?.image_url && recipe.image_url.trim() !== '';
+    const isPlaceholder = recipe?.image_url === '/placeholder.svg' || recipe?.image_url === 'placeholder.svg';
 
     if (loading) {
         return (
@@ -83,15 +81,15 @@ const RecipePage = () => {
                     <CardTitle className="text-3xl md:text-4xl font-bold text-center text-white drop-shadow-lg">{recipe.title}</CardTitle>
                     {shouldShowImage && (
                         <div className="flex justify-center mt-6">
-                            {imageLoading && (
+                            {imageLoading && !isPlaceholder && (
                                 <div className="flex items-center justify-center w-full max-w-md h-96 bg-black/20 rounded-lg">
                                     <Loader2 className="h-8 w-8 animate-spin text-white/60" />
                                 </div>
                             )}
                             <img 
-                                src={recipe.image_url} 
+                                src={imageError ? '/placeholder.svg' : recipe.image_url} 
                                 alt={recipe.title} 
-                                className={`rounded-lg w-full h-auto max-h-96 max-w-md object-cover shadow-lg ${imageLoading ? 'hidden' : 'block'}`}
+                                className={`rounded-lg w-full h-auto max-h-96 max-w-md object-cover shadow-lg ${imageLoading && !isPlaceholder ? 'hidden' : 'block'}`}
                                 onLoad={handleImageLoad}
                                 onError={handleImageError}
                             />
