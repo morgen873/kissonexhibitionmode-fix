@@ -14,6 +14,8 @@ const RecipePage = () => {
     const [recipe, setRecipe] = useState<Recipe | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [imageError, setImageError] = useState(false);
+    const [imageLoading, setImageLoading] = useState(true);
 
     useEffect(() => {
         const fetchRecipe = async () => {
@@ -34,12 +36,29 @@ const RecipePage = () => {
                 console.error(error);
             } else {
                 setRecipe(data);
+                console.log('Recipe image_url:', data?.image_url);
             }
             setLoading(false);
         };
 
         fetchRecipe();
     }, [id]);
+
+    const handleImageLoad = () => {
+        setImageLoading(false);
+        setImageError(false);
+    };
+
+    const handleImageError = () => {
+        setImageLoading(false);
+        setImageError(true);
+        console.error('Failed to load recipe image:', recipe?.image_url);
+    };
+
+    const shouldShowImage = recipe?.image_url && 
+                           recipe.image_url !== '/placeholder.svg' && 
+                           recipe.image_url !== 'placeholder.svg' &&
+                           !imageError;
 
     if (loading) {
         return (
@@ -62,12 +81,19 @@ const RecipePage = () => {
             <Card className="max-w-4xl mx-auto bg-black/30 backdrop-blur-xl border-2 border-white/20 shadow-2xl">
                 <CardHeader>
                     <CardTitle className="text-3xl md:text-4xl font-bold text-center text-white drop-shadow-lg">{recipe.title}</CardTitle>
-                    {recipe.image_url && (
+                    {shouldShowImage && (
                         <div className="flex justify-center mt-6">
+                            {imageLoading && (
+                                <div className="flex items-center justify-center w-full max-w-md h-96 bg-black/20 rounded-lg">
+                                    <Loader2 className="h-8 w-8 animate-spin text-white/60" />
+                                </div>
+                            )}
                             <img 
                                 src={recipe.image_url} 
                                 alt={recipe.title} 
-                                className="rounded-lg w-full h-auto max-h-96 max-w-md object-cover shadow-lg" 
+                                className={`rounded-lg w-full h-auto max-h-96 max-w-md object-cover shadow-lg ${imageLoading ? 'hidden' : 'block'}`}
+                                onLoad={handleImageLoad}
+                                onError={handleImageError}
                             />
                         </div>
                     )}
