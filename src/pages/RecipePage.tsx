@@ -40,8 +40,10 @@ const RecipePage = () => {
                 console.error(error);
             } else {
                 setRecipe(data);
+                console.log('Recipe data:', data);
                 console.log('Recipe image_url:', data?.image_url);
                 console.log('Image from URL parameter:', imageFromUrl);
+                console.log('Final image URL to use:', data?.image_url || imageFromUrl);
             }
             setLoading(false);
         };
@@ -50,19 +52,24 @@ const RecipePage = () => {
     }, [id, imageFromUrl]);
 
     const handleImageLoad = () => {
+        console.log('Image loaded successfully');
         setImageLoading(false);
         setImageError(false);
     };
 
     const handleImageError = () => {
+        console.error('Failed to load recipe image');
+        console.error('Attempted URL:', recipe?.image_url || imageFromUrl);
         setImageLoading(false);
         setImageError(true);
-        console.error('Failed to load recipe image');
     };
 
     // Use image from database first, then fall back to URL parameter
     const imageUrl = recipe?.image_url || imageFromUrl;
     const shouldShowImage = imageUrl && imageUrl.trim() !== '' && imageUrl !== '/placeholder.svg' && imageUrl !== 'placeholder.svg';
+
+    console.log('Should show image:', shouldShowImage);
+    console.log('Image URL being used:', imageUrl);
 
     if (loading) {
         return (
@@ -104,15 +111,15 @@ const RecipePage = () => {
                 </CardHeader>
                 <CardContent className="space-y-8 mt-4">
                     <div>
-                        <h3 className="text-2xl font-semibold mb-2 border-b-2 border-white/20 pb-2">Description</h3>
+                        <h3 className="text-2xl font-semibold mb-2 border-b-2 border-white/20 pb-2 text-white">Description</h3>
                         <p className="text-white/80 mt-4">{recipe.description}</p>
                     </div>
                      <div>
-                        <h3 className="text-2xl font-semibold mb-2 border-b-2 border-white/20 pb-2">Ingredients</h3>
+                        <h3 className="text-2xl font-semibold mb-2 border-b-2 border-white/20 pb-2 text-white">Ingredients</h3>
                         <IngredientsList ingredients={recipe.ingredients} />
                     </div>
                     <div>
-                        <h3 className="text-2xl font-semibold mb-2 border-b-2 border-white/20 pb-2">Cooking Instructions</h3>
+                        <h3 className="text-2xl font-semibold mb-2 border-b-2 border-white/20 pb-2 text-white">Cooking Instructions</h3>
                         <pre className="text-white/80 bg-black/20 p-4 rounded-md whitespace-pre-wrap font-sans mt-4">{recipe.cooking_recipe}</pre>
                     </div>
                 </CardContent>
