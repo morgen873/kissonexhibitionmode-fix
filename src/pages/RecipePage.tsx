@@ -62,7 +62,15 @@ const RecipePage = () => {
             <Card className="max-w-4xl mx-auto bg-black/30 backdrop-blur-xl border-2 border-white/20 shadow-2xl">
                 <CardHeader>
                     <CardTitle className="text-3xl md:text-4xl font-bold text-center text-white drop-shadow-lg">{recipe.title}</CardTitle>
-                    {recipe.image_url && <img src={recipe.image_url} alt={recipe.title} className="rounded-lg mt-6 w-full h-auto max-h-96 object-cover" />}
+                    {recipe.image_url && (
+                        <div className="flex justify-center mt-6">
+                            <img 
+                                src={recipe.image_url} 
+                                alt={recipe.title} 
+                                className="rounded-lg w-full h-auto max-h-96 max-w-md object-cover shadow-lg" 
+                            />
+                        </div>
+                    )}
                 </CardHeader>
                 <CardContent className="space-y-8 mt-4">
                     <div>
