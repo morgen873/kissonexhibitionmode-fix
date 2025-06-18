@@ -138,6 +138,10 @@ The dumpling should appear as actual food that someone would want to eat, with p
             const imagePath = `public/${newRecipe.id}.png`;
 
             console.log("Uploading image to storage bucket...");
+            console.log("Storage bucket: recipe_images");
+            console.log("Image path:", imagePath);
+            console.log("Image size:", imageBlob.size, "bytes");
+            
             const { error: uploadError } = await supabaseAdmin.storage
                 .from('recipe_images')
                 .upload(imagePath, imageBlob, {
