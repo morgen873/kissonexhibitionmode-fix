@@ -64,12 +64,14 @@ const RecipePage = () => {
         setImageError(true);
     };
 
-    // Use image from database first, then fall back to URL parameter
-    const imageUrl = recipe?.image_url || imageFromUrl;
-    const shouldShowImage = imageUrl && imageUrl.trim() !== '' && imageUrl !== '/placeholder.svg' && imageUrl !== 'placeholder.svg';
+    // Use image from database first, then fall back to URL parameter, then to placeholder
+    const imageUrl = recipe?.image_url || imageFromUrl || '/placeholder.svg';
+    
+    // Always show an image - either the generated one or placeholder
+    const displayImageUrl = imageError ? '/placeholder.svg' : imageUrl;
 
-    console.log('Should show image:', shouldShowImage);
-    console.log('Image URL being used:', imageUrl);
+    console.log('Should show image: true (always show)');
+    console.log('Image URL being used:', displayImageUrl);
 
     if (loading) {
         return (
@@ -92,22 +94,20 @@ const RecipePage = () => {
             <Card className="max-w-4xl mx-auto bg-black/30 backdrop-blur-xl border-2 border-white/20 shadow-2xl">
                 <CardHeader>
                     <CardTitle className="text-3xl md:text-4xl font-bold text-center text-white drop-shadow-lg">{recipe.title}</CardTitle>
-                    {shouldShowImage && (
-                        <div className="flex justify-center mt-6">
-                            {imageLoading && (
-                                <div className="flex items-center justify-center w-full max-w-md h-96 bg-black/20 rounded-lg">
-                                    <Loader2 className="h-8 w-8 animate-spin text-white/60" />
-                                </div>
-                            )}
-                            <img 
-                                src={imageError ? '/placeholder.svg' : imageUrl} 
-                                alt={recipe.title} 
-                                className={`rounded-lg w-full h-auto max-h-96 max-w-md object-cover shadow-lg ${imageLoading ? 'hidden' : 'block'}`}
-                                onLoad={handleImageLoad}
-                                onError={handleImageError}
-                            />
-                        </div>
-                    )}
+                    <div className="flex justify-center mt-6">
+                        {imageLoading && (
+                            <div className="flex items-center justify-center w-full max-w-md h-96 bg-black/20 rounded-lg">
+                                <Loader2 className="h-8 w-8 animate-spin text-white/60" />
+                            </div>
+                        )}
+                        <img 
+                            src={displayImageUrl} 
+                            alt={recipe.title} 
+                            className={`rounded-lg w-full h-auto max-h-96 max-w-md object-cover shadow-lg ${imageLoading ? 'hidden' : 'block'}`}
+                            onLoad={handleImageLoad}
+                            onError={handleImageError}
+                        />
+                    </div>
                 </CardHeader>
                 <CardContent className="space-y-8 mt-4">
                     <div>
