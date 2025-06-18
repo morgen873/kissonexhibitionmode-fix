@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Database } from '@/integrations/supabase/types';
 import { Loader2 } from 'lucide-react';
@@ -11,15 +11,9 @@ type Recipe = Database['public']['Tables']['recipes']['Row'];
 
 const RecipePage = () => {
     const { id } = useParams<{ id: string }>();
-    const [searchParams] = useSearchParams();
     const [recipe, setRecipe] = useState<Recipe | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [imageError, setImageError] = useState(false);
-    const [imageLoading, setImageLoading] = useState(true);
-
-    // Get image URL from query parameter as fallback
-    const imageFromUrl = searchParams.get('img');
 
     useEffect(() => {
         const fetchRecipe = async () => {
@@ -40,38 +34,14 @@ const RecipePage = () => {
                 console.error(error);
             } else {
                 setRecipe(data);
-                console.log('Recipe data:', data);
-                console.log('Recipe image_url:', data?.image_url);
-                console.log('Image from URL parameter:', imageFromUrl);
-                console.log('Final image URL to use:', data?.image_url || imageFromUrl);
+                console.log('Recipe fetched:', data);
+                console.log('Recipe image URL:', data?.image_url);
             }
             setLoading(false);
         };
 
         fetchRecipe();
-    }, [id, imageFromUrl]);
-
-    const handleImageLoad = () => {
-        console.log('Image loaded successfully');
-        setImageLoading(false);
-        setImageError(false);
-    };
-
-    const handleImageError = () => {
-        console.error('Failed to load recipe image');
-        console.error('Attempted URL:', recipe?.image_url || imageFromUrl);
-        setImageLoading(false);
-        setImageError(true);
-    };
-
-    // Use image from database first, then fall back to URL parameter, then to placeholder
-    const imageUrl = recipe?.image_url || imageFromUrl || '/placeholder.svg';
-    
-    // Always show an image - either the generated one or placeholder
-    const displayImageUrl = imageError ? '/placeholder.svg' : imageUrl;
-
-    console.log('Should show image: true (always show)');
-    console.log('Image URL being used:', displayImageUrl);
+    }, [id]);
 
     if (loading) {
         return (
@@ -95,17 +65,17 @@ const RecipePage = () => {
                 <CardHeader>
                     <CardTitle className="text-3xl md:text-4xl font-bold text-center text-white drop-shadow-lg">{recipe.title}</CardTitle>
                     <div className="flex justify-center mt-6">
-                        {imageLoading && (
-                            <div className="flex items-center justify-center w-full max-w-md h-96 bg-black/20 rounded-lg">
-                                <Loader2 className="h-8 w-8 animate-spin text-white/60" />
-                            </div>
-                        )}
                         <img 
-                            src={displayImageUrl} 
+                            src={recipe.image_url || '/placeholder.svg'} 
                             alt={recipe.title} 
-                            className={`rounded-lg w-full h-auto max-h-96 max-w-md object-cover shadow-lg ${imageLoading ? 'hidden' : 'block'}`}
-                            onLoad={handleImageLoad}
-                            onError={handleImageError}
+                            className="rounded-lg w-full h-auto max-h-96 max-w-md object-cover shadow-lg"
+                            onError={(e) => {
+                                console.log('Image failed to load, using placeholder');
+                                e.currentTarget.src = '/placeholder.svg';
+                            }}
+                            onLoad={() => {
+                                console.log('Image loaded successfully:', recipe.image_url);
+                            }}
                         />
                     </div>
                 </CardHeader>
