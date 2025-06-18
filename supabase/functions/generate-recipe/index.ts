@@ -1,3 +1,4 @@
+
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { corsHeaders } from '../_shared/cors.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
@@ -63,6 +64,7 @@ serve(async (req) => {
       - "cooking_recipe": A string containing numbered, step-by-step instructions for preparing and cooking the dumplings. The steps should also reflect the timeline. Use \\n for newlines between steps.
     `;
 
+    console.log("Generating recipe with OpenAI...");
     const response = await openai.chat.completions.create({
         model: 'gpt-4o-mini',
         messages: [{ role: 'user', content: prompt }],
@@ -70,6 +72,7 @@ serve(async (req) => {
     });
 
     const recipeContent = JSON.parse(response.choices[0].message.content);
+    console.log("Recipe generated successfully:", recipeContent.title);
 
     // Insert recipe first to get an ID, starting with a placeholder image
     const { data: newRecipe, error: insertError } = await supabaseAdmin
@@ -94,6 +97,8 @@ serve(async (req) => {
         throw new Error("Failed to create and retrieve recipe.");
     }
 
+    console.log("Recipe inserted with ID:", newRecipe.id);
+
     // In a background step, generate and upload the image.
     // This uses a try/catch so that if image generation fails, the recipe is still returned.
     try {
@@ -116,6 +121,7 @@ REQUIREMENTS:
 
 The dumpling should appear as actual food that someone would want to eat, with proper dough texture and realistic appearance.`;
         
+        console.log("Generating image with DALL-E...");
         const imageResponse = await openai.images.generate({
             model: 'dall-e-3',
             prompt: imagePrompt,
@@ -125,11 +131,13 @@ The dumpling should appear as actual food that someone would want to eat, with p
             style: 'natural',
         });
         
+        console.log("Image generated successfully");
         const imageB64 = imageResponse.data[0].b64_json;
         if (imageB64) {
             const imageBlob = await(await fetch(`data:image/png;base64,${imageB64}`)).blob();
             const imagePath = `public/${newRecipe.id}.png`;
 
+            console.log("Uploading image to storage bucket...");
             const { error: uploadError } = await supabaseAdmin.storage
                 .from('recipe_images')
                 .upload(imagePath, imageBlob, {
@@ -139,16 +147,21 @@ The dumpling should appear as actual food that someone would want to eat, with p
 
             if (uploadError) {
                 console.error('Error uploading image:', uploadError);
+                console.error('Upload error details:', JSON.stringify(uploadError, null, 2));
             } else {
+                console.log("Image uploaded successfully to:", imagePath);
                 const { data: urlData } = supabaseAdmin.storage
                     .from('recipe_images')
                     .getPublicUrl(imagePath);
+                
+                console.log("Generated public URL:", urlData.publicUrl);
                 
                 if (urlData.publicUrl) {
                     // Update the recipe object that will be returned to the client
                     newRecipe.image_url = urlData.publicUrl;
                     
                     // Update the database record and wait for it.
+                    console.log("Updating recipe with image URL...");
                     const { error: updateError } = await supabaseAdmin
                         .from('recipes')
                         .update({ image_url: urlData.publicUrl })
@@ -156,20 +169,27 @@ The dumpling should appear as actual food that someone would want to eat, with p
 
                     if (updateError) {
                         console.error('Error updating recipe with image URL:', updateError);
+                    } else {
+                        console.log("Recipe updated successfully with image URL");
                     }
                 }
             }
+        } else {
+            console.error("No image data received from OpenAI");
         }
     } catch (e) {
         console.error("Error generating/uploading image:", e.message);
+        console.error("Full error details:", e);
         // Do not re-throw, let the response succeed with the placeholder image.
     }
 
+    console.log("Returning recipe with image_url:", newRecipe.image_url);
     return new Response(JSON.stringify({ recipe: newRecipe }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 200,
     })
   } catch (error) {
+    console.error('Edge function error:', error);
     return new Response(JSON.stringify({ error: error.message }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 500,
