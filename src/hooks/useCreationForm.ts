@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { steps } from '@/data/creation';
@@ -151,15 +152,16 @@ export const useCreationForm = () => {
                 throw new Error("Recipe generation failed. The function did not return a recipe.");
             }
 
-            // Create QR data with both recipe URL and image URL as parameters
+            console.log("Recipe received:", newRecipe);
+            console.log("Recipe image URL:", newRecipe.image_url);
+
+            // Create simple QR data with just the recipe URL
             const recipeUrl = `${window.location.origin}/recipe/${newRecipe.id}`;
-            const imageParam = newRecipe.image_url ? `?img=${encodeURIComponent(newRecipe.image_url)}` : '';
-            const qrData = `${recipeUrl}${imageParam}`;
 
             setRecipeResult({
                 name: newRecipe.title,
                 imageUrl: newRecipe.image_url || "/placeholder.svg",
-                qrData: qrData
+                qrData: recipeUrl
             });
 
         } catch (error) {
