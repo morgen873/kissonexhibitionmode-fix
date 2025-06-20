@@ -42,6 +42,7 @@ const Creation = () => {
   } = useCreationForm();
   
   const [hasStarted, setHasStarted] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const { setHeaderVisible } = useOutletContext<OutletContextType>() || {};
 
   useEffect(() => {
@@ -55,6 +56,15 @@ const Creation = () => {
     };
   }, [hasStarted, setHeaderVisible]);
 
+  // Enhanced transition handling
+  const handleStepTransition = (transitionFn: () => void) => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      transitionFn();
+      setTimeout(() => setIsTransitioning(false), 50);
+    }, 300);
+  };
+
   if (!hasStarted) {
     return <IntroFlow onComplete={() => setHasStarted(true)} />;
   }
@@ -63,18 +73,18 @@ const Creation = () => {
   const theme = stepThemes[currentStep] || stepThemes[0];
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br ${theme.bg} text-white p-4 sm:p-6 md:p-8 flex flex-col items-center justify-start transition-all duration-500 pt-24`}>
+    <div className={`min-h-screen bg-gradient-to-br ${theme.bg} text-white p-4 sm:p-6 md:p-8 flex flex-col items-center justify-start transition-all duration-700 ease-out pt-24`}>
       <div className="w-full max-w-4xl space-y-8">
         {/* Progress Bar at top */}
-        <div className="w-full">
+        <div className="w-full animate-breathe-in">
           <ProgressBar progress={progress} theme={theme} />
         </div>
 
         {/* Main Content Card */}
-        <Card className={`relative w-full ${recipeResult ? 'max-w-4xl' : 'max-w-2xl'} mx-auto bg-black/30 backdrop-blur-xl border-2 border-white/20 shadow-2xl ${theme.cardShadow} transition-all duration-500 transform animate-slide-in-from-bottom`}>
-          <CardHeader>
+        <Card className={`relative w-full ${recipeResult ? 'max-w-4xl' : 'max-w-2xl'} mx-auto bg-black/30 backdrop-blur-xl border-2 border-white/20 shadow-2xl ${theme.cardShadow} transition-all duration-700 ease-out transform ${isTransitioning ? 'animate-morph-out' : 'animate-morph-in'}`}>
+          <CardHeader className="animate-flow-up">
             {!recipeResult && !isCreatingRecipe && (
-              <CardTitle className={`text-2xl md:text-3xl font-black text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent drop-shadow-lg min-h-[100px] flex items-center justify-center transition-all duration-500`}>
+              <CardTitle className={`text-2xl md:text-3xl font-black text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent drop-shadow-lg min-h-[100px] flex items-center justify-center transition-all duration-700 ease-out`}>
                 {currentStepData.type === 'question' ? currentStepData.question : currentStepData.title}
               </CardTitle>
             )}
@@ -82,14 +92,16 @@ const Creation = () => {
           
           <CardContent className="py-0 px-0 mx-[15px]">
             {isCreatingRecipe ? (
-              <div className="flex flex-col items-center justify-center h-96 space-y-4">
+              <div className="flex flex-col items-center justify-center h-96 space-y-4 animate-breathe-in">
                 <Loader2 className="h-16 w-16 animate-spin text-white" />
-                <p className="text-2xl font-semibold text-white/80">Creating your recipe...</p>
+                <p className="text-2xl font-semibold text-white/80 animate-flow-up">Creating your recipe...</p>
               </div>
             ) : recipeResult ? (
-              <RecipeResultScreen recipe={recipeResult} onReset={handleReset} />
+              <div className="animate-slide-morph-in">
+                <RecipeResultScreen recipe={recipeResult} onReset={handleReset} />
+              </div>
             ) : (
-              <div className="animate-fade-in">
+              <div className={`transition-all duration-500 ${isTransitioning ? 'animate-morph-out' : 'animate-content-transition stagger-children'}`}>
                 {currentStepData.type === 'explanation' ? (
                   <ExplanationScreen description={currentStepData.description} />
                 ) : currentStepData.type === 'question' ? (
@@ -122,9 +134,9 @@ const Creation = () => {
                 <NavigationControls 
                   currentStep={currentStep} 
                   stepsLength={steps.length} 
-                  prevStep={prevStep} 
-                  nextStep={nextStep} 
-                  handleSubmit={handleSubmit} 
+                  prevStep={() => handleStepTransition(prevStep)} 
+                  nextStep={() => handleStepTransition(nextStep)} 
+                  handleSubmit={() => handleStepTransition(handleSubmit)} 
                   isNextDisabled={isNextDisabled} 
                 />
               </div>
