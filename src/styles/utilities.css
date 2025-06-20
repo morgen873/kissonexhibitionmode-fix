@@ -1,0 +1,67 @@
+
+/* Animation utility classes */
+@layer utilities {
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
+  
+  .animate-gradient {
+    background-size: 400% 400%;
+    animation: gradient-shift 6s ease infinite;
+  }
+  
+  .animate-psychedelic-pulse {
+    animation: psychedelic-pulse 3s ease-in-out infinite;
+  }
+  
+  .animate-neon-glow {
+    animation: neon-glow 2s ease-in-out infinite;
+  }
+  
+  .animate-holographic {
+    animation: holographic 4s ease-in-out infinite;
+  }
+  
+  .animate-matrix-rain {
+    animation: matrix-rain 8s linear infinite;
+  }
+  
+  .animate-slide-in-from-bottom {
+    animation: slide-in-from-bottom 0.5s ease-out;
+  }
+  
+  .animate-slide-out-to-bottom {
+    animation: slide-out-to-bottom 0.5s ease-out;
+  }
+  
+  .animate-fade-in {
+    animation: fade-in 0.4s ease-out;
+  }
+  
+  /* Glitch text effect */
+  .text-glitch {
+    position: relative;
+  }
+  
+  .text-glitch::before,
+  .text-glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .text-glitch::before {
+    animation: glitch-1 0.5s infinite;
+    color: #ff0040;
+    z-index: -1;
+  }
+  
+  .text-glitch::after {
+    animation: glitch-2 0.5s infinite;
+    color: #00ff40;
+    z-index: -2;
+  }
+}
