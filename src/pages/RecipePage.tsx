@@ -14,7 +14,6 @@ const RecipePage = () => {
     const [recipe, setRecipe] = useState<Recipe | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [imageLoaded, setImageLoaded] = useState(false);
     const [imageError, setImageError] = useState(false);
 
     useEffect(() => {
@@ -40,20 +39,6 @@ const RecipePage = () => {
                 setRecipe(data);
                 console.log('Recipe fetched successfully:', data);
                 console.log('Recipe image URL:', data?.image_url);
-                
-                // If there's an image URL, pre-load it to check if it's accessible
-                if (data?.image_url && data.image_url !== '/placeholder.svg') {
-                    const img = new Image();
-                    img.onload = () => {
-                        console.log('Image loaded successfully:', data.image_url);
-                        setImageLoaded(true);
-                    };
-                    img.onerror = () => {
-                        console.log('Image failed to load:', data.image_url);
-                        setImageError(true);
-                    };
-                    img.src = data.image_url;
-                }
             }
             setLoading(false);
         };
@@ -77,12 +62,7 @@ const RecipePage = () => {
         );
     }
 
-    const getImageSource = () => {
-        if (!recipe.image_url || recipe.image_url === '/placeholder.svg' || imageError) {
-            return '/placeholder.svg';
-        }
-        return recipe.image_url;
-    };
+    const shouldShowImage = recipe.image_url && recipe.image_url !== '/placeholder.svg' && !imageError;
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 to-slate-800 text-white p-4 sm:p-8">
@@ -91,18 +71,17 @@ const RecipePage = () => {
                     <CardTitle className="text-3xl md:text-4xl font-bold text-center text-white drop-shadow-lg">{recipe.title}</CardTitle>
                     <div className="flex justify-center mt-6">
                         <img 
-                            src={getImageSource()}
+                            src={shouldShowImage ? recipe.image_url : '/placeholder.svg'}
                             alt={recipe.title} 
                             className="rounded-lg w-full h-auto max-h-96 max-w-md object-cover shadow-lg"
                             onError={(e) => {
-                                console.log('Image failed to load, using placeholder:', e.currentTarget.src);
+                                console.log('Image failed to load:', e.currentTarget.src);
                                 setImageError(true);
                                 e.currentTarget.src = '/placeholder.svg';
                             }}
                             onLoad={() => {
-                                if (!imageError) {
-                                    console.log('Image loaded successfully in component:', recipe.image_url);
-                                    setImageLoaded(true);
+                                if (shouldShowImage) {
+                                    console.log('Image loaded successfully:', recipe.image_url);
                                 }
                             }}
                         />
