@@ -6,6 +6,7 @@ import { Database } from '@/integrations/supabase/types';
 import { Loader2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import IngredientsList from '@/components/recipe/IngredientsList';
+import { testImageAccess } from '@/utils/imageDebug';
 
 type Recipe = Database['public']['Tables']['recipes']['Row'];
 
@@ -38,6 +39,11 @@ const RecipePage = () => {
                 setRecipe(data);
                 console.log('Recipe fetched successfully:', data);
                 console.log('Recipe image URL from database:', data?.image_url);
+                
+                // Test image access if we have an image URL
+                if (data?.image_url && data.image_url !== '/placeholder.svg') {
+                    testImageAccess(data.image_url);
+                }
             }
             setLoading(false);
         };
@@ -61,17 +67,14 @@ const RecipePage = () => {
         );
     }
 
-    // Check if we have a valid generated image URL
-    const hasValidImage = recipe.image_url && 
-                         recipe.image_url !== '/placeholder.svg' && 
-                         recipe.image_url.trim() !== '';
+    // Simple image URL logic - use what's in the database or fallback to placeholder
+    const imageUrl = recipe.image_url || '/placeholder.svg';
+    const isPlaceholder = !recipe.image_url || recipe.image_url === '/placeholder.svg';
 
-    const imageUrl = hasValidImage ? recipe.image_url : '/placeholder.svg';
-
-    console.log('Image display decision:');
-    console.log('- Recipe image URL:', recipe.image_url);
-    console.log('- Has valid image:', hasValidImage);
-    console.log('- Final image URL:', imageUrl);
+    console.log('Image URL decision:');
+    console.log('- Database image_url:', recipe.image_url);
+    console.log('- Final image URL to use:', imageUrl);
+    console.log('- Is placeholder:', isPlaceholder);
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 to-slate-800 text-white p-4 sm:p-8">
@@ -85,19 +88,20 @@ const RecipePage = () => {
                                 alt={recipe.title} 
                                 className="rounded-lg w-full h-auto max-h-96 object-cover shadow-lg"
                                 onLoad={() => {
-                                    console.log('Image loaded successfully:', imageUrl);
+                                    console.log('✅ Image loaded successfully:', imageUrl);
                                 }}
                                 onError={(e) => {
-                                    console.log('Image failed to load:', imageUrl);
-                                    // If it's not already the placeholder, fall back to it
+                                    console.log('❌ Image failed to load:', imageUrl);
+                                    console.log('❌ Error details:', e);
+                                    // Only fall back if we're not already using placeholder
                                     if (e.currentTarget.src !== '/placeholder.svg') {
-                                        console.log('Falling back to placeholder');
+                                        console.log('🔄 Falling back to placeholder');
                                         e.currentTarget.src = '/placeholder.svg';
                                     }
                                 }}
                             />
                             <div className="absolute top-2 left-2 bg-black/50 text-white text-xs p-1 rounded">
-                                {hasValidImage ? 'Generated' : 'Placeholder'}
+                                {isPlaceholder ? 'Placeholder' : 'Generated'}
                             </div>
                         </div>
                     </div>
