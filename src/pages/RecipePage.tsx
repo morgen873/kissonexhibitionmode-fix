@@ -14,7 +14,6 @@ const RecipePage = () => {
     const [recipe, setRecipe] = useState<Recipe | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [imageError, setImageError] = useState(false);
 
     useEffect(() => {
         const fetchRecipe = async () => {
@@ -62,19 +61,17 @@ const RecipePage = () => {
         );
     }
 
-    // Check if we have a generated image URL (not placeholder)
-    const hasGeneratedImage = recipe.image_url && 
-                              recipe.image_url !== '/placeholder.svg' && 
-                              recipe.image_url.trim() !== '' &&
-                              !imageError;
+    // Check if we have a valid generated image URL
+    const hasValidImage = recipe.image_url && 
+                         recipe.image_url !== '/placeholder.svg' && 
+                         recipe.image_url.trim() !== '';
 
-    const imageToShow = hasGeneratedImage ? recipe.image_url : '/placeholder.svg';
+    const imageUrl = hasValidImage ? recipe.image_url : '/placeholder.svg';
 
-    console.log('Final image decision:');
+    console.log('Image display decision:');
     console.log('- Recipe image URL:', recipe.image_url);
-    console.log('- Has generated image:', hasGeneratedImage);
-    console.log('- Image to show:', imageToShow);
-    console.log('- Image error state:', imageError);
+    console.log('- Has valid image:', hasValidImage);
+    console.log('- Final image URL:', imageUrl);
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 to-slate-800 text-white p-4 sm:p-8">
@@ -84,23 +81,23 @@ const RecipePage = () => {
                     <div className="flex justify-center mt-6">
                         <div className="relative w-full max-w-md">
                             <img 
-                                src={imageToShow}
+                                src={imageUrl}
                                 alt={recipe.title} 
                                 className="rounded-lg w-full h-auto max-h-96 object-cover shadow-lg"
+                                onLoad={() => {
+                                    console.log('Image loaded successfully:', imageUrl);
+                                }}
                                 onError={(e) => {
-                                    console.log('Image load error for URL:', e.currentTarget.src);
-                                    if (!imageError) {
-                                        console.log('Setting imageError to true and switching to placeholder');
-                                        setImageError(true);
+                                    console.log('Image failed to load:', imageUrl);
+                                    // If it's not already the placeholder, fall back to it
+                                    if (e.currentTarget.src !== '/placeholder.svg') {
+                                        console.log('Falling back to placeholder');
                                         e.currentTarget.src = '/placeholder.svg';
                                     }
                                 }}
-                                onLoad={(e) => {
-                                    console.log('Image loaded successfully:', e.currentTarget.src);
-                                }}
                             />
                             <div className="absolute top-2 left-2 bg-black/50 text-white text-xs p-1 rounded">
-                                {hasGeneratedImage ? 'Generated' : 'Placeholder'}
+                                {hasValidImage ? 'Generated' : 'Placeholder'}
                             </div>
                         </div>
                     </div>
