@@ -105,6 +105,36 @@ export type Database = {
         }
         Relationships: []
       }
+      user_saved_recipes: {
+        Row: {
+          created_at: string
+          id: string
+          qr_data: string | null
+          recipe_image_url: string | null
+          recipe_name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          qr_data?: string | null
+          recipe_image_url?: string | null
+          recipe_name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          qr_data?: string | null
+          recipe_image_url?: string | null
+          recipe_name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
