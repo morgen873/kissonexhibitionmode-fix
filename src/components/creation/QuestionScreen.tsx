@@ -26,13 +26,13 @@ const QuestionScreen: React.FC<QuestionScreenProps> = ({
 }) => {
     return (
         <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-8">
+            <div className="flex flex-col gap-4 my-8 max-w-2xl mx-auto">
                 {stepData.options.map((option) => (
                     <div
                         key={option.title}
                         onClick={() => handleAnswerSelect(option.title)}
                         className={`
-                            p-6 rounded-lg transition-all duration-300 h-full cursor-pointer
+                            p-6 rounded-lg transition-all duration-300 cursor-pointer
                             ${answers[stepData.id] === option.title
                                 ? `bg-white/20 border-2 ${theme.optionSelectedBorder} scale-105 shadow-lg ${theme.optionSelectedShadow}`
                                 : `bg-white/10 border-2 border-white/20 ${theme.optionHover}`
@@ -45,7 +45,7 @@ const QuestionScreen: React.FC<QuestionScreenProps> = ({
                 ))}
             </div>
             {stepData.customOption && answers[stepData.id] === stepData.customOption.title && (
-                <div className="my-4">
+                <div className="my-4 max-w-2xl mx-auto">
                     <label htmlFor="custom-answer" className="block text-sm font-medium text-white/80 mb-2">
                         {stepData.customOption.title}:
                     </label>
