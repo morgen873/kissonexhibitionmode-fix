@@ -93,9 +93,9 @@ const Knob: React.FC<KnobProps> = ({
         <div
             ref={knobRef}
             className={cn(
-                "relative rounded-full bg-muted border-2 border-border shadow-inner cursor-pointer select-none",
+                "relative rounded-full bg-slate-800 border-2 border-slate-700 shadow-inner cursor-pointer select-none",
                 "flex items-center justify-center",
-                "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background focus:ring-foreground/20",
+                "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-cyan-500",
                 className
             )}
             style={{ width: size, height: size }}
@@ -107,13 +107,13 @@ const Knob: React.FC<KnobProps> = ({
             aria-valuemax={max}
             aria-valuenow={value}
         >
-            <div className="absolute w-[85%] h-[85%] bg-muted/50 rounded-full shadow-inner" />
+            <div className="absolute w-[85%] h-[85%] bg-slate-700/50 rounded-full shadow-inner" />
             <div
                 className="absolute w-full h-full"
                 style={{ transform: `rotate(${currentAngleDeg}deg)` }}
             >
                 <div
-                    className="absolute bg-foreground rounded-full shadow-md shadow-foreground/20"
+                    className="absolute bg-cyan-400 rounded-full shadow-md shadow-cyan-400/50"
                     style={{
                         top: '10%',
                         left: '50%',
@@ -123,7 +123,7 @@ const Knob: React.FC<KnobProps> = ({
                     }}
                 ></div>
             </div>
-            <div className="absolute w-3/4 h-3/4 bg-background rounded-full shadow-md border border-border/30" />
+            <div className="absolute w-3/4 h-3/4 bg-slate-900 rounded-full shadow-md" />
         </div>
     );
 };
