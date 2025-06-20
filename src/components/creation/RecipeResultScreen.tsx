@@ -4,6 +4,8 @@ import { QRCodeSVG as QRCode } from 'qrcode.react';
 import { Button } from '@/components/ui/button';
 import { Printer, Save, Mail, RotateCcw } from 'lucide-react';
 import { RecipeResult } from '@/types/creation';
+import { toast } from '@/components/ui/sonner';
+import { supabase } from '@/integrations/supabase/client';
 
 interface RecipeResultScreenProps {
     recipe: RecipeResult;
@@ -91,6 +93,91 @@ const RecipeResultScreen: React.FC<RecipeResultScreenProps> = ({ recipe, onReset
         }
     };
 
+    const saveRecipe = async () => {
+        try {
+            // Get current user
+            const { data: { user } } = await supabase.auth.getUser();
+            
+            if (!user) {
+                toast.error('Please sign in to save recipes');
+                return;
+            }
+
+            // Check if recipe already exists in user's saved recipes
+            const { data: existingRecipe, error: checkError } = await supabase
+                .from('user_saved_recipes')
+                .select('id')
+                .eq('user_id', user.id)
+                .eq('recipe_name', recipe.name)
+                .maybeSingle();
+
+            if (checkError) {
+                console.error('Error checking existing recipe:', checkError);
+                toast.error('Failed to check existing recipes');
+                return;
+            }
+
+            if (existingRecipe) {
+                toast.info('Recipe already saved to your collection');
+                return;
+            }
+
+            // Save recipe to user's collection
+            const { error: saveError } = await supabase
+                .from('user_saved_recipes')
+                .insert({
+                    user_id: user.id,
+                    recipe_name: recipe.name,
+                    recipe_image_url: recipe.imageUrl,
+                    qr_data: recipe.qrData
+                });
+
+            if (saveError) {
+                console.error('Error saving recipe:', saveError);
+                toast.error('Failed to save recipe');
+                return;
+            }
+
+            toast.success('Recipe saved to your collection!');
+        } catch (error) {
+            console.error('Error saving recipe:', error);
+            toast.error('Failed to save recipe');
+        }
+    };
+
+    const emailRecipe = async () => {
+        try {
+            // Get current user
+            const { data: { user } } = await supabase.auth.getUser();
+            
+            if (!user?.email) {
+                toast.error('Please sign in to email recipes');
+                return;
+            }
+
+            // Call edge function to send email
+            const { error } = await supabase.functions.invoke('send-recipe-email', {
+                body: {
+                    recipeName: recipe.name,
+                    recipeImageUrl: recipe.imageUrl,
+                    qrData: recipe.qrData,
+                    userEmail: user.email
+                }
+            });
+
+            if (error) {
+                console.error('Error sending email:', error);
+                toast.error('Failed to send recipe via email');
+                return;
+            }
+
+            toast.success('Recipe sent to your email!');
+        } catch (error) {
+            console.error('Error sending email:', error);
+            toast.error('Failed to send recipe via email');
+        }
+    };
+
     return (
         <div className="w-full flex flex-col items-center space-y-8 text-white/90 pb-8">
             <h2 className="text-3xl font-bold text-center">Your Memory KissOn Recipe</h2>
@@ -138,8 +225,8 @@ const RecipeResultScreen: React.FC<RecipeResultScreenProps> = ({ recipe, onReset
 
             <div className="flex flex-wrap justify-center gap-4">
                 <Button onClick={printRecipe}><Printer/> Print Label</Button>
-                <Button variant="secondary"> <Save/> Save Recipe</Button>
-                <Button variant="secondary"><Mail/> Email Recipe</Button>
+                <Button variant="secondary" onClick={saveRecipe}> <Save/> Save Recipe</Button>
+                <Button variant="secondary" onClick={emailRecipe}><Mail/> Email Recipe</Button>
             </div>
              <Button onClick={onReset} variant="outline" className="bg-transparent hover:bg-white/10 text-white mb-8">
                 <RotateCcw className="mr-2" /> Create Another
