@@ -210,6 +210,40 @@
   }
 }
 
+/* Vertical sliding animations */
+@keyframes slide-in-from-bottom {
+  0% {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-out-to-bottom {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @layer utilities {
   .animate-float {
     animation: float 4s ease-in-out infinite;
@@ -234,6 +268,18 @@
   
   .animate-matrix-rain {
     animation: matrix-rain 8s linear infinite;
+  }
+  
+  .animate-slide-in-from-bottom {
+    animation: slide-in-from-bottom 0.5s ease-out;
+  }
+  
+  .animate-slide-out-to-bottom {
+    animation: slide-out-to-bottom 0.5s ease-out;
+  }
+  
+  .animate-fade-in {
+    animation: fade-in 0.4s ease-out;
   }
   
   /* Glitch text effect */

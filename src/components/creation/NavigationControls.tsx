@@ -1,6 +1,8 @@
+
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, Zap } from 'lucide-react';
+import { ArrowUp, ArrowDown, Zap } from 'lucide-react';
+
 interface NavigationControlsProps {
   currentStep: number;
   stepsLength: number;
@@ -9,6 +11,7 @@ interface NavigationControlsProps {
   handleSubmit: () => void;
   isNextDisabled: boolean;
 }
+
 const NavigationControls: React.FC<NavigationControlsProps> = ({
   currentStep,
   stepsLength,
@@ -17,15 +20,27 @@ const NavigationControls: React.FC<NavigationControlsProps> = ({
   handleSubmit,
   isNextDisabled
 }) => {
-  return <div className="flex justify-between mt-8 my-[30px]">
-            <Button onClick={prevStep} disabled={currentStep === 0} variant="ghost" className="text-white hover:bg-white/10 disabled:opacity-50">
-                <ArrowLeft className="mr-2" /> Back
-            </Button>
-            {currentStep === stepsLength - 1 ? <Button onClick={handleSubmit} disabled={isNextDisabled}>
-                    Create Recipe <Zap className="ml-2" />
-                </Button> : <Button onClick={nextStep} disabled={isNextDisabled} className="py-0 px-[30px]">
-                    Next <ArrowRight className="ml-2" />
-                </Button>}
-        </div>;
+  return (
+    <div className="flex justify-between mt-8 my-[30px]">
+      <Button 
+        onClick={prevStep} 
+        disabled={currentStep === 0} 
+        variant="ghost" 
+        className="text-white hover:bg-white/10 disabled:opacity-50"
+      >
+        <ArrowUp className="mr-2" /> Back
+      </Button>
+      {currentStep === stepsLength - 1 ? (
+        <Button onClick={handleSubmit} disabled={isNextDisabled}>
+          Create Recipe <Zap className="ml-2" />
+        </Button>
+      ) : (
+        <Button onClick={nextStep} disabled={isNextDisabled} className="py-0 px-[30px]">
+          Continue <ArrowDown className="ml-2" />
+        </Button>
+      )}
+    </div>
+  );
 };
+
 export default NavigationControls;
