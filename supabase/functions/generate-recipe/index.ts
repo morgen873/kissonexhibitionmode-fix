@@ -33,13 +33,13 @@ serve(async (req) => {
     const openai = new OpenAI({ apiKey: openAIKey });
     
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
-    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY');
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
-    if (!supabaseUrl || !supabaseAnonKey) {
+    if (!supabaseUrl || !supabaseServiceKey) {
       throw new Error("Missing Supabase environment variables.");
     }
     
-    const supabaseAdmin = createClient(supabaseUrl, supabaseAnonKey);
+    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
 
     const prompt = `
       You are a creative chef specializing in "Memory KissOn" dumplings. A user has provided the following inputs to create a unique recipe.
@@ -99,8 +99,7 @@ serve(async (req) => {
 
     console.log("Recipe inserted with ID:", newRecipe.id);
 
-    // In a background step, generate and upload the image.
-    // This uses a try/catch so that if image generation fails, the recipe is still returned.
+    // Generate and upload image
     try {
         const dumplingShape = Object.values(payload.controls)[0]?.shape || 'classic';
         
@@ -133,15 +132,33 @@ The dumpling should appear as actual food that someone would want to eat, with p
         
         console.log("Image generated successfully");
         const imageB64 = imageResponse.data[0].b64_json;
+        
         if (imageB64) {
             const imageBlob = await(await fetch(`data:image/png;base64,${imageB64}`)).blob();
             const imagePath = `public/${newRecipe.id}.png`;
 
-            console.log("Uploading image to storage bucket...");
-            console.log("Storage bucket: recipe_images");
-            console.log("Image path:", imagePath);
-            console.log("Image size:", imageBlob.size, "bytes");
+            console.log("Ensuring bucket exists and uploading image...");
             
+            // First, ensure the bucket exists
+            const { data: buckets } = await supabaseAdmin.storage.listBuckets();
+            const bucketExists = buckets?.some(bucket => bucket.id === 'recipe_images');
+            
+            if (!bucketExists) {
+                console.log("Creating recipe_images bucket...");
+                const { error: bucketError } = await supabaseAdmin.storage.createBucket('recipe_images', {
+                    public: true,
+                    allowedMimeTypes: ['image/png', 'image/jpeg', 'image/webp'],
+                    fileSizeLimit: 5242880 // 5MB
+                });
+                
+                if (bucketError) {
+                    console.error('Error creating bucket:', bucketError);
+                } else {
+                    console.log("Bucket created successfully");
+                }
+            }
+            
+            // Upload the image
             const { error: uploadError } = await supabaseAdmin.storage
                 .from('recipe_images')
                 .upload(imagePath, imageBlob, {
@@ -151,7 +168,6 @@ The dumpling should appear as actual food that someone would want to eat, with p
 
             if (uploadError) {
                 console.error('Error uploading image:', uploadError);
-                console.error('Upload error details:', JSON.stringify(uploadError, null, 2));
             } else {
                 console.log("Image uploaded successfully to:", imagePath);
                 const { data: urlData } = supabaseAdmin.storage
@@ -161,11 +177,8 @@ The dumpling should appear as actual food that someone would want to eat, with p
                 console.log("Generated public URL:", urlData.publicUrl);
                 
                 if (urlData.publicUrl) {
-                    // Update the recipe object that will be returned to the client
                     newRecipe.image_url = urlData.publicUrl;
                     
-                    // Update the database record and wait for it.
-                    console.log("Updating recipe with image URL...");
                     const { error: updateError } = await supabaseAdmin
                         .from('recipes')
                         .update({ image_url: urlData.publicUrl })
@@ -178,13 +191,10 @@ The dumpling should appear as actual food that someone would want to eat, with p
                     }
                 }
             }
-        } else {
-            console.error("No image data received from OpenAI");
         }
     } catch (e) {
-        console.error("Error generating/uploading image:", e.message);
-        console.error("Full error details:", e);
-        // Do not re-throw, let the response succeed with the placeholder image.
+        console.error("Error generating/uploading image:", e);
+        // Continue with placeholder image
     }
 
     console.log("Returning recipe with image_url:", newRecipe.image_url);
