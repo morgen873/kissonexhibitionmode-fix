@@ -10,7 +10,7 @@ const ExplanationScreen: React.FC<ExplanationScreenProps> = ({
 }) => {
   return (
     <div className="text-center my-8 animate-breathe-in">
-      <p className="text-lg text-white/80 leading-relaxed max-w-prose whitespace-pre-line py-0 px-0 mx-[10px] my-0 font-bold text-center animate-flow-up">
+      <p className="text-lg text-foreground/90 leading-relaxed max-w-prose whitespace-pre-line py-0 px-0 mx-[10px] my-0 font-bold text-center animate-flow-up">
         {description}
       </p>
     </div>

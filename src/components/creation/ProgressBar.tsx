@@ -10,8 +10,11 @@ interface ProgressBarProps {
 
 const ProgressBar: React.FC<ProgressBarProps> = ({ progress, theme }) => {
     return (
-        <div className="w-full bg-gray-700/50 rounded-full h-2.5 mb-4">
-            <div className={`bg-gradient-to-r ${theme.progress} h-2.5 rounded-full transition-all duration-500`} style={{ width: `${progress}%` }}></div>
+        <div className="w-full bg-muted/30 rounded-full h-2.5 mb-4 border border-border/50">
+            <div 
+                className="bg-gradient-to-r from-foreground via-foreground/80 to-foreground h-2.5 rounded-full transition-all duration-500 shadow-sm" 
+                style={{ width: `${progress}%` }}
+            ></div>
         </div>
     );
 };

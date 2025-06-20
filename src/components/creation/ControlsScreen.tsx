@@ -32,12 +32,12 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
     const flavorIndex = controls.flavor.options.indexOf(controlValues.flavor);
 
     return (
-        <div className="space-y-8 my-8 text-white/90">
-            <p className="text-center text-white/80 whitespace-pre-line">{stepData.description}</p>
+        <div className="space-y-8 my-8 text-foreground/90">
+            <p className="text-center text-foreground/80 whitespace-pre-line">{stepData.description}</p>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-4">
                 <div className="flex flex-col items-center gap-4">
-                    <Label className="font-bold text-lg">Temperature</Label>
+                    <Label className="font-bold text-lg text-foreground">Temperature</Label>
                     <Knob
                         min={controls.temperature.min}
                         max={controls.temperature.max}
@@ -46,11 +46,11 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
                         onValueChange={onTemperatureChange}
                         size={120}
                     />
-                    <span className="w-28 text-center p-2 rounded-md bg-black/20 font-mono">{controlValues.temperature} {controls.temperature.unit}</span>
+                    <span className="w-28 text-center p-2 rounded-md bg-card/50 border border-border font-mono text-foreground">{controlValues.temperature} {controls.temperature.unit}</span>
                 </div>
 
                 <div className="flex flex-col items-center gap-4">
-                    <Label className="font-bold text-lg">Shape</Label>
+                    <Label className="font-bold text-lg text-foreground">Shape</Label>
                      <Knob
                         min={0}
                         max={controls.shape.options.length - 1}
@@ -59,11 +59,11 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
                         onValueChange={onShapeChange}
                         size={120}
                     />
-                    <span className="w-28 capitalize text-center p-2 rounded-md bg-black/20 font-mono">{controlValues.shape}</span>
+                    <span className="w-28 capitalize text-center p-2 rounded-md bg-card/50 border border-border font-mono text-foreground">{controlValues.shape}</span>
                 </div>
 
                 <div className="flex flex-col items-center gap-4">
-                    <Label className="font-bold text-lg">Flavor</Label>
+                    <Label className="font-bold text-lg text-foreground">Flavor</Label>
                      <Knob
                         min={0}
                         max={controls.flavor.options.length - 1}
@@ -72,19 +72,19 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
                         onValueChange={onFlavorChange}
                         size={120}
                     />
-                    <span className="w-28 capitalize text-center p-2 rounded-md bg-black/20 font-mono">{controlValues.flavor}</span>
+                    <span className="w-28 capitalize text-center p-2 rounded-md bg-card/50 border border-border font-mono text-foreground">{controlValues.flavor}</span>
                 </div>
             </div>
 
             <div className="flex flex-col items-center gap-2 pt-4">
-                <Label htmlFor="enhancer" className="font-bold text-lg text-center">What spice or condiment would enhance this experience?</Label>
-                <p className="text-sm text-center text-white/70 max-w-md">Salt, pepper, cinnamon, honey... This will add the final touch of flavor to your memory recipe.</p>
+                <Label htmlFor="enhancer" className="font-bold text-lg text-center text-foreground">What spice or condiment would enhance this experience?</Label>
+                <p className="text-sm text-center text-foreground/70 max-w-md">Salt, pepper, cinnamon, honey... This will add the final touch of flavor to your memory recipe.</p>
                 <Textarea
                     id="enhancer"
                     value={controlValues.enhancer}
                     onChange={onEnhancerChange}
                     placeholder="e.g., A pinch of cinnamon"
-                    className="mt-2 w-full max-w-sm bg-black/20 border-white/20 text-white placeholder:text-white/50 focus:ring-cyan-500 focus:border-cyan-500"
+                    className="mt-2 w-full max-w-sm bg-input border-border text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-foreground/20 focus:border-foreground"
                     rows={2}
                 />
             </div>
