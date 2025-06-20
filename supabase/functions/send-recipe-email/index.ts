@@ -17,6 +17,18 @@ serve(async (req) => {
   try {
     const { recipeName, recipeImageUrl, qrData, userEmail }: EmailRequest = await req.json()
 
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(userEmail)) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid email format' }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 400,
+        }
+      )
+    }
+
     // For now, we'll use a simple email service simulation
     // In production, you would integrate with a service like Resend, SendGrid, etc.
     console.log(`Sending recipe "${recipeName}" to ${userEmail}`)

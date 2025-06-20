@@ -6,41 +6,17 @@ import { toast } from '@/components/ui/sonner';
 export const useRecipeSave = () => {
     const saveRecipe = async (recipe: RecipeResult) => {
         try {
-            // Get current user
-            const { data: { user } } = await supabase.auth.getUser();
-            
-            if (!user) {
-                toast.error('Please sign in to save recipes');
-                return;
-            }
-
-            // Check if recipe already exists in user's saved recipes
-            const { data: existingRecipe, error: checkError } = await supabase
-                .from('user_saved_recipes')
-                .select('id')
-                .eq('user_id', user.id)
-                .eq('recipe_name', recipe.name)
-                .maybeSingle();
-
-            if (checkError) {
-                console.error('Error checking existing recipe:', checkError);
-                toast.error('Failed to check existing recipes');
-                return;
-            }
-
-            if (existingRecipe) {
-                toast.info('Recipe already saved to your collection');
-                return;
-            }
-
-            // Save recipe to user's collection
+            // Save recipe without requiring user authentication
             const { error: saveError } = await supabase
-                .from('user_saved_recipes')
+                .from('recipes')
                 .insert({
-                    user_id: user.id,
-                    recipe_name: recipe.name,
-                    recipe_image_url: recipe.imageUrl,
-                    qr_data: recipe.qrData
+                    title: recipe.name,
+                    image_url: recipe.imageUrl,
+                    recipe_data: {
+                        name: recipe.name,
+                        imageUrl: recipe.imageUrl,
+                        qrData: recipe.qrData
+                    }
                 });
 
             if (saveError) {
@@ -49,7 +25,7 @@ export const useRecipeSave = () => {
                 return;
             }
 
-            toast.success('Recipe saved to your collection!');
+            toast.success('Recipe saved successfully!');
         } catch (error) {
             console.error('Error saving recipe:', error);
             toast.error('Failed to save recipe');

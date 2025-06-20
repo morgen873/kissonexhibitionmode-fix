@@ -4,14 +4,23 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/sonner';
 
 export const useRecipeEmail = () => {
-    const emailRecipe = async (recipe: RecipeResult) => {
+    const emailRecipe = async (recipe: RecipeResult, userEmail?: string) => {
         try {
-            // Get current user
-            const { data: { user } } = await supabase.auth.getUser();
-            
-            if (!user?.email) {
-                toast.error('Please sign in to email recipes');
-                return;
+            // Prompt user for email if not provided
+            let email = userEmail;
+            if (!email) {
+                email = prompt('Please enter your email address to receive the recipe:');
+                if (!email) {
+                    toast.error('Email address is required');
+                    return;
+                }
+                
+                // Basic email validation
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    toast.error('Please enter a valid email address');
+                    return;
+                }
             }
 
             // Call edge function to send email
@@ -20,7 +29,7 @@ export const useRecipeEmail = () => {
                     recipeName: recipe.name,
                     recipeImageUrl: recipe.imageUrl,
                     qrData: recipe.qrData,
-                    userEmail: user.email
+                    userEmail: email
                 }
             });
 
