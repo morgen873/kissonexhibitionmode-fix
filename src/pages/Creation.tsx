@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -58,13 +59,9 @@ const Creation = () => {
     };
   }, [setHeaderVisible]);
 
-  // Enhanced transition handling
+  // Simplified transition handling - no delays
   const handleStepTransition = (transitionFn: () => void) => {
-    setIsTransitioning(true);
-    setTimeout(() => {
-      transitionFn();
-      setTimeout(() => setIsTransitioning(false), 50);
-    }, 300);
+    transitionFn();
   };
 
   const nextIntroStep = () => {
@@ -90,13 +87,13 @@ const Creation = () => {
                         <p className="text-xl text-white font-bold mb-12 font-mono">
                             {step.description}
                         </p>
-                        <Button onClick={nextIntroStep} size="lg" className="bg-gradient-to-r from-black via-gray-800 to-black hover:from-gray-800 hover:via-black hover:to-gray-800 text-white font-bold shadow-lg transition-all duration-300 transform hover:scale-105 border-2 border-white/20 backdrop-blur-sm px-10 py-6 text-2xl rounded-2xl font-mono">
+                        <Button onClick={nextIntroStep} size="lg" className="bg-gradient-to-r from-black via-gray-800 to-black hover:from-gray-800 hover:via-black hover:to-gray-800 text-white font-bold shadow-lg transition-all duration-300 transform hover:scale-105 border-2 border-white/20 px-10 py-6 text-2xl rounded-2xl font-mono">
                             {step.buttonText}
                         </Button>
                     </div>;
       case 'explanation':
         const Icon = step.icon;
-        return <Card className="bg-transparent border-4 border-white/20 backdrop-blur-md transition-all duration-300 shadow-2xl shadow-black/25 w-full max-w-2xl mx-auto">
+        return <Card className="bg-transparent border-4 border-white/20 transition-all duration-300 shadow-2xl shadow-black/25 w-full max-w-2xl mx-auto">
                         <CardContent className="p-6">
                             {Icon && <div className="w-20 h-20 bg-gradient-to-r from-black via-gray-800 to-black rounded-full flex items-center justify-center mx-auto mb-8">
                                 <Icon className="h-10 w-10 text-white" />
@@ -154,28 +151,28 @@ const Creation = () => {
   };
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br ${theme.bg} text-white p-4 sm:p-6 md:p-8 flex flex-col items-center justify-start transition-all duration-700 ease-out pt-24`}>
-      {/* Simplified background effects */}
+    <div className={`min-h-screen bg-gradient-to-br ${theme.bg} text-white p-4 sm:p-6 md:p-8 flex flex-col items-center justify-start transition-all duration-300 pt-24`}>
+      {/* Simplified background effects - no blur */}
       {!hasStartedCreation && (
         <div className="absolute inset-0 opacity-20 overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-gray-800 via-black to-gray-800"></div>
-          <div className="absolute top-20 left-20 w-40 h-40 bg-gradient-to-r from-gray-600 to-black rounded-full blur-3xl"></div>
-          <div className="absolute top-60 right-10 w-60 h-60 bg-gradient-to-r from-black to-gray-700 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 left-1/3 w-32 h-32 bg-gradient-to-r from-gray-500 to-black rounded-full blur-2xl"></div>
+          <div className="absolute top-20 left-20 w-40 h-40 bg-gradient-to-r from-gray-600 to-black rounded-full"></div>
+          <div className="absolute top-60 right-10 w-60 h-60 bg-gradient-to-r from-black to-gray-700 rounded-full"></div>
+          <div className="absolute bottom-20 left-1/3 w-32 h-32 bg-gradient-to-r from-gray-500 to-black rounded-full"></div>
         </div>
       )}
 
       <div className="w-full max-w-2xl space-y-8 relative z-10">
         {/* Progress Bar at top */}
-        <div className="w-full animate-breathe-in">
+        <div className="w-full">
           <ProgressBar progress={progress} theme={theme} />
         </div>
 
-        {/* Main Content Card */}
-        <Card className={`relative w-full mx-auto bg-black/30 backdrop-blur-xl border-2 border-white/20 shadow-2xl ${theme.cardShadow} transition-all duration-700 ease-out transform ${isTransitioning ? 'animate-morph-out' : 'animate-morph-in'}`}>
-          <CardHeader className="animate-flow-up p-6">
+        {/* Main Content Card - removed backdrop-blur */}
+        <Card className={`relative w-full mx-auto bg-black/50 border-2 border-white/20 shadow-2xl ${theme.cardShadow} transition-opacity duration-300`}>
+          <CardHeader className="p-6">
             {!recipeResult && !isCreatingRecipe && (
-              <CardTitle className={`text-2xl md:text-3xl font-black text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent drop-shadow-lg min-h-[100px] flex items-center justify-center transition-all duration-700 ease-out font-mono`}>
+              <CardTitle className={`text-2xl md:text-3xl font-black text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent drop-shadow-lg min-h-[100px] flex items-center justify-center font-mono`}>
                 {!hasStartedCreation 
                   ? introSteps[currentIntroStep].title 
                   : (creationStepData.type === 'question' ? creationStepData.question : creationStepData.title)
@@ -186,16 +183,16 @@ const Creation = () => {
           
           <CardContent className="p-6">
             {isCreatingRecipe ? (
-              <div className="flex flex-col items-center justify-center h-96 space-y-4 animate-breathe-in">
+              <div className="flex flex-col items-center justify-center h-96 space-y-4">
                 <Loader2 className="h-16 w-16 animate-spin text-white" />
-                <p className="text-2xl font-semibold text-white/80 animate-flow-up font-mono">Creating your recipe...</p>
+                <p className="text-2xl font-semibold text-white/80 font-mono">Creating your recipe...</p>
               </div>
             ) : recipeResult ? (
-              <div className="animate-slide-morph-in">
+              <div>
                 <RecipeResultScreen recipe={recipeResult} onReset={handleReset} />
               </div>
             ) : (
-              <div className={`transition-all duration-500 ${isTransitioning ? 'animate-morph-out' : 'animate-content-transition stagger-children'}`}>
+              <div className="transition-opacity duration-300">
                 {!hasStartedCreation ? (
                   <main className="flex flex-col items-center justify-center flex-grow w-full">
                     {renderIntroStepContent(introSteps[currentIntroStep])}
@@ -270,7 +267,7 @@ const Creation = () => {
 
       {/* Footer for intro flow */}
       {!hasStartedCreation && (
-        <footer className="relative z-10 bg-black/50 backdrop-blur-md text-white mt-8 w-full text-center border-t-2 border-white/20 py-4">
+        <footer className="relative z-10 bg-black/50 text-white mt-8 w-full text-center border-t-2 border-white/20 py-4">
           <p className="text-lg font-black font-mono">
             A DESIGN PROJECT BY <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mx-1">OREN/LUPE</span>
           </p>
