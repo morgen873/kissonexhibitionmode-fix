@@ -55,7 +55,7 @@ export const PROHIBITED_WORDS = [
   'excrement', 'execute', 'executed', 'execution', 'executioner', 'explosion', 'facefucker',
   'faeces', 'fag', 'fagging', 'faggot', 'fagot', 'failed', 'failure', 'fairies', 'fairy',
   'faith', 'fannyfucker', 'fart', 'farted', 'farting', 'farty', 'fastfuck', 'fat', 'fatah',
-  'fatass', 'fatfuck', 'fatfucker', 'fatso', 'fckcum', 'fear', 'feces', 'felatio', 'felch',
+  'fatass', 'fatfuck', 'fatfucker', 'fatso', 'fckcum', 'feces', 'felatio', 'felch',
   'felcher', 'felching', 'fellatio', 'feltch', 'feltcher', 'feltching', 'fetish', 'fight',
   'filipina', 'filipino', 'fingerfood', 'fingerfuck', 'fingerfucked', 'fingerfucker',
   'fingerfuckers', 'fingerfucking', 'fire', 'firing', 'fister', 'fistfuck', 'fistfucked',
