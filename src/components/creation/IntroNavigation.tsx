@@ -11,6 +11,8 @@ interface IntroNavigationProps {
     isFirstStep: boolean;
     isLastStep: boolean;
     buttonText: string;
+    onTransitionNext?: () => void;
+    onTransitionPrev?: () => void;
 }
 
 const IntroNavigation: React.FC<IntroNavigationProps> = ({
@@ -20,13 +22,31 @@ const IntroNavigation: React.FC<IntroNavigationProps> = ({
     onNext,
     isFirstStep,
     isLastStep,
-    buttonText
+    buttonText,
+    onTransitionNext,
+    onTransitionPrev
 }) => {
+    const handleNextClick = () => {
+        if (onTransitionNext) {
+            onTransitionNext();
+        } else {
+            onNext();
+        }
+    };
+
+    const handlePrevClick = () => {
+        if (onTransitionPrev) {
+            onTransitionPrev();
+        } else {
+            onPrev();
+        }
+    };
+
     return (
         <div className="w-full mt-6">
             <div className="flex justify-between items-center">
                 <Button 
-                    onClick={onPrev} 
+                    onClick={handlePrevClick} 
                     variant="ghost" 
                     className="text-white hover:bg-white/10 disabled:opacity-50 font-mono text-sm" 
                     disabled={isFirstStep}
@@ -43,7 +63,7 @@ const IntroNavigation: React.FC<IntroNavigationProps> = ({
                         />
                     ))}
                 </div>
-                <Button onClick={onNext} className="bg-gradient-to-r from-black to-gray-800 text-white font-mono text-sm">
+                <Button onClick={handleNextClick} className="bg-gradient-to-r from-black to-gray-800 text-white font-mono text-sm">
                     {isLastStep ? buttonText : 'Next'}
                 </Button>
             </div>

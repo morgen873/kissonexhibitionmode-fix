@@ -4,6 +4,7 @@ import { useOutletContext } from "react-router-dom";
 import { steps } from '@/data/creation';
 import { Loader2 } from 'lucide-react';
 import { useCreationForm } from '@/hooks/useCreationForm';
+import { useTransition } from '@/hooks/useTransition';
 import { introSteps } from "@/data/introSteps";
 import CreationContainer from '@/components/creation/CreationContainer';
 import IntroStepContent from '@/components/creation/IntroStepContent';
@@ -11,6 +12,7 @@ import IntroNavigation from '@/components/creation/IntroNavigation';
 import CreationMainContent from '@/components/creation/CreationMainContent';
 import NavigationControls from '@/components/creation/NavigationControls';
 import RecipeResultScreen from '@/components/creation/RecipeResultScreen';
+import TransitionAnimation from '@/components/creation/TransitionAnimation';
 
 interface OutletContextType {
   setHeaderVisible: (visible: boolean) => void;
@@ -38,6 +40,7 @@ const Creation = () => {
     handleReset
   } = useCreationForm();
   
+  const { isTransitioning, transitionDirection, startTransition, completeTransition } = useTransition();
   const [currentIntroStep, setCurrentIntroStep] = useState(0);
   const [hasStartedCreation, setHasStartedCreation] = useState(false);
   const { setHeaderVisible } = useOutletContext<OutletContextType>() || {};
@@ -53,11 +56,45 @@ const Creation = () => {
     };
   }, [setHeaderVisible]);
 
-  // Simplified transition handling - no delays
-  const handleStepTransition = (transitionFn: () => void) => {
-    transitionFn();
+  // Transition handlers for intro steps
+  const handleIntroNext = () => {
+    startTransition('forward', () => {
+      if (currentIntroStep < introSteps.length - 1) {
+        setCurrentIntroStep(currentIntroStep + 1);
+      } else {
+        setHasStartedCreation(true);
+      }
+    });
   };
 
+  const handleIntroPrev = () => {
+    startTransition('backward', () => {
+      if (currentIntroStep > 0) {
+        setCurrentIntroStep(currentIntroStep - 1);
+      }
+    });
+  };
+
+  // Transition handlers for creation steps
+  const handleCreationNext = () => {
+    startTransition('forward', () => {
+      nextCreationStep();
+    });
+  };
+
+  const handleCreationPrev = () => {
+    startTransition('backward', () => {
+      prevCreationStep();
+    });
+  };
+
+  const handleCreationSubmit = () => {
+    startTransition('forward', () => {
+      handleSubmit();
+    });
+  };
+
+  // Regular non-transition handlers
   const nextIntroStep = () => {
     if (currentIntroStep < introSteps.length - 1) {
       setCurrentIntroStep(currentIntroStep + 1);
@@ -155,6 +192,8 @@ const Creation = () => {
                   totalSteps={4}
                   onPrev={prevIntroStep}
                   onNext={nextIntroStep}
+                  onTransitionPrev={handleIntroPrev}
+                  onTransitionNext={handleIntroNext}
                   isFirstStep={currentIntroStep === 0}
                   isLastStep={currentIntroStep === introSteps.length - 1}
                   buttonText={introSteps[currentIntroStep].buttonText}
@@ -164,15 +203,24 @@ const Creation = () => {
               <NavigationControls 
                 currentStep={creationStep} 
                 stepsLength={steps.length} 
-                prevStep={() => handleStepTransition(prevCreationStep)} 
-                nextStep={() => handleStepTransition(nextCreationStep)} 
-                handleSubmit={() => handleStepTransition(handleSubmit)} 
+                prevStep={prevCreationStep} 
+                nextStep={nextCreationStep} 
+                handleSubmit={handleSubmit}
+                onTransitionNext={creationStep === steps.length - 1 ? handleCreationSubmit : handleCreationNext}
+                onTransitionPrev={handleCreationPrev}
                 isNextDisabled={isNextDisabled} 
               />
             )}
           </div>
         )}
       </CreationContainer>
+
+      {/* Transition Animation Overlay */}
+      <TransitionAnimation
+        isVisible={isTransitioning}
+        direction={transitionDirection}
+        onComplete={completeTransition}
+      />
 
       {/* Footer for intro flow - made more compact */}
       {!hasStartedCreation && (

@@ -10,6 +10,8 @@ interface NavigationControlsProps {
   nextStep: () => void;
   handleSubmit: () => void;
   isNextDisabled: boolean;
+  onTransitionNext?: () => void;
+  onTransitionPrev?: () => void;
 }
 
 const NavigationControls: React.FC<NavigationControlsProps> = ({
@@ -18,12 +20,38 @@ const NavigationControls: React.FC<NavigationControlsProps> = ({
   prevStep,
   nextStep,
   handleSubmit,
-  isNextDisabled
+  isNextDisabled,
+  onTransitionNext,
+  onTransitionPrev
 }) => {
+  const handleNextClick = () => {
+    if (onTransitionNext) {
+      onTransitionNext();
+    } else {
+      nextStep();
+    }
+  };
+
+  const handlePrevClick = () => {
+    if (onTransitionPrev) {
+      onTransitionPrev();
+    } else {
+      prevStep();
+    }
+  };
+
+  const handleSubmitClick = () => {
+    if (onTransitionNext) {
+      onTransitionNext();
+    } else {
+      handleSubmit();
+    }
+  };
+
   return (
     <div className="flex justify-between mt-6">
       <Button 
-        onClick={prevStep} 
+        onClick={handlePrevClick} 
         disabled={currentStep === 0} 
         variant="ghost" 
         className="text-white hover:bg-white/10 disabled:opacity-50 font-mono text-sm"
@@ -31,11 +59,11 @@ const NavigationControls: React.FC<NavigationControlsProps> = ({
         <ArrowUp className="mr-2 h-4 w-4" /> Back
       </Button>
       {currentStep === stepsLength - 1 ? (
-        <Button onClick={handleSubmit} disabled={isNextDisabled} className="bg-gradient-to-r from-black to-gray-800 text-white font-mono text-sm">
+        <Button onClick={handleSubmitClick} disabled={isNextDisabled} className="bg-gradient-to-r from-black to-gray-800 text-white font-mono text-sm">
           Create Recipe <Zap className="ml-2 h-4 w-4" />
         </Button>
       ) : (
-        <Button onClick={nextStep} disabled={isNextDisabled} className="px-6 bg-gradient-to-r from-black to-gray-800 text-white font-mono text-sm">
+        <Button onClick={handleNextClick} disabled={isNextDisabled} className="px-6 bg-gradient-to-r from-black to-gray-800 text-white font-mono text-sm">
           Continue <ArrowDown className="ml-2 h-4 w-4" />
         </Button>
       )}
