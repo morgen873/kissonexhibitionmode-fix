@@ -65,7 +65,7 @@ export const introSteps: IntroStepData[] = [
     },
     {
         type: 'quote',
-        title: '"EVERY DUMPLING IS A PORTAL, EVERY BITE A TIME MACHINE"',
+        title: 'EVERY DUMPLING IS A PORTAL, EVERY BITE A TIME MACHINE',
         description: "- KissOn",
         buttonText: "Let's Begin Creation"
     }

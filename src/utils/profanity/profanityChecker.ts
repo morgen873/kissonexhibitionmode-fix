@@ -12,6 +12,16 @@ export function containsProfanity(text: string): boolean {
   
   const normalizedText = text.toLowerCase().trim();
   
+  // Allow single color words that are commonly used
+  if (FOOD_COLOR_WORDS.includes(normalizedText)) {
+    return false;
+  }
+  
+  // Allow common food-related words even if they're in the prohibited list
+  if (FOOD_RELATED_WORDS.includes(normalizedText)) {
+    return false;
+  }
+  
   // Check if the text matches any food exceptions first
   for (const exception of FOOD_EXCEPTIONS) {
     if (normalizedText.includes(exception.toLowerCase())) {
@@ -27,18 +37,15 @@ export function containsProfanity(text: string): boolean {
     }
   }
   
-  // Allow single color words that are commonly used in food
-  if (FOOD_COLOR_WORDS.includes(normalizedText)) {
-    return false;
-  }
+  // Check for prohibited words, but exclude common color words
+  const colorWords = ['black', 'white', 'brown', 'red', 'green', 'yellow', 'orange', 'purple', 'pink', 'golden'];
   
-  // Allow common food-related words even if they're in the prohibited list
-  if (FOOD_RELATED_WORDS.includes(normalizedText)) {
-    return false;
-  }
-  
-  // Check for prohibited words
   for (const word of PROHIBITED_WORDS) {
+    // Skip color words that should be allowed
+    if (colorWords.includes(word.toLowerCase())) {
+      continue;
+    }
+    
     // Use word boundaries to avoid false positives
     const regex = new RegExp(`\\b${word.toLowerCase()}\\b`, 'i');
     if (regex.test(normalizedText)) {

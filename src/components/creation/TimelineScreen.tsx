@@ -39,13 +39,13 @@ const TimelineScreen: React.FC<TimelineScreenProps> = ({ stepData, selectedValue
                                             : `border-white/20 ${theme.optionHover}`
                                     )}
                                 >
-                                    <CardContent className="p-3">
-                                        <span className="text-sm font-semibold font-mono text-white">{option.title}</span>
+                                    <CardContent className="p-3 flex items-center justify-center">
+                                        <span className="text-sm font-semibold font-mono text-white text-center">{option.title}</span>
                                     </CardContent>
                                 </Card>
                             </TooltipTrigger>
                             <TooltipContent side="bottom" className="max-w-xs bg-black/80 text-white border-white/20 p-3">
-                                <p className="font-mono text-sm">{option.description}</p>
+                                <p className="font-mono text-sm text-center">{option.description}</p>
                             </TooltipContent>
                         </Tooltip>
                     ))}
