@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import { steps } from '@/data/creation';
@@ -96,10 +95,11 @@ const Creation = () => {
     textAreaFocus: "focus:ring-white focus:border-white"
   };
 
-  // Determine title and show title condition
-  const getTitle = () => {
+  // Determine title and show title condition - Fixed to handle string arrays
+  const getTitle = (): string => {
     if (!hasStartedCreation) {
-      return introSteps[currentIntroStep].title;
+      const title = introSteps[currentIntroStep].title;
+      return Array.isArray(title) ? title.join(' ') : title;
     }
     return creationStepData.type === 'question' ? creationStepData.question : creationStepData.title;
   };
