@@ -60,7 +60,7 @@ const CreationContent: React.FC<CreationContentProps> = ({
   if (isCreatingRecipe) {
     console.log('Showing recipe creation loader');
     return (
-      <div className="flex flex-col items-center justify-center h-64 space-y-4">
+      <div className="flex flex-col items-center justify-center h-64 space-y-4 bg-gradient-to-br from-black via-gray-900 to-black">
         <Loader2 className="h-12 w-12 animate-spin text-white" />
         <p className="text-lg font-semibold text-white/80 font-mono">Creating your recipe...</p>
       </div>
@@ -68,7 +68,7 @@ const CreationContent: React.FC<CreationContentProps> = ({
   }
 
   if (recipeResult) {
-    console.log('Showing recipe result screen');
+    console.log('Showing recipe result screen with data:', recipeResult);
     return <RecipeResultScreen recipe={recipeResult} onReset={onReset} />;
   }
 
