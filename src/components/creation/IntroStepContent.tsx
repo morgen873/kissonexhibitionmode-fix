@@ -56,6 +56,9 @@ const IntroStepContent: React.FC<IntroStepContentProps> = ({ step, onNext }) => 
                         <p className="text-xl text-white font-black mb-8 font-mono">
                             {step.description}
                         </p>
+                        <Button onClick={onNext} size="lg" className="bg-gradient-to-r from-black via-gray-800 to-black hover:from-gray-800 hover:via-black hover:to-gray-800 text-white font-bold shadow-lg transition-all duration-300 transform hover:scale-105 border-2 border-white/20 px-8 py-4 text-xl rounded-xl font-mono">
+                            {step.buttonText}
+                        </Button>
                     </div>
                 );
             default:
