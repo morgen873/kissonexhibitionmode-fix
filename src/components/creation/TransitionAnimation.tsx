@@ -16,7 +16,7 @@ const TransitionAnimation: React.FC<TransitionAnimationProps> = ({
 }) => {
   const [currentImage, setCurrentImage] = useState(0);
 
-  // Using the new dumpling images you provided
+  // Using the dumpling images
   const images = [
     '/lovable-uploads/9e669733-5c8a-4971-926a-51a8a6711aca.png',
     '/lovable-uploads/504c7d32-e678-4269-92bd-2bcbb41ed83d.png',
@@ -27,16 +27,16 @@ const TransitionAnimation: React.FC<TransitionAnimationProps> = ({
   useEffect(() => {
     if (!isVisible) return;
 
-    console.log(`TransitionAnimation: Starting ${backgroundMode ? 'background' : 'full-screen'} animation with dumpling images:`, images);
+    console.log(`TransitionAnimation: Starting ${backgroundMode ? 'background' : 'full-screen'} animation`);
     let timeouts: NodeJS.Timeout[] = [];
 
     if (backgroundMode) {
       // In background mode, cycle continuously at a slower pace
       const cycleDuration = 2000; // 2 seconds per image
       const startCycling = () => {
-        images.forEach((imagePath, index) => {
+        images.forEach((_, index) => {
           timeouts.push(setTimeout(() => {
-            console.log(`TransitionAnimation: Background mode showing image ${index + 1}: ${imagePath}`);
+            console.log(`TransitionAnimation: Background mode showing image ${index + 1}`);
             setCurrentImage(index);
           }, index * cycleDuration));
         });
@@ -48,24 +48,25 @@ const TransitionAnimation: React.FC<TransitionAnimationProps> = ({
       startCycling();
     } else {
       // Normal transition mode - 0.5 seconds each for 2 second total
-      images.forEach((imagePath, index) => {
+      images.forEach((_, index) => {
         timeouts.push(setTimeout(() => {
-          console.log(`TransitionAnimation: Showing full-screen image ${index + 1}: ${imagePath}`);
+          console.log(`TransitionAnimation: Full-screen showing image ${index + 1}`);
           setCurrentImage(index);
         }, index * 500)); // 0.5 seconds per image
       });
 
       // Complete the animation after all images have been shown
       timeouts.push(setTimeout(() => {
-        console.log('TransitionAnimation: Full-screen animation complete');
+        console.log('TransitionAnimation: Full-screen animation complete, calling onComplete');
         onComplete();
       }, images.length * 500 + 300));
     }
 
     return () => {
+      console.log('TransitionAnimation: Cleaning up timeouts');
       timeouts.forEach(clearTimeout);
     };
-  }, [isVisible, onComplete, backgroundMode]);
+  }, [isVisible, onComplete, backgroundMode, images.length]);
 
   if (!isVisible) return null;
 
@@ -80,8 +81,8 @@ const TransitionAnimation: React.FC<TransitionAnimationProps> = ({
         src={images[currentImage]}
         alt={`Dumpling ${currentImage + 1}`}
         className={`w-full h-full object-cover transition-opacity duration-150 ${backgroundMode ? 'opacity-30' : ''}`}
-        onLoad={() => console.log(`TransitionAnimation: ${backgroundMode ? 'Background' : 'Full-screen'} image loaded successfully`)}
-        onError={(e) => console.error(`TransitionAnimation: ${backgroundMode ? 'Background' : 'Full-screen'} image failed to load:`, e)}
+        onLoad={() => console.log(`TransitionAnimation: Image loaded successfully`)}
+        onError={(e) => console.error(`TransitionAnimation: Image failed to load:`, e)}
       />
     </div>
   );

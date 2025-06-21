@@ -75,12 +75,12 @@ const Creation = () => {
     };
   }, [setHeaderVisible]);
 
-  // Transition handlers for intro steps - NO ANIMATION during intro
+  // Simple intro navigation - no animations during intro
   const handleIntroTransitionNext = () => {
     if (currentIntroStep < 3) {
       handleIntroNext();
     } else {
-      // Only start transition when moving from intro to creation
+      // Transition from intro to creation with animation
       handleCreationNext(() => {
         setHasStartedCreation(true);
       });
@@ -91,7 +91,7 @@ const Creation = () => {
     handleIntroPrev();
   };
 
-  // Transition handlers for creation steps - WITH ANIMATION
+  // Creation step navigation - always with animation
   const handleCreationTransitionNext = () => {
     handleCreationNext(() => {
       nextCreationStep();
@@ -170,27 +170,15 @@ const Creation = () => {
         />
       </CreationContainer>
 
-      {/* Transition Animation Overlay - only during creation transitions */}
-      {hasStartedCreation && (
-        <TransitionAnimation
-          isVisible={isTransitioning}
-          direction={transitionDirection}
-          onComplete={completeTransition}
-          backgroundMode={isCreatingRecipe}
-        />
-      )}
+      {/* Single transition animation that handles both full-screen and background modes */}
+      <TransitionAnimation
+        isVisible={isTransitioning || isCreatingRecipe}
+        direction={transitionDirection}
+        onComplete={completeTransition}
+        backgroundMode={isCreatingRecipe}
+      />
 
-      {/* Background Animation during recipe creation */}
-      {isCreatingRecipe && (
-        <TransitionAnimation
-          isVisible={true}
-          direction="forward"
-          onComplete={() => {}}
-          backgroundMode={true}
-        />
-      )}
-
-      {/* Footer for intro flow - made more compact */}
+      {/* Footer for intro flow */}
       {!hasStartedCreation && (
         <footer className="relative z-10 bg-black/50 text-white mt-6 w-full text-center border-t-2 border-white/20 py-3">
           <p className="text-sm font-black font-mono">

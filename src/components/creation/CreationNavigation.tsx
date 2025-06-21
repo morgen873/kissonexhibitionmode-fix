@@ -73,7 +73,7 @@ const CreationNavigation: React.FC<CreationNavigationProps> = ({
       prevStep={onCreationPrev} 
       nextStep={onCreationNext} 
       handleSubmit={onCreationSubmit}
-      onTransitionNext={creationStep === steps.length - 1 ? onCreationSubmit : onCreationTransitionNext}
+      onTransitionNext={onCreationTransitionNext}
       onTransitionPrev={onCreationTransitionPrev}
       isNextDisabled={isNextDisabled} 
     />
