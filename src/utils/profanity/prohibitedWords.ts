@@ -175,7 +175,7 @@ export const PROHIBITED_WORDS = [
   'vibrater', 'vibrator', 'vietcong', 'violence', 'virgin', 'virginbreaker', 'vomit',
   'vulva', 'wab', 'wank', 'wanker', 'wanking', 'waysted', 'weapon', 'weenie', 'weewee',
   'welcher', 'welfare', 'wetb', 'wetback', 'wetspot', 'whacker', 'whash', 'whigger',
-  'whiskey', 'whiskeydick', 'whiskydick', 'whit', 'whitenigger', 'whites', 'whitetrash',
+  'whiskey', 'whiskeydick', 'whiskydick', 'whitenigger', 'whites', 'whitetrash',
   'whitey', 'whiz', 'whop', 'whore', 'whorefucker', 'whorehouse', 'wigger', 'willie',
   'williewanker', 'willy', 'wn', 'wog', 'women\'s', 'wop', 'wtf', 'wuss', 'wuzzie', 'xtc',
   'xxx', 'yankee', 'yellowman', 'zigabo', 'zipperhead'

@@ -31,22 +31,33 @@ export function containsProfanity(text: string): boolean {
     colorWords.includes(word) || 
     FOOD_COLOR_WORDS.includes(word) ||
     FOOD_RELATED_WORDS.includes(word) ||
-    ['and', 'or', 'the', 'a', 'an', 'with', 'of', 'in', 'to', 'for', 'like', 'as'].includes(word)
+    ['and', 'or', 'the', 'a', 'an', 'with', 'of', 'in', 'to', 'for', 'like', 'as'].includes(word) ||
+    word.length < 3 // Allow short words like "a", "an", "to", etc.
   );
   
   if (allWordsAreSafe) {
+    console.log(`Allowing text "${text}" because all words are safe`);
     return false;
   }
   
   // Check if the text matches any food exceptions
   for (const exception of FOOD_EXCEPTIONS) {
     if (normalizedText.includes(exception.toLowerCase())) {
+      console.log(`Allowing text "${text}" because it matches food exception: "${exception}"`);
       return false;
     }
   }
   
   // Check if it's clearly food-related context
   if (isFoodRelated(normalizedText) && hasOnlyFoodSafeWords(normalizedText, PROHIBITED_WORDS)) {
+    console.log(`Allowing text "${text}" because it's food-related with safe words`);
+    return false;
+  }
+  
+  // Only check for prohibited words if we have complete words (more than 2 characters)
+  // This prevents blocking partial typing
+  if (normalizedText.length < 3) {
+    console.log(`Allowing text "${text}" because it's too short to be problematic`);
     return false;
   }
   
@@ -57,11 +68,13 @@ export function containsProfanity(text: string): boolean {
       continue;
     }
     
-    // Use word boundaries to avoid false positives
-    const regex = new RegExp(`\\b${word.toLowerCase()}\\b`, 'i');
-    if (regex.test(normalizedText)) {
-      console.log(`Blocking text "${text}" because of prohibited word: "${word}"`);
-      return true;
+    // Use word boundaries to avoid false positives, but only for words 3+ characters
+    if (word.length >= 3) {
+      const regex = new RegExp(`\\b${word.toLowerCase()}\\b`, 'i');
+      if (regex.test(normalizedText)) {
+        console.log(`Blocking text "${text}" because of prohibited word: "${word}"`);
+        return true;
+      }
     }
   }
   
