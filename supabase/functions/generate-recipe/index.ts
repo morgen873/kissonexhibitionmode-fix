@@ -5,6 +5,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import OpenAI from 'https://esm.sh/openai@4.24.1'
 import { generateRecipeWithOpenAI } from './utils/recipeGenerator.ts'
 import { generateAndUploadRecipeImage } from './utils/imageGenerator.ts'
+import { insertRecipe, updateRecipeImageUrl } from './utils/databaseOperations.ts'
 
 // This is to make Deno's type checker happy
 // It's a surreal bug, see: https://github.com/denoland/deno/issues/17211
@@ -47,29 +48,7 @@ serve(async (req) => {
     const recipeContent = await generateRecipeWithOpenAI(payload, openai);
 
     // Insert recipe first to get an ID, starting with a placeholder image
-    const { data: newRecipe, error: insertError } = await supabaseAdmin
-        .from('recipes')
-        .insert({
-            recipe_data: payload,
-            title: recipeContent.title,
-            description: recipeContent.description,
-            ingredients: recipeContent.ingredients,
-            cooking_recipe: recipeContent.cooking_recipe,
-            image_url: '/placeholder.svg',
-        })
-        .select()
-        .single();
-    
-    if (insertError) {
-        console.error('Error inserting recipe:', insertError);
-        throw insertError;
-    }
-
-    if (!newRecipe) {
-        throw new Error("Failed to create and retrieve recipe.");
-    }
-
-    console.log("Recipe inserted with ID:", newRecipe.id);
+    const newRecipe = await insertRecipe(supabaseAdmin, payload, recipeContent);
 
     // Generate and upload image
     const imageUrl = await generateAndUploadRecipeImage(
@@ -82,18 +61,8 @@ serve(async (req) => {
 
     // Update recipe with final image URL
     if (imageUrl !== '/placeholder.svg') {
+      await updateRecipeImageUrl(supabaseAdmin, newRecipe.id, imageUrl);
       newRecipe.image_url = imageUrl;
-      
-      const { error: updateError } = await supabaseAdmin
-        .from('recipes')
-        .update({ image_url: imageUrl })
-        .eq('id', newRecipe.id);
-
-      if (updateError) {
-        console.error('Error updating recipe with image URL:', updateError);
-      } else {
-        console.log("Recipe updated successfully with image URL");
-      }
     }
 
     console.log("Returning recipe with image_url:", newRecipe.image_url);
