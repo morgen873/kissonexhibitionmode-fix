@@ -24,7 +24,7 @@ interface TimelineScreenProps {
 const TimelineScreen: React.FC<TimelineScreenProps> = ({ stepData, selectedValue, onSelect, theme }) => {
     return (
         <div className="w-full flex flex-col items-center space-y-8 text-white/90">
-             <p className="text-center text-white/80 whitespace-pre-line">{stepData.description}</p>
+             <p className="text-center text-white/80 whitespace-pre-line font-mono">{stepData.description}</p>
             <TooltipProvider>
                 <div className="flex flex-wrap justify-center gap-4">
                     {stepData.options.map((option, index) => (
@@ -40,12 +40,12 @@ const TimelineScreen: React.FC<TimelineScreenProps> = ({ stepData, selectedValue
                                     )}
                                 >
                                     <CardContent className="p-4">
-                                        <span className="text-base font-semibold">{option.title}</span>
+                                        <span className="text-base font-semibold font-mono">{option.title}</span>
                                     </CardContent>
                                 </Card>
                             </TooltipTrigger>
                             <TooltipContent side="bottom" className="max-w-xs bg-black/80 text-white border-white/20 p-3">
-                                <p>{option.description}</p>
+                                <p className="font-mono">{option.description}</p>
                             </TooltipContent>
                         </Tooltip>
                     ))}

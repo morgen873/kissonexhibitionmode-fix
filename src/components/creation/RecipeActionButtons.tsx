@@ -18,14 +18,14 @@ const RecipeActionButtons: React.FC<RecipeActionButtonsProps> = ({ recipe, onRes
     return (
         <div className="flex flex-col items-center gap-4">
             <div className="flex flex-wrap justify-center gap-4">
-                <Button onClick={handlePrint}>
+                <Button onClick={handlePrint} className="bg-gradient-to-r from-black to-gray-800 text-white font-mono">
                     <Printer /> Print Label
                 </Button>
             </div>
             <Button 
                 onClick={onReset} 
                 variant="outline" 
-                className="bg-transparent hover:bg-white/10 text-white mb-8"
+                className="bg-transparent hover:bg-white/10 text-white mb-8 border-white font-mono"
             >
                 <RotateCcw className="mr-2" /> Create Another
             </Button>

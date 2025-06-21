@@ -26,16 +26,16 @@ const NavigationControls: React.FC<NavigationControlsProps> = ({
         onClick={prevStep} 
         disabled={currentStep === 0} 
         variant="ghost" 
-        className="text-white hover:bg-white/10 disabled:opacity-50"
+        className="text-white hover:bg-white/10 disabled:opacity-50 font-mono"
       >
         <ArrowUp className="mr-2" /> Back
       </Button>
       {currentStep === stepsLength - 1 ? (
-        <Button onClick={handleSubmit} disabled={isNextDisabled}>
+        <Button onClick={handleSubmit} disabled={isNextDisabled} className="bg-gradient-to-r from-black to-gray-800 text-white font-mono">
           Create Recipe <Zap className="ml-2" />
         </Button>
       ) : (
-        <Button onClick={nextStep} disabled={isNextDisabled} className="px-6">
+        <Button onClick={nextStep} disabled={isNextDisabled} className="px-6 bg-gradient-to-r from-black to-gray-800 text-white font-mono">
           Continue <ArrowDown className="ml-2" />
         </Button>
       )}

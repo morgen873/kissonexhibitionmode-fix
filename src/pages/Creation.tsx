@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -86,42 +85,42 @@ const Creation = () => {
     switch (step.type) {
       case 'hero':
         return <div className="text-center max-w-2xl mx-auto px-6">
-                        <img src="/lovable-uploads/64d3de25-5e40-498e-8a21-28d15db9a050.png" alt="KissOn Logo" className="mx-auto mb-8 w-64 mix-blend-screen" />
+                        <img src="/lovable-uploads/64d3de25-5e40-498e-8a21-28d15db9a050.png" alt="KissOn Logo" className="mx-auto mb-8 w-64 filter grayscale" />
                         
-                        <p className="text-xl text-white font-bold mb-12">
+                        <p className="text-xl text-white font-bold mb-12 font-mono">
                             {step.description}
                         </p>
-                        <Button onClick={nextIntroStep} size="lg" className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 hover:from-pink-400 hover:via-purple-400 hover:to-cyan-400 text-white font-bold shadow-lg hover:shadow-pink-500/25 transition-all duration-300 transform hover:scale-105 border-2 border-white/20 backdrop-blur-sm px-10 py-6 text-2xl rounded-2xl">
+                        <Button onClick={nextIntroStep} size="lg" className="bg-gradient-to-r from-black via-gray-800 to-black hover:from-gray-800 hover:via-black hover:to-gray-800 text-white font-bold shadow-lg transition-all duration-300 transform hover:scale-105 border-2 border-white/20 backdrop-blur-sm px-10 py-6 text-2xl rounded-2xl font-mono">
                             {step.buttonText}
                         </Button>
                     </div>;
       case 'explanation':
         const Icon = step.icon;
-        return <Card className={`bg-transparent border-4 ${step.theme?.border} backdrop-blur-md transition-all duration-300 shadow-2xl ${step.theme?.shadow} w-full max-w-2xl mx-auto`}>
+        return <Card className="bg-transparent border-4 border-white/20 backdrop-blur-md transition-all duration-300 shadow-2xl shadow-black/25 w-full max-w-2xl mx-auto">
                         <CardContent className="p-6">
-                            {Icon && <div className={`w-20 h-20 bg-gradient-to-r ${step.theme?.iconGradient} rounded-full flex items-center justify-center mx-auto mb-8`}>
+                            {Icon && <div className="w-20 h-20 bg-gradient-to-r from-black via-gray-800 to-black rounded-full flex items-center justify-center mx-auto mb-8">
                                 <Icon className="h-10 w-10 text-white" />
                             </div>}
-                            <h3 className="font-black text-white mb-6 drop-shadow-lg text-3xl text-center">
+                            <h3 className="font-black text-white mb-6 drop-shadow-lg text-3xl text-center font-mono">
                                 {(step.title as string[])[0]}
                                 <br />
-                                <span className={`bg-gradient-to-r ${step.theme?.titleGradient} bg-clip-text text-transparent`}>
+                                <span className="bg-gradient-to-r from-white via-gray-300 to-white bg-clip-text text-transparent">
                                     {(step.title as string[])[1]}
                                 </span>
                             </h3>
-                            <p className="text-white font-bold text-base text-center">
+                            <p className="text-white font-bold text-base text-center font-mono">
                                 {step.description}
                             </p>
                         </CardContent>
                     </Card>;
       case 'quote':
         return <div className="text-center max-w-2xl mx-auto px-6">
-                        <blockquote className="text-4xl md:text-6xl font-black leading-tight mb-8">
-                            <span className="bg-gradient-to-r from-yellow-300 via-pink-300 to-cyan-300 bg-clip-text text-transparent drop-shadow-2xl">
+                        <blockquote className="text-4xl md:text-6xl font-black leading-tight mb-8 font-mono">
+                            <span className="bg-gradient-to-r from-white via-gray-300 to-white bg-clip-text text-transparent drop-shadow-2xl">
                                 {step.title}
                             </span>
                         </blockquote>
-                        <p className="text-2xl text-white font-black mb-12">
+                        <p className="text-2xl text-white font-black mb-12 font-mono">
                             {step.description}
                         </p>
                     </div>;
@@ -142,28 +141,27 @@ const Creation = () => {
   }
   const progress = (currentStepIndex / totalSteps) * 100;
 
-  // Determine current theme
-  let theme;
-  if (!hasStartedCreation) {
-    theme = { 
-      bg: "from-purple-900 via-pink-900 to-orange-900",
-      progress: "from-pink-500 to-purple-500",
-      cardShadow: "shadow-purple-500/25"
-    };
-  } else {
-    theme = stepThemes[creationStep] || stepThemes[0];
-  }
+  // Unified black and white theme
+  const theme = { 
+    bg: "from-black via-gray-900 to-black",
+    progress: "from-white to-gray-300",
+    cardShadow: "shadow-black/25",
+    title: "from-white to-gray-300",
+    optionSelectedBorder: "border-white",
+    optionSelectedShadow: "shadow-white/25",
+    optionHover: "hover:bg-white/10",
+    textAreaFocus: "focus:ring-white focus:border-white"
+  };
 
   return (
     <div className={`min-h-screen bg-gradient-to-br ${theme.bg} text-white p-4 sm:p-6 md:p-8 flex flex-col items-center justify-start transition-all duration-700 ease-out pt-24`}>
-      {/* Background effects for intro */}
+      {/* Simplified background effects */}
       {!hasStartedCreation && (
-        <div className="absolute inset-0 opacity-30 overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 animate-gradient"></div>
-          <div className="absolute top-20 left-20 w-40 h-40 bg-gradient-to-r from-yellow-400 to-pink-500 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute top-60 right-10 w-60 h-60 bg-gradient-to-r from-green-400 to-blue-500 rounded-full blur-3xl animate-bounce"></div>
-          <div className="absolute bottom-20 left-1/3 w-32 h-32 bg-gradient-to-r from-red-400 to-yellow-500 rounded-full blur-2xl animate-float"></div>
-          <div className="absolute top-1/2 right-1/4 w-48 h-48 bg-gradient-to-r from-indigo-400 to-purple-600 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute inset-0 opacity-20 overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-gray-800 via-black to-gray-800"></div>
+          <div className="absolute top-20 left-20 w-40 h-40 bg-gradient-to-r from-gray-600 to-black rounded-full blur-3xl"></div>
+          <div className="absolute top-60 right-10 w-60 h-60 bg-gradient-to-r from-black to-gray-700 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 left-1/3 w-32 h-32 bg-gradient-to-r from-gray-500 to-black rounded-full blur-2xl"></div>
         </div>
       )}
 
@@ -177,7 +175,7 @@ const Creation = () => {
         <Card className={`relative w-full mx-auto bg-black/30 backdrop-blur-xl border-2 border-white/20 shadow-2xl ${theme.cardShadow} transition-all duration-700 ease-out transform ${isTransitioning ? 'animate-morph-out' : 'animate-morph-in'}`}>
           <CardHeader className="animate-flow-up p-6">
             {!recipeResult && !isCreatingRecipe && (
-              <CardTitle className={`text-2xl md:text-3xl font-black text-center bg-gradient-to-r ${theme.title || 'from-white to-white'} bg-clip-text text-transparent drop-shadow-lg min-h-[100px] flex items-center justify-center transition-all duration-700 ease-out`}>
+              <CardTitle className={`text-2xl md:text-3xl font-black text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent drop-shadow-lg min-h-[100px] flex items-center justify-center transition-all duration-700 ease-out font-mono`}>
                 {!hasStartedCreation 
                   ? introSteps[currentIntroStep].title 
                   : (creationStepData.type === 'question' ? creationStepData.question : creationStepData.title)
@@ -190,7 +188,7 @@ const Creation = () => {
             {isCreatingRecipe ? (
               <div className="flex flex-col items-center justify-center h-96 space-y-4 animate-breathe-in">
                 <Loader2 className="h-16 w-16 animate-spin text-white" />
-                <p className="text-2xl font-semibold text-white/80 animate-flow-up">Creating your recipe...</p>
+                <p className="text-2xl font-semibold text-white/80 animate-flow-up font-mono">Creating your recipe...</p>
               </div>
             ) : recipeResult ? (
               <div className="animate-slide-morph-in">
@@ -240,7 +238,7 @@ const Creation = () => {
                   introSteps[currentIntroStep].type !== 'hero' && (
                     <div className="w-full mt-8">
                       <div className="flex justify-between items-center">
-                        <Button onClick={prevIntroStep} variant="ghost" className="text-white hover:bg-white/10 disabled:opacity-50" disabled={currentIntroStep === 0}>
+                        <Button onClick={prevIntroStep} variant="ghost" className="text-white hover:bg-white/10 disabled:opacity-50 font-mono" disabled={currentIntroStep === 0}>
                           <ArrowLeft className="mr-2" /> Back
                         </Button>
                         <div className="flex items-center space-x-2">
@@ -248,7 +246,7 @@ const Creation = () => {
                             <div key={index} className={`w-3 h-3 rounded-full transition-colors ${currentIntroStep === index + 1 ? 'bg-white' : 'bg-white/30'}`} />
                           ))}
                         </div>
-                        <Button onClick={nextIntroStep} className="bg-gradient-to-r from-pink-500 to-purple-500 text-white">
+                        <Button onClick={nextIntroStep} className="bg-gradient-to-r from-black to-gray-800 text-white font-mono">
                           {currentIntroStep === introSteps.length - 1 ? introSteps[currentIntroStep].buttonText : 'Next'}
                         </Button>
                       </div>
@@ -273,8 +271,8 @@ const Creation = () => {
       {/* Footer for intro flow */}
       {!hasStartedCreation && (
         <footer className="relative z-10 bg-black/50 backdrop-blur-md text-white mt-8 w-full text-center border-t-2 border-white/20 py-4">
-          <p className="text-lg font-black">
-            A DESIGN PROJECT BY <span className="bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent mx-1">OREN/LUPE</span>
+          <p className="text-lg font-black font-mono">
+            A DESIGN PROJECT BY <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mx-1">OREN/LUPE</span>
           </p>
         </footer>
       )}

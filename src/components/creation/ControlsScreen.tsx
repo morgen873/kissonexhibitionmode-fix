@@ -33,11 +33,11 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
 
     return (
         <div className="space-y-8 text-white/90">
-            <p className="text-center text-white/80 whitespace-pre-line">{stepData.description}</p>
+            <p className="text-center text-white/80 whitespace-pre-line font-mono">{stepData.description}</p>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-4">
                 <div className="flex flex-col items-center gap-4">
-                    <Label className="font-bold text-lg">Temperature</Label>
+                    <Label className="font-bold text-lg font-mono">Temperature</Label>
                     <Knob
                         min={controls.temperature.min}
                         max={controls.temperature.max}
@@ -50,7 +50,7 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
                 </div>
 
                 <div className="flex flex-col items-center gap-4">
-                    <Label className="font-bold text-lg">Shape</Label>
+                    <Label className="font-bold text-lg font-mono">Shape</Label>
                      <Knob
                         min={0}
                         max={controls.shape.options.length - 1}
@@ -63,7 +63,7 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
                 </div>
 
                 <div className="flex flex-col items-center gap-4">
-                    <Label className="font-bold text-lg">Flavor</Label>
+                    <Label className="font-bold text-lg font-mono">Flavor</Label>
                      <Knob
                         min={0}
                         max={controls.flavor.options.length - 1}
@@ -77,14 +77,14 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
             </div>
 
             <div className="flex flex-col items-center gap-2 pt-4">
-                <Label htmlFor="enhancer" className="font-bold text-lg text-center">What spice or condiment would enhance this experience?</Label>
-                <p className="text-sm text-center text-white/70 max-w-md">Salt, pepper, cinnamon, honey... This will add the final touch of flavor to your memory recipe.</p>
+                <Label htmlFor="enhancer" className="font-bold text-lg text-center font-mono">What spice or condiment would enhance this experience?</Label>
+                <p className="text-sm text-center text-white/70 max-w-md font-mono">Salt, pepper, cinnamon, honey... This will add the final touch of flavor to your memory recipe.</p>
                 <Textarea
                     id="enhancer"
                     value={controlValues.enhancer}
                     onChange={onEnhancerChange}
                     placeholder="e.g., A pinch of cinnamon"
-                    className="mt-2 w-full max-w-sm bg-black/20 border-white/20 text-white placeholder:text-white/50 focus:ring-cyan-500 focus:border-cyan-500 p-4"
+                    className="mt-2 w-full max-w-sm bg-black/20 border-white/20 text-white placeholder:text-white/50 focus:ring-white focus:border-white p-4 font-mono"
                     rows={2}
                 />
             </div>
