@@ -175,12 +175,11 @@ const Creation = () => {
         />
       </CreationContainer>
 
-      {/* Single transition animation that handles both full-screen and background modes */}
+      {/* Single transition animation - only for step transitions, not for recipe creation */}
       <TransitionAnimation
-        isVisible={isTransitioning || isCreatingRecipe}
+        isVisible={isTransitioning}
         direction={transitionDirection}
         onComplete={completeTransition}
-        backgroundMode={isCreatingRecipe}
       />
 
       {/* Footer for intro flow */}

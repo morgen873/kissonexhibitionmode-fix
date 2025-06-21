@@ -5,14 +5,12 @@ interface TransitionAnimationProps {
   isVisible: boolean;
   onComplete: () => void;
   direction?: 'forward' | 'backward';
-  backgroundMode?: boolean;
 }
 
 const TransitionAnimation: React.FC<TransitionAnimationProps> = ({
   isVisible,
   onComplete,
-  direction = 'forward',
-  backgroundMode = false
+  direction = 'forward'
 }) => {
   const [currentImage, setCurrentImage] = useState(0);
 
@@ -27,62 +25,41 @@ const TransitionAnimation: React.FC<TransitionAnimationProps> = ({
   useEffect(() => {
     if (!isVisible) return;
 
-    console.log(`TransitionAnimation: Starting ${backgroundMode ? 'background' : 'full-screen'} animation`);
+    console.log('TransitionAnimation: Starting full-screen animation');
     let timeouts: NodeJS.Timeout[] = [];
 
-    if (backgroundMode) {
-      // In background mode, cycle continuously at a slower pace
-      const cycleDuration = 2000; // 2 seconds per image
-      const startCycling = () => {
-        images.forEach((_, index) => {
-          timeouts.push(setTimeout(() => {
-            console.log(`TransitionAnimation: Background mode showing image ${index + 1}`);
-            setCurrentImage(index);
-          }, index * cycleDuration));
-        });
-        
-        // Continue cycling
-        timeouts.push(setTimeout(startCycling, images.length * cycleDuration));
-      };
-      
-      startCycling();
-    } else {
-      // Normal transition mode - 0.5 seconds each for 2 second total
-      images.forEach((_, index) => {
-        timeouts.push(setTimeout(() => {
-          console.log(`TransitionAnimation: Full-screen showing image ${index + 1}`);
-          setCurrentImage(index);
-        }, index * 500)); // 0.5 seconds per image
-      });
-
-      // Complete the animation after all images have been shown
+    // Normal transition mode - 0.5 seconds each for 2 second total
+    images.forEach((_, index) => {
       timeouts.push(setTimeout(() => {
-        console.log('TransitionAnimation: Full-screen animation complete, calling onComplete');
-        onComplete();
-      }, images.length * 500 + 300));
-    }
+        console.log(`TransitionAnimation: Showing image ${index + 1}`);
+        setCurrentImage(index);
+      }, index * 500)); // 0.5 seconds per image
+    });
+
+    // Complete the animation after all images have been shown
+    timeouts.push(setTimeout(() => {
+      console.log('TransitionAnimation: Animation complete, calling onComplete');
+      onComplete();
+    }, images.length * 500 + 300));
 
     return () => {
       console.log('TransitionAnimation: Cleaning up timeouts');
       timeouts.forEach(clearTimeout);
     };
-  }, [isVisible, onComplete, backgroundMode, images.length]);
+  }, [isVisible, onComplete, images.length]);
 
   if (!isVisible) return null;
 
-  console.log(`TransitionAnimation: Rendering ${backgroundMode ? 'background' : 'full-screen'} image:`, images[currentImage]);
+  console.log('TransitionAnimation: Rendering image:', images[currentImage]);
 
   return (
-    <div 
-      className={`fixed top-0 left-0 w-screen h-screen ${backgroundMode ? 'bg-black/50' : 'bg-black'}`}
-      style={{ zIndex: backgroundMode ? 1 : 9999 }}
-    >
+    <div className="fixed top-0 left-0 w-screen h-screen bg-black" style={{ zIndex: 9999 }}>
       <img
         src={images[currentImage]}
         alt={`Dumpling ${currentImage + 1}`}
-        className={`w-full h-full object-cover transition-opacity duration-150 ${backgroundMode ? 'opacity-30' : ''}`}
-        onLoad={() => console.log(`TransitionAnimation: Image loaded successfully`)}
-        onError={(e) => console.error(`TransitionAnimation: Image failed to load:`, e)}
+        className="w-full h-full object-cover transition-opacity duration-150"
+        onLoad={() => console.log('TransitionAnimation: Image loaded successfully')}
+        onError={(e) => console.error('TransitionAnimation: Image failed to load:', e)}
       />
     </div>
   );
