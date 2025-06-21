@@ -1,4 +1,3 @@
-
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { corsHeaders } from '../_shared/cors.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
@@ -6,6 +5,8 @@ import OpenAI from 'https://esm.sh/openai@4.24.1'
 import { generateRecipeWithOpenAI } from './utils/recipeGenerator.ts'
 import { generateAndUploadRecipeImage } from './utils/imageGenerator.ts'
 import { insertRecipe, updateRecipeImageUrl } from './utils/databaseOperations.ts'
+import { checkRateLimit } from './utils/rateLimiter.ts'
+import { validateRecipeContent } from './utils/contentValidator.ts'
 
 // This is to make Deno's type checker happy
 // It's a surreal bug, see: https://github.com/denoland/deno/issues/17211
@@ -26,6 +27,11 @@ serve(async (req) => {
   }
 
   try {
+    // Get client IP for rate limiting
+    const clientIP = req.headers.get('x-forwarded-for') || 
+                    req.headers.get('x-real-ip') || 
+                    'unknown';
+
     const payload: RecipePayload = await req.json()
     const openAIKey = Deno.env.get('OPENAI_API_KEY')
     
@@ -44,8 +50,34 @@ serve(async (req) => {
     
     const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
 
+    // Check rate limiting for exhibition safety
+    const rateLimitResult = await checkRateLimit(supabaseAdmin, clientIP);
+    if (!rateLimitResult.allowed) {
+      return new Response(JSON.stringify({ 
+        error: 'Too many requests. Please wait a moment before creating another recipe.',
+        remainingRequests: rateLimitResult.remainingRequests,
+        resetTime: rateLimitResult.resetTime
+      }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 429,
+      });
+    }
+
     // Generate recipe content
     const recipeContent = await generateRecipeWithOpenAI(payload, openai);
+
+    // Validate content for exhibition appropriateness
+    const validation = validateRecipeContent(recipeContent);
+    if (!validation.isValid) {
+      console.log('Content validation failed:', validation.reason);
+      return new Response(JSON.stringify({ 
+        error: 'Recipe content not suitable for exhibition. Please try again with different inputs.',
+        reason: validation.reason
+      }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 400,
+      });
+    }
 
     // Insert recipe first to get an ID, starting with a placeholder image
     const newRecipe = await insertRecipe(supabaseAdmin, payload, recipeContent);
