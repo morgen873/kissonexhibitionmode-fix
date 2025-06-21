@@ -1,6 +1,7 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { QuestionStep } from '@/types/creation';
+import { containsProfanity } from '@/utils/profanityFilter';
 
 interface QuestionScreenProps {
     stepData: QuestionStep;
@@ -24,6 +25,22 @@ const QuestionScreen: React.FC<QuestionScreenProps> = ({
     handleCustomAnswerChange,
     theme
 }) => {
+    const [profanityWarning, setProfanityWarning] = useState(false);
+
+    const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const text = e.target.value;
+        
+        // Check for profanity
+        if (containsProfanity(text)) {
+            setProfanityWarning(true);
+            // Don't update the value if it contains profanity
+            return;
+        } else {
+            setProfanityWarning(false);
+            handleCustomAnswerChange(e);
+        }
+    };
+
     return (
         <>
             <div className="flex flex-col gap-4">
@@ -52,11 +69,16 @@ const QuestionScreen: React.FC<QuestionScreenProps> = ({
                     <textarea
                         id="custom-answer"
                         rows={4}
-                        className={`w-full bg-white/10 border-white/20 rounded-lg p-4 text-white block transition ${theme.textAreaFocus} font-mono`}
+                        className={`w-full bg-white/10 border-white/20 rounded-lg p-4 text-white block transition ${theme.textAreaFocus} font-mono ${profanityWarning ? 'border-red-500 border-2' : ''}`}
                         value={customAnswers[stepData.id] || ''}
-                        onChange={handleCustomAnswerChange}
+                        onChange={handleTextChange}
                         placeholder={stepData.customOption.placeholder}
                     />
+                    {profanityWarning && (
+                        <p className="text-red-400 text-sm mt-2 font-mono">
+                            Please use appropriate language. Food-related terms like "black coffee" or "white chocolate" are allowed.
+                        </p>
+                    )}
                 </div>
             )}
         </>
