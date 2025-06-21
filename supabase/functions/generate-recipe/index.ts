@@ -99,11 +99,15 @@ serve(async (req) => {
 
     console.log("Recipe inserted with ID:", newRecipe.id);
 
-    // Generate and upload image with detailed recipe-specific prompt
+    // Generate and upload image with emotionally resonant, conceptual design
     try {
         const dumplingShape = Object.values(payload.controls)[0]?.shape || 'classic';
         const flavor = Object.values(payload.controls)[0]?.flavor || 'mild';
         const timelineTheme = Object.values(payload.timeline)[0] || 'present';
+        
+        // Extract emotional context from user's answers
+        const userAnswers = Object.values(payload.questions);
+        const emotionalContext = userAnswers.join(', ');
         
         // Extract key ingredients for visual representation
         const ingredientsList = [];
@@ -111,7 +115,6 @@ serve(async (req) => {
             Object.values(recipeContent.ingredients).forEach((categoryItems: any) => {
                 if (Array.isArray(categoryItems)) {
                     categoryItems.forEach((item: string) => {
-                        // Extract main ingredient names (remove quantities and descriptions)
                         const cleanIngredient = item.replace(/^\d+[\s\w]*\s+/, '').split(',')[0].split('(')[0].trim();
                         if (cleanIngredient.length > 2) {
                             ingredientsList.push(cleanIngredient);
@@ -121,53 +124,107 @@ serve(async (req) => {
             });
         }
         
-        // Create timeline-specific visual themes
-        let visualTheme = '';
-        let colorScheme = '';
-        let textureDescription = '';
+        let imagePrompt = '';
         
         if (timelineTheme.toLowerCase().includes('future') || timelineTheme.toLowerCase().includes('distant')) {
-            visualTheme = 'futuristic, high-tech, molecular gastronomy style';
-            colorScheme = 'with iridescent, metallic, or neon accents';
-            textureDescription = 'smooth, translucent, or geometric patterns';
-        } else if (timelineTheme.toLowerCase().includes('ancient') || timelineTheme.toLowerCase().includes('past')) {
-            visualTheme = 'traditional, rustic, historical';
-            colorScheme = 'with earthy, natural colors';
-            textureDescription = 'handmade texture with visible pleats and folds';
-        } else if (timelineTheme.toLowerCase().includes('medieval')) {
-            visualTheme = 'medieval, rustic, traditional European';
-            colorScheme = 'with warm, muted colors';
-            textureDescription = 'hearty, rustic appearance';
-        } else {
-            visualTheme = 'contemporary, artisanal';
-            colorScheme = 'with natural, appealing colors';
-            textureDescription = 'professional, well-crafted appearance';
-        }
+            // FUTURISTIC: Conceptual, speculative, mind-blowing design
+            imagePrompt = `Ultra-futuristic conceptual food art: a single ${dumplingShape} dumpling that transcends traditional food design, embodying the memories and emotions: "${emotionalContext}".
 
-        const imagePrompt = `Professional food photography of a single ${dumplingShape} dumpling that visually represents this recipe: "${recipeContent.title}".
+SPECULATIVE DESIGN CONCEPT:
+- This dumpling exists in ${timelineTheme} where food is art, memory, and technology combined
+- The dumpling should be BREATHTAKINGLY beautiful and conceptually stunning
+- Incorporate bioluminescent, holographic, or crystalline elements that pulse with emotion
+- The surface might have flowing light patterns, neural network-like veins, or memory fragments visible within
+- Colors should be otherworldly: electric blues, plasma purples, quantum silvers, or energy greens
+- The ${dumplingShape} shape is reimagined as a perfect geometric form with impossible physics
+- Ingredients like "${ingredientsList.slice(0, 3).join(', ')}" are visualized as glowing essences or energy patterns
+- The dumpling appears to float or defy gravity, surrounded by particle effects or energy fields
 
-RECIPE THEME: ${timelineTheme} - ${visualTheme}
-KEY INGREDIENTS TO SHOW: ${ingredientsList.slice(0, 5).join(', ')}
-FLAVOR PROFILE: ${flavor}
+EMOTIONAL TRANSLATION:
+- The visual should make viewers feel the profound emotions: ${emotionalContext}
+- Use dramatic lighting that suggests transcendence, connection across time, or emotional depth
+- The dumpling should look like it contains actual memories - perhaps with subtle holographic imagery within
+- ${flavor} flavor is represented through color temperature and energy intensity
+
+TECHNICAL REQUIREMENTS:
+- Pure black void background - the dumpling exists in space-time
+- Photorealistic but impossibly beautiful - like concept art from the best sci-fi films
+- No text, utensils, or mundane elements
+- Professional cinematic lighting with dramatic shadows and highlights
+- The image should make people gasp with wonder and want to experience this impossible food
+
+This is not just food - it's a vessel for human memory and emotion, designed by advanced civilization.`;
+        
+        } else if (timelineTheme.toLowerCase().includes('ancient') || timelineTheme.toLowerCase().includes('past') || timelineTheme.toLowerCase().includes('medieval')) {
+            // HISTORICAL: Authentic, rustic, traditional with emotional depth
+            let historicalStyle = '';
+            let culturalContext = '';
+            
+            if (timelineTheme.toLowerCase().includes('ancient')) {
+                historicalStyle = 'ancient, primitive, clay-fired appearance';
+                culturalContext = 'made by ancient hands with deep spiritual significance';
+            } else if (timelineTheme.toLowerCase().includes('medieval')) {
+                historicalStyle = 'medieval, hearty, rustic European';
+                culturalContext = 'crafted in a medieval kitchen with traditional techniques';
+            } else {
+                historicalStyle = 'traditional, handmade, historical';
+                culturalContext = 'made with ancestral knowledge and emotional care';
+            }
+            
+            imagePrompt = `Authentic historical food photography: a single ${dumplingShape} dumpling representing "${recipeContent.title}" from ${timelineTheme}.
+
+HISTORICAL AUTHENTICITY:
+- ${historicalStyle} appearance that reflects the ${timelineTheme} era
+- The dumpling looks ${culturalContext}
+- Visible hand-crafted texture with natural imperfections that show human touch
+- Colors and ingredients reflect what was available in ${timelineTheme}: ${ingredientsList.slice(0, 3).join(', ')}
+- The ${flavor} flavor is suggested through natural, earthy color tones
+- Surface shows traditional pleating, folding, or shaping techniques
+
+EMOTIONAL RESONANCE:
+- The dumpling embodies the emotions: ${emotionalContext}
+- Lighting suggests warmth, tradition, and deep human connection
+- The texture and appearance should evoke nostalgia and authenticity
+- Made with love and carrying the weight of human tradition
 
 VISUAL REQUIREMENTS:
-- ONE ${dumplingShape}-shaped dumpling only, no multiples
-- The dumpling should visually reflect the ${timelineTheme} theme through its appearance
-- ${textureDescription}
-- Colors and appearance should suggest the key ingredients: ${ingredientsList.slice(0, 3).join(', ')}
-- ${colorScheme}
-- The dumpling should look edible and match the ${flavor} flavor profile
-- Solid black background with no reflections, shadows, or textures
-- No text, words, letters, numbers, or human features
-- No props, utensils, plates, or decorative elements
-- No steam, sauce, or garnishes
-- Professional lighting that highlights the dumpling's unique appearance
-- Clean, simple composition with the dumpling centered
+- Solid black background for dramatic contrast
+- Warm, natural lighting that highlights the handmade texture
+- Realistic food photography that makes it look absolutely delicious
+- No modern elements, text, or artificial additions
+- The dumpling should look like it was lovingly prepared by skilled traditional hands
 
-The dumpling should appear as actual food that represents the specific recipe ingredients and ${timelineTheme} theme, making someone want to taste this unique creation.`;
+This dumpling carries the emotional weight of human tradition and ancestral memory.`;
         
-        console.log("Generating recipe-specific image with DALL-E...");
-        console.log("Image prompt:", imagePrompt);
+        } else {
+            // CONTEMPORARY: Modern artisanal approach
+            imagePrompt = `Contemporary artisanal food photography: a single ${dumplingShape} dumpling representing "${recipeContent.title}".
+
+MODERN ARTISANAL STYLE:
+- Professional, contemporary food presentation
+- The dumpling shows modern culinary techniques while honoring tradition
+- Clean, precise craftsmanship with artistic flair
+- Ingredients ${ingredientsList.slice(0, 3).join(', ')} are represented through natural colors and textures
+- ${flavor} flavor profile suggested through appealing visual cues
+
+EMOTIONAL CONNECTION:
+- The dumpling embodies: ${emotionalContext}
+- Lighting and presentation evoke modern comfort and sophistication
+- Perfect balance of tradition and innovation
+
+REQUIREMENTS:
+- Solid black background
+- Professional food photography lighting
+- The dumpling looks expertly crafted and delicious
+- No props or decorative elements
+- Clean, focused composition
+
+A perfect dumpling that bridges tradition with contemporary culinary artistry.`;
+        }
+        
+        console.log("Generating emotionally resonant image with DALL-E...");
+        console.log("Timeline theme:", timelineTheme);
+        console.log("Emotional context:", emotionalContext);
         
         const imageResponse = await openai.images.generate({
             model: 'dall-e-3',
