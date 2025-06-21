@@ -56,25 +56,26 @@ const Creation = () => {
     };
   }, [setHeaderVisible]);
 
-  // Transition handlers for intro steps - NO ANIMATION during intro
+  // Transition handlers for intro steps
   const handleIntroNext = () => {
-    if (currentIntroStep < introSteps.length - 1) {
-      setCurrentIntroStep(currentIntroStep + 1);
-    } else {
-      // Only start transition when moving from intro to creation
-      startTransition('forward', () => {
+    startTransition('forward', () => {
+      if (currentIntroStep < introSteps.length - 1) {
+        setCurrentIntroStep(currentIntroStep + 1);
+      } else {
         setHasStartedCreation(true);
-      });
-    }
+      }
+    });
   };
 
   const handleIntroPrev = () => {
-    if (currentIntroStep > 0) {
-      setCurrentIntroStep(currentIntroStep - 1);
-    }
+    startTransition('backward', () => {
+      if (currentIntroStep > 0) {
+        setCurrentIntroStep(currentIntroStep - 1);
+      }
+    });
   };
 
-  // Transition handlers for creation steps - WITH ANIMATION
+  // Transition handlers for creation steps
   const handleCreationNext = () => {
     startTransition('forward', () => {
       nextCreationStep();
@@ -88,8 +89,9 @@ const Creation = () => {
   };
 
   const handleCreationSubmit = () => {
-    // No transition animation for recipe creation - it will show in background
-    handleSubmit();
+    startTransition('forward', () => {
+      handleSubmit();
+    });
   };
 
   // Regular non-transition handlers
@@ -213,25 +215,12 @@ const Creation = () => {
         )}
       </CreationContainer>
 
-      {/* Transition Animation Overlay - only during creation transitions */}
-      {hasStartedCreation && (
-        <TransitionAnimation
-          isVisible={isTransitioning}
-          direction={transitionDirection}
-          onComplete={completeTransition}
-          backgroundMode={isCreatingRecipe}
-        />
-      )}
-
-      {/* Background Animation during recipe creation */}
-      {isCreatingRecipe && (
-        <TransitionAnimation
-          isVisible={true}
-          direction="forward"
-          onComplete={() => {}}
-          backgroundMode={true}
-        />
-      )}
+      {/* Transition Animation Overlay */}
+      <TransitionAnimation
+        isVisible={isTransitioning}
+        direction={transitionDirection}
+        onComplete={completeTransition}
+      />
 
       {/* Footer for intro flow - made more compact */}
       {!hasStartedCreation && (
