@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -81,43 +80,43 @@ const Creation = () => {
   const renderIntroStepContent = (step: any) => {
     switch (step.type) {
       case 'hero':
-        return <div className="text-center max-w-2xl mx-auto px-6">
-                        <img src="/lovable-uploads/64d3de25-5e40-498e-8a21-28d15db9a050.png" alt="KissOn Logo" className="mx-auto mb-8 w-64 filter grayscale" />
+        return <div className="text-center max-w-sm mx-auto px-4">
+                        <img src="/lovable-uploads/64d3de25-5e40-498e-8a21-28d15db9a050.png" alt="KissOn Logo" className="mx-auto mb-6 w-48 filter grayscale" />
                         
-                        <p className="text-xl text-white font-bold mb-12 font-mono">
+                        <p className="text-lg text-white font-bold mb-8 font-mono">
                             {step.description}
                         </p>
-                        <Button onClick={nextIntroStep} size="lg" className="bg-gradient-to-r from-black via-gray-800 to-black hover:from-gray-800 hover:via-black hover:to-gray-800 text-white font-bold shadow-lg transition-all duration-300 transform hover:scale-105 border-2 border-white/20 px-10 py-6 text-2xl rounded-2xl font-mono">
+                        <Button onClick={nextIntroStep} size="lg" className="bg-gradient-to-r from-black via-gray-800 to-black hover:from-gray-800 hover:via-black hover:to-gray-800 text-white font-bold shadow-lg transition-all duration-300 transform hover:scale-105 border-2 border-white/20 px-8 py-4 text-xl rounded-xl font-mono">
                             {step.buttonText}
                         </Button>
                     </div>;
       case 'explanation':
         const Icon = step.icon;
-        return <Card className="bg-transparent border-4 border-white/20 transition-all duration-300 shadow-2xl shadow-black/25 w-full max-w-2xl mx-auto">
-                        <CardContent className="p-6">
-                            {Icon && <div className="w-20 h-20 bg-gradient-to-r from-black via-gray-800 to-black rounded-full flex items-center justify-center mx-auto mb-8">
-                                <Icon className="h-10 w-10 text-white" />
+        return <Card className="bg-transparent border-4 border-white/20 transition-all duration-300 shadow-2xl shadow-black/25 w-full max-w-sm mx-auto">
+                        <CardContent className="p-4">
+                            {Icon && <div className="w-16 h-16 bg-gradient-to-r from-black via-gray-800 to-black rounded-full flex items-center justify-center mx-auto mb-6">
+                                <Icon className="h-8 w-8 text-white" />
                             </div>}
-                            <h3 className="font-black text-white mb-6 drop-shadow-lg text-3xl text-center font-mono">
+                            <h3 className="font-black text-white mb-4 drop-shadow-lg text-2xl text-center font-mono">
                                 {(step.title as string[])[0]}
                                 <br />
                                 <span className="bg-gradient-to-r from-white via-gray-300 to-white bg-clip-text text-transparent">
                                     {(step.title as string[])[1]}
                                 </span>
                             </h3>
-                            <p className="text-white font-bold text-base text-center font-mono">
+                            <p className="text-white font-bold text-sm text-center font-mono">
                                 {step.description}
                             </p>
                         </CardContent>
                     </Card>;
       case 'quote':
-        return <div className="text-center max-w-2xl mx-auto px-6">
-                        <blockquote className="text-4xl md:text-6xl font-black leading-tight mb-8 font-mono">
+        return <div className="text-center max-w-sm mx-auto px-4">
+                        <blockquote className="text-3xl md:text-4xl font-black leading-tight mb-6 font-mono">
                             <span className="bg-gradient-to-r from-white via-gray-300 to-white bg-clip-text text-transparent drop-shadow-2xl">
                                 {step.title}
                             </span>
                         </blockquote>
-                        <p className="text-2xl text-white font-black mb-12 font-mono">
+                        <p className="text-xl text-white font-black mb-8 font-mono">
                             {step.description}
                         </p>
                     </div>;
@@ -151,28 +150,28 @@ const Creation = () => {
   };
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br ${theme.bg} text-white p-4 sm:p-6 md:p-8 flex flex-col items-center justify-start transition-all duration-300 pt-24`}>
+    <div className={`min-h-screen bg-gradient-to-br ${theme.bg} text-white p-3 sm:p-4 flex flex-col items-center justify-start transition-all duration-300 pt-16`}>
       {/* Simplified background effects - no blur */}
       {!hasStartedCreation && (
         <div className="absolute inset-0 opacity-20 overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-gray-800 via-black to-gray-800"></div>
-          <div className="absolute top-20 left-20 w-40 h-40 bg-gradient-to-r from-gray-600 to-black rounded-full"></div>
-          <div className="absolute top-60 right-10 w-60 h-60 bg-gradient-to-r from-black to-gray-700 rounded-full"></div>
-          <div className="absolute bottom-20 left-1/3 w-32 h-32 bg-gradient-to-r from-gray-500 to-black rounded-full"></div>
+          <div className="absolute top-20 left-20 w-32 h-32 bg-gradient-to-r from-gray-600 to-black rounded-full"></div>
+          <div className="absolute top-60 right-10 w-48 h-48 bg-gradient-to-r from-black to-gray-700 rounded-full"></div>
+          <div className="absolute bottom-20 left-1/3 w-24 h-24 bg-gradient-to-r from-gray-500 to-black rounded-full"></div>
         </div>
       )}
 
-      <div className="w-full max-w-2xl space-y-8 relative z-10">
+      <div className="w-full max-w-sm space-y-6 relative z-10">
         {/* Progress Bar at top */}
         <div className="w-full">
           <ProgressBar progress={progress} theme={theme} />
         </div>
 
-        {/* Main Content Card - removed backdrop-blur */}
+        {/* Main Content Card - adjusted for 9:16 */}
         <Card className={`relative w-full mx-auto bg-black/50 border-2 border-white/20 shadow-2xl ${theme.cardShadow} transition-opacity duration-300`}>
-          <CardHeader className="p-6">
+          <CardHeader className="p-4">
             {!recipeResult && !isCreatingRecipe && (
-              <CardTitle className={`text-2xl md:text-3xl font-black text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent drop-shadow-lg min-h-[100px] flex items-center justify-center font-mono`}>
+              <CardTitle className={`text-xl md:text-2xl font-black text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent drop-shadow-lg min-h-[80px] flex items-center justify-center font-mono`}>
                 {!hasStartedCreation 
                   ? introSteps[currentIntroStep].title 
                   : (creationStepData.type === 'question' ? creationStepData.question : creationStepData.title)
@@ -181,11 +180,11 @@ const Creation = () => {
             )}
           </CardHeader>
           
-          <CardContent className="p-6">
+          <CardContent className="p-4">
             {isCreatingRecipe ? (
-              <div className="flex flex-col items-center justify-center h-96 space-y-4">
-                <Loader2 className="h-16 w-16 animate-spin text-white" />
-                <p className="text-2xl font-semibold text-white/80 font-mono">Creating your recipe...</p>
+              <div className="flex flex-col items-center justify-center h-64 space-y-4">
+                <Loader2 className="h-12 w-12 animate-spin text-white" />
+                <p className="text-lg font-semibold text-white/80 font-mono">Creating your recipe...</p>
               </div>
             ) : recipeResult ? (
               <div>
@@ -233,17 +232,17 @@ const Creation = () => {
                 {/* Navigation Controls */}
                 {!hasStartedCreation ? (
                   introSteps[currentIntroStep].type !== 'hero' && (
-                    <div className="w-full mt-8">
+                    <div className="w-full mt-6">
                       <div className="flex justify-between items-center">
-                        <Button onClick={prevIntroStep} variant="ghost" className="text-white hover:bg-white/10 disabled:opacity-50 font-mono" disabled={currentIntroStep === 0}>
-                          <ArrowLeft className="mr-2" /> Back
+                        <Button onClick={prevIntroStep} variant="ghost" className="text-white hover:bg-white/10 disabled:opacity-50 font-mono text-sm" disabled={currentIntroStep === 0}>
+                          <ArrowLeft className="mr-2 h-4 w-4" /> Back
                         </Button>
                         <div className="flex items-center space-x-2">
                           {introSteps.slice(1, 4).map((_, index) => (
-                            <div key={index} className={`w-3 h-3 rounded-full transition-colors ${currentIntroStep === index + 1 ? 'bg-white' : 'bg-white/30'}`} />
+                            <div key={index} className={`w-2 h-2 rounded-full transition-colors ${currentIntroStep === index + 1 ? 'bg-white' : 'bg-white/30'}`} />
                           ))}
                         </div>
-                        <Button onClick={nextIntroStep} className="bg-gradient-to-r from-black to-gray-800 text-white font-mono">
+                        <Button onClick={nextIntroStep} className="bg-gradient-to-r from-black to-gray-800 text-white font-mono text-sm">
                           {currentIntroStep === introSteps.length - 1 ? introSteps[currentIntroStep].buttonText : 'Next'}
                         </Button>
                       </div>
@@ -265,10 +264,10 @@ const Creation = () => {
         </Card>
       </div>
 
-      {/* Footer for intro flow */}
+      {/* Footer for intro flow - made more compact */}
       {!hasStartedCreation && (
-        <footer className="relative z-10 bg-black/50 text-white mt-8 w-full text-center border-t-2 border-white/20 py-4">
-          <p className="text-lg font-black font-mono">
+        <footer className="relative z-10 bg-black/50 text-white mt-6 w-full text-center border-t-2 border-white/20 py-3">
+          <p className="text-sm font-black font-mono">
             A DESIGN PROJECT BY <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mx-1">OREN/LUPE</span>
           </p>
         </footer>

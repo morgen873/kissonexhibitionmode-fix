@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -77,16 +76,16 @@ const RecipePage = () => {
     console.log('- Is placeholder:', isPlaceholder);
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 to-slate-800 text-white p-4 sm:p-8">
-            <Card className="max-w-4xl mx-auto bg-black/30 backdrop-blur-xl border-2 border-white/20 shadow-2xl">
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 to-slate-800 text-white p-3 sm:p-4">
+            <Card className="max-w-sm mx-auto bg-black/30 backdrop-blur-xl border-2 border-white/20 shadow-2xl">
                 <CardHeader>
-                    <CardTitle className="text-3xl md:text-4xl font-bold text-center text-white drop-shadow-lg">{recipe.title}</CardTitle>
-                    <div className="flex justify-center mt-6">
-                        <div className="relative w-full max-w-md">
+                    <CardTitle className="text-2xl md:text-3xl font-bold text-center text-white drop-shadow-lg">{recipe.title}</CardTitle>
+                    <div className="flex justify-center mt-4">
+                        <div className="relative w-full max-w-xs">
                             <img 
                                 src={imageUrl}
                                 alt={recipe.title} 
-                                className="rounded-lg w-full h-auto max-h-96 object-cover shadow-lg"
+                                className="rounded-lg w-full h-auto max-h-64 object-cover shadow-lg"
                                 onLoad={() => {
                                     console.log('✅ Image loaded successfully:', imageUrl);
                                 }}
@@ -106,18 +105,18 @@ const RecipePage = () => {
                         </div>
                     </div>
                 </CardHeader>
-                <CardContent className="space-y-8 mt-4">
+                <CardContent className="space-y-6 mt-3">
                     <div>
-                        <h3 className="text-2xl font-semibold mb-2 border-b-2 border-white/20 pb-2 text-white">Description</h3>
-                        <p className="text-white/80 mt-4">{recipe.description}</p>
+                        <h3 className="text-xl font-semibold mb-2 border-b-2 border-white/20 pb-2 text-white">Description</h3>
+                        <p className="text-white/80 mt-3 text-sm">{recipe.description}</p>
                     </div>
                      <div>
-                        <h3 className="text-2xl font-semibold mb-2 border-b-2 border-white/20 pb-2 text-white">Ingredients</h3>
+                        <h3 className="text-xl font-semibold mb-2 border-b-2 border-white/20 pb-2 text-white">Ingredients</h3>
                         <IngredientsList ingredients={recipe.ingredients} />
                     </div>
                     <div>
-                        <h3 className="text-2xl font-semibold mb-2 border-b-2 border-white/20 pb-2 text-white">Cooking Instructions</h3>
-                        <pre className="text-white/80 bg-black/20 p-4 rounded-md whitespace-pre-wrap font-sans mt-4">{recipe.cooking_recipe}</pre>
+                        <h3 className="text-xl font-semibold mb-2 border-b-2 border-white/20 pb-2 text-white">Cooking Instructions</h3>
+                        <pre className="text-white/80 bg-black/20 p-3 rounded-md whitespace-pre-wrap font-sans mt-3 text-sm">{recipe.cooking_recipe}</pre>
                     </div>
                 </CardContent>
             </Card>
