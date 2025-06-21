@@ -77,17 +77,22 @@ const Creation = () => {
 
   // Simple intro navigation - no animations during intro
   const handleIntroTransitionNext = () => {
+    console.log('handleIntroTransitionNext called, currentIntroStep:', currentIntroStep);
     if (currentIntroStep < 3) {
+      console.log('Moving to next intro step');
       handleIntroNext();
     } else {
+      console.log('Transitioning from intro to creation');
       // Transition from intro to creation with animation
       handleCreationNext(() => {
+        console.log('Setting hasStartedCreation to true');
         setHasStartedCreation(true);
       });
     }
   };
 
   const handleIntroTransitionPrev = () => {
+    console.log('handleIntroTransitionPrev called');
     handleIntroPrev();
   };
 
@@ -147,7 +152,7 @@ const Creation = () => {
           onShapeChange={handleShapeChange}
           onFlavorChange={handleFlavorChange}
           onEnhancerChange={handleEnhancerChange}
-          onIntroNext={handleIntroNext}
+          onIntroNext={handleIntroTransitionNext}
           onReset={handleReset}
         />
         
