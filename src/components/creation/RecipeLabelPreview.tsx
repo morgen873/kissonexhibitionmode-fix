@@ -11,7 +11,7 @@ const RecipeLabelPreview: React.FC<RecipeLabelPreviewProps> = ({ recipe }) => {
     return (
         <div className="flex flex-col items-center gap-3">
             <h3 className="text-lg font-semibold font-mono">Label Preview</h3>
-            <div className="w-full max-w-[250px] aspect-square p-2 bg-white text-black flex flex-col justify-between rounded-lg shadow-lg">
+            <div className="w-full max-w-[250px] lg:max-w-[300px] aspect-square p-2 bg-white text-black flex flex-col justify-between rounded-lg shadow-lg">
                 <div className="text-center pt-1">
                     <h4 className="text-xs font-bold truncate px-2 font-mono">{recipe.name}</h4>
                 </div>

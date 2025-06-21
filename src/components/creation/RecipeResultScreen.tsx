@@ -18,7 +18,7 @@ const RecipeResultScreen: React.FC<RecipeResultScreenProps> = ({ recipe, onReset
 
             <RecipePrintTemplate recipe={recipe} />
 
-            <div className="flex flex-col gap-6 w-full">
+            <div className="flex flex-col lg:flex-row gap-6 w-full justify-center">
                 <RecipeImageDisplay recipe={recipe} />
                 <RecipeLabelPreview recipe={recipe} />
             </div>

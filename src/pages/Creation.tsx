@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -150,7 +151,7 @@ const Creation = () => {
   };
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br ${theme.bg} text-white p-3 sm:p-4 flex flex-col items-center justify-start transition-all duration-300 pt-16`}>
+    <div className={`min-h-screen bg-gradient-to-br ${theme.bg} text-white p-3 sm:p-4 lg:p-8 flex flex-col items-center justify-start transition-all duration-300 pt-16 lg:pt-8`}>
       {/* Simplified background effects - no blur */}
       {!hasStartedCreation && (
         <div className="absolute inset-0 opacity-20 overflow-hidden">
@@ -161,17 +162,17 @@ const Creation = () => {
         </div>
       )}
 
-      <div className="w-full max-w-sm space-y-6 relative z-10">
+      <div className="w-full max-w-sm lg:max-w-4xl xl:max-w-6xl space-y-6 relative z-10">
         {/* Progress Bar at top */}
         <div className="w-full">
           <ProgressBar progress={progress} theme={theme} />
         </div>
 
-        {/* Main Content Card - adjusted for 9:16 */}
+        {/* Main Content Card - responsive width */}
         <Card className={`relative w-full mx-auto bg-black/50 border-2 border-white/20 shadow-2xl ${theme.cardShadow} transition-opacity duration-300`}>
-          <CardHeader className="p-4">
+          <CardHeader className="p-4 lg:p-6">
             {!recipeResult && !isCreatingRecipe && (
-              <CardTitle className={`text-xl md:text-2xl font-black text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent drop-shadow-lg min-h-[80px] flex items-center justify-center font-mono`}>
+              <CardTitle className={`text-xl md:text-2xl lg:text-3xl font-black text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent drop-shadow-lg min-h-[80px] flex items-center justify-center font-mono`}>
                 {!hasStartedCreation 
                   ? introSteps[currentIntroStep].title 
                   : (creationStepData.type === 'question' ? creationStepData.question : creationStepData.title)
@@ -180,7 +181,7 @@ const Creation = () => {
             )}
           </CardHeader>
           
-          <CardContent className="p-4">
+          <CardContent className="p-4 lg:p-6">
             {isCreatingRecipe ? (
               <div className="flex flex-col items-center justify-center h-64 space-y-4">
                 <Loader2 className="h-12 w-12 animate-spin text-white" />
