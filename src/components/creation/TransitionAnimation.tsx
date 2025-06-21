@@ -5,12 +5,14 @@ interface TransitionAnimationProps {
   isVisible: boolean;
   onComplete: () => void;
   direction?: 'forward' | 'backward';
+  backgroundMode?: boolean;
 }
 
 const TransitionAnimation: React.FC<TransitionAnimationProps> = ({
   isVisible,
   onComplete,
-  direction = 'forward'
+  direction = 'forward',
+  backgroundMode = false
 }) => {
   const [currentImage, setCurrentImage] = useState(0);
 
@@ -25,43 +27,61 @@ const TransitionAnimation: React.FC<TransitionAnimationProps> = ({
   useEffect(() => {
     if (!isVisible) return;
 
-    console.log('TransitionAnimation: Starting full-screen animation with dumpling images:', images);
+    console.log(`TransitionAnimation: Starting ${backgroundMode ? 'background' : 'full-screen'} animation with dumpling images:`, images);
     let timeouts: NodeJS.Timeout[] = [];
 
-    // Cycle through dumpling images - 0.5 seconds each for 2 second total
-    images.forEach((imagePath, index) => {
-      timeouts.push(setTimeout(() => {
-        console.log(`TransitionAnimation: Showing full-screen image ${index + 1}: ${imagePath}`);
-        setCurrentImage(index);
-      }, index * 500)); // 0.5 seconds per image
-    });
+    if (backgroundMode) {
+      // In background mode, cycle continuously at a slower pace
+      const cycleDuration = 2000; // 2 seconds per image
+      const startCycling = () => {
+        images.forEach((imagePath, index) => {
+          timeouts.push(setTimeout(() => {
+            console.log(`TransitionAnimation: Background mode showing image ${index + 1}: ${imagePath}`);
+            setCurrentImage(index);
+          }, index * cycleDuration));
+        });
+        
+        // Continue cycling
+        timeouts.push(setTimeout(startCycling, images.length * cycleDuration));
+      };
+      
+      startCycling();
+    } else {
+      // Normal transition mode - 0.5 seconds each for 2 second total
+      images.forEach((imagePath, index) => {
+        timeouts.push(setTimeout(() => {
+          console.log(`TransitionAnimation: Showing full-screen image ${index + 1}: ${imagePath}`);
+          setCurrentImage(index);
+        }, index * 500)); // 0.5 seconds per image
+      });
 
-    // Complete the animation after all images have been shown
-    timeouts.push(setTimeout(() => {
-      console.log('TransitionAnimation: Full-screen animation complete');
-      onComplete();
-    }, images.length * 500 + 300));
+      // Complete the animation after all images have been shown
+      timeouts.push(setTimeout(() => {
+        console.log('TransitionAnimation: Full-screen animation complete');
+        onComplete();
+      }, images.length * 500 + 300));
+    }
 
     return () => {
       timeouts.forEach(clearTimeout);
     };
-  }, [isVisible, onComplete]);
+  }, [isVisible, onComplete, backgroundMode]);
 
   if (!isVisible) return null;
 
-  console.log('TransitionAnimation: Rendering full-screen image:', images[currentImage]);
+  console.log(`TransitionAnimation: Rendering ${backgroundMode ? 'background' : 'full-screen'} image:`, images[currentImage]);
 
   return (
     <div 
-      className="fixed top-0 left-0 w-screen h-screen bg-black"
-      style={{ zIndex: 9999 }}
+      className={`fixed top-0 left-0 w-screen h-screen ${backgroundMode ? 'bg-black/50' : 'bg-black'}`}
+      style={{ zIndex: backgroundMode ? 1 : 9999 }}
     >
       <img
         src={images[currentImage]}
         alt={`Dumpling ${currentImage + 1}`}
-        className="w-full h-full object-cover transition-opacity duration-150"
-        onLoad={() => console.log('TransitionAnimation: Full-screen image loaded successfully')}
-        onError={(e) => console.error('TransitionAnimation: Full-screen image failed to load:', e)}
+        className={`w-full h-full object-cover transition-opacity duration-150 ${backgroundMode ? 'opacity-30' : ''}`}
+        onLoad={() => console.log(`TransitionAnimation: ${backgroundMode ? 'Background' : 'Full-screen'} image loaded successfully`)}
+        onError={(e) => console.error(`TransitionAnimation: ${backgroundMode ? 'Background' : 'Full-screen'} image failed to load:`, e)}
       />
     </div>
   );

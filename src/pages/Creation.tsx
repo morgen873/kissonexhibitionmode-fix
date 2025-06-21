@@ -56,26 +56,25 @@ const Creation = () => {
     };
   }, [setHeaderVisible]);
 
-  // Transition handlers for intro steps
+  // Transition handlers for intro steps - NO ANIMATION during intro
   const handleIntroNext = () => {
-    startTransition('forward', () => {
-      if (currentIntroStep < introSteps.length - 1) {
-        setCurrentIntroStep(currentIntroStep + 1);
-      } else {
+    if (currentIntroStep < introSteps.length - 1) {
+      setCurrentIntroStep(currentIntroStep + 1);
+    } else {
+      // Only start transition when moving from intro to creation
+      startTransition('forward', () => {
         setHasStartedCreation(true);
-      }
-    });
+      });
+    }
   };
 
   const handleIntroPrev = () => {
-    startTransition('backward', () => {
-      if (currentIntroStep > 0) {
-        setCurrentIntroStep(currentIntroStep - 1);
-      }
-    });
+    if (currentIntroStep > 0) {
+      setCurrentIntroStep(currentIntroStep - 1);
+    }
   };
 
-  // Transition handlers for creation steps
+  // Transition handlers for creation steps - WITH ANIMATION
   const handleCreationNext = () => {
     startTransition('forward', () => {
       nextCreationStep();
@@ -89,9 +88,8 @@ const Creation = () => {
   };
 
   const handleCreationSubmit = () => {
-    startTransition('forward', () => {
-      handleSubmit();
-    });
+    // No transition animation for recipe creation - it will show in background
+    handleSubmit();
   };
 
   // Regular non-transition handlers
@@ -215,12 +213,25 @@ const Creation = () => {
         )}
       </CreationContainer>
 
-      {/* Transition Animation Overlay */}
-      <TransitionAnimation
-        isVisible={isTransitioning}
-        direction={transitionDirection}
-        onComplete={completeTransition}
-      />
+      {/* Transition Animation Overlay - only during creation transitions */}
+      {hasStartedCreation && (
+        <TransitionAnimation
+          isVisible={isTransitioning}
+          direction={transitionDirection}
+          onComplete={completeTransition}
+          backgroundMode={isCreatingRecipe}
+        />
+      )}
+
+      {/* Background Animation during recipe creation */}
+      {isCreatingRecipe && (
+        <TransitionAnimation
+          isVisible={true}
+          direction="forward"
+          onComplete={() => {}}
+          backgroundMode={true}
+        />
+      )}
 
       {/* Footer for intro flow - made more compact */}
       {!hasStartedCreation && (
