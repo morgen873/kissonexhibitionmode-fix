@@ -12,16 +12,22 @@ export function containsProfanity(text: string): boolean {
   
   const normalizedText = text.toLowerCase().trim();
   
-  // Common color words that should always be allowed
+  // Common color words that should always be allowed in any context
   const colorWords = ['black', 'white', 'brown', 'red', 'green', 'yellow', 'orange', 'purple', 'pink', 'golden', 'blue', 'gray', 'grey'];
   
-  // If the text contains only color words and common safe words, allow it
+  // If the text is just a color word or color words, always allow it
   const words = normalizedText.split(/\s+/);
+  const isOnlyColorWords = words.every(word => colorWords.includes(word));
+  if (isOnlyColorWords) {
+    return false;
+  }
+  
+  // If the text contains only color words and common safe words, allow it
   const allWordsAreSafe = words.every(word => 
     colorWords.includes(word) || 
     FOOD_COLOR_WORDS.includes(word) ||
     FOOD_RELATED_WORDS.includes(word) ||
-    ['and', 'or', 'the', 'a', 'an', 'with', 'of', 'in', 'to', 'for'].includes(word)
+    ['and', 'or', 'the', 'a', 'an', 'with', 'of', 'in', 'to', 'for', 'like', 'as'].includes(word)
   );
   
   if (allWordsAreSafe) {
@@ -53,23 +59,30 @@ export function containsProfanity(text: string): boolean {
     }
   }
   
-  // Check for prohibited words, but exclude color words and safe combinations
+  // Check for prohibited words, but be very permissive with color words
   for (const word of PROHIBITED_WORDS) {
-    // Skip color words that should be allowed
+    // Skip all color words - they should always be allowed
     if (colorWords.includes(word.toLowerCase())) {
       continue;
     }
     
-    // Use word boundaries to avoid false positives, but be more lenient with color combinations
+    // Use word boundaries to avoid false positives
     const regex = new RegExp(`\\b${word.toLowerCase()}\\b`, 'i');
     if (regex.test(normalizedText)) {
-      // Double check if this is a color combination that should be allowed
-      const isColorCombination = colorWords.some(color => 
+      // Check if this word is part of a color combination or food context
+      const hasColorContext = colorWords.some(color => 
         normalizedText.includes(`${color} ${word}`) || 
-        normalizedText.includes(`${word} ${color}`)
+        normalizedText.includes(`${word} ${color}`) ||
+        normalizedText.includes(color)
       );
       
-      if (!isColorCombination) {
+      // Check if it's in a food context
+      const hasFoodContext = FOOD_RELATED_WORDS.some(foodWord => 
+        normalizedText.includes(foodWord)
+      );
+      
+      // Only flag as profanity if it's not in a color or food context
+      if (!hasColorContext && !hasFoodContext) {
         return true;
       }
     }

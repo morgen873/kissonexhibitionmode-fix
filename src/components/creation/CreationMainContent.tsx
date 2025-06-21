@@ -5,6 +5,7 @@ import ExplanationScreen from './ExplanationScreen';
 import QuestionScreen from './QuestionScreen';
 import ControlsScreen from './ControlsScreen';
 import TimelineScreen from './TimelineScreen';
+import { containsProfanity } from '@/utils/profanityFilter';
 
 interface CreationMainContentProps {
     stepData: any;
@@ -38,6 +39,16 @@ const CreationMainContent: React.FC<CreationMainContentProps> = ({
     onFlavorChange,
     onEnhancerChange
 }) => {
+    // Create a profanity-filtered enhancer change handler
+    const handleEnhancerChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const text = e.target.value;
+        
+        // Check for profanity and only update if no profanity is detected
+        if (!containsProfanity(text)) {
+            onEnhancerChange(e);
+        }
+    };
+
     if (stepData.type === 'explanation') {
         return <ExplanationScreen description={stepData.description} />;
     }
@@ -74,7 +85,7 @@ const CreationMainContent: React.FC<CreationMainContentProps> = ({
                 onTemperatureChange={onTemperatureChange} 
                 onShapeChange={onShapeChange} 
                 onFlavorChange={onFlavorChange} 
-                onEnhancerChange={onEnhancerChange} 
+                onEnhancerChange={handleEnhancerChange} 
             />
         );
     }
