@@ -8,7 +8,7 @@ interface UseAnswerHandlersProps {
     controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } };
     setAnswers: (answers: { [key: number]: string }) => void;
     setCustomAnswers: (customAnswers: { [key: number]: string }) => void;
-    setControlValues: (controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } }) => void;
+    setControlValues: (controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } } | ((prev: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } }) => { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } })) => void;
     currentStep: number;
 }
 
