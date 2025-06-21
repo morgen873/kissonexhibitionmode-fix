@@ -14,7 +14,7 @@ const TransitionAnimation: React.FC<TransitionAnimationProps> = ({
 }) => {
   const [currentImage, setCurrentImage] = useState(0);
 
-  // Your dumpling images
+  // Dumpling images - using the provided dumpling image path
   const images = [
     '/lovable-uploads/64d3de25-5e40-498e-8a21-28d15db9a050.png',
     '/lovable-uploads/64d3de25-5e40-498e-8a21-28d15db9a050.png',
@@ -25,19 +25,22 @@ const TransitionAnimation: React.FC<TransitionAnimationProps> = ({
   useEffect(() => {
     if (!isVisible) return;
 
+    console.log('TransitionAnimation: Starting animation with images:', images);
     let timeouts: NodeJS.Timeout[] = [];
 
-    // Cycle through your dumpling images
-    images.forEach((_, index) => {
+    // Cycle through dumpling images
+    images.forEach((imagePath, index) => {
       timeouts.push(setTimeout(() => {
+        console.log(`TransitionAnimation: Showing image ${index}: ${imagePath}`);
         setCurrentImage(index);
-      }, index * 150));
+      }, index * 500)); // 0.5 seconds per image as requested
     });
 
-    // Complete the animation
+    // Complete the animation after all images have been shown
     timeouts.push(setTimeout(() => {
+      console.log('TransitionAnimation: Animation complete');
       onComplete();
-    }, images.length * 150 + 300));
+    }, images.length * 500 + 300));
 
     return () => {
       timeouts.forEach(clearTimeout);
@@ -46,13 +49,17 @@ const TransitionAnimation: React.FC<TransitionAnimationProps> = ({
 
   if (!isVisible) return null;
 
+  console.log('TransitionAnimation: Rendering image:', images[currentImage]);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80">
       <div className="w-32 h-32">
         <img
           src={images[currentImage]}
-          alt="Dumpling"
+          alt={`Dumpling ${currentImage + 1}`}
           className="w-full h-full object-contain transition-opacity duration-150"
+          onLoad={() => console.log('TransitionAnimation: Image loaded successfully')}
+          onError={(e) => console.error('TransitionAnimation: Image failed to load:', e)}
         />
       </div>
     </div>
