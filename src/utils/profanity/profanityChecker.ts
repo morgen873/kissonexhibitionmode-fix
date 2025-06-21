@@ -15,13 +15,15 @@ export function containsProfanity(text: string): boolean {
   // Common color words that should ALWAYS be allowed in ANY context
   const colorWords = ['black', 'white', 'brown', 'red', 'green', 'yellow', 'orange', 'purple', 'pink', 'golden', 'blue', 'gray', 'grey'];
   
-  // If the text is just a color word or contains only color words, always allow it
+  // Split text into words for analysis
   const words = normalizedText.split(/\s+/);
   
-  // Check if any word is a color word - if so, allow the entire text
-  const hasColorWord = words.some(word => colorWords.includes(word));
-  if (hasColorWord) {
-    return false;
+  // FIRST: Check if ANY word is a color word - if so, IMMEDIATELY allow the entire text
+  for (const word of words) {
+    if (colorWords.includes(word)) {
+      console.log(`Allowing text "${text}" because it contains color word: "${word}"`);
+      return false;
+    }
   }
   
   // Check if text contains only safe words
@@ -58,6 +60,7 @@ export function containsProfanity(text: string): boolean {
     // Use word boundaries to avoid false positives
     const regex = new RegExp(`\\b${word.toLowerCase()}\\b`, 'i');
     if (regex.test(normalizedText)) {
+      console.log(`Blocking text "${text}" because of prohibited word: "${word}"`);
       return true;
     }
   }
