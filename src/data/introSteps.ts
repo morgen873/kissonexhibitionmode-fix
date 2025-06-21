@@ -20,7 +20,7 @@ export interface IntroStepData {
 export const introSteps: IntroStepData[] = [
     {
         type: 'hero',
-        title: 'From Feeling To Filling',
+        title: 'a recipe is an edible algorithm...',
         description: 'Our AI transforms your feelings into delicious, one-of-a-kind dumpling recipes.',
         buttonText: 'Start The Experience',
     },
