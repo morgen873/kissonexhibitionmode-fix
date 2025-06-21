@@ -25,7 +25,30 @@ export function containsProfanity(text: string): boolean {
     return false;
   }
   
-  // Check if the text matches any food exceptions FIRST (most specific)
+  // FIRST: Check for explicit prohibited words (excluding color words that might be food-related)
+  const explicitProfanity = [];
+  for (const word of PROHIBITED_WORDS) {
+    // Skip color words - we'll handle them separately
+    if (colorWords.includes(word.toLowerCase())) {
+      continue;
+    }
+    
+    // Use word boundaries to avoid false positives, but only for words 3+ characters
+    if (word.length >= 3) {
+      const regex = new RegExp(`\\b${word.toLowerCase()}\\b`, 'i');
+      if (regex.test(normalizedText)) {
+        explicitProfanity.push(word);
+      }
+    }
+  }
+  
+  // If we found explicit profanity, block it regardless of food context
+  if (explicitProfanity.length > 0) {
+    console.log(`Blocking text "${text}" because of explicit profanity: ${explicitProfanity.join(', ')}`);
+    return true;
+  }
+  
+  // Check if the text matches any food exceptions (most specific)
   for (const exception of FOOD_EXCEPTIONS) {
     if (normalizedText.includes(exception.toLowerCase())) {
       console.log(`Allowing text "${text}" because it matches food exception: "${exception}"`);
@@ -53,11 +76,20 @@ export function containsProfanity(text: string): boolean {
     return false;
   }
   
-  // Now check for prohibited words - this happens AFTER safe word checks
+  // Finally, check for any remaining prohibited words including color words used inappropriately
   for (const word of PROHIBITED_WORDS) {
-    // Skip color words when they appear as standalone prohibited words
+    // For color words, only block if they're not in a clearly food context
     if (colorWords.includes(word.toLowerCase())) {
-      continue;
+      // Allow color words if they appear to be food-related
+      const hasNearbyFoodWords = words.some((w, index) => {
+        const wordIndex = words.indexOf(word.toLowerCase());
+        const distance = Math.abs(index - wordIndex);
+        return distance <= 2 && (FOOD_RELATED_WORDS.includes(w) || ['sauce', 'pepper', 'bean', 'beans', 'rice', 'bread', 'tea', 'coffee'].includes(w));
+      });
+      
+      if (hasNearbyFoodWords) {
+        continue; // Allow this color word
+      }
     }
     
     // Use word boundaries to avoid false positives, but only for words 3+ characters
