@@ -50,7 +50,15 @@ const CreationContent: React.FC<CreationContentProps> = ({
   onIntroNext,
   onReset
 }) => {
+  console.log('CreationContent rendering:', {
+    hasStartedCreation,
+    isCreatingRecipe,
+    recipeResult: !!recipeResult,
+    recipeResultData: recipeResult
+  });
+
   if (isCreatingRecipe) {
+    console.log('Showing recipe creation loader');
     return (
       <div className="flex flex-col items-center justify-center h-64 space-y-4">
         <Loader2 className="h-12 w-12 animate-spin text-white" />
@@ -60,6 +68,7 @@ const CreationContent: React.FC<CreationContentProps> = ({
   }
 
   if (recipeResult) {
+    console.log('Showing recipe result screen');
     return <RecipeResultScreen recipe={recipeResult} onReset={onReset} />;
   }
 

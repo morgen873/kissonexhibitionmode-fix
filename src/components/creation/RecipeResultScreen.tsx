@@ -12,9 +12,11 @@ interface RecipeResultScreenProps {
 }
 
 const RecipeResultScreen: React.FC<RecipeResultScreenProps> = ({ recipe, onReset }) => {
+    console.log('RecipeResultScreen rendering with recipe:', recipe);
+    
     return (
-        <div className="w-full flex flex-col items-center space-y-6 text-white/90">
-            <h2 className="text-2xl font-bold text-center font-mono">Your Memory KissOn Recipe</h2>
+        <div className="w-full flex flex-col items-center space-y-6 text-white p-4">
+            <h2 className="text-2xl font-bold text-center font-mono text-white">Your Memory KissOn Recipe</h2>
 
             <div className="w-full flex justify-center">
                 <RecipePrintTemplate recipe={recipe} />
