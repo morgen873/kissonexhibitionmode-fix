@@ -14,7 +14,7 @@ const RecipeImageDisplay: React.FC<RecipeImageDisplayProps> = ({ recipe }) => {
                 <img 
                     src={recipe.imageUrl} 
                     alt="Generated Dumpling" 
-                    className="rounded-lg shadow-lg w-full aspect-square object-cover filter grayscale" 
+                    className="rounded-lg shadow-lg w-full aspect-square object-cover" 
                 />
             </div>
         </div>
