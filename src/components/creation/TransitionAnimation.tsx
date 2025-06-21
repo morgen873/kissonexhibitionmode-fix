@@ -25,20 +25,20 @@ const TransitionAnimation: React.FC<TransitionAnimationProps> = ({
   useEffect(() => {
     if (!isVisible) return;
 
-    console.log('TransitionAnimation: Starting animation with new dumpling images:', images);
+    console.log('TransitionAnimation: Starting full-screen animation with dumpling images:', images);
     let timeouts: NodeJS.Timeout[] = [];
 
     // Cycle through dumpling images - 0.5 seconds each for 2 second total
     images.forEach((imagePath, index) => {
       timeouts.push(setTimeout(() => {
-        console.log(`TransitionAnimation: Showing image ${index + 1}: ${imagePath}`);
+        console.log(`TransitionAnimation: Showing full-screen image ${index + 1}: ${imagePath}`);
         setCurrentImage(index);
       }, index * 500)); // 0.5 seconds per image
     });
 
     // Complete the animation after all images have been shown
     timeouts.push(setTimeout(() => {
-      console.log('TransitionAnimation: Animation complete');
+      console.log('TransitionAnimation: Full-screen animation complete');
       onComplete();
     }, images.length * 500 + 300));
 
@@ -49,19 +49,17 @@ const TransitionAnimation: React.FC<TransitionAnimationProps> = ({
 
   if (!isVisible) return null;
 
-  console.log('TransitionAnimation: Rendering image:', images[currentImage]);
+  console.log('TransitionAnimation: Rendering full-screen image:', images[currentImage]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80">
-      <div className="w-32 h-32">
-        <img
-          src={images[currentImage]}
-          alt={`Dumpling ${currentImage + 1}`}
-          className="w-full h-full object-contain transition-opacity duration-150"
-          onLoad={() => console.log('TransitionAnimation: Image loaded successfully')}
-          onError={(e) => console.error('TransitionAnimation: Image failed to load:', e)}
-        />
-      </div>
+    <div className="fixed inset-0 z-50 bg-black">
+      <img
+        src={images[currentImage]}
+        alt={`Dumpling ${currentImage + 1}`}
+        className="w-full h-full object-cover transition-opacity duration-150"
+        onLoad={() => console.log('TransitionAnimation: Full-screen image loaded successfully')}
+        onError={(e) => console.error('TransitionAnimation: Full-screen image failed to load:', e)}
+      />
     </div>
   );
 };
