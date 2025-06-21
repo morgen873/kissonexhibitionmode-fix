@@ -12,47 +12,11 @@ export function containsProfanity(text: string): boolean {
   
   const normalizedText = text.toLowerCase().trim();
   
-  // Common color words that should ALWAYS be allowed in ANY context
+  // Common color words that should be allowed in appropriate contexts
   const colorWords = ['black', 'white', 'brown', 'red', 'green', 'yellow', 'orange', 'purple', 'pink', 'golden', 'blue', 'gray', 'grey'];
   
   // Split text into words for analysis
   const words = normalizedText.split(/\s+/);
-  
-  // FIRST: Check if ANY word is a color word - if so, IMMEDIATELY allow the entire text
-  for (const word of words) {
-    if (colorWords.includes(word)) {
-      console.log(`Allowing text "${text}" because it contains color word: "${word}"`);
-      return false;
-    }
-  }
-  
-  // Check if text contains only safe words
-  const allWordsAreSafe = words.every(word => 
-    colorWords.includes(word) || 
-    FOOD_COLOR_WORDS.includes(word) ||
-    FOOD_RELATED_WORDS.includes(word) ||
-    ['and', 'or', 'the', 'a', 'an', 'with', 'of', 'in', 'to', 'for', 'like', 'as'].includes(word) ||
-    word.length < 3 // Allow short words like "a", "an", "to", etc.
-  );
-  
-  if (allWordsAreSafe) {
-    console.log(`Allowing text "${text}" because all words are safe`);
-    return false;
-  }
-  
-  // Check if the text matches any food exceptions
-  for (const exception of FOOD_EXCEPTIONS) {
-    if (normalizedText.includes(exception.toLowerCase())) {
-      console.log(`Allowing text "${text}" because it matches food exception: "${exception}"`);
-      return false;
-    }
-  }
-  
-  // Check if it's clearly food-related context
-  if (isFoodRelated(normalizedText) && hasOnlyFoodSafeWords(normalizedText, PROHIBITED_WORDS)) {
-    console.log(`Allowing text "${text}" because it's food-related with safe words`);
-    return false;
-  }
   
   // Only check for prohibited words if we have complete words (more than 2 characters)
   // This prevents blocking partial typing
@@ -61,9 +25,37 @@ export function containsProfanity(text: string): boolean {
     return false;
   }
   
-  // Check for prohibited words, but exclude all color words completely
+  // Check if the text matches any food exceptions FIRST (most specific)
+  for (const exception of FOOD_EXCEPTIONS) {
+    if (normalizedText.includes(exception.toLowerCase())) {
+      console.log(`Allowing text "${text}" because it matches food exception: "${exception}"`);
+      return false;
+    }
+  }
+  
+  // Check if it's clearly food-related context with safe words
+  if (isFoodRelated(normalizedText) && hasOnlyFoodSafeWords(normalizedText, PROHIBITED_WORDS)) {
+    console.log(`Allowing text "${text}" because it's food-related with safe words`);
+    return false;
+  }
+  
+  // Check if text contains only safe words (including color words in appropriate context)
+  const allWordsAreSafe = words.every(word => 
+    colorWords.includes(word) || 
+    FOOD_COLOR_WORDS.includes(word) ||
+    FOOD_RELATED_WORDS.includes(word) ||
+    ['and', 'or', 'the', 'a', 'an', 'with', 'of', 'in', 'to', 'for', 'like', 'as', 'sauce', 'pepper', 'bean', 'beans', 'rice', 'bread'].includes(word) ||
+    word.length < 3 // Allow short words like "a", "an", "to", etc.
+  );
+  
+  if (allWordsAreSafe) {
+    console.log(`Allowing text "${text}" because all words are safe`);
+    return false;
+  }
+  
+  // Now check for prohibited words - this happens AFTER safe word checks
   for (const word of PROHIBITED_WORDS) {
-    // Skip ALL color words - they should never be flagged
+    // Skip color words when they appear as standalone prohibited words
     if (colorWords.includes(word.toLowerCase())) {
       continue;
     }
