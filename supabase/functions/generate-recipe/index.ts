@@ -99,28 +99,76 @@ serve(async (req) => {
 
     console.log("Recipe inserted with ID:", newRecipe.id);
 
-    // Generate and upload image
+    // Generate and upload image with detailed recipe-specific prompt
     try {
         const dumplingShape = Object.values(payload.controls)[0]?.shape || 'classic';
+        const flavor = Object.values(payload.controls)[0]?.flavor || 'mild';
+        const timelineTheme = Object.values(payload.timeline)[0] || 'present';
         
-        const imagePrompt = `Professional food photography of a single ${dumplingShape} dumpling on a solid black background.
+        // Extract key ingredients for visual representation
+        const ingredientsList = [];
+        if (recipeContent.ingredients && typeof recipeContent.ingredients === 'object') {
+            Object.values(recipeContent.ingredients).forEach((categoryItems: any) => {
+                if (Array.isArray(categoryItems)) {
+                    categoryItems.forEach((item: string) => {
+                        // Extract main ingredient names (remove quantities and descriptions)
+                        const cleanIngredient = item.replace(/^\d+[\s\w]*\s+/, '').split(',')[0].split('(')[0].trim();
+                        if (cleanIngredient.length > 2) {
+                            ingredientsList.push(cleanIngredient);
+                        }
+                    });
+                }
+            });
+        }
+        
+        // Create timeline-specific visual themes
+        let visualTheme = '';
+        let colorScheme = '';
+        let textureDescription = '';
+        
+        if (timelineTheme.toLowerCase().includes('future') || timelineTheme.toLowerCase().includes('distant')) {
+            visualTheme = 'futuristic, high-tech, molecular gastronomy style';
+            colorScheme = 'with iridescent, metallic, or neon accents';
+            textureDescription = 'smooth, translucent, or geometric patterns';
+        } else if (timelineTheme.toLowerCase().includes('ancient') || timelineTheme.toLowerCase().includes('past')) {
+            visualTheme = 'traditional, rustic, historical';
+            colorScheme = 'with earthy, natural colors';
+            textureDescription = 'handmade texture with visible pleats and folds';
+        } else if (timelineTheme.toLowerCase().includes('medieval')) {
+            visualTheme = 'medieval, rustic, traditional European';
+            colorScheme = 'with warm, muted colors';
+            textureDescription = 'hearty, rustic appearance';
+        } else {
+            visualTheme = 'contemporary, artisanal';
+            colorScheme = 'with natural, appealing colors';
+            textureDescription = 'professional, well-crafted appearance';
+        }
 
-REQUIREMENTS:
-- ONE dumpling only, no multiples
-- Photorealistic food photography style
-- The dumpling must look completely edible and appetizing
+        const imagePrompt = `Professional food photography of a single ${dumplingShape} dumpling that visually represents this recipe: "${recipeContent.title}".
+
+RECIPE THEME: ${timelineTheme} - ${visualTheme}
+KEY INGREDIENTS TO SHOW: ${ingredientsList.slice(0, 5).join(', ')}
+FLAVOR PROFILE: ${flavor}
+
+VISUAL REQUIREMENTS:
+- ONE ${dumplingShape}-shaped dumpling only, no multiples
+- The dumpling should visually reflect the ${timelineTheme} theme through its appearance
+- ${textureDescription}
+- Colors and appearance should suggest the key ingredients: ${ingredientsList.slice(0, 3).join(', ')}
+- ${colorScheme}
+- The dumpling should look edible and match the ${flavor} flavor profile
 - Solid black background with no reflections, shadows, or textures
-- No text, words, letters, or numbers anywhere in the image
-- No faces, eyes, lips, or any human features on the dumpling
+- No text, words, letters, numbers, or human features
 - No props, utensils, plates, or decorative elements
 - No steam, sauce, or garnishes
-- The dumpling should have realistic food texture and appearance
+- Professional lighting that highlights the dumpling's unique appearance
 - Clean, simple composition with the dumpling centered
-- Professional lighting that highlights the dumpling's natural texture
 
-The dumpling should appear as actual food that someone would want to eat, with proper dough texture and realistic appearance.`;
+The dumpling should appear as actual food that represents the specific recipe ingredients and ${timelineTheme} theme, making someone want to taste this unique creation.`;
         
-        console.log("Generating image with DALL-E...");
+        console.log("Generating recipe-specific image with DALL-E...");
+        console.log("Image prompt:", imagePrompt);
+        
         const imageResponse = await openai.images.generate({
             model: 'dall-e-3',
             prompt: imagePrompt,
