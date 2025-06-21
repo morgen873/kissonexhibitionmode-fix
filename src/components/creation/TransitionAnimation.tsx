@@ -52,7 +52,10 @@ const TransitionAnimation: React.FC<TransitionAnimationProps> = ({
   console.log('TransitionAnimation: Rendering full-screen image:', images[currentImage]);
 
   return (
-    <div className="fixed inset-0 z-50 bg-black">
+    <div 
+      className="fixed top-0 left-0 w-screen h-screen bg-black"
+      style={{ zIndex: 9999 }}
+    >
       <img
         src={images[currentImage]}
         alt={`Dumpling ${currentImage + 1}`}
