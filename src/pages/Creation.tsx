@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import { steps } from '@/data/creation';
@@ -104,7 +105,8 @@ const Creation = () => {
     return creationStepData.type === 'question' ? creationStepData.question : creationStepData.title;
   };
 
-  const showTitle = !recipeResult && !isCreatingRecipe;
+  // Only show title for non-quote intro steps and creation steps
+  const showTitle = !recipeResult && !isCreatingRecipe && (!hasStartedCreation ? introSteps[currentIntroStep].type !== 'quote' : true);
 
   return (
     <>
