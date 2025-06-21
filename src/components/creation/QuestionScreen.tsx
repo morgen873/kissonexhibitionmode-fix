@@ -26,7 +26,7 @@ const QuestionScreen: React.FC<QuestionScreenProps> = ({
 }) => {
     return (
         <>
-            <div className="flex flex-col gap-4 my-8 max-w-2xl mx-auto">
+            <div className="flex flex-col gap-4">
                 {stepData.options.map((option) => (
                     <div
                         key={option.title}
@@ -45,14 +45,14 @@ const QuestionScreen: React.FC<QuestionScreenProps> = ({
                 ))}
             </div>
             {stepData.customOption && answers[stepData.id] === stepData.customOption.title && (
-                <div className="my-4 max-w-2xl mx-auto">
+                <div className="mt-6">
                     <label htmlFor="custom-answer" className="block text-sm font-medium text-white/80 mb-2">
                         {stepData.customOption.title}:
                     </label>
                     <textarea
                         id="custom-answer"
                         rows={4}
-                        className={`w-full bg-white/10 border-white/20 rounded-lg p-2 text-white block transition ${theme.textAreaFocus}`}
+                        className={`w-full bg-white/10 border-white/20 rounded-lg p-4 text-white block transition ${theme.textAreaFocus}`}
                         value={customAnswers[stepData.id] || ''}
                         onChange={handleCustomAnswerChange}
                         placeholder={stepData.customOption.placeholder}

@@ -21,7 +21,7 @@ const NavigationControls: React.FC<NavigationControlsProps> = ({
   isNextDisabled
 }) => {
   return (
-    <div className="flex justify-between mt-8 my-[30px]">
+    <div className="flex justify-between mt-8">
       <Button 
         onClick={prevStep} 
         disabled={currentStep === 0} 
@@ -35,7 +35,7 @@ const NavigationControls: React.FC<NavigationControlsProps> = ({
           Create Recipe <Zap className="ml-2" />
         </Button>
       ) : (
-        <Button onClick={nextStep} disabled={isNextDisabled} className="py-0 px-[30px]">
+        <Button onClick={nextStep} disabled={isNextDisabled} className="px-6">
           Continue <ArrowDown className="ml-2" />
         </Button>
       )}

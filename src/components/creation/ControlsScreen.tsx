@@ -32,7 +32,7 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
     const flavorIndex = controls.flavor.options.indexOf(controlValues.flavor);
 
     return (
-        <div className="space-y-8 my-8 text-white/90">
+        <div className="space-y-8 text-white/90">
             <p className="text-center text-white/80 whitespace-pre-line">{stepData.description}</p>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-4">
@@ -84,7 +84,7 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
                     value={controlValues.enhancer}
                     onChange={onEnhancerChange}
                     placeholder="e.g., A pinch of cinnamon"
-                    className="mt-2 w-full max-w-sm bg-black/20 border-white/20 text-white placeholder:text-white/50 focus:ring-cyan-500 focus:border-cyan-500"
+                    className="mt-2 w-full max-w-sm bg-black/20 border-white/20 text-white placeholder:text-white/50 focus:ring-cyan-500 focus:border-cyan-500 p-4"
                     rows={2}
                 />
             </div>

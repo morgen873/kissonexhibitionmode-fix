@@ -23,7 +23,7 @@ interface TimelineScreenProps {
 
 const TimelineScreen: React.FC<TimelineScreenProps> = ({ stepData, selectedValue, onSelect, theme }) => {
     return (
-        <div className="w-full flex flex-col items-center space-y-8 my-8 text-white/90">
+        <div className="w-full flex flex-col items-center space-y-8 text-white/90">
              <p className="text-center text-white/80 whitespace-pre-line">{stepData.description}</p>
             <TooltipProvider>
                 <div className="flex flex-wrap justify-center gap-4">
@@ -33,13 +33,13 @@ const TimelineScreen: React.FC<TimelineScreenProps> = ({ stepData, selectedValue
                                 <Card
                                     onClick={() => onSelect(option.title)}
                                     className={cn(
-                                        'cursor-pointer transition-all duration-300 bg-black/20 border-2 h-24 w-36 flex items-center justify-center text-center p-2',
+                                        'cursor-pointer transition-all duration-300 bg-black/20 border-2 h-24 w-36 flex items-center justify-center text-center',
                                         selectedValue === option.title 
                                             ? `${theme.optionSelectedBorder} ${theme.optionSelectedShadow} scale-105` 
                                             : `border-white/20 ${theme.optionHover}`
                                     )}
                                 >
-                                    <CardContent className="p-0">
+                                    <CardContent className="p-4">
                                         <span className="text-base font-semibold">{option.title}</span>
                                     </CardContent>
                                 </Card>
