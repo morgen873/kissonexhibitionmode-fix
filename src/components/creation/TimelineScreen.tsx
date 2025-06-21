@@ -40,7 +40,7 @@ const TimelineScreen: React.FC<TimelineScreenProps> = ({ stepData, selectedValue
                                     )}
                                 >
                                     <CardContent className="p-4">
-                                        <span className="text-base font-semibold font-mono">{option.title}</span>
+                                        <span className="text-base font-semibold font-mono text-white">{option.title}</span>
                                     </CardContent>
                                 </Card>
                             </TooltipTrigger>
