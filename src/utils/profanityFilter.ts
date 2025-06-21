@@ -15,7 +15,7 @@ const PROHIBITED_WORDS = [
   'beastial', 'beastiality', 'beatoff', 'beat-off', 'beatyourmeat', 'beaver', 'bestial',
   'bestiality', 'bi', 'biatch', 'bible', 'bicurious', 'bigass', 'bigbastard', 'bigbutt',
   'bigger', 'bisexual', 'bi-sexual', 'bitch', 'bitcher', 'bitches', 'bitchez', 'bitchin',
-  'bitching', 'bitchslap', 'bitchy', 'biteme', 'black', 'blackman', 'blackout', 'blacks',
+  'bitching', 'bitchslap', 'bitchy', 'biteme', 'blackman', 'blackout', 'blacks',
   'blind', 'blow', 'blowjob', 'boang', 'bogan', 'bohunk', 'bollick', 'bollock', 'bomb',
   'bombers', 'bombing', 'bombs', 'bomd', 'bondage', 'boner', 'bong', 'boob', 'boobies',
   'boobs', 'booby', 'boody', 'boom', 'boong', 'boonga', 'boonie', 'booty', 'bootycall',
@@ -212,6 +212,38 @@ const FOOD_EXCEPTIONS = [
   'vanilla extract', 'almond extract', 'lemon extract'
 ];
 
+// Common food-related color words that should be allowed
+const FOOD_COLOR_WORDS = [
+  'black', 'white', 'brown', 'red', 'green', 'yellow', 'orange', 'purple', 'pink', 'golden'
+];
+
+// Common food-related words that might be in the prohibited list
+const FOOD_RELATED_WORDS = [
+  'breast', 'thigh', 'leg', 'wing', 'cream', 'milk', 'cheese', 'butter', 'oil', 'juice',
+  'sauce', 'soup', 'tea', 'coffee', 'wine', 'beer', 'cocktail', 'hot', 'cold', 'sweet',
+  'sour', 'spicy', 'mild', 'fresh', 'dried', 'smoked', 'grilled', 'baked', 'fried',
+  'steamed', 'roasted', 'raw', 'cooked'
+];
+
+function isFoodRelated(text: string): boolean {
+  const normalizedText = text.toLowerCase().trim();
+  
+  // Check if text contains multiple food-related indicators
+  const foodIndicators = [
+    'recipe', 'ingredient', 'food', 'dish', 'meal', 'cooking', 'baking', 'kitchen',
+    'restaurant', 'cafe', 'dinner', 'lunch', 'breakfast', 'snack', 'beverage',
+    'flavor', 'taste', 'spice', 'herb', 'vegetable', 'fruit', 'meat', 'fish',
+    'chicken', 'beef', 'pork', 'turkey', 'lamb', 'seafood', 'dairy', 'grain',
+    'pasta', 'bread', 'cake', 'cookie', 'pie', 'pizza', 'sandwich', 'salad'
+  ];
+  
+  const hasMultipleFoodWords = foodIndicators.filter(indicator => 
+    normalizedText.includes(indicator)
+  ).length >= 1;
+  
+  return hasMultipleFoodWords;
+}
+
 export function containsProfanity(text: string): boolean {
   if (!text || typeof text !== 'string') return false;
   
@@ -222,6 +254,31 @@ export function containsProfanity(text: string): boolean {
     if (normalizedText.includes(exception.toLowerCase())) {
       return false; // Allow food-related terms
     }
+  }
+  
+  // Check if it's clearly food-related context
+  if (isFoodRelated(normalizedText)) {
+    // Allow common food color words in food context
+    const words = normalizedText.split(/\s+/);
+    const hasOnlyFoodColors = words.every(word => 
+      FOOD_COLOR_WORDS.includes(word) || 
+      FOOD_RELATED_WORDS.includes(word) ||
+      !PROHIBITED_WORDS.includes(word)
+    );
+    
+    if (hasOnlyFoodColors) {
+      return false;
+    }
+  }
+  
+  // Allow single color words that are commonly used in food
+  if (FOOD_COLOR_WORDS.includes(normalizedText)) {
+    return false;
+  }
+  
+  // Allow common food-related words even if they're in the prohibited list
+  if (FOOD_RELATED_WORDS.includes(normalizedText)) {
+    return false;
   }
   
   // Check for prohibited words
