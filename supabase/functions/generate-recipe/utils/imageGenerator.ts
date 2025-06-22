@@ -18,11 +18,11 @@ export async function generateAndUploadRecipeImage(
   supabaseAdmin: ReturnType<typeof createClient>
 ): Promise<string> {
   try {
-    console.log("=== IMAGE GENERATION DETAILED DEBUG ===");
+    console.log("=== ENHANCED IMAGE GENERATION DEBUG ===");
     console.log("Payload received:", JSON.stringify(payload, null, 2));
     console.log("Recipe content:", JSON.stringify(recipeContent, null, 2));
     
-    // Extract timeline theme with better debugging
+    // Extract timeline theme with enhanced debugging
     console.log("=== TIMELINE EXTRACTION ===");
     console.log("Timeline object:", payload.timeline);
     console.log("Timeline keys:", Object.keys(payload.timeline));
@@ -32,7 +32,7 @@ export async function generateAndUploadRecipeImage(
     const timelineTheme = timelineEntries.length > 0 ? timelineEntries[0] : 'present day';
     console.log("Extracted timeline theme:", `"${timelineTheme}"`);
     
-    // Extract emotional context with better debugging
+    // Extract emotional context with enhanced debugging
     console.log("=== EMOTIONAL CONTEXT EXTRACTION ===");
     console.log("Questions object:", payload.questions);
     console.log("Questions keys:", Object.keys(payload.questions));
@@ -42,7 +42,7 @@ export async function generateAndUploadRecipeImage(
     const emotionalContext = questionAnswers.length > 0 ? questionAnswers.join(', ') : 'comfort and warmth';
     console.log("Extracted emotional context:", `"${emotionalContext}"`);
     
-    // Extract control values with better debugging
+    // Extract control values with enhanced debugging
     console.log("=== CONTROLS EXTRACTION ===");
     console.log("Controls object:", payload.controls);
     console.log("Controls keys:", Object.keys(payload.controls));
@@ -60,19 +60,19 @@ export async function generateAndUploadRecipeImage(
     // Extract key ingredients for visual representation
     console.log("=== INGREDIENTS EXTRACTION ===");
     const ingredientsList = extractIngredientsList(recipeContent.ingredients);
-    console.log("Final ingredients list for image:", ingredientsList);
+    console.log("Final ingredients list for enhanced image:", ingredientsList);
     
-    // Validation checks
+    // Enhanced validation checks
     if (!timelineTheme || timelineTheme.trim() === '' || timelineTheme === 'present day') {
-      console.warn("Timeline theme is missing or default - this may cause generic images");
+      console.warn("⚠️ Timeline theme is missing or default - this may cause generic images");
       console.warn("Available timeline data:", payload.timeline);
     }
     if (!emotionalContext || emotionalContext.trim() === '') {
-      console.warn("Emotional context is missing - this may cause generic images");
+      console.warn("⚠️ Emotional context is missing - this may cause generic images");
       console.warn("Available questions data:", payload.questions);
     }
     if (ingredientsList.length === 0) {
-      console.warn("No ingredients extracted - this may cause generic images");
+      console.warn("⚠️ No ingredients extracted - this may cause generic images");
       console.warn("Available ingredients data:", recipeContent.ingredients);
     }
     
@@ -85,42 +85,45 @@ export async function generateAndUploadRecipeImage(
       recipeTitle: recipeContent.title
     });
     
-    console.log("=== FINAL GENERATED IMAGE PROMPT ===");
+    console.log("=== ENHANCED FINAL GENERATED IMAGE PROMPT ===");
     console.log(imagePrompt);
-    console.log("==========================================");
+    console.log("==============================================");
     
-    console.log("Sending to DALL-E with the following parameters:");
+    console.log("Sending to DALL-E with ENHANCED parameters:");
     console.log("- Timeline theme:", `"${timelineTheme}"`);
     console.log("- Emotional context:", `"${emotionalContext}"`);
     console.log("- Dumpling shape:", controls.shape);
     console.log("- Flavor:", controls.flavor);
-    console.log("- Key ingredients:", ingredientsList.slice(0, 3));
+    console.log("- Key ingredients for color:", ingredientsList.slice(0, 3));
     console.log("- Recipe title:", recipeContent.title);
+    console.log("- Expected visual style: Dramatic, colorful, artistic like reference images");
     
+    // Enhanced DALL-E parameters for highest quality results
     const imageResponse = await openai.images.generate({
       model: 'dall-e-3',
       prompt: imagePrompt,
       n: 1,
       size: '1024x1024',
       response_format: 'b64_json',
-      style: 'natural',
+      style: 'natural',  // Natural style for more realistic, detailed results
+      quality: 'hd',     // Explicit HD quality request
     });
     
-    console.log("DALL-E image generated successfully");
+    console.log("✅ DALL-E image generated successfully with enhanced parameters");
     const imageB64 = imageResponse.data[0].b64_json;
     
     if (imageB64) {
       const imageUrl = await uploadImageToSupabase(imageB64, recipeId, supabaseAdmin);
       if (imageUrl) {
-        console.log("Image uploaded and URL generated:", imageUrl);
+        console.log("✅ Enhanced image uploaded and URL generated:", imageUrl);
         return imageUrl;
       }
     }
     
-    console.log("Failed to generate/upload image, using placeholder");
+    console.log("❌ Failed to generate/upload enhanced image, using placeholder");
     return '/placeholder.svg';
   } catch (error) {
-    console.error("Error generating/uploading image:", error);
+    console.error("❌ Error generating/uploading enhanced image:", error);
     return '/placeholder.svg';
   }
 }

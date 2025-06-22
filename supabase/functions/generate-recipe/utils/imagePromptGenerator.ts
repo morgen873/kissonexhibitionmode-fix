@@ -8,45 +8,50 @@ interface ImagePromptParams {
   recipeTitle: string;
 }
 
-// Color mapping for common ingredients
-const ingredientColors: { [key: string]: { color: string; description: string } } = {
-  'beetroot': { color: 'deep crimson red', description: 'vibrant red-purple hues' },
-  'beet': { color: 'deep crimson red', description: 'vibrant red-purple hues' },
-  'carrot': { color: 'bright orange', description: 'warm orange tones' },
-  'spinach': { color: 'emerald green', description: 'rich green coloration' },
-  'green chili': { color: 'vibrant green', description: 'bright green accents' },
-  'chili': { color: 'fiery red', description: 'spicy red coloration' },
-  'turmeric': { color: 'golden yellow', description: 'warm golden hues' },
-  'saffron': { color: 'golden amber', description: 'luxurious golden tones' },
-  'purple cabbage': { color: 'deep purple', description: 'rich purple coloration' },
-  'red cabbage': { color: 'deep purple-red', description: 'burgundy-purple tones' },
-  'tomato': { color: 'rich red', description: 'vibrant red coloration' },
-  'bell pepper': { color: 'bright colored', description: 'colorful pepper tones' },
-  'red pepper': { color: 'bright red', description: 'vivid red coloration' },
-  'green pepper': { color: 'fresh green', description: 'bright green tones' },
-  'yellow pepper': { color: 'sunny yellow', description: 'cheerful yellow hues' },
-  'kale': { color: 'dark green', description: 'deep leafy green' },
-  'chard': { color: 'rainbow colored', description: 'multicolored stems and leaves' },
-  'sweet potato': { color: 'warm orange', description: 'earthy orange tones' },
-  'pumpkin': { color: 'rich orange', description: 'autumn orange coloration' },
-  'butternut squash': { color: 'golden orange', description: 'warm golden-orange hues' },
-  'corn': { color: 'bright yellow', description: 'sunny corn-yellow' },
-  'blueberry': { color: 'deep blue-purple', description: 'rich blueberry tones' },
-  'blackberry': { color: 'dark purple-black', description: 'deep berry coloration' },
-  'cranberry': { color: 'tart red', description: 'bright cranberry red' },
-  'mushroom': { color: 'earthy brown', description: 'natural brown tones' },
-  'seaweed': { color: 'ocean green', description: 'sea-green coloration' },
-  'matcha': { color: 'vibrant green', description: 'ceremonial green tea color' },
-  'cocoa': { color: 'rich brown', description: 'deep chocolate tones' },
-  'chocolate': { color: 'dark brown', description: 'luxurious chocolate coloration' }
+// Enhanced color mapping for more dramatic visual effects
+const ingredientColors: { [key: string]: { color: string; description: string; effect: string } } = {
+  'beetroot': { color: 'deep crimson red', description: 'vibrant red-purple hues', effect: 'flowing crimson energy streams' },
+  'beet': { color: 'deep crimson red', description: 'vibrant red-purple hues', effect: 'flowing crimson energy streams' },
+  'carrot': { color: 'bright orange', description: 'warm orange tones', effect: 'golden orange flame patterns' },
+  'spinach': { color: 'emerald green', description: 'rich green coloration', effect: 'emerald green energy veins' },
+  'green chili': { color: 'vibrant green', description: 'bright green accents', effect: 'electric green lightning effects' },
+  'chili': { color: 'fiery red', description: 'spicy red coloration', effect: 'fiery red plasma streams' },
+  'turmeric': { color: 'golden yellow', description: 'warm golden hues', effect: 'liquid gold flowing patterns' },
+  'saffron': { color: 'golden amber', description: 'luxurious golden tones', effect: 'amber light emanations' },
+  'purple cabbage': { color: 'deep purple', description: 'rich purple coloration', effect: 'royal purple energy waves' },
+  'red cabbage': { color: 'deep purple-red', description: 'burgundy-purple tones', effect: 'burgundy crystal formations' },
+  'tomato': { color: 'rich red', description: 'vibrant red coloration', effect: 'ruby red liquid effects' },
+  'bell pepper': { color: 'bright colored', description: 'colorful pepper tones', effect: 'rainbow energy cascades' },
+  'red pepper': { color: 'bright red', description: 'vivid red coloration', effect: 'scarlet flame tongues' },
+  'green pepper': { color: 'fresh green', description: 'bright green tones', effect: 'jade green aura' },
+  'yellow pepper': { color: 'sunny yellow', description: 'cheerful yellow hues', effect: 'solar yellow radiation' },
+  'kale': { color: 'dark green', description: 'deep leafy green', effect: 'forest green energy spirals' },
+  'chard': { color: 'rainbow colored', description: 'multicolored stems and leaves', effect: 'prismatic light refractions' },
+  'sweet potato': { color: 'warm orange', description: 'earthy orange tones', effect: 'sunset orange gradients' },
+  'pumpkin': { color: 'rich orange', description: 'autumn orange coloration', effect: 'harvest orange glow' },
+  'butternut squash': { color: 'golden orange', description: 'warm golden-orange hues', effect: 'molten gold streams' },
+  'corn': { color: 'bright yellow', description: 'sunny corn-yellow', effect: 'sunburst yellow rays' },
+  'blueberry': { color: 'deep blue-purple', description: 'rich blueberry tones', effect: 'sapphire blue energy orbs' },
+  'blackberry': { color: 'dark purple-black', description: 'deep berry coloration', effect: 'obsidian purple shadows' },
+  'cranberry': { color: 'tart red', description: 'bright cranberry red', effect: 'ruby crystal formations' },
+  'mushroom': { color: 'earthy brown', description: 'natural brown tones', effect: 'earth-tone energy patterns' },
+  'seaweed': { color: 'ocean green', description: 'sea-green coloration', effect: 'oceanic teal waves' },
+  'matcha': { color: 'vibrant green', description: 'ceremonial green tea color', effect: 'zen green energy flow' },
+  'cocoa': { color: 'rich brown', description: 'deep chocolate tones', effect: 'chocolate bronze swirls' },
+  'chocolate': { color: 'dark brown', description: 'luxurious chocolate coloration', effect: 'dark bronze liquid metal' }
 };
 
-function extractIngredientColors(ingredientsList: string[]): { colors: string[]; descriptions: string[] } {
+function extractIngredientColors(ingredientsList: string[]): { 
+  colors: string[]; 
+  descriptions: string[]; 
+  effects: string[] 
+} {
   const colors: string[] = [];
   const descriptions: string[] = [];
+  const effects: string[] = [];
   
-  console.log("=== INGREDIENT COLOR EXTRACTION ===");
-  console.log("Analyzing ingredients for color:", ingredientsList);
+  console.log("=== ENHANCED INGREDIENT COLOR EXTRACTION ===");
+  console.log("Analyzing ingredients for dramatic color effects:", ingredientsList);
   
   ingredientsList.forEach(ingredient => {
     const lowerIngredient = ingredient.toLowerCase();
@@ -57,22 +62,23 @@ function extractIngredientColors(ingredientsList: string[]): { colors: string[];
       if (lowerIngredient.includes(key)) {
         colors.push(value.color);
         descriptions.push(value.description);
-        console.log(`✓ Found color match: ${ingredient} -> ${value.color} (${value.description})`);
+        effects.push(value.effect);
+        console.log(`✓ Found enhanced color match: ${ingredient} -> ${value.color} (${value.effect})`);
         break;
       }
     }
   });
   
   console.log("Final extracted colors:", colors);
-  console.log("Final color descriptions:", descriptions);
+  console.log("Final color effects:", effects);
   
-  return { colors, descriptions };
+  return { colors, descriptions, effects };
 }
 
 export function generateImagePrompt(params: ImagePromptParams): string {
   const { timelineTheme, emotionalContext, dumplingShape, flavor, ingredientsList, recipeTitle } = params;
   
-  console.log("=== IMAGE PROMPT GENERATION DEBUG ===");
+  console.log("=== ENHANCED IMAGE PROMPT GENERATION ===");
   console.log("Timeline theme received:", timelineTheme);
   console.log("Emotional context received:", emotionalContext);
   console.log("Dumpling shape received:", dumplingShape);
@@ -80,10 +86,10 @@ export function generateImagePrompt(params: ImagePromptParams): string {
   console.log("Ingredients list received:", ingredientsList);
   console.log("Recipe title received:", recipeTitle);
   
-  // Extract colors from ingredients
-  const { colors, descriptions } = extractIngredientColors(ingredientsList);
+  // Extract enhanced colors and effects from ingredients
+  const { colors, descriptions, effects } = extractIngredientColors(ingredientsList);
   
-  // Check if timeline contains future-related keywords more comprehensively
+  // Timeline classification with enhanced detection
   const timelineLower = timelineTheme.toLowerCase();
   const isFuturistic = timelineLower.includes('future') || 
                        timelineLower.includes('distant') || 
@@ -104,161 +110,162 @@ export function generateImagePrompt(params: ImagePromptParams): string {
                        timelineLower.includes('vintage') ||
                        timelineLower.includes('classic');
 
-  console.log("Timeline classification - Futuristic:", isFuturistic, "Historical:", isHistorical);
-  console.log("Ingredient colors found:", colors.length, "colors");
+  console.log("Enhanced timeline classification - Futuristic:", isFuturistic, "Historical:", isHistorical);
+  console.log("Enhanced ingredient effects found:", effects.length, "effects");
   
   if (isFuturistic) {
-    // FUTURISTIC: Dramatic color transformation with high-tech interpretation
+    // FUTURISTIC: Ultra-dramatic with cosmic energy effects
     let colorSection = '';
     if (colors.length > 0) {
       const primaryColors = colors.slice(0, 3);
+      const primaryEffects = effects.slice(0, 3);
       colorSection = `
-REVOLUTIONARY COLOR TRANSFORMATION:
-- The dumpling wrapper is dramatically transformed by ingredient colors: ${primaryColors.join(', ')}
-- These colors appear as GLOWING ENERGY PATTERNS, BIOLUMINESCENT VEINS, or HOLOGRAPHIC SURFACES
-- ${descriptions.slice(0, 3).join(', ')} are amplified into otherworldly intensities
-- The dumpling skin is semi-translucent, revealing swirling color energies within
-- Colors pulse, flow, and shift like living liquid light or neural networks
-- Each ingredient color creates a distinct energy field or particle stream`;
+COSMIC COLOR TRANSFORMATION:
+- The dumpling is a SPECTACULAR COSMIC ENTITY with ${primaryColors.join(', ')} energy signatures
+- DRAMATIC VISUAL EFFECTS: ${primaryEffects.join(', ')}
+- The wrapper is SEMI-TRANSLUCENT PLASMA with swirling galaxies of ingredient colors inside
+- Energy streams, particle effects, and holographic auras surround the dumpling
+- Colors PULSE and FLOW like liquid starlight with zero-gravity fluid dynamics
+- Each ingredient creates its own energy field that interacts with others in beautiful harmony
+- The dumpling FLOATS in cosmic space with dimensional rifts and energy cascades`;
     } else {
       colorSection = `
-- The dumpling has ethereal, translucent skin with subtle energy patterns
-- Colors shift between metallic silvers and quantum blues`;
+- The dumpling is an ethereal cosmic entity with quantum energy patterns
+- Translucent plasma skin with shifting cosmic aurora effects`;
     }
 
-    const prompt = `ULTRA-FUTURISTIC CONCEPTUAL FOOD ART: A single ${dumplingShape} dumpling that completely transcends traditional food design, embodying the emotions and memories: "${emotionalContext}".
+    const prompt = `BREATHTAKING COSMIC FOOD ART: A single spectacular ${dumplingShape} dumpling floating in space that embodies: "${emotionalContext}".
 
-SPECULATIVE DESIGN REQUIREMENTS:
-- This dumpling exists in ${timelineTheme} where food is pure art, memory, and technology fused
-- The dumpling must be BREATHTAKINGLY beautiful and conceptually mind-blowing
+ULTRA-FUTURISTIC SPECIFICATIONS:
+- This is PURE VISUAL POETRY - a dumpling reimagined as cosmic art from ${timelineTheme}
+- CINEMATIC LIGHTING with dramatic shadows, energy glows, and particle effects
 ${colorSection}
-- The ${dumplingShape} shape is reimagined as a perfect geometric form with impossible physics - floating, defying gravity
-- Key ingredients "${ingredientsList.slice(0, 3).join(', ')}" are visualized as glowing energy essences within the translucent wrapper
-- The dumpling appears to hover in space, surrounded by energy fields, particle effects, or dimensional rifts
-- ${flavor} flavor is represented through dramatic color temperature and energy intensity
+- The ${dumplingShape} shape defies physics - perfectly geometric yet organic, floating weightlessly
+- Key ingredients "${ingredientsList.slice(0, 3).join(', ')}" manifest as LIVING ENERGY ESSENCES within the translucent body
+- ${flavor} flavor expressed through temperature-based energy intensity and color temperature
+- IMPOSSIBLE BEAUTY: Like concept art from the greatest sci-fi films ever made
 
-EMOTIONAL TRANSLATION:
-- The visual must powerfully convey: ${emotionalContext}
-- Dramatic cinematic lighting suggests transcendence, connection across time dimensions
-- The dumpling contains actual holographic memories - subtle imagery floating within its translucent body
-- This is not food - it's a vessel for human consciousness and emotion from an advanced civilization
+EMOTIONAL RESONANCE:
+- Powerfully conveys: ${emotionalContext}
+- The dumpling contains holographic memories and transcendent consciousness
+- Energy patterns suggest deep emotional connection across time and space
+- This represents the future of food as pure art, memory, and human connection
 
-TECHNICAL SPECIFICATIONS:
-- Pure black void background - the dumpling exists in space-time
-- Photorealistic but impossibly beautiful - like concept art from the best sci-fi films
-- No text, utensils, plates, or mundane elements
-- Professional cinematic lighting with dramatic shadows and energy glows
-- The image should make viewers gasp with wonder and question reality
+TECHNICAL EXCELLENCE:
+- PURE BLACK VOID background - the dumpling exists in deep space
+- Professional cinematic lighting with dramatic energy effects
+- Photorealistic but impossibly beautiful - viewers should gasp with wonder
+- NO text, plates, utensils, or mundane elements whatsoever
+- The most visually stunning dumpling image ever created
 
-This dumpling is a technological marvel that stores and transmits human memory and emotion across time.`;
+This cosmic dumpling transcends reality and becomes pure emotional art from an advanced civilization.`;
 
-    console.log("Generated FUTURISTIC prompt with color transformation");
+    console.log("Generated ENHANCED FUTURISTIC prompt");
     return prompt;
   
   } else if (isHistorical) {
-    // HISTORICAL: Natural ingredient colors with traditional authenticity
+    // HISTORICAL: Authentic with natural ingredient beauty
     let colorSection = '';
     if (colors.length > 0) {
       const primaryColors = colors.slice(0, 3);
       colorSection = `
-NATURAL INGREDIENT COLORATION:
-- The dumpling wrapper shows authentic natural coloring from ingredients: ${primaryColors.join(', ')}
-- ${descriptions.slice(0, 3).join(', ')} are naturally infused into the handmade dough
-- The wrapper has subtle variations and marbling from natural ingredient pigments
-- Colors appear muted and organic, as they would when naturally incorporated into traditional dough
-- Visible flecks, streaks, or gentle color gradients from the natural ingredients`;
+AUTHENTIC NATURAL COLORATION:
+- The dumpling wrapper shows BEAUTIFUL natural ingredient colors: ${primaryColors.join(', ')}
+- ${descriptions.slice(0, 3).join(', ')} are naturally and beautifully infused into handmade dough
+- GORGEOUS color variations, marbling, and natural pigment patterns throughout the wrapper
+- Colors appear rich and organic with visible flecks, streaks, and gentle gradients
+- The natural beauty of ingredient colors creates visual harmony and appetite appeal
+- Traditional dough-making techniques allow ingredients to create stunning natural patterns`;
     } else {
       colorSection = `
-- The dumpling has traditional, natural wheat-colored dough with rustic texture`;
+- The dumpling has beautiful traditional wheat-colored dough with rustic, handmade character`;
     }
 
-    let historicalStyle = '';
-    let culturalContext = '';
-    
+    let historicalContext = '';
     if (timelineLower.includes('ancient')) {
-      historicalStyle = 'ancient, primitive, hand-formed with visible finger marks and imperfections';
-      culturalContext = 'crafted by ancient hands with deep spiritual and cultural significance';
+      historicalContext = 'ancient civilization with deep spiritual significance and primitive beauty';
     } else if (timelineLower.includes('medieval')) {
-      historicalStyle = 'medieval, hearty, rustic European peasant-style';
-      culturalContext = 'made in a medieval kitchen using traditional ancestral techniques';
+      historicalContext = 'medieval era with rustic European craftsmanship and hearty authenticity';
     } else {
-      historicalStyle = 'traditional, handmade, historical with authentic period details';
-      culturalContext = 'created with ancestral knowledge and deep emotional significance';
+      historicalContext = 'historical period with traditional techniques and ancestral wisdom';
     }
     
-    const prompt = `AUTHENTIC HISTORICAL FOOD PHOTOGRAPHY: A single ${dumplingShape} dumpling representing "${recipeTitle}" from ${timelineTheme}.
+    const prompt = `STUNNING HISTORICAL FOOD PHOTOGRAPHY: A single magnificent ${dumplingShape} dumpling representing "${recipeTitle}" from ${timelineTheme}.
 
-HISTORICAL AUTHENTICITY REQUIREMENTS:
-- ${historicalStyle} appearance that authentically reflects the ${timelineTheme} era
-- The dumpling looks exactly as it would if ${culturalContext}
+AUTHENTIC HISTORICAL BEAUTY:
+- Crafted as it would have been in ${historicalContext}
+- VISUALLY GORGEOUS with traditional craftsmanship and natural beauty
 ${colorSection}
-- Visible hand-crafted texture with natural imperfections, uneven edges, rustic pleating
-- Available ingredients from ${timelineTheme}: ${ingredientsList.slice(0, 3).join(', ')}
-- The ${flavor} flavor is suggested through natural, earthy, period-appropriate color tones
-- Surface shows traditional pleating, folding, or shaping techniques from that era
+- Beautiful hand-crafted texture with organic imperfections and traditional pleating techniques
+- Ingredients available in ${timelineTheme}: ${ingredientsList.slice(0, 3).join(', ')}
+- ${flavor} flavor suggested through warm, natural, period-appropriate color harmony
+- Surface shows masterful traditional shaping with visible evidence of skilled human hands
 
-EMOTIONAL RESONANCE:
-- The dumpling powerfully embodies: ${emotionalContext}
-- Warm, natural lighting suggests human warmth, tradition, and deep ancestral connection
-- The texture and appearance evoke profound nostalgia and historical authenticity
-- Made with love and carrying the emotional weight of human tradition across generations
+EMOTIONAL DEPTH:
+- Powerfully embodies: ${emotionalContext}
+- Warm, golden natural lighting that highlights ingredient colors and handmade texture
+- Evokes profound nostalgia, human connection, and the beauty of ancestral traditions
+- This dumpling carries the emotional weight of generations and cultural memory
 
-VISUAL REQUIREMENTS:
-- Solid black background for dramatic historical contrast
-- Warm, natural candlelight or firelight that highlights the handmade texture and ingredient colors
-- Realistic historical food photography - absolutely delicious and authentic
-- No modern elements, text, or artificial additions whatsoever
-- The dumpling looks lovingly prepared by skilled traditional craftspeople
+VISUAL EXCELLENCE:
+- Solid black background for dramatic contrast that highlights the dumpling's natural beauty
+- Warm, natural lighting (candlelight/firelight) that makes colors glow beautifully
+- ABSOLUTELY DELICIOUS and visually stunning - museum-quality food photography
+- No modern elements, text, or artificial additions
+- The perfect balance of rustic authenticity and visual beauty
 
-This dumpling carries the emotional weight of human tradition and ancestral memory from ${timelineTheme}.`;
+A masterpiece of traditional food craft that honors both history and the natural beauty of ingredients.`;
 
-    console.log("Generated HISTORICAL prompt with natural ingredient colors");
+    console.log("Generated ENHANCED HISTORICAL prompt");
     return prompt;
   
   } else {
-    // CONTEMPORARY: Modern artisanal approach with vibrant ingredient colors
+    // CONTEMPORARY: Ultra-vibrant artisanal with dramatic color showcase
     let colorSection = '';
     if (colors.length > 0) {
       const primaryColors = colors.slice(0, 3);
+      const primaryEffects = effects.slice(0, 3);
       colorSection = `
-VIBRANT INGREDIENT-INFUSED WRAPPER:
-- The dumpling wrapper beautifully showcases ingredient colors: ${primaryColors.join(', ')}
-- ${descriptions.slice(0, 3).join(', ')} are artfully incorporated into the modern dumpling skin
-- The wrapper has gorgeous color gradients, marbling, or distinct colored sections
-- Colors are vibrant and appetizing, showing modern culinary color techniques
-- Natural ingredient pigments create stunning visual appeal in the translucent wrapper`;
+SPECTACULAR INGREDIENT COLOR SHOWCASE:
+- The dumpling wrapper is a MASTERPIECE of color: ${primaryColors.join(', ')}
+- DRAMATIC COLOR EFFECTS: ${primaryEffects.join(', ')}
+- ${descriptions.slice(0, 3).join(', ')} create STUNNING visual impact in the modern wrapper
+- Colors flow and blend in gorgeous gradients, marbling, and artistic patterns
+- The wrapper showcases modern culinary color techniques at their finest
+- Vibrant, appetizing, and visually spectacular - like edible art
+- Natural ingredient pigments create breathtaking visual appeal with contemporary flair`;
     } else {
       colorSection = `
-- The dumpling has clean, modern presentation with subtle natural coloring`;
+- The dumpling features clean, modern presentation with subtle natural beauty`;
     }
 
-    const prompt = `CONTEMPORARY ARTISANAL FOOD PHOTOGRAPHY: A single ${dumplingShape} dumpling representing "${recipeTitle}".
+    const prompt = `SPECTACULAR CONTEMPORARY FOOD ART: A single stunning ${dumplingShape} dumpling representing "${recipeTitle}".
 
-MODERN ARTISANAL REQUIREMENTS:
-- Professional, contemporary food presentation with artistic flair
-- The dumpling shows modern culinary techniques while honoring tradition
+MODERN ARTISANAL EXCELLENCE:
+- PROFESSIONAL FOOD PHOTOGRAPHY at its absolute finest
+- Perfect fusion of traditional craft and contemporary artistic innovation
 ${colorSection}
-- Clean, precise craftsmanship with visible artisanal touches
-- Key ingredients "${ingredientsList.slice(0, 3).join(', ')}" are clearly represented through the colored wrapper and visible elements
-- ${flavor} flavor profile suggested through appealing visual cues and vibrant ingredient colors
-- Modern plating and presentation techniques
+- FLAWLESS modern craftsmanship with visible artisanal touches and precision details
+- Key ingredients "${ingredientsList.slice(0, 3).join(', ')}" are beautifully showcased through wrapper colors and visible elements
+- ${flavor} flavor profile expressed through gorgeous visual cues and vibrant color harmony
+- Modern culinary techniques create unprecedented visual beauty
 
 EMOTIONAL CONNECTION:
-- The dumpling beautifully embodies: ${emotionalContext}
-- Professional lighting and presentation evoke modern comfort and culinary sophistication
-- Perfect balance of tradition and contemporary innovation
-- Ingredient colors create visual excitement and appetite appeal
+- Beautifully embodies: ${emotionalContext}
+- PROFESSIONAL STUDIO LIGHTING that makes ingredient colors absolutely radiant
+- Perfect balance of tradition, innovation, and pure visual delight
+- Ingredient colors create excitement, appetite appeal, and artistic wonder
 
-VISUAL REQUIREMENTS:
-- Solid black background for professional food photography
-- Professional studio lighting that highlights texture and vibrant ingredient colors
-- The dumpling looks expertly crafted, modern, and absolutely delicious
-- No props or decorative elements - focus entirely on the dumpling and its colors
-- Clean, focused composition with contemporary aesthetic
+VISUAL PERFECTION:
+- Solid black background for professional food photography excellence
+- STUNNING studio lighting that highlights texture and makes colors absolutely glow
+- The dumpling looks expertly crafted, modern, and absolutely irresistible
+- No props or decorative elements - pure focus on the dumpling's color beauty
+- Clean, sophisticated composition with contemporary aesthetic perfection
 
-A perfect modern dumpling that bridges tradition with contemporary culinary artistry, showcasing vibrant ingredient colors in its wrapper.`;
+The ultimate modern dumpling that showcases ingredient colors as pure edible art - absolutely breathtaking.`;
 
-    console.log("Generated CONTEMPORARY prompt with vibrant ingredient colors");
+    console.log("Generated ENHANCED CONTEMPORARY prompt");
     return prompt;
   }
 }
