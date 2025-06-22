@@ -1,6 +1,5 @@
 
 import { extractIngredientColors } from './colorExtractor.ts';
-import { buildFuturisticPrompt, buildHistoricalPrompt, buildContemporaryPrompt } from './promptBuilders.ts';
 import { extractIngredientsList } from './ingredientParser.ts';
 
 interface ImagePromptParams {
@@ -15,7 +14,7 @@ interface ImagePromptParams {
 export function generateImagePrompt(params: ImagePromptParams): string {
   const { timelineTheme, emotionalContext, dumplingShape, flavor, ingredientsList, recipeTitle } = params;
   
-  console.log("=== REALISTIC FOOD PHOTOGRAPHY PROMPT GENERATION ===");
+  console.log("=== HOLOGRAM DISPLAY FOOD PHOTOGRAPHY PROMPT GENERATION ===");
   console.log("Timeline theme:", `"${timelineTheme}"`);
   console.log("Emotional context:", `"${emotionalContext}"`);
   console.log("Dumpling shape:", dumplingShape);
@@ -23,172 +22,141 @@ export function generateImagePrompt(params: ImagePromptParams): string {
   console.log("Recipe title:", `"${recipeTitle}"`);
   console.log("Ingredients list:", ingredientsList);
   
-  // Enhanced timeline classification with more nuanced detection
-  const timelineLower = timelineTheme.toLowerCase();
-  const emotionalLower = emotionalContext.toLowerCase();
-  
-  const isFuturistic = timelineLower.includes('future') || 
-                       timelineLower.includes('distant') || 
-                       timelineLower.includes('tomorrow') ||
-                       timelineLower.includes('advanced') ||
-                       timelineLower.includes('cyber') ||
-                       timelineLower.includes('space') ||
-                       timelineLower.includes('2030') ||
-                       timelineLower.includes('2040') ||
-                       timelineLower.includes('2050') ||
-                       timelineLower.includes('tech') ||
-                       emotionalLower.includes('digital') ||
-                       emotionalLower.includes('virtual');
-
-  const isHistorical = timelineLower.includes('ancient') || 
-                       timelineLower.includes('past') || 
-                       timelineLower.includes('medieval') ||
-                       timelineLower.includes('traditional') ||
-                       timelineLower.includes('old') ||
-                       timelineLower.includes('historic') ||
-                       timelineLower.includes('vintage') ||
-                       timelineLower.includes('classic') ||
-                       timelineLower.includes('1800') ||
-                       timelineLower.includes('1900') ||
-                       timelineLower.includes('century') ||
-                       emotionalLower.includes('heritage') ||
-                       emotionalLower.includes('ancestral');
-
-  console.log("Timeline classification:");
-  console.log("- Is Futuristic:", isFuturistic);
-  console.log("- Is Historical:", isHistorical);
-  
-  // Extract colors with enhanced vibrant mapping
-  const { colors, descriptions, effects } = extractIngredientColors(ingredientsList);
-  console.log("Color extraction results:");
-  console.log("- Colors found:", colors);
-  console.log("- Descriptions:", descriptions);
-  console.log("- Effects:", effects);
-  
-  // Create comprehensive context for realistic food photography
-  const comprehensiveContext = {
+  // Generate hologram-ready prompt using the exact structure provided
+  const finalPrompt = generateHologramPrompt({
     timelineTheme,
     emotionalContext,
     dumplingShape,
     flavor,
     ingredientsList,
-    recipeTitle,
-    colors,
-    descriptions,
-    effects,
-    emotionalDescriptors: extractEmotionalDescriptors(emotionalContext),
-    timelineAtmosphere: extractTimelineAtmosphere(timelineTheme)
-  };
-
-  let finalPrompt = '';
+    recipeTitle
+  });
   
-  if (isFuturistic) {
-    console.log("🚀 Using REALISTIC FUTURISTIC food photography prompt");
-    finalPrompt = buildRealisticFuturisticPrompt(comprehensiveContext);
-  } else if (isHistorical) {
-    console.log("🏛️ Using REALISTIC HISTORICAL food photography prompt");
-    finalPrompt = buildRealisticHistoricalPrompt(comprehensiveContext);
-  } else {
-    console.log("🎨 Using REALISTIC CONTEMPORARY food photography prompt");
-    finalPrompt = buildRealisticContemporaryPrompt(comprehensiveContext);
-  }
-  
-  console.log("=== FINAL REALISTIC FOOD PHOTOGRAPHY PROMPT ===");
+  console.log("=== FINAL HOLOGRAM DISPLAY PROMPT ===");
   console.log("Prompt length:", finalPrompt.length);
   console.log("Full prompt:", finalPrompt);
   
   return finalPrompt;
 }
 
-function extractEmotionalDescriptors(emotionalContext: string): string[] {
-  const descriptors: string[] = [];
-  const context = emotionalContext.toLowerCase();
+function generateHologramPrompt(params: ImagePromptParams): string {
+  const { timelineTheme, emotionalContext, dumplingShape, flavor, ingredientsList, recipeTitle } = params;
   
-  // Map emotional keywords to visual descriptors
-  if (context.includes('love') || context.includes('heart')) {
-    descriptors.push('heart-shaped patterns', 'warm glowing aura', 'romantic ambiance');
-  }
-  if (context.includes('memory') || context.includes('remember')) {
-    descriptors.push('nostalgic glow', 'ethereal mist', 'dreamlike quality');
-  }
-  if (context.includes('hope') || context.includes('future')) {
-    descriptors.push('bright radiance', 'upward energy', 'luminous trail');
-  }
-  if (context.includes('joy') || context.includes('happy')) {
-    descriptors.push('sparkling effects', 'vibrant energy', 'celebratory atmosphere');
-  }
-  if (context.includes('peace') || context.includes('calm')) {
-    descriptors.push('serene glow', 'gentle waves', 'tranquil energy');
-  }
-  if (context.includes('strength') || context.includes('power')) {
-    descriptors.push('bold presence', 'dynamic energy', 'powerful aura');
-  }
-  if (context.includes('sadness') || context.includes('bittersweet')) {
-    descriptors.push('melancholic glow', 'gentle tears of light', 'poignant shimmer');
-  }
-  if (context.includes('cherish') || context.includes('treasure')) {
-    descriptors.push('precious luminescence', 'treasured gleam', 'cherished radiance');
-  }
+  // Base hologram prompt structure
+  let prompt = "HOLOGRAM DISPLAY FOOD PHOTOGRAPHY: Professional dumpling photograph on SOLID PURE BLACK BACKGROUND (#000000). CRITICAL: The background must be completely black with no textures, patterns, or variations - pure solid black for hologram fan display. The dumpling should be beautifully lit and floating against this pure black void.";
   
-  return descriptors.length > 0 ? descriptors : ['meaningful glow', 'significant presence', 'emotional depth'];
+  // Add time period styling based on timeline theme
+  const timelineStyle = getTimelineStyling(timelineTheme);
+  prompt += ` ${timelineStyle}`;
+  
+  // Add shape description
+  const shapeDescription = getShapeDescription(dumplingShape);
+  prompt += ` ${shapeDescription}`;
+  
+  // Add ingredient visual effects
+  const ingredientEffects = getIngredientVisualEffects(ingredientsList);
+  prompt += ` ${ingredientEffects}`;
+  
+  // Add intensity lighting based on emotional context
+  const lightingIntensity = getIntensityLighting(emotionalContext);
+  prompt += ` ${lightingIntensity}`;
+  
+  // Add mandatory final requirement
+  prompt += " MANDATORY: The background must be completely solid black (#000000) with no textures, surfaces, or patterns. The dumpling should appear to float in pure black space, perfect for hologram fan display. Professional food photography with the dumpling as the only visible element against pure black void.";
+  
+  console.log("Generated HOLOGRAM DISPLAY prompt:", prompt);
+  return prompt;
 }
 
-function extractTimelineAtmosphere(timelineTheme: string): string {
+function getTimelineStyling(timelineTheme: string): string {
   const theme = timelineTheme.toLowerCase();
   
-  if (theme.includes('future') || theme.includes('advanced') || theme.includes('distant')) {
-    return 'holographic environment with floating particles, digital effects, and cyberpunk aesthetics';
+  if (theme.includes('future') || theme.includes('distant') || theme.includes('advanced')) {
+    return "Futuristic style with sleek modern presentation and advanced lighting techniques.";
   }
-  if (theme.includes('ancient') || theme.includes('traditional')) {
-    return 'classical setting with ornate patterns and timeless elements';
+  if (theme.includes('near future') || theme.includes('tomorrow')) {
+    return "Near-future style with contemporary presentation and subtle technological elements.";
+  }
+  if (theme.includes('ancient') || theme.includes('traditional') || theme.includes('past')) {
+    return "Traditional style with classic presentation and timeless plating techniques.";
   }
   if (theme.includes('medieval')) {
-    return 'medieval atmosphere with stone textures and heraldic elements';
-  }
-  if (theme.includes('space') || theme.includes('cosmic')) {
-    return 'cosmic setting with stellar backgrounds and space phenomena';
+    return "Historical style with rustic presentation and traditional craftsmanship.";
   }
   
-  return 'contemporary setting with modern artistic elements';
+  return "Contemporary style with modern plating techniques and professional lighting.";
 }
 
-function buildRealisticFuturisticPrompt(context: any): string {
-  const { timelineTheme, emotionalContext, dumplingShape, flavor, ingredientsList, recipeTitle, colors, emotionalDescriptors, timelineAtmosphere } = context;
-  
-  const primaryColor = colors[0] || 'electric blue';
-  const secondaryColor = colors[1] || 'bright pink';
-  const emotionalEffects = emotionalDescriptors.join(', ');
-  
-  const prompt = `Create a vibrant futuristic digital art image of a ${dumplingShape}-shaped dumpling called "${recipeTitle}". Style: Pure image with neon ${primaryColor} and ${secondaryColor} colors, holographic effects, glowing translucent wrapper, cyberpunk aesthetics. The dumpling embodies ${emotionalContext} with ${emotionalEffects}. Ingredients: ${ingredientsList.join(', ')}. Setting: ${timelineAtmosphere}. CRITICAL: This must be a stylized image with bright neon colors, realistic food photography. Pure black background. photorealism, realistic textures, food photography. Only vibrant digital image artwork.`;
-
-  console.log("Generated REALISTIC FUTURISTIC prompt:", prompt);
-  return prompt;
+function getShapeDescription(dumplingShape: string): string {
+  switch (dumplingShape.toLowerCase()) {
+    case 'round':
+      return "The dumpling has traditional pleated edges with rounded body.";
+    case 'crescent':
+      return "The dumpling has elegant crescent shape with delicate pleated seams.";
+    case 'square':
+      return "The dumpling has geometric square form with clean angular edges.";
+    case 'triangular':
+      return "The dumpling has distinctive triangular shape with precise folded corners.";
+    case 'flower':
+      return "The dumpling has beautiful flower-like form with petal-shaped pleats.";
+    default:
+      return "The dumpling has traditional pleated edges with classic form.";
+  }
 }
 
-function buildRealisticHistoricalPrompt(context: any): string {
-  const { timelineTheme, emotionalContext, dumplingShape, flavor, ingredientsList, recipeTitle, colors, emotionalDescriptors, timelineAtmosphere } = context;
+function getIngredientVisualEffects(ingredientsList: string[]): string {
+  const effects: string[] = [];
   
-  const primaryColor = colors[0] || 'deep red';
-  const secondaryColor = colors[1] || 'golden yellow';
-  const emotionalEffects = emotionalDescriptors.join(', ');
+  ingredientsList.forEach(ingredient => {
+    const ing = ingredient.toLowerCase();
+    
+    if (ing.includes('herb') || ing.includes('basil') || ing.includes('cilantro') || ing.includes('parsley')) {
+      effects.push("Fresh herbs visible on the dumpling surface");
+    }
+    if (ing.includes('spice') || ing.includes('pepper') || ing.includes('chili')) {
+      effects.push("Spice elements creating visual texture");
+    }
+    if (ing.includes('chocolate') || ing.includes('cocoa')) {
+      effects.push("Rich chocolate tones and glossy finish");
+    }
+    if (ing.includes('cheese') || ing.includes('cream')) {
+      effects.push("Creamy textures and smooth surfaces");
+    }
+    if (ing.includes('mushroom')) {
+      effects.push("Earthy mushroom elements visible");
+    }
+    if (ing.includes('seafood') || ing.includes('shrimp') || ing.includes('fish')) {
+      effects.push("Delicate seafood textures");
+    }
+    if (ing.includes('vegetable') || ing.includes('carrot') || ing.includes('onion')) {
+      effects.push("Colorful vegetable elements");
+    }
+  });
   
-  const prompt = `Create a beautiful historical image of a ${dumplingShape}-shaped dumpling called "${recipeTitle}". Style: image of a dumpling with ${primaryColor} and ${secondaryColor} pigments. The dumpling embodies ${emotionalContext} with ${emotionalEffects}. Ingredients: ${ingredientsList.join(', ')}. Setting: ${timelineAtmosphere}. CRITICAL: This must be a realistic food photography. Pure black background. Absolutely photorealism, realistic textures, food photography.`;
-
-  console.log("Generated REALISTIC HISTORICAL prompt:", prompt);
-  return prompt;
+  if (effects.length === 0) {
+    return "Beautiful ingredient textures visible on the dumpling surface.";
+  }
+  
+  return effects.join('. ') + ".";
 }
 
-function buildRealisticContemporaryPrompt(context: any): string {
-  const { timelineTheme, emotionalContext, dumplingShape, flavor, ingredientsList, recipeTitle, colors, emotionalDescriptors, timelineAtmosphere } = context;
+function getIntensityLighting(emotionalContext: string): string {
+  const context = emotionalContext.toLowerCase();
   
-  const primaryColor = colors[0] || 'vibrant purple';
-  const secondaryColor = colors[1] || 'electric orange';
-  const emotionalEffects = emotionalDescriptors.join(', ');
+  if (context.includes('intense') || context.includes('powerful') || context.includes('strong')) {
+    return "Dramatic lighting with strong contrasts showcasing the dumpling against pure black background.";
+  }
+  if (context.includes('gentle') || context.includes('soft') || context.includes('calm')) {
+    return "Soft gentle lighting creating subtle shadows against pure black background.";
+  }
+  if (context.includes('bright') || context.includes('vibrant') || context.includes('energetic')) {
+    return "Bright vibrant lighting emphasizing colors against pure black background.";
+  }
+  if (context.includes('warm') || context.includes('cozy') || context.includes('comfort')) {
+    return "Warm lighting creating inviting atmosphere against pure black background.";
+  }
   
-  const prompt = `Create a modern image of a ${dumplingShape}-shaped dumpling called "${recipeTitle}". Style: realistic image with bold ${primaryColor} and ${secondaryColor} colors, clean geometric design. The dumpling embodies ${emotionalContext} with ${emotionalEffects}. Ingredients: ${ingredientsList.join(', ')}. Setting: ${timelineAtmosphere}. realistic food photography. Modern digital art style with clean lines, vivid colors, and contemporary design elements. Pure black background. Absolutely photorealism, realistic textures, food photography.`;
-
-  console.log("Generated REALISTIC CONTEMPORARY prompt:", prompt);
-  return prompt;
+  return "Balanced lighting showcasing the dumpling against pure black background.";
 }
 
 // Re-export the ingredient parser for backward compatibility
