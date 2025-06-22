@@ -3,6 +3,7 @@ import OpenAI from 'https://esm.sh/openai@4.24.1'
 import { extractIngredientColors } from './colorExtractor.ts'
 import { buildFuturisticPrompt, buildHistoricalPrompt, buildContemporaryPrompt } from './promptBuilders.ts'
 import { extractIngredientsList } from './ingredientParser.ts'
+import { uploadImageToSupabase } from './imageUploader.ts'
 
 interface RecipePayload {
   questions: { [key: string]: string };
@@ -27,7 +28,7 @@ export async function generateAndUploadRecipeImage(
   supabaseAdmin: ReturnType<typeof createClient>
 ): Promise<string> {
   try {
-    console.log("=== IMAGE GENERATION FROM SAVED RECIPE DATA ===");
+    console.log("=== ARTISTIC STYLE IMAGE GENERATION ===");
     
     // Extract timeline theme from original user input
     const timelineValues = Object.values(payload.timeline);
@@ -49,21 +50,17 @@ export async function generateAndUploadRecipeImage(
     };
     console.log("✓ Controls from user:", controls);
     
-    // CRITICAL FIX: Extract ingredients from SAVED RECIPE DATA, not user input
+    // Extract ingredients from SAVED RECIPE DATA
     console.log("=== EXTRACTING INGREDIENTS FROM SAVED RECIPE ===");
-    console.log("Saved recipe ingredients structure:", JSON.stringify(savedRecipe.ingredients, null, 2));
-    
-    // Use the ingredient parser to extract from the saved recipe data
     const recipeIngredients = extractIngredientsList(savedRecipe.ingredients);
     console.log("✓ Ingredients extracted from SAVED RECIPE:", recipeIngredients);
-    console.log("✓ Number of ingredients from saved recipe:", recipeIngredients.length);
     
     // Use saved recipe ingredients as the source of truth
     const finalIngredients = recipeIngredients.length > 0 ? recipeIngredients : ['colorful vegetables'];
     console.log("✓ FINAL ingredients for image generation:", finalIngredients);
     
-    // Generate image prompt with data from saved recipe
-    const imagePrompt = generateImagePrompt({
+    // Generate image prompt with ARTISTIC STYLE FOCUS
+    const imagePrompt = generateArtisticImagePrompt({
       timelineTheme: timelineTheme,
       emotionalContext: emotionalContext,
       dumplingShape: controls.shape,
@@ -72,9 +69,8 @@ export async function generateAndUploadRecipeImage(
       recipeTitle: savedRecipe.title
     });
     
-    console.log("=== SENDING TO DALL-E WITH SAVED RECIPE DATA ===");
-    console.log("Final prompt:", imagePrompt);
-    console.log("Ingredients used from saved recipe:", finalIngredients);
+    console.log("=== SENDING ARTISTIC PROMPT TO DALL-E ===");
+    console.log("Final artistic prompt:", imagePrompt);
     
     const imageResponse = await openai.images.generate({
       model: 'dall-e-3',
@@ -82,30 +78,30 @@ export async function generateAndUploadRecipeImage(
       n: 1,
       size: '1024x1024',
       response_format: 'b64_json',
-      style: 'natural',
+      style: 'vivid',  // Use 'vivid' style for more artistic results
       quality: 'hd',
     });
     
-    console.log("✅ DALL-E response received");
+    console.log("✅ DALL-E response received for artistic image");
     const imageB64 = imageResponse.data[0].b64_json;
     
     // Upload to Supabase
     if (imageB64) {
       const imageUrl = await uploadImageToSupabase(imageB64, recipeId, supabaseAdmin);
       if (imageUrl) {
-        console.log("✅ Image uploaded successfully:", imageUrl);
+        console.log("✅ Artistic image uploaded successfully:", imageUrl);
         return imageUrl;
       }
     }
     
     return '/placeholder.svg';
   } catch (error) {
-    console.error("❌ Error in image generation:", error);
+    console.error("❌ Error in artistic image generation:", error);
     return '/placeholder.svg';
   }
 }
 
-function generateImagePrompt(params: {
+function generateArtisticImagePrompt(params: {
   timelineTheme: string;
   emotionalContext: string;
   dumplingShape: string;
@@ -115,7 +111,7 @@ function generateImagePrompt(params: {
 }): string {
   const { timelineTheme, emotionalContext, dumplingShape, flavor, ingredientsList, recipeTitle } = params;
   
-  console.log("=== IMAGE PROMPT FROM SAVED RECIPE DATA ===");
+  console.log("=== ARTISTIC PROMPT GENERATION WITH SPECIFIC STYLE ===");
   console.log("Timeline theme:", `"${timelineTheme}"`);
   console.log("Dumpling shape:", dumplingShape);
   console.log("Ingredients from saved recipe:", ingredientsList);
@@ -161,20 +157,20 @@ function generateImagePrompt(params: {
   let finalPrompt = '';
   
   if (isFuturistic) {
-    console.log("🚀 Using FUTURISTIC prompt with saved recipe data");
+    console.log("🚀 Using SPECIFIC FUTURISTIC artistic prompt");
     finalPrompt = buildFuturisticPrompt(promptParams);
   } else if (isHistorical) {
-    console.log("🏛️ Using HISTORICAL prompt with saved recipe data");
+    console.log("🏛️ Using SPECIFIC HISTORICAL artistic prompt");
     finalPrompt = buildHistoricalPrompt(promptParams);
   } else {
-    console.log("🎨 Using CONTEMPORARY prompt with saved recipe data");
+    console.log("🎨 Using SPECIFIC CONTEMPORARY artistic prompt");
     finalPrompt = buildContemporaryPrompt(promptParams);
   }
   
-  // Add explicit artistic style instructions
-  finalPrompt = finalPrompt + " IMPORTANT: This should be an artistic illustration or digital art, NOT realistic food photography. Stylized and colorful like the provided reference images.";
+  // Add VERY EXPLICIT artistic style requirements
+  finalPrompt = finalPrompt + " CRITICAL REQUIREMENTS: This MUST be a stylized artistic illustration with vibrant colors and smooth gradients, similar to digital artwork or cartoon illustration. ABSOLUTELY NO realistic food photography. ABSOLUTELY NO photorealistic textures. Pure artistic style only.";
   
-  console.log("=== FINAL PROMPT FROM SAVED RECIPE ===");
+  console.log("=== FINAL ARTISTIC PROMPT WITH EXPLICIT STYLE ===");
   console.log("Prompt length:", finalPrompt.length);
   console.log("Prompt:", finalPrompt);
   
