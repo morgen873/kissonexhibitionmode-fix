@@ -26,16 +26,16 @@ export async function generateAndUploadRecipeImage(
   supabaseAdmin: ReturnType<typeof createClient>
 ): Promise<string> {
   try {
-    console.log("=== ENHANCED IMAGE GENERATION WITH SPECIALIZED PROMPTS ===");
+    console.log("=== COMPREHENSIVE IMAGE GENERATION WITH FULL USER CONTEXT ===");
     
-    // Extract the user inputs from the payload
+    // Extract ALL user context for comprehensive image generation
     const timelineValues = Object.values(payload.timeline);
     const timelineTheme = timelineValues.length > 0 ? timelineValues[0] : 'present day';
     
     const questionValues = Object.values(payload.questions);
-    const emotionalContext = questionValues.join(' and ');
+    const fullEmotionalContext = questionValues.join(' and '); // Use ALL question responses
     
-    // Extract control values
+    // Extract control values with comprehensive context
     const controlValues = Object.values(payload.controls)[0] || {
       shape: 'round',
       flavor: 'savory',
@@ -43,24 +43,45 @@ export async function generateAndUploadRecipeImage(
       enhancer: 'none'
     };
     
-    console.log("=== EXTRACTED USER INPUTS FOR IMAGE ===");
-    console.log("Timeline theme:", timelineTheme);
-    console.log("Emotional context:", emotionalContext);
+    console.log("=== COMPREHENSIVE USER INPUT EXTRACTION FOR IMAGE ===");
+    console.log("Timeline theme:", `"${timelineTheme}"`);
+    console.log("Full emotional context from ALL questions:", `"${fullEmotionalContext}"`);
     console.log("Control values:", controlValues);
-    console.log("Recipe title:", savedRecipe.title);
+    console.log("Recipe title from saved recipe:", `"${savedRecipe.title}"`);
+    console.log("Recipe description:", `"${savedRecipe.description}"`);
     
-    // Use the specialized image prompt generator with BOTH user data AND saved recipe data
-    const imagePrompt = generateImagePrompt({
+    // Extract ingredients from the SAVED recipe for accurate representation
+    const ingredientsList = extractIngredientsFromSavedRecipe(savedRecipe.ingredients);
+    
+    console.log("Ingredients extracted from saved recipe:", ingredientsList);
+    
+    // Create comprehensive context combining user input AND saved recipe data
+    const comprehensiveImageContext = {
       timelineTheme,
-      emotionalContext,
+      emotionalContext: fullEmotionalContext,
       dumplingShape: controlValues.shape,
       flavor: controlValues.flavor,
-      ingredientsList: extractIngredientsFromSavedRecipe(savedRecipe.ingredients),
-      recipeTitle: savedRecipe.title
-    });
+      ingredientsList,
+      recipeTitle: savedRecipe.title,
+      // Add additional context from saved recipe
+      recipeDescription: savedRecipe.description
+    };
     
-    console.log("=== SENDING SPECIALIZED PROMPT TO DALL-E ===");
-    console.log("Specialized image prompt:", imagePrompt);
+    console.log("=== COMPREHENSIVE IMAGE CONTEXT CREATED ===");
+    console.log("Image generation will use:");
+    console.log("- Timeline theme:", comprehensiveImageContext.timelineTheme);
+    console.log("- Full emotional context:", comprehensiveImageContext.emotionalContext);
+    console.log("- Dumpling shape:", comprehensiveImageContext.dumplingShape);
+    console.log("- Flavor profile:", comprehensiveImageContext.flavor);
+    console.log("- Recipe ingredients:", comprehensiveImageContext.ingredientsList);
+    console.log("- Recipe title:", comprehensiveImageContext.recipeTitle);
+    
+    // Use the enhanced image prompt generator with COMPREHENSIVE context
+    const imagePrompt = generateImagePrompt(comprehensiveImageContext);
+    
+    console.log("=== SENDING COMPREHENSIVE PROMPT TO DALL-E ===");
+    console.log("Final comprehensive image prompt:", imagePrompt);
+    console.log("Prompt length:", imagePrompt.length);
     
     const imageResponse = await openai.images.generate({
       model: 'dall-e-3',
@@ -72,27 +93,27 @@ export async function generateAndUploadRecipeImage(
       quality: 'hd',
     });
     
-    console.log("✅ DALL-E response received for specialized image");
+    console.log("✅ DALL-E response received for comprehensive image");
     const imageB64 = imageResponse.data[0].b64_json;
     
     // Upload to Supabase
     if (imageB64) {
       const imageUrl = await uploadImageToSupabase(imageB64, recipeId, supabaseAdmin);
       if (imageUrl) {
-        console.log("✅ Specialized image uploaded successfully:", imageUrl);
+        console.log("✅ Comprehensive image uploaded successfully:", imageUrl);
         return imageUrl;
       }
     }
     
     return '/placeholder.svg';
   } catch (error) {
-    console.error("❌ Error in specialized image generation:", error);
+    console.error("❌ Error in comprehensive image generation:", error);
     return '/placeholder.svg';
   }
 }
 
 function extractIngredientsFromSavedRecipe(ingredients: any): string[] {
-  console.log("=== EXTRACTING INGREDIENTS FROM SAVED RECIPE FOR IMAGE ===");
+  console.log("=== COMPREHENSIVE INGREDIENTS EXTRACTION FROM SAVED RECIPE ===");
   console.log("Raw saved recipe ingredients:", JSON.stringify(ingredients, null, 2));
   
   const ingredientsList: string[] = [];
@@ -129,7 +150,7 @@ function extractIngredientsFromSavedRecipe(ingredients: any): string[] {
     }
   }
   
-  console.log("Final extracted ingredients for image generation:", ingredientsList);
+  console.log("Final comprehensive ingredients list for image generation:", ingredientsList);
   return ingredientsList;
 }
 
