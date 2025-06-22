@@ -35,7 +35,7 @@ serve(async (req) => {
 
     const payload: RecipePayload = await req.json()
     
-    console.log("=== FIXED RECIPE GENERATION FLOW STARTED ===");
+    console.log("=== NEW STRUCTURED RECIPE GENERATION FLOW ===");
     console.log("STEP 1: Frontend payload received and parsed");
     console.log("Raw payload structure:", {
       hasQuestions: !!payload.questions,
@@ -74,12 +74,6 @@ serve(async (req) => {
       });
     }
     
-    // Log the actual user inputs that will be used for image generation
-    console.log("STEP 3: Key user inputs for image generation:");
-    console.log("- Timeline choices:", Object.values(payload.timeline));
-    console.log("- Question answers:", Object.values(payload.questions));
-    console.log("- Control settings:", Object.values(payload.controls));
-    
     const openAIKey = Deno.env.get('OPENAI_API_KEY')
     
     if (!openAIKey) {
@@ -110,8 +104,8 @@ serve(async (req) => {
       });
     }
 
-    // STEP 4: Generate recipe content first
-    console.log("STEP 4: Generating recipe content with AI...");
+    // STEP 3: Generate recipe content
+    console.log("STEP 3: Generating recipe content with AI...");
     const recipeContent = await generateRecipeWithOpenAI(payload, openai);
     console.log("✅ Recipe content generated:", recipeContent.title);
 
@@ -128,40 +122,41 @@ serve(async (req) => {
       });
     }
 
-    // STEP 5: Insert recipe into database to get ID
-    console.log("STEP 5: Inserting recipe into database...");
+    // STEP 4: Insert COMPLETE recipe into database FIRST
+    console.log("STEP 4: Inserting COMPLETE recipe into database...");
     const newRecipe = await insertRecipe(supabaseAdmin, payload, recipeContent);
-    console.log("✅ Recipe inserted with ID:", newRecipe.id);
+    console.log("✅ Recipe FULLY saved to database with ID:", newRecipe.id);
 
-    // STEP 6: Generate image with ORIGINAL USER DATA + RECIPE DATA
-    console.log("STEP 6: Starting image generation with COMPLETE user data...");
-    console.log("Passing to image generator:");
+    // STEP 5: Now generate image with BOTH original user data AND saved recipe data
+    console.log("STEP 5: Starting image generation with COMPLETE data from database...");
+    console.log("Image generation will use:");
     console.log("- Original user payload (questions, timeline, controls)");
-    console.log("- Generated recipe content (title, ingredients)");
-    console.log("- Recipe ID for storage");
+    console.log("- SAVED recipe data from database (title, ingredients)");
+    console.log("- Recipe ID:", newRecipe.id);
     
     const imageUrl = await generateAndUploadRecipeImage(
-      payload,      // ORIGINAL USER INPUT - this is crucial!
-      recipeContent, // AI-generated recipe content
+      payload,      // Original user input
+      newRecipe,    // COMPLETE saved recipe data from database
       newRecipe.id,
       openai,
       supabaseAdmin
     );
 
-    // STEP 7: Update recipe with final image URL
+    // STEP 6: Update recipe with final image URL only if we got a real image
     if (imageUrl !== '/placeholder.svg') {
       await updateRecipeImageUrl(supabaseAdmin, newRecipe.id, imageUrl);
       newRecipe.image_url = imageUrl;
       console.log("✅ Recipe updated with final image URL:", imageUrl);
     } else {
-      console.log("❌ Using placeholder image");
+      console.log("❌ Using placeholder image - no update needed");
     }
 
-    console.log("=== FIXED RECIPE GENERATION COMPLETED ===");
+    console.log("=== STRUCTURED RECIPE GENERATION COMPLETED ===");
     console.log("Final recipe data being returned:");
     console.log("- Title:", newRecipe.title);
     console.log("- Image URL:", newRecipe.image_url);
     console.log("- Recipe ID:", newRecipe.id);
+    console.log("- Has ingredients data:", !!newRecipe.ingredients);
     
     return new Response(JSON.stringify({ recipe: newRecipe }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },

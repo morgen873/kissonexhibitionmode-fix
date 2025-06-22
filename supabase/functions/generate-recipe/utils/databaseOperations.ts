@@ -19,7 +19,12 @@ export async function insertRecipe(
   payload: RecipePayload,
   recipeContent: RecipeData
 ) {
-  console.log("Inserting recipe into database...");
+  console.log("=== INSERTING COMPLETE RECIPE INTO DATABASE ===");
+  console.log("Recipe content being saved:");
+  console.log("- Title:", recipeContent.title);
+  console.log("- Has ingredients:", !!recipeContent.ingredients);
+  console.log("- Has description:", !!recipeContent.description);
+  console.log("- Has cooking recipe:", !!recipeContent.cooking_recipe);
   
   const { data: newRecipe, error: insertError } = await supabaseAdmin
     .from('recipes')
@@ -43,7 +48,12 @@ export async function insertRecipe(
     throw new Error("Failed to create and retrieve recipe.");
   }
 
-  console.log("Recipe inserted with ID:", newRecipe.id);
+  console.log("✅ Recipe COMPLETELY saved to database:");
+  console.log("- Recipe ID:", newRecipe.id);
+  console.log("- Title:", newRecipe.title);
+  console.log("- Ingredients saved:", !!newRecipe.ingredients);
+  console.log("- Full recipe data available for image generation");
+  
   return newRecipe;
 }
 
@@ -52,7 +62,9 @@ export async function updateRecipeImageUrl(
   recipeId: string,
   imageUrl: string
 ) {
-  console.log("Updating recipe with image URL...");
+  console.log("=== UPDATING RECIPE WITH FINAL IMAGE URL ===");
+  console.log("Recipe ID:", recipeId);
+  console.log("Image URL:", imageUrl);
   
   const { error: updateError } = await supabaseAdmin
     .from('recipes')
@@ -64,5 +76,5 @@ export async function updateRecipeImageUrl(
     throw updateError;
   }
 
-  console.log("Recipe updated successfully with image URL");
+  console.log("✅ Recipe successfully updated with final image URL");
 }
