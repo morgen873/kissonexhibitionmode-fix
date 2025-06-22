@@ -1,3 +1,4 @@
+
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { corsHeaders } from '../_shared/cors.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
@@ -33,6 +34,35 @@ serve(async (req) => {
                     'unknown';
 
     const payload: RecipePayload = await req.json()
+    
+    console.log("=== RECIPE GENERATION STARTED ===");
+    console.log("Received payload:", JSON.stringify(payload, null, 2));
+    
+    // Validate that we have the required data
+    const hasQuestions = payload.questions && Object.keys(payload.questions).length > 0;
+    const hasTimeline = payload.timeline && Object.keys(payload.timeline).length > 0;
+    const hasControls = payload.controls && Object.keys(payload.controls).length > 0;
+    
+    console.log("Data validation:");
+    console.log("- Has questions:", hasQuestions);
+    console.log("- Has timeline:", hasTimeline);
+    console.log("- Has controls:", hasControls);
+    
+    if (!hasQuestions || !hasTimeline || !hasControls) {
+      console.error("Missing required data in payload!");
+      return new Response(JSON.stringify({ 
+        error: 'Missing required data. Please complete all steps.',
+        missing: {
+          questions: !hasQuestions,
+          timeline: !hasTimeline,
+          controls: !hasControls
+        }
+      }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 400,
+      });
+    }
+    
     const openAIKey = Deno.env.get('OPENAI_API_KEY')
     
     if (!openAIKey) {
@@ -64,7 +94,9 @@ serve(async (req) => {
     }
 
     // Generate recipe content
+    console.log("Generating recipe content...");
     const recipeContent = await generateRecipeWithOpenAI(payload, openai);
+    console.log("Recipe content generated:", recipeContent.title);
 
     // Validate content for exhibition appropriateness
     const validation = validateRecipeContent(recipeContent);
@@ -80,9 +112,12 @@ serve(async (req) => {
     }
 
     // Insert recipe first to get an ID, starting with a placeholder image
+    console.log("Inserting recipe into database...");
     const newRecipe = await insertRecipe(supabaseAdmin, payload, recipeContent);
+    console.log("Recipe inserted with ID:", newRecipe.id);
 
-    // Generate and upload image
+    // Generate and upload image with all the user data
+    console.log("Starting image generation with user data...");
     const imageUrl = await generateAndUploadRecipeImage(
       payload,
       recipeContent,
@@ -95,9 +130,14 @@ serve(async (req) => {
     if (imageUrl !== '/placeholder.svg') {
       await updateRecipeImageUrl(supabaseAdmin, newRecipe.id, imageUrl);
       newRecipe.image_url = imageUrl;
+      console.log("Recipe updated with image URL:", imageUrl);
+    } else {
+      console.log("Using placeholder image");
     }
 
+    console.log("=== RECIPE GENERATION COMPLETED ===");
     console.log("Returning recipe with image_url:", newRecipe.image_url);
+    
     return new Response(JSON.stringify({ recipe: newRecipe }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 200,

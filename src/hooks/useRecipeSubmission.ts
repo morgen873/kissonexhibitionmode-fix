@@ -17,21 +17,52 @@ export const useRecipeSubmission = () => {
         const questionAnswers: { [key:string]: string } = {};
         const timelineAnswers: { [key: string]: string } = {};
 
+        // Process answers with better debugging
+        console.log("Processing answers:", answers);
+        console.log("Processing custom answers:", customAnswers);
+        console.log("Processing control values:", controlValues);
+
         Object.entries(answers).forEach(([stepId, answer]) => {
             const step = steps.find(s => 'id' in s && s.id === Number(stepId));
+            console.log(`Step ${stepId}:`, step, "Answer:", answer);
+            
             if (step) {
                 if (step.type === 'question') {
                     const questionStep = step as QuestionStep;
                     if (questionStep.customOption && answer === questionStep.customOption.title) {
-                        questionAnswers[stepId] = customAnswers[Number(stepId)] || '';
+                        const customAnswer = customAnswers[Number(stepId)];
+                        questionAnswers[stepId] = customAnswer || '';
+                        console.log(`Using custom answer for step ${stepId}:`, customAnswer);
                     } else {
                         questionAnswers[stepId] = answer;
+                        console.log(`Using regular answer for step ${stepId}:`, answer);
                     }
                 } else if (step.type === 'timeline') {
                     timelineAnswers[stepId] = answer;
+                    console.log(`Timeline answer for step ${stepId}:`, answer);
                 }
             }
         });
+
+        // Ensure we have all the required data before submitting
+        const hasQuestionAnswers = Object.keys(questionAnswers).length > 0;
+        const hasTimelineAnswers = Object.keys(timelineAnswers).length > 0;
+        const hasControlValues = Object.keys(controlValues).length > 0;
+
+        console.log("Data validation:");
+        console.log("- Has question answers:", hasQuestionAnswers, questionAnswers);
+        console.log("- Has timeline answers:", hasTimelineAnswers, timelineAnswers);
+        console.log("- Has control values:", hasControlValues, controlValues);
+
+        if (!hasQuestionAnswers) {
+            console.error("Missing question answers!");
+        }
+        if (!hasTimelineAnswers) {
+            console.error("Missing timeline answers!");
+        }
+        if (!hasControlValues) {
+            console.error("Missing control values!");
+        }
 
         const finalPayload = {
             questions: questionAnswers,
@@ -39,7 +70,7 @@ export const useRecipeSubmission = () => {
             controls: controlValues,
         };
 
-        console.log("Final payload:", finalPayload);
+        console.log("Final payload being sent:", JSON.stringify(finalPayload, null, 2));
         
         try {
             const { data, error } = await supabase.functions.invoke('generate-recipe', {
@@ -47,6 +78,7 @@ export const useRecipeSubmission = () => {
             });
 
             if (error) {
+                console.error("Supabase function error:", error);
                 throw error;
             }
 

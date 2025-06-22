@@ -18,29 +18,64 @@ export async function generateAndUploadRecipeImage(
   supabaseAdmin: ReturnType<typeof createClient>
 ): Promise<string> {
   try {
-    const dumplingShape = Object.values(payload.controls)[0]?.shape || 'classic';
-    const flavor = Object.values(payload.controls)[0]?.flavor || 'mild';
-    const timelineTheme = Object.values(payload.timeline)[0] || 'present';
+    console.log("=== IMAGE GENERATION DEBUG ===");
+    console.log("Payload received:", JSON.stringify(payload, null, 2));
+    console.log("Recipe content:", JSON.stringify(recipeContent, null, 2));
     
-    // Extract emotional context from user's answers
-    const userAnswers = Object.values(payload.questions);
-    const emotionalContext = userAnswers.join(', ');
+    // Extract control values - get the first (and likely only) control entry
+    const controlEntries = Object.values(payload.controls);
+    const controls = controlEntries.length > 0 ? controlEntries[0] : {
+      shape: 'classic',
+      flavor: 'mild',
+      temperature: 180,
+      enhancer: ''
+    };
+    
+    console.log("Extracted controls:", controls);
+    
+    // Extract timeline theme - get the first timeline answer
+    const timelineEntries = Object.values(payload.timeline);
+    const timelineTheme = timelineEntries.length > 0 ? timelineEntries[0] : 'present';
+    
+    console.log("Extracted timeline theme:", timelineTheme);
+    
+    // Extract emotional context from user's answers - combine all question answers
+    const questionAnswers = Object.values(payload.questions);
+    const emotionalContext = questionAnswers.length > 0 ? questionAnswers.join(', ') : 'comfort and warmth';
+    
+    console.log("Extracted emotional context:", emotionalContext);
     
     // Extract key ingredients for visual representation
     const ingredientsList = extractIngredientsList(recipeContent.ingredients);
+    console.log("Extracted ingredients list:", ingredientsList);
+    
+    // Ensure we have meaningful data
+    if (!timelineTheme || timelineTheme.trim() === '') {
+      console.warn("No timeline theme found, using default");
+    }
+    if (!emotionalContext || emotionalContext.trim() === '') {
+      console.warn("No emotional context found, using default");
+    }
     
     const imagePrompt = generateImagePrompt({
       timelineTheme,
       emotionalContext,
-      dumplingShape,
-      flavor,
+      dumplingShape: controls.shape,
+      flavor: controls.flavor,
       ingredientsList,
       recipeTitle: recipeContent.title
     });
     
+    console.log("=== GENERATED IMAGE PROMPT ===");
+    console.log(imagePrompt);
+    console.log("=============================");
+    
     console.log("Generating emotionally resonant image with DALL-E...");
     console.log("Timeline theme:", timelineTheme);
     console.log("Emotional context:", emotionalContext);
+    console.log("Dumpling shape:", controls.shape);
+    console.log("Flavor:", controls.flavor);
+    console.log("Enhancer:", controls.enhancer);
     
     const imageResponse = await openai.images.generate({
       model: 'dall-e-3',
