@@ -15,7 +15,7 @@ interface ImagePromptParams {
 export function generateImagePrompt(params: ImagePromptParams): string {
   const { timelineTheme, emotionalContext, dumplingShape, flavor, ingredientsList, recipeTitle } = params;
   
-  console.log("=== ENHANCED IMAGE PROMPT GENERATION WITH FULL CONTEXT ===");
+  console.log("=== ULTRA-FORCEFUL ARTISTIC IMAGE PROMPT GENERATION ===");
   console.log("Timeline theme:", `"${timelineTheme}"`);
   console.log("Emotional context:", `"${emotionalContext}"`);
   console.log("Dumpling shape:", dumplingShape);
@@ -54,20 +54,18 @@ export function generateImagePrompt(params: ImagePromptParams): string {
                        emotionalLower.includes('heritage') ||
                        emotionalLower.includes('ancestral');
 
-  console.log("Enhanced timeline classification:");
+  console.log("Timeline classification:");
   console.log("- Is Futuristic:", isFuturistic);
   console.log("- Is Historical:", isHistorical);
-  console.log("- Timeline theme analysis:", timelineTheme);
-  console.log("- Emotional context analysis:", emotionalContext);
   
   // Extract colors with enhanced vibrant mapping
   const { colors, descriptions, effects } = extractIngredientColors(ingredientsList);
-  console.log("ENHANCED color extraction results:");
+  console.log("Color extraction results:");
   console.log("- Colors found:", colors);
   console.log("- Descriptions:", descriptions);
   console.log("- Effects:", effects);
   
-  // Create comprehensive context for image generation
+  // Create ULTRA-FORCEFUL artistic context
   const comprehensiveContext = {
     timelineTheme,
     emotionalContext,
@@ -78,26 +76,24 @@ export function generateImagePrompt(params: ImagePromptParams): string {
     colors,
     descriptions,
     effects,
-    // Add derived emotional descriptors
     emotionalDescriptors: extractEmotionalDescriptors(emotionalContext),
-    // Add timeline atmosphere
     timelineAtmosphere: extractTimelineAtmosphere(timelineTheme)
   };
 
   let finalPrompt = '';
   
   if (isFuturistic) {
-    console.log("🚀 Using ENHANCED FUTURISTIC prompt with full emotional context");
-    finalPrompt = buildEnhancedFuturisticPrompt(comprehensiveContext);
+    console.log("🚀 Using ULTRA-FORCEFUL FUTURISTIC artistic prompt");
+    finalPrompt = buildUltraForcefulFuturisticPrompt(comprehensiveContext);
   } else if (isHistorical) {
-    console.log("🏛️ Using ENHANCED HISTORICAL prompt with full emotional context");
-    finalPrompt = buildEnhancedHistoricalPrompt(comprehensiveContext);
+    console.log("🏛️ Using ULTRA-FORCEFUL HISTORICAL artistic prompt");
+    finalPrompt = buildUltraForcefulHistoricalPrompt(comprehensiveContext);
   } else {
-    console.log("🎨 Using ENHANCED CONTEMPORARY prompt with full emotional context");
-    finalPrompt = buildEnhancedContemporaryPrompt(comprehensiveContext);
+    console.log("🎨 Using ULTRA-FORCEFUL CONTEMPORARY artistic prompt");
+    finalPrompt = buildUltraForcefulContemporaryPrompt(comprehensiveContext);
   }
   
-  console.log("=== FINAL ENHANCED ARTISTIC PROMPT ===");
+  console.log("=== FINAL ULTRA-FORCEFUL ARTISTIC PROMPT ===");
   console.log("Prompt length:", finalPrompt.length);
   console.log("Full prompt:", finalPrompt);
   
@@ -127,6 +123,12 @@ function extractEmotionalDescriptors(emotionalContext: string): string[] {
   if (context.includes('strength') || context.includes('power')) {
     descriptors.push('bold presence', 'dynamic energy', 'powerful aura');
   }
+  if (context.includes('sadness') || context.includes('bittersweet')) {
+    descriptors.push('melancholic glow', 'gentle tears of light', 'poignant shimmer');
+  }
+  if (context.includes('cherish') || context.includes('treasure')) {
+    descriptors.push('precious luminescence', 'treasured gleam', 'cherished radiance');
+  }
   
   return descriptors.length > 0 ? descriptors : ['meaningful glow', 'significant presence', 'emotional depth'];
 }
@@ -134,8 +136,8 @@ function extractEmotionalDescriptors(emotionalContext: string): string[] {
 function extractTimelineAtmosphere(timelineTheme: string): string {
   const theme = timelineTheme.toLowerCase();
   
-  if (theme.includes('future') || theme.includes('advanced')) {
-    return 'holographic environment with floating particles and digital effects';
+  if (theme.includes('future') || theme.includes('advanced') || theme.includes('distant')) {
+    return 'holographic environment with floating particles, digital effects, and cyberpunk aesthetics';
   }
   if (theme.includes('ancient') || theme.includes('traditional')) {
     return 'classical setting with ornate patterns and timeless elements';
@@ -150,42 +152,42 @@ function extractTimelineAtmosphere(timelineTheme: string): string {
   return 'contemporary setting with modern artistic elements';
 }
 
-function buildEnhancedFuturisticPrompt(context: any): string {
+function buildUltraForcefulFuturisticPrompt(context: any): string {
   const { timelineTheme, emotionalContext, dumplingShape, flavor, ingredientsList, recipeTitle, colors, emotionalDescriptors, timelineAtmosphere } = context;
   
   const primaryColor = colors[0] || 'electric blue';
   const secondaryColor = colors[1] || 'bright pink';
   const emotionalEffects = emotionalDescriptors.join(', ');
   
-  const prompt = `Create a stunning futuristic artistic illustration of a ${dumplingShape}-shaped dumpling representing "${recipeTitle}". The dumpling embodies the essence of ${emotionalContext} in a ${timelineTheme} setting. Visual elements: ${emotionalEffects}, ${timelineAtmosphere}. The dumpling features ${flavor} characteristics with ingredients ${ingredientsList.join(', ')} expressed through ${primaryColor} and ${secondaryColor} coloring. ARTISTIC STYLE: Vibrant digital illustration with holographic effects, neon glows, translucent surfaces, and futuristic lighting. Smooth gradients with cyberpunk aesthetics. The dumpling should have a translucent wrapper showing internal ingredient colors. Holographic rainbow lighting effects around the dumpling. Ultra-vibrant saturated colors with electric glows. Digital art style with clean vector lines and smooth shading. Pure black background for dramatic contrast. NO photorealism, NO realistic food photography. Pure artistic futuristic illustration style with sci-fi elements.`;
+  const prompt = `ARTISTIC ILLUSTRATION ONLY - NO PHOTOGRAPHY: Create a vibrant futuristic digital art illustration of a ${dumplingShape}-shaped dumpling called "${recipeTitle}". Style: Pure digital art with neon ${primaryColor} and ${secondaryColor} colors, holographic effects, glowing translucent wrapper, cyberpunk aesthetics. The dumpling embodies ${emotionalContext} with ${emotionalEffects}. Ingredients: ${ingredientsList.join(', ')}. Setting: ${timelineAtmosphere}. CRITICAL: This must be a stylized cartoon-like digital illustration with bright neon colors, NOT realistic food photography. Vector art style with smooth gradients, glowing effects, and futuristic elements. Pure black background. Absolutely NO photorealism, NO realistic textures, NO food photography. Only vibrant digital artwork.`;
 
-  console.log("Generated ENHANCED FUTURISTIC prompt:", prompt);
+  console.log("Generated ULTRA-FORCEFUL FUTURISTIC prompt:", prompt);
   return prompt;
 }
 
-function buildEnhancedHistoricalPrompt(context: any): string {
+function buildUltraForcefulHistoricalPrompt(context: any): string {
   const { timelineTheme, emotionalContext, dumplingShape, flavor, ingredientsList, recipeTitle, colors, emotionalDescriptors, timelineAtmosphere } = context;
   
   const primaryColor = colors[0] || 'deep red';
   const secondaryColor = colors[1] || 'golden yellow';
   const emotionalEffects = emotionalDescriptors.join(', ');
   
-  const prompt = `Create a beautiful historical artistic illustration of a ${dumplingShape}-shaped dumpling representing "${recipeTitle}". The dumpling embodies the essence of ${emotionalContext} in a ${timelineTheme} setting. Visual elements: ${emotionalEffects}, ${timelineAtmosphere}. The dumpling features ${flavor} characteristics with ingredients ${ingredientsList.join(', ')} expressed through rich ${primaryColor} and ${secondaryColor} coloring. ARTISTIC STYLE: Classical watercolor painting with ornate details, traditional brush strokes, and vintage aesthetics. The dumpling should have beautiful hand-painted coloring with artistic shading and classical ornamentation. Traditional illustration style with painterly effects and rich pigments. Watercolor technique with vivid colors and artistic textures. Ornate decorative elements surrounding the dumpling. Pure black background for dramatic presentation. NO photorealism, NO modern photography. Pure artistic historical painting style with classical elements.`;
+  const prompt = `ARTISTIC PAINTING ONLY - NO PHOTOGRAPHY: Create a beautiful historical watercolor painting of a ${dumplingShape}-shaped dumpling called "${recipeTitle}". Style: Traditional watercolor art with rich ${primaryColor} and ${secondaryColor} pigments, artistic brush strokes, ornate decorative elements. The dumpling embodies ${emotionalContext} with ${emotionalEffects}. Ingredients: ${ingredientsList.join(', ')}. Setting: ${timelineAtmosphere}. CRITICAL: This must be a stylized watercolor painting with artistic coloring, NOT realistic food photography. Hand-painted illustration style with painterly effects and classical ornamentation. Pure black background. Absolutely NO photorealism, NO realistic textures, NO food photography. Only artistic painted illustration.`;
 
-  console.log("Generated ENHANCED HISTORICAL prompt:", prompt);
+  console.log("Generated ULTRA-FORCEFUL HISTORICAL prompt:", prompt);
   return prompt;
 }
 
-function buildEnhancedContemporaryPrompt(context: any): string {
+function buildUltraForcefulContemporaryPrompt(context: any): string {
   const { timelineTheme, emotionalContext, dumplingShape, flavor, ingredientsList, recipeTitle, colors, emotionalDescriptors, timelineAtmosphere } = context;
   
   const primaryColor = colors[0] || 'vibrant purple';
   const secondaryColor = colors[1] || 'electric orange';
   const emotionalEffects = emotionalDescriptors.join(', ');
   
-  const prompt = `Create a modern artistic illustration of a ${dumplingShape}-shaped dumpling representing "${recipeTitle}". The dumpling embodies the essence of ${emotionalContext} in a ${timelineTheme} setting. Visual elements: ${emotionalEffects}, ${timelineAtmosphere}. The dumpling features ${flavor} characteristics with ingredients ${ingredientsList.join(', ')} expressed through bright ${primaryColor} and ${secondaryColor} coloring. ARTISTIC STYLE: Contemporary digital artwork with clean vector-style illustration, bold graphic design elements, and modern aesthetics. The dumpling should have stylized coloring with contemporary graphic design principles. Modern illustration style with clean lines, vivid colors, and artistic flair. Flat design with gradient effects and modern artistic elements. Geometric patterns and contemporary visual effects around the dumpling. Pure black background for modern contrast. NO photorealism, NO realistic food photography. Pure modern graphic illustration style with contemporary design elements.`;
+  const prompt = `ARTISTIC GRAPHIC DESIGN ONLY - NO PHOTOGRAPHY: Create a modern graphic design illustration of a ${dumplingShape}-shaped dumpling called "${recipeTitle}". Style: Contemporary vector art with bold ${primaryColor} and ${secondaryColor} colors, clean geometric design, modern graphic elements. The dumpling embodies ${emotionalContext} with ${emotionalEffects}. Ingredients: ${ingredientsList.join(', ')}. Setting: ${timelineAtmosphere}. CRITICAL: This must be a stylized vector graphic illustration with flat design aesthetics, NOT realistic food photography. Modern digital art style with clean lines, vivid colors, and contemporary design elements. Pure black background. Absolutely NO photorealism, NO realistic textures, NO food photography. Only graphic design illustration.`;
 
-  console.log("Generated ENHANCED CONTEMPORARY prompt:", prompt);
+  console.log("Generated ULTRA-FORCEFUL CONTEMPORARY prompt:", prompt);
   return prompt;
 }
 
