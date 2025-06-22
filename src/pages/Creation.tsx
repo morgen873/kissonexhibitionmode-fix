@@ -1,18 +1,13 @@
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
-import { steps } from '@/data/creation';
-import { Loader2 } from 'lucide-react';
 import { useCreationForm } from '@/hooks/useCreationForm';
-import { useTransition } from '@/hooks/useTransition';
-import { introSteps } from "@/data/introSteps";
-import CreationContainer from '@/components/creation/CreationContainer';
-import IntroStepContent from '@/components/creation/IntroStepContent';
-import IntroNavigation from '@/components/creation/IntroNavigation';
-import CreationMainContent from '@/components/creation/CreationMainContent';
-import NavigationControls from '@/components/creation/NavigationControls';
-import RecipeResultScreen from '@/components/creation/RecipeResultScreen';
-import TransitionAnimation from '@/components/creation/TransitionAnimation';
+import { useCreationNavigation } from '@/hooks/useCreationNavigation';
+import { useCreationProgress } from '@/hooks/useCreationProgress';
+import { creationTheme } from '@/components/creation/CreationTheme';
+import { getCreationTitle, shouldShowTitle } from '@/components/creation/CreationTitleHandler';
+import CreationLayout from '@/components/creation/CreationLayout';
+import CreationContent from '@/components/creation/CreationContent';
 
 interface OutletContextType {
   setHeaderVisible: (visible: boolean) => void;
@@ -40,9 +35,32 @@ const Creation = () => {
     handleReset
   } = useCreationForm();
   
-  const { isTransitioning, transitionDirection, startTransition, completeTransition } = useTransition();
-  const [currentIntroStep, setCurrentIntroStep] = useState(0);
-  const [hasStartedCreation, setHasStartedCreation] = useState(false);
+  const {
+    currentIntroStep,
+    hasStartedCreation,
+    isTransitioning,
+    transitionDirection,
+    completeTransition,
+    handleIntroNext,
+    handleIntroPrev,
+    handleCreationNext,
+    handleCreationPrev,
+    handleCreationSubmit,
+    nextIntroStep,
+    prevIntroStep
+  } = useCreationNavigation({
+    nextCreationStep,
+    prevCreationStep,
+    handleSubmit
+  });
+
+  const { progress } = useCreationProgress({
+    currentIntroStep,
+    hasStartedCreation,
+    creationStep,
+    recipeResult
+  });
+
   const { setHeaderVisible } = useOutletContext<OutletContextType>() || {};
 
   useEffect(() => {
@@ -56,181 +74,56 @@ const Creation = () => {
     };
   }, [setHeaderVisible]);
 
-  // Transition handlers for intro steps
-  const handleIntroNext = () => {
-    startTransition('forward', () => {
-      if (currentIntroStep < introSteps.length - 1) {
-        setCurrentIntroStep(currentIntroStep + 1);
-      } else {
-        setHasStartedCreation(true);
-      }
-    });
-  };
+  const title = getCreationTitle({
+    hasStartedCreation,
+    currentIntroStep,
+    creationStepData
+  });
 
-  const handleIntroPrev = () => {
-    startTransition('backward', () => {
-      if (currentIntroStep > 0) {
-        setCurrentIntroStep(currentIntroStep - 1);
-      }
-    });
-  };
-
-  // Transition handlers for creation steps
-  const handleCreationNext = () => {
-    startTransition('forward', () => {
-      nextCreationStep();
-    });
-  };
-
-  const handleCreationPrev = () => {
-    startTransition('backward', () => {
-      prevCreationStep();
-    });
-  };
-
-  const handleCreationSubmit = () => {
-    startTransition('forward', () => {
-      handleSubmit();
-    });
-  };
-
-  // Regular non-transition handlers
-  const nextIntroStep = () => {
-    if (currentIntroStep < introSteps.length - 1) {
-      setCurrentIntroStep(currentIntroStep + 1);
-    } else {
-      setHasStartedCreation(true);
-    }
-  };
-
-  const prevIntroStep = () => {
-    if (currentIntroStep > 0) {
-      setCurrentIntroStep(currentIntroStep - 1);
-    }
-  };
-
-  // Calculate progress across the entire flow
-  const totalSteps = introSteps.length + steps.length;
-  let currentStepIndex;
-  if (!hasStartedCreation) {
-    currentStepIndex = currentIntroStep;
-  } else if (recipeResult) {
-    currentStepIndex = totalSteps;
-  } else {
-    currentStepIndex = introSteps.length + creationStep;
-  }
-  const progress = (currentStepIndex / totalSteps) * 100;
-
-  // Unified black and white theme
-  const theme = { 
-    bg: "from-black via-gray-900 to-black",
-    progress: "from-white to-gray-300",
-    cardShadow: "shadow-black/25",
-    title: "from-white to-gray-300",
-    optionSelectedBorder: "border-white",
-    optionSelectedShadow: "shadow-white/25",
-    optionHover: "hover:bg-white/10",
-    textAreaFocus: "focus:ring-white focus:border-white"
-  };
-
-  // Determine title and show title condition - Fixed to handle string arrays
-  const getTitle = (): string => {
-    if (!hasStartedCreation) {
-      const title = introSteps[currentIntroStep].title;
-      return Array.isArray(title) ? title.join(' ') : title;
-    }
-    return creationStepData.type === 'question' ? creationStepData.question : creationStepData.title;
-  };
-
-  // Only show title for non-quote intro steps and creation steps
-  const showTitle = !recipeResult && !isCreatingRecipe && (!hasStartedCreation ? introSteps[currentIntroStep].type !== 'quote' : true);
+  const showTitle = shouldShowTitle(recipeResult, isCreatingRecipe, hasStartedCreation, currentIntroStep);
 
   return (
-    <>
-      <CreationContainer
-        progress={progress}
-        theme={theme}
-        title={getTitle()}
-        showTitle={showTitle}
+    <CreationLayout
+      progress={progress}
+      theme={creationTheme}
+      title={title}
+      showTitle={showTitle}
+      hasStartedCreation={hasStartedCreation}
+      isTransitioning={isTransitioning}
+      transitionDirection={transitionDirection}
+      completeTransition={completeTransition}
+    >
+      <CreationContent
+        isCreatingRecipe={isCreatingRecipe}
+        recipeResult={recipeResult}
         hasStartedCreation={hasStartedCreation}
-      >
-        {isCreatingRecipe ? (
-          <div className="flex flex-col items-center justify-center h-64 space-y-4">
-            <Loader2 className="h-12 w-12 animate-spin text-white" />
-            <p className="text-lg font-semibold text-white/80 font-mono">Creating your recipe...</p>
-          </div>
-        ) : recipeResult ? (
-          <RecipeResultScreen recipe={recipeResult} onReset={handleReset} />
-        ) : (
-          <div className="transition-opacity duration-300">
-            {!hasStartedCreation ? (
-              <IntroStepContent 
-                step={introSteps[currentIntroStep]} 
-                onNext={nextIntroStep}
-              />
-            ) : (
-              <CreationMainContent
-                stepData={creationStepData}
-                answers={answers}
-                customAnswers={customAnswers}
-                controlValues={controlValues}
-                theme={theme}
-                onAnswerSelect={handleAnswerSelect}
-                onCustomAnswerChange={handleCustomAnswerChange}
-                onTemperatureChange={handleTemperatureChange}
-                onShapeChange={handleShapeChange}
-                onFlavorChange={handleFlavorChange}
-                onEnhancerChange={handleEnhancerChange}
-              />
-            )}
-            
-            {/* Navigation Controls */}
-            {!hasStartedCreation ? (
-              introSteps[currentIntroStep].type !== 'hero' && (
-                <IntroNavigation
-                  currentStep={currentIntroStep}
-                  totalSteps={4}
-                  onPrev={prevIntroStep}
-                  onNext={nextIntroStep}
-                  onTransitionPrev={handleIntroPrev}
-                  onTransitionNext={handleIntroNext}
-                  isFirstStep={currentIntroStep === 0}
-                  isLastStep={currentIntroStep === introSteps.length - 1}
-                  buttonText={introSteps[currentIntroStep].buttonText}
-                />
-              )
-            ) : (
-              <NavigationControls 
-                currentStep={creationStep} 
-                stepsLength={steps.length} 
-                prevStep={prevCreationStep} 
-                nextStep={nextCreationStep} 
-                handleSubmit={handleSubmit}
-                onTransitionNext={creationStep === steps.length - 1 ? handleCreationSubmit : handleCreationNext}
-                onTransitionPrev={handleCreationPrev}
-                isNextDisabled={isNextDisabled} 
-              />
-            )}
-          </div>
-        )}
-      </CreationContainer>
-
-      {/* Transition Animation Overlay */}
-      <TransitionAnimation
-        isVisible={isTransitioning}
-        direction={transitionDirection}
-        onComplete={completeTransition}
+        currentIntroStep={currentIntroStep}
+        creationStep={creationStep}
+        creationStepData={creationStepData}
+        answers={answers}
+        customAnswers={customAnswers}
+        controlValues={controlValues}
+        theme={creationTheme}
+        isNextDisabled={isNextDisabled}
+        onAnswerSelect={handleAnswerSelect}
+        onCustomAnswerChange={handleCustomAnswerChange}
+        onTemperatureChange={handleTemperatureChange}
+        onShapeChange={handleShapeChange}
+        onFlavorChange={handleFlavorChange}
+        onEnhancerChange={handleEnhancerChange}
+        nextIntroStep={nextIntroStep}
+        prevIntroStep={prevIntroStep}
+        prevCreationStep={prevCreationStep}
+        nextCreationStep={nextCreationStep}
+        handleSubmit={handleSubmit}
+        handleReset={handleReset}
+        handleIntroNext={handleIntroNext}
+        handleIntroPrev={handleIntroPrev}
+        handleCreationNext={handleCreationNext}
+        handleCreationPrev={handleCreationPrev}
+        handleCreationSubmit={handleCreationSubmit}
       />
-
-      {/* Footer for intro flow - made more compact */}
-      {!hasStartedCreation && (
-        <footer className="relative z-10 bg-black/50 text-white mt-6 w-full text-center border-t-2 border-white/20 py-3">
-          <p className="text-sm font-black font-mono">
-            A DESIGN PROJECT BY <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mx-1">OREN/LUPE</span>
-          </p>
-        </footer>
-      )}
-    </>
+    </CreationLayout>
   );
 };
 
