@@ -1,35 +1,34 @@
 
-// Enhanced color mapping for more dramatic visual effects
+// Enhanced color mapping for more direct color specification
 const ingredientColors: { [key: string]: { color: string; description: string; effect: string } } = {
-  'beetroot': { color: 'deep crimson red', description: 'vibrant red-purple hues', effect: 'flowing crimson energy streams' },
-  'beet': { color: 'deep crimson red', description: 'vibrant red-purple hues', effect: 'flowing crimson energy streams' },
-  'carrot': { color: 'bright orange', description: 'warm orange tones', effect: 'golden orange flame patterns' },
-  'spinach': { color: 'emerald green', description: 'rich green coloration', effect: 'emerald green energy veins' },
-  'green chili': { color: 'vibrant green', description: 'bright green accents', effect: 'electric green lightning effects' },
-  'chili': { color: 'fiery red', description: 'spicy red coloration', effect: 'fiery red plasma streams' },
-  'turmeric': { color: 'golden yellow', description: 'warm golden hues', effect: 'liquid gold flowing patterns' },
-  'saffron': { color: 'golden amber', description: 'luxurious golden tones', effect: 'amber light emanations' },
-  'purple cabbage': { color: 'deep purple', description: 'rich purple coloration', effect: 'royal purple energy waves' },
-  'red cabbage': { color: 'deep purple-red', description: 'burgundy-purple tones', effect: 'burgundy crystal formations' },
-  'tomato': { color: 'rich red', description: 'vibrant red coloration', effect: 'ruby red liquid effects' },
-  'bell pepper': { color: 'bright colored', description: 'colorful pepper tones', effect: 'rainbow energy cascades' },
-  'red pepper': { color: 'bright red', description: 'vivid red coloration', effect: 'scarlet flame tongues' },
-  'green pepper': { color: 'fresh green', description: 'bright green tones', effect: 'jade green aura' },
-  'yellow pepper': { color: 'sunny yellow', description: 'cheerful yellow hues', effect: 'solar yellow radiation' },
-  'kale': { color: 'dark green', description: 'deep leafy green', effect: 'forest green energy spirals' },
-  'chard': { color: 'rainbow colored', description: 'multicolored stems and leaves', effect: 'prismatic light refractions' },
-  'sweet potato': { color: 'warm orange', description: 'earthy orange tones', effect: 'sunset orange gradients' },
-  'pumpkin': { color: 'rich orange', description: 'autumn orange coloration', effect: 'harvest orange glow' },
-  'butternut squash': { color: 'golden orange', description: 'warm golden-orange hues', effect: 'molten gold streams' },
-  'corn': { color: 'bright yellow', description: 'sunny corn-yellow', effect: 'sunburst yellow rays' },
-  'blueberry': { color: 'deep blue-purple', description: 'rich blueberry tones', effect: 'sapphire blue energy orbs' },
-  'blackberry': { color: 'dark purple-black', description: 'deep berry coloration', effect: 'obsidian purple shadows' },
-  'cranberry': { color: 'tart red', description: 'bright cranberry red', effect: 'ruby crystal formations' },
-  'mushroom': { color: 'earthy brown', description: 'natural brown tones', effect: 'earth-tone energy patterns' },
-  'seaweed': { color: 'ocean green', description: 'sea-green coloration', effect: 'oceanic teal waves' },
-  'matcha': { color: 'vibrant green', description: 'ceremonial green tea color', effect: 'zen green energy flow' },
-  'cocoa': { color: 'rich brown', description: 'deep chocolate tones', effect: 'chocolate bronze swirls' },
-  'chocolate': { color: 'dark brown', description: 'luxurious chocolate coloration', effect: 'dark bronze liquid metal' }
+  'beetroot': { color: 'deep red', description: 'crimson red coloration', effect: 'red energy' },
+  'beet': { color: 'deep red', description: 'crimson red coloration', effect: 'red energy' },
+  'carrot': { color: 'bright orange', description: 'orange coloration', effect: 'orange glow' },
+  'spinach': { color: 'emerald green', description: 'green coloration', effect: 'green energy' },
+  'green chili': { color: 'bright green', description: 'green coloration', effect: 'green energy' },
+  'chili': { color: 'red', description: 'red coloration', effect: 'red energy' },
+  'turmeric': { color: 'golden yellow', description: 'yellow coloration', effect: 'golden glow' },
+  'saffron': { color: 'golden yellow', description: 'golden coloration', effect: 'golden energy' },
+  'purple cabbage': { color: 'deep purple', description: 'purple coloration', effect: 'purple energy' },
+  'red cabbage': { color: 'purple-red', description: 'purple-red coloration', effect: 'purple energy' },
+  'tomato': { color: 'red', description: 'red coloration', effect: 'red energy' },
+  'bell pepper': { color: 'colorful', description: 'multicolored', effect: 'rainbow energy' },
+  'red pepper': { color: 'red', description: 'red coloration', effect: 'red energy' },
+  'green pepper': { color: 'green', description: 'green coloration', effect: 'green energy' },
+  'yellow pepper': { color: 'yellow', description: 'yellow coloration', effect: 'yellow energy' },
+  'orange': { color: 'bright orange', description: 'orange coloration', effect: 'orange energy' },
+  'orange zest': { color: 'bright orange', description: 'orange coloration', effect: 'orange energy' },
+  'kale': { color: 'dark green', description: 'green coloration', effect: 'green energy' },
+  'chard': { color: 'multicolored', description: 'rainbow coloration', effect: 'rainbow energy' },
+  'sweet potato': { color: 'orange', description: 'orange coloration', effect: 'orange energy' },
+  'pumpkin': { color: 'orange', description: 'orange coloration', effect: 'orange energy' },
+  'corn': { color: 'yellow', description: 'yellow coloration', effect: 'yellow energy' },
+  'blueberry': { color: 'blue-purple', description: 'blue-purple coloration', effect: 'blue energy' },
+  'blackberry': { color: 'dark purple', description: 'purple coloration', effect: 'purple energy' },
+  'cranberry': { color: 'red', description: 'red coloration', effect: 'red energy' },
+  'matcha': { color: 'bright green', description: 'green coloration', effect: 'green energy' },
+  'cocoa': { color: 'brown', description: 'brown coloration', effect: 'brown energy' },
+  'chocolate': { color: 'dark brown', description: 'brown coloration', effect: 'brown energy' }
 };
 
 export function extractIngredientColors(ingredientsList: string[]): { 
@@ -41,8 +40,8 @@ export function extractIngredientColors(ingredientsList: string[]): {
   const descriptions: string[] = [];
   const effects: string[] = [];
   
-  console.log("=== ENHANCED INGREDIENT COLOR EXTRACTION ===");
-  console.log("Analyzing ingredients for dramatic color effects:", ingredientsList);
+  console.log("=== SIMPLIFIED COLOR EXTRACTION ===");
+  console.log("Analyzing ingredients for direct colors:", ingredientsList);
   
   ingredientsList.forEach(ingredient => {
     const lowerIngredient = ingredient.toLowerCase();
@@ -54,14 +53,21 @@ export function extractIngredientColors(ingredientsList: string[]): {
         colors.push(value.color);
         descriptions.push(value.description);
         effects.push(value.effect);
-        console.log(`✓ Found enhanced color match: ${ingredient} -> ${value.color} (${value.effect})`);
+        console.log(`✓ DIRECT color match: ${ingredient} -> ${value.color}`);
         break;
       }
     }
   });
   
+  // If no colors found, add a default but log it
+  if (colors.length === 0) {
+    console.log("❌ NO COLORS FOUND - this is the problem!");
+    console.log("Available ingredients:", ingredientsList);
+    console.log("Color mapping keys:", Object.keys(ingredientColors));
+  }
+  
   console.log("Final extracted colors:", colors);
-  console.log("Final color effects:", effects);
+  console.log("Colors found:", colors.length > 0 ? "✅" : "❌");
   
   return { colors, descriptions, effects };
 }

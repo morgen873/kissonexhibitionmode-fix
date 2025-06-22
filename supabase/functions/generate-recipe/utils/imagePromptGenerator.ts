@@ -15,44 +15,43 @@ interface ImagePromptParams {
 export function generateImagePrompt(params: ImagePromptParams): string {
   const { timelineTheme, emotionalContext, dumplingShape, flavor, ingredientsList, recipeTitle } = params;
   
-  console.log("=== FIXED IMAGE PROMPT GENERATION ===");
-  console.log("PRIORITY 1 - Timeline theme:", `"${timelineTheme}"`);
-  console.log("PRIORITY 2 - Emotional context:", `"${emotionalContext}"`);
-  console.log("PRIORITY 3 - Physical attributes:", { dumplingShape, flavor });
-  console.log("PRIORITY 4 - Ingredients for color:", ingredientsList);
-  console.log("PRIORITY 5 - Recipe title:", `"${recipeTitle}"`);
+  console.log("=== SIMPLIFIED IMAGE PROMPT GENERATION ===");
+  console.log("Timeline theme:", `"${timelineTheme}"`);
+  console.log("Dumpling shape:", dumplingShape);
+  console.log("Flavor:", flavor);
+  console.log("Ingredients list:", ingredientsList);
   
-  // Enhanced timeline classification - this is the MOST IMPORTANT factor
+  // Enhanced timeline classification
   const timelineLower = timelineTheme.toLowerCase();
   const isFuturistic = timelineLower.includes('future') || 
                        timelineLower.includes('distant') || 
                        timelineLower.includes('tomorrow') ||
                        timelineLower.includes('advanced') ||
                        timelineLower.includes('cyber') ||
-                       timelineLower.includes('space') ||
-                       timelineLower.includes('2050') ||
-                       timelineLower.includes('sci-fi') ||
-                       timelineLower.includes('tech');
+                       timelineLower.includes('space');
 
   const isHistorical = timelineLower.includes('ancient') || 
                        timelineLower.includes('past') || 
                        timelineLower.includes('medieval') ||
                        timelineLower.includes('traditional') ||
                        timelineLower.includes('old') ||
-                       timelineLower.includes('historic') ||
-                       timelineLower.includes('vintage') ||
-                       timelineLower.includes('classic');
+                       timelineLower.includes('historic');
 
-  console.log("Timeline classification results:");
+  console.log("Timeline classification:");
   console.log("- Is Futuristic:", isFuturistic);
   console.log("- Is Historical:", isHistorical);
-  console.log("- Timeline theme used:", `"${timelineTheme}"`);
   
-  // Extract enhanced colors and effects from ingredients
+  // Extract colors with detailed logging
   const { colors, descriptions, effects } = extractIngredientColors(ingredientsList);
   console.log("Color extraction results:");
   console.log("- Colors found:", colors);
-  console.log("- Visual effects:", effects);
+  console.log("- Number of colors:", colors.length);
+  
+  if (colors.length === 0) {
+    console.log("🚨 CRITICAL: NO COLORS EXTRACTED!");
+    console.log("This explains why dumplings are plain!");
+    console.log("Ingredient list was:", ingredientsList);
+  }
   
   const promptParams = {
     timelineTheme,
@@ -69,19 +68,19 @@ export function generateImagePrompt(params: ImagePromptParams): string {
   let finalPrompt = '';
   
   if (isFuturistic) {
-    console.log("🚀 Using FUTURISTIC prompt builder");
+    console.log("🚀 Using SIMPLIFIED FUTURISTIC prompt");
     finalPrompt = buildFuturisticPrompt(promptParams);
   } else if (isHistorical) {
-    console.log("🏛️ Using HISTORICAL prompt builder");
+    console.log("🏛️ Using SIMPLIFIED HISTORICAL prompt");
     finalPrompt = buildHistoricalPrompt(promptParams);
   } else {
-    console.log("🎨 Using CONTEMPORARY prompt builder");
+    console.log("🎨 Using SIMPLIFIED CONTEMPORARY prompt");
     finalPrompt = buildContemporaryPrompt(promptParams);
   }
   
-  console.log("=== FINAL PROMPT GENERATED ===");
-  console.log("Prompt builder used:", isFuturistic ? "FUTURISTIC" : isHistorical ? "HISTORICAL" : "CONTEMPORARY");
-  console.log("Final prompt length:", finalPrompt.length);
+  console.log("=== FINAL SIMPLIFIED PROMPT ===");
+  console.log("Prompt length:", finalPrompt.length);
+  console.log("Prompt:", finalPrompt);
   
   return finalPrompt;
 }
