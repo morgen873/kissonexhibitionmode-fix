@@ -12,58 +12,46 @@ interface PromptParams {
 }
 
 export function buildFuturisticPrompt(params: PromptParams): string {
-  const { dumplingShape, ingredientsList, colors } = params;
+  const { dumplingShape, colors, ingredientsList } = params;
   
-  // Build direct color specifications
-  let colorInstructions = '';
+  // Build vibrant color specifications
+  let colorSpec = 'vibrant neon colors';
   if (colors.length > 0) {
-    const primaryColors = colors.slice(0, 2);
-    colorInstructions = `The dumpling wrapper must be ${primaryColors.join(' and ')} colored. `;
+    colorSpec = `bright glowing ${colors.slice(0, 2).join(' and ')} colors`;
   }
   
-  // Key ingredients for color emphasis
-  const keyIngredients = ingredientsList.slice(0, 2);
-  
-  const prompt = `A single ${dumplingShape} dumpling on black background. ${colorInstructions}The dumpling has a translucent, glowing wrapper with visible ${keyIngredients.join(' and ')} creating bright color patterns inside. Futuristic holographic effects. Studio lighting. Professional food photography. Ultra-realistic. No text, no plates, no utensils.`;
+  const prompt = `A single artistic ${dumplingShape} dumpling with ${colorSpec} in a futuristic style. The dumpling wrapper is translucent and glowing with bright ${colors.join(', ')} hues. Holographic rainbow effects. Neon lighting. Digital art style. Ultra-vibrant colors. Black background. No text.`;
 
-  console.log("Generated SIMPLIFIED FUTURISTIC prompt:", prompt);
+  console.log("Generated VIBRANT FUTURISTIC prompt:", prompt);
   return prompt;
 }
 
 export function buildHistoricalPrompt(params: PromptParams): string {
-  const { dumplingShape, ingredientsList, colors } = params;
+  const { dumplingShape, colors, ingredientsList } = params;
   
-  // Build direct color specifications
-  let colorInstructions = '';
+  // Build vibrant color specifications
+  let colorSpec = 'rich earthy colors';
   if (colors.length > 0) {
-    const primaryColors = colors.slice(0, 2);
-    colorInstructions = `The dumpling wrapper is naturally colored ${primaryColors.join(' and ')} from the ingredients. `;
+    colorSpec = `deep ${colors.slice(0, 2).join(' and ')} colors`;
   }
   
-  // Key ingredients for color emphasis
-  const keyIngredients = ingredientsList.slice(0, 2);
-  
-  const prompt = `A single handmade ${dumplingShape} dumpling on black background. ${colorInstructions}Traditional preparation with ${keyIngredients.join(' and ')} naturally coloring the dough. Rustic, artisanal appearance. Warm lighting. Professional food photography. Ultra-realistic. No text, no plates, no utensils.`;
+  const prompt = `A single artistic ${dumplingShape} dumpling with ${colorSpec} in a traditional artistic style. The wrapper is beautifully colored with rich ${colors.join(', ')} tones. Hand-painted illustration style. Watercolor effect. Artistic rendering, not photorealistic. Black background. No text.`;
 
-  console.log("Generated SIMPLIFIED HISTORICAL prompt:", prompt);
+  console.log("Generated VIBRANT HISTORICAL prompt:", prompt);
   return prompt;
 }
 
 export function buildContemporaryPrompt(params: PromptParams): string {
-  const { dumplingShape, ingredientsList, colors } = params;
+  const { dumplingShape, colors, ingredientsList } = params;
   
-  // Build direct color specifications
-  let colorInstructions = '';
+  // Build vibrant color specifications
+  let colorSpec = 'bright artistic colors';
   if (colors.length > 0) {
-    const primaryColors = colors.slice(0, 2);
-    colorInstructions = `The dumpling wrapper is vibrant ${primaryColors.join(' and ')} colored. `;
+    colorSpec = `vivid ${colors.slice(0, 2).join(' and ')} colors`;
   }
   
-  // Key ingredients for color emphasis
-  const keyIngredients = ingredientsList.slice(0, 2);
-  
-  const prompt = `A single artisanal ${dumplingShape} dumpling on black background. ${colorInstructions}Modern culinary artistry with ${keyIngredients.join(' and ')} creating beautiful color effects in the wrapper. Contemporary food styling. Professional studio lighting. Ultra-realistic. No text, no plates, no utensils.`;
+  const prompt = `A single stylized ${dumplingShape} dumpling with ${colorSpec} in a modern artistic style. The wrapper features bold ${colors.join(', ')} coloring. Contemporary food art style. Artistic illustration, not realistic photography. Vibrant and colorful. Black background. No text.`;
 
-  console.log("Generated SIMPLIFIED CONTEMPORARY prompt:", prompt);
+  console.log("Generated VIBRANT CONTEMPORARY prompt:", prompt);
   return prompt;
 }

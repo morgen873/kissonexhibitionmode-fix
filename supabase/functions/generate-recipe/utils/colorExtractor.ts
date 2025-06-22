@@ -1,34 +1,41 @@
 
 // Enhanced color mapping for more direct color specification
 const ingredientColors: { [key: string]: { color: string; description: string; effect: string } } = {
-  'beetroot': { color: 'deep red', description: 'crimson red coloration', effect: 'red energy' },
-  'beet': { color: 'deep red', description: 'crimson red coloration', effect: 'red energy' },
-  'carrot': { color: 'bright orange', description: 'orange coloration', effect: 'orange glow' },
-  'spinach': { color: 'emerald green', description: 'green coloration', effect: 'green energy' },
-  'green chili': { color: 'bright green', description: 'green coloration', effect: 'green energy' },
-  'chili': { color: 'red', description: 'red coloration', effect: 'red energy' },
-  'turmeric': { color: 'golden yellow', description: 'yellow coloration', effect: 'golden glow' },
+  'beetroot': { color: 'bright magenta', description: 'vibrant magenta coloration', effect: 'magenta glow' },
+  'beet': { color: 'bright magenta', description: 'vibrant magenta coloration', effect: 'magenta glow' },
+  'carrot': { color: 'electric orange', description: 'bright orange coloration', effect: 'orange glow' },
+  'spinach': { color: 'electric green', description: 'vibrant green coloration', effect: 'green glow' },
+  'green chili': { color: 'lime green', description: 'bright green coloration', effect: 'green energy' },
+  'chili': { color: 'fire red', description: 'bright red coloration', effect: 'red glow' },
+  'turmeric': { color: 'electric yellow', description: 'bright yellow coloration', effect: 'golden glow' },
   'saffron': { color: 'golden yellow', description: 'golden coloration', effect: 'golden energy' },
-  'purple cabbage': { color: 'deep purple', description: 'purple coloration', effect: 'purple energy' },
-  'red cabbage': { color: 'purple-red', description: 'purple-red coloration', effect: 'purple energy' },
-  'tomato': { color: 'red', description: 'red coloration', effect: 'red energy' },
-  'bell pepper': { color: 'colorful', description: 'multicolored', effect: 'rainbow energy' },
-  'red pepper': { color: 'red', description: 'red coloration', effect: 'red energy' },
-  'green pepper': { color: 'green', description: 'green coloration', effect: 'green energy' },
-  'yellow pepper': { color: 'yellow', description: 'yellow coloration', effect: 'yellow energy' },
-  'orange': { color: 'bright orange', description: 'orange coloration', effect: 'orange energy' },
-  'orange zest': { color: 'bright orange', description: 'orange coloration', effect: 'orange energy' },
-  'kale': { color: 'dark green', description: 'green coloration', effect: 'green energy' },
-  'chard': { color: 'multicolored', description: 'rainbow coloration', effect: 'rainbow energy' },
-  'sweet potato': { color: 'orange', description: 'orange coloration', effect: 'orange energy' },
-  'pumpkin': { color: 'orange', description: 'orange coloration', effect: 'orange energy' },
-  'corn': { color: 'yellow', description: 'yellow coloration', effect: 'yellow energy' },
-  'blueberry': { color: 'blue-purple', description: 'blue-purple coloration', effect: 'blue energy' },
-  'blackberry': { color: 'dark purple', description: 'purple coloration', effect: 'purple energy' },
-  'cranberry': { color: 'red', description: 'red coloration', effect: 'red energy' },
-  'matcha': { color: 'bright green', description: 'green coloration', effect: 'green energy' },
-  'cocoa': { color: 'brown', description: 'brown coloration', effect: 'brown energy' },
-  'chocolate': { color: 'dark brown', description: 'brown coloration', effect: 'brown energy' }
+  'purple cabbage': { color: 'electric purple', description: 'vibrant purple coloration', effect: 'purple glow' },
+  'red cabbage': { color: 'bright purple', description: 'purple-red coloration', effect: 'purple energy' },
+  'tomato': { color: 'bright red', description: 'vivid red coloration', effect: 'red energy' },
+  'bell pepper': { color: 'rainbow', description: 'multicolored', effect: 'rainbow energy' },
+  'red pepper': { color: 'fire red', description: 'bright red coloration', effect: 'red energy' },
+  'green pepper': { color: 'lime green', description: 'bright green coloration', effect: 'green energy' },
+  'yellow pepper': { color: 'electric yellow', description: 'bright yellow coloration', effect: 'yellow energy' },
+  'orange': { color: 'electric orange', description: 'bright orange coloration', effect: 'orange energy' },
+  'orange zest': { color: 'electric orange', description: 'bright orange coloration', effect: 'orange energy' },
+  'kale': { color: 'forest green', description: 'deep green coloration', effect: 'green energy' },
+  'chard': { color: 'rainbow', description: 'multicolored', effect: 'rainbow energy' },
+  'sweet potato': { color: 'burnt orange', description: 'orange coloration', effect: 'orange energy' },
+  'pumpkin': { color: 'bright orange', description: 'orange coloration', effect: 'orange energy' },
+  'corn': { color: 'golden yellow', description: 'yellow coloration', effect: 'yellow energy' },
+  'blueberry': { color: 'electric blue', description: 'bright blue coloration', effect: 'blue energy' },
+  'blackberry': { color: 'deep purple', description: 'purple coloration', effect: 'purple energy' },
+  'cranberry': { color: 'crimson red', description: 'red coloration', effect: 'red energy' },
+  'matcha': { color: 'electric green', description: 'bright green coloration', effect: 'green energy' },
+  'cocoa': { color: 'rich brown', description: 'brown coloration', effect: 'brown energy' },
+  'chocolate': { color: 'dark brown', description: 'brown coloration', effect: 'brown energy' },
+  // Add more vibrant interpretations
+  'black': { color: 'deep black', description: 'black coloration', effect: 'black energy' },
+  'white': { color: 'pure white', description: 'white coloration', effect: 'white glow' },
+  'pink': { color: 'hot pink', description: 'pink coloration', effect: 'pink energy' },
+  'blue': { color: 'electric blue', description: 'blue coloration', effect: 'blue glow' },
+  'violet': { color: 'electric violet', description: 'violet coloration', effect: 'violet energy' },
+  'indigo': { color: 'deep indigo', description: 'indigo coloration', effect: 'indigo energy' }
 };
 
 export function extractIngredientColors(ingredientsList: string[]): { 
@@ -40,8 +47,8 @@ export function extractIngredientColors(ingredientsList: string[]): {
   const descriptions: string[] = [];
   const effects: string[] = [];
   
-  console.log("=== SIMPLIFIED COLOR EXTRACTION ===");
-  console.log("Analyzing ingredients for direct colors:", ingredientsList);
+  console.log("=== ENHANCED COLOR EXTRACTION FOR VIBRANT DUMPLINGS ===");
+  console.log("Analyzing ingredients for vibrant colors:", ingredientsList);
   
   ingredientsList.forEach(ingredient => {
     const lowerIngredient = ingredient.toLowerCase();
@@ -53,20 +60,22 @@ export function extractIngredientColors(ingredientsList: string[]): {
         colors.push(value.color);
         descriptions.push(value.description);
         effects.push(value.effect);
-        console.log(`✓ DIRECT color match: ${ingredient} -> ${value.color}`);
+        console.log(`✓ VIBRANT color match: ${ingredient} -> ${value.color}`);
         break;
       }
     }
   });
   
-  // If no colors found, add a default but log it
+  // If no colors found, add default vibrant colors to ensure we get colorful dumplings
   if (colors.length === 0) {
-    console.log("❌ NO COLORS FOUND - this is the problem!");
-    console.log("Available ingredients:", ingredientsList);
-    console.log("Color mapping keys:", Object.keys(ingredientColors));
+    console.log("❌ NO COLORS FOUND - adding default vibrant colors!");
+    colors.push('rainbow', 'electric blue', 'bright pink');
+    descriptions.push('rainbow coloration', 'blue coloration', 'pink coloration');
+    effects.push('rainbow energy', 'blue glow', 'pink energy');
+    console.log("Added default vibrant colors:", colors);
   }
   
-  console.log("Final extracted colors:", colors);
+  console.log("Final vibrant colors:", colors);
   console.log("Colors found:", colors.length > 0 ? "✅" : "❌");
   
   return { colors, descriptions, effects };
