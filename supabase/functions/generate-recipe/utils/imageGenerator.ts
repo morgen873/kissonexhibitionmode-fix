@@ -1,7 +1,6 @@
 
 import OpenAI from 'https://esm.sh/openai@4.24.1'
 import { extractIngredientColors } from './colorExtractor.ts'
-import { buildFuturisticPrompt, buildHistoricalPrompt, buildContemporaryPrompt } from './promptBuilders.ts'
 import { extractIngredientsList } from './ingredientParser.ts'
 import { uploadImageToSupabase } from './imageUploader.ts'
 
@@ -28,49 +27,13 @@ export async function generateAndUploadRecipeImage(
   supabaseAdmin: ReturnType<typeof createClient>
 ): Promise<string> {
   try {
-    console.log("=== ARTISTIC STYLE IMAGE GENERATION ===");
+    console.log("=== UNIFIED IMAGE GENERATION WITH SAME INSTRUCTIONS AS RECIPE ===");
     
-    // Extract timeline theme from original user input
-    const timelineValues = Object.values(payload.timeline);
-    const timelineTheme = timelineValues.length > 0 ? timelineValues[0] : 'present day';
-    console.log("✓ Timeline theme:", `"${timelineTheme}"`);
+    // Use the EXACT SAME prompt structure as the recipe generator
+    const imagePrompt = generateUnifiedImagePrompt(payload, savedRecipe);
     
-    // Extract emotional context from original user input
-    const questionValues = Object.values(payload.questions);
-    const emotionalContext = questionValues.length > 0 ? questionValues.join(', ') : 'comfort and warmth';
-    console.log("✓ Emotional context:", `"${emotionalContext}"`);
-    
-    // Extract controls from original user input
-    const controlValues = Object.values(payload.controls);
-    const controls = controlValues.length > 0 ? controlValues[0] : {
-      shape: 'classic',
-      flavor: 'mild',
-      temperature: 180,
-      enhancer: ''
-    };
-    console.log("✓ Controls from user:", controls);
-    
-    // Extract ingredients from SAVED RECIPE DATA
-    console.log("=== EXTRACTING INGREDIENTS FROM SAVED RECIPE ===");
-    const recipeIngredients = extractIngredientsList(savedRecipe.ingredients);
-    console.log("✓ Ingredients extracted from SAVED RECIPE:", recipeIngredients);
-    
-    // Use saved recipe ingredients as the source of truth
-    const finalIngredients = recipeIngredients.length > 0 ? recipeIngredients : ['colorful vegetables'];
-    console.log("✓ FINAL ingredients for image generation:", finalIngredients);
-    
-    // Generate image prompt with ARTISTIC STYLE FOCUS
-    const imagePrompt = generateArtisticImagePrompt({
-      timelineTheme: timelineTheme,
-      emotionalContext: emotionalContext,
-      dumplingShape: controls.shape,
-      flavor: controls.flavor,
-      ingredientsList: finalIngredients,
-      recipeTitle: savedRecipe.title
-    });
-    
-    console.log("=== SENDING ARTISTIC PROMPT TO DALL-E ===");
-    console.log("Final artistic prompt:", imagePrompt);
+    console.log("=== SENDING UNIFIED PROMPT TO DALL-E ===");
+    console.log("Unified image prompt:", imagePrompt);
     
     const imageResponse = await openai.images.generate({
       model: 'dall-e-3',
@@ -78,101 +41,76 @@ export async function generateAndUploadRecipeImage(
       n: 1,
       size: '1024x1024',
       response_format: 'b64_json',
-      style: 'vivid',  // Use 'vivid' style for more artistic results
+      style: 'vivid',
       quality: 'hd',
     });
     
-    console.log("✅ DALL-E response received for artistic image");
+    console.log("✅ DALL-E response received for unified image");
     const imageB64 = imageResponse.data[0].b64_json;
     
     // Upload to Supabase
     if (imageB64) {
       const imageUrl = await uploadImageToSupabase(imageB64, recipeId, supabaseAdmin);
       if (imageUrl) {
-        console.log("✅ Artistic image uploaded successfully:", imageUrl);
+        console.log("✅ Unified image uploaded successfully:", imageUrl);
         return imageUrl;
       }
     }
     
     return '/placeholder.svg';
   } catch (error) {
-    console.error("❌ Error in artistic image generation:", error);
+    console.error("❌ Error in unified image generation:", error);
     return '/placeholder.svg';
   }
 }
 
-function generateArtisticImagePrompt(params: {
-  timelineTheme: string;
-  emotionalContext: string;
-  dumplingShape: string;
-  flavor: string;
-  ingredientsList: string[];
-  recipeTitle: string;
-}): string {
-  const { timelineTheme, emotionalContext, dumplingShape, flavor, ingredientsList, recipeTitle } = params;
+function generateUnifiedImagePrompt(payload: RecipePayload, savedRecipe: SavedRecipe): string {
+  console.log("=== GENERATING UNIFIED PROMPT (SAME AS RECIPE GENERATOR) ===");
   
-  console.log("=== ARTISTIC PROMPT GENERATION WITH SPECIFIC STYLE ===");
-  console.log("Timeline theme:", `"${timelineTheme}"`);
-  console.log("Dumpling shape:", dumplingShape);
-  console.log("Ingredients from saved recipe:", ingredientsList);
-  
-  // Enhanced timeline classification
+  // Use the EXACT SAME instruction structure as the recipe generator
+  const basePrompt = `
+    You are a creative chef specializing in "Memory KissOn" dumplings. A user has provided the following inputs to create a unique recipe.
+    Your task is to generate a dumpling IMAGE that meticulously incorporates all the user's choices.
+
+    User Inputs:
+    - Questions & Answers: ${JSON.stringify(payload.questions, null, 2)}
+    - Timeline selection: ${JSON.stringify(payload.timeline, null, 2)}
+    - Control settings: ${JSON.stringify(payload.controls, null, 2)}
+
+    **Crucial Instructions:**
+    The "Timeline selection" is the most important input. It defines the entire theme of the dumpling.
+    - If the timeline is futuristic (e.g., "Distant Future"), the dumpling must be avant-garde and futuristic looking. Use experimental visual elements like holographic effects, neon colors, or sci-fi aesthetics. The appearance should look futuristic.
+    - If the timeline is historical (e.g., "Ancient Past"), the dumpling must look traditional, using visual elements authentic to that period.
+    - All other inputs (questions, controls) should be interpreted through the lens of the selected timeline. For example, a "spicy" flavor in a futuristic context might be visualized with glowing red elements, while in a historical context it would be represented with traditional spice colors.
+
+    Generated Recipe Details:
+    - Title: "${savedRecipe.title}"
+    - Description: "${savedRecipe.description}"
+    - Ingredients: ${JSON.stringify(savedRecipe.ingredients, null, 2)}
+
+    Create a vibrant artistic illustration of this dumpling that matches the recipe title "${savedRecipe.title}" and timeline theme. The image should be stylized digital art, not realistic food photography. Use bright, saturated colors and artistic rendering that reflects both the timeline theme and the emotional context of the user's answers.
+  `;
+
+  // Extract timeline theme for additional specific styling
+  const timelineValues = Object.values(payload.timeline);
+  const timelineTheme = timelineValues.length > 0 ? timelineValues[0] : 'present day';
   const timelineLower = timelineTheme.toLowerCase();
-  const isFuturistic = timelineLower.includes('future') || 
-                       timelineLower.includes('distant') || 
-                       timelineLower.includes('tomorrow') ||
-                       timelineLower.includes('advanced') ||
-                       timelineLower.includes('cyber') ||
-                       timelineLower.includes('space');
-
-  const isHistorical = timelineLower.includes('ancient') || 
-                       timelineLower.includes('past') || 
-                       timelineLower.includes('medieval') ||
-                       timelineLower.includes('traditional') ||
-                       timelineLower.includes('old') ||
-                       timelineLower.includes('historic');
-
-  console.log("Timeline classification:");
-  console.log("- Is Futuristic:", isFuturistic);
-  console.log("- Is Historical:", isHistorical);
   
-  // Extract colors from saved recipe ingredients
-  const { colors, descriptions, effects } = extractIngredientColors(ingredientsList);
-  console.log("Color extraction from saved recipe:");
-  console.log("- Colors found:", colors);
-  console.log("- Number of colors:", colors.length);
-  
-  const promptParams = {
-    timelineTheme,
-    emotionalContext,
-    dumplingShape,
-    flavor,
-    ingredientsList,
-    recipeTitle,
-    colors,
-    descriptions,
-    effects
-  };
-
-  let finalPrompt = '';
-  
-  if (isFuturistic) {
-    console.log("🚀 Using SPECIFIC FUTURISTIC artistic prompt");
-    finalPrompt = buildFuturisticPrompt(promptParams);
-  } else if (isHistorical) {
-    console.log("🏛️ Using SPECIFIC HISTORICAL artistic prompt");
-    finalPrompt = buildHistoricalPrompt(promptParams);
+  let styleAddition = '';
+  if (timelineLower.includes('future') || timelineLower.includes('distant')) {
+    styleAddition = " FUTURISTIC STYLE: Holographic effects, neon lighting, metallic surfaces, translucent materials, and sci-fi aesthetics. Glowing edges and digital art style.";
+  } else if (timelineLower.includes('ancient') || timelineLower.includes('past')) {
+    styleAddition = " HISTORICAL STYLE: Traditional artistic techniques, classic color palettes, and period-appropriate visual elements. Watercolor or classical painting style.";
   } else {
-    console.log("🎨 Using SPECIFIC CONTEMPORARY artistic prompt");
-    finalPrompt = buildContemporaryPrompt(promptParams);
+    styleAddition = " CONTEMPORARY STYLE: Modern digital art with clean lines, vibrant colors, and contemporary design elements.";
   }
-  
-  // Add VERY EXPLICIT artistic style requirements
-  finalPrompt = finalPrompt + " CRITICAL REQUIREMENTS: This MUST be a stylized artistic illustration with vibrant colors and smooth gradients, similar to digital artwork or cartoon illustration. ABSOLUTELY NO realistic food photography. ABSOLUTELY NO photorealistic textures. Pure artistic style only.";
-  
-  console.log("=== FINAL ARTISTIC PROMPT WITH EXPLICIT STYLE ===");
-  console.log("Prompt length:", finalPrompt.length);
-  console.log("Prompt:", finalPrompt);
+
+  const finalPrompt = basePrompt + styleAddition + " Black background. Pure artistic illustration style, NOT realistic food photography.";
+
+  console.log("=== UNIFIED PROMPT GENERATED ===");
+  console.log("Timeline theme extracted:", timelineTheme);
+  console.log("Recipe title:", savedRecipe.title);
+  console.log("Final unified prompt length:", finalPrompt.length);
   
   return finalPrompt;
 }
