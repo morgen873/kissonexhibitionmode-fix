@@ -47,54 +47,36 @@ export function extractIngredientColors(ingredientsList: string[]): {
   const descriptions: string[] = [];
   const effects: string[] = [];
   
-  console.log("=== FIXED COLOR EXTRACTION FOR BEETROOT ===");
-  console.log("Analyzing ingredients for colors:", ingredientsList);
+  console.log("=== COLOR EXTRACTION FROM SAVED RECIPE INGREDIENTS ===");
+  console.log("Analyzing saved recipe ingredients for colors:", ingredientsList);
   
-  // DIRECT CHECK: If we have beetroot, add it immediately
-  const hasBeetroot = ingredientsList.some(ingredient => 
-    ingredient.toLowerCase().includes('beetroot') || 
-    ingredient.toLowerCase().includes('beet')
-  );
-  
-  if (hasBeetroot) {
-    console.log("🎯 BEETROOT DETECTED - Adding bright magenta color!");
-    colors.push('bright magenta');
-    descriptions.push('vibrant magenta coloration from beetroot');
-    effects.push('magenta glow');
-  }
-  
-  // Then check for other ingredients
+  // Check each ingredient from the saved recipe
   ingredientsList.forEach(ingredient => {
     const lowerIngredient = ingredient.toLowerCase();
-    console.log(`Checking ingredient: "${ingredient}"`);
+    console.log(`Checking saved recipe ingredient: "${ingredient}"`);
     
-    // Skip beetroot since we already handled it above
-    if (lowerIngredient.includes('beetroot') || lowerIngredient.includes('beet')) {
-      return;
-    }
-    
-    // Check for other matches
+    // Check for matches with our color mapping
     for (const [key, value] of Object.entries(ingredientColors)) {
       if (lowerIngredient.includes(key)) {
         colors.push(value.color);
         descriptions.push(value.description);
         effects.push(value.effect);
-        console.log(`✓ Color match: ${ingredient} -> ${value.color}`);
+        console.log(`✓ Color match from saved recipe: ${ingredient} -> ${value.color}`);
         break;
       }
     }
   });
   
-  // If still no colors found, add default vibrant colors
+  // If no colors found from saved recipe ingredients, add default vibrant colors
   if (colors.length === 0) {
-    console.log("❌ NO COLORS FOUND - adding default vibrant colors!");
+    console.log("❌ NO COLORS FOUND from saved recipe - adding default vibrant colors!");
     colors.push('rainbow', 'electric blue', 'bright pink');
     descriptions.push('rainbow coloration', 'blue coloration', 'pink coloration');
     effects.push('rainbow energy', 'blue glow', 'pink energy');
     console.log("Added default vibrant colors:", colors);
   }
   
-  console.log("Final colors extracted:", colors);
+  console.log("Final colors extracted from saved recipe:", colors);
   console.log("Total colors found:", colors.length);
   
   return { colors, descriptions, effects };

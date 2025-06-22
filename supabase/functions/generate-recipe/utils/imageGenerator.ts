@@ -2,6 +2,7 @@
 import OpenAI from 'https://esm.sh/openai@4.24.1'
 import { extractIngredientColors } from './colorExtractor.ts'
 import { buildFuturisticPrompt, buildHistoricalPrompt, buildContemporaryPrompt } from './promptBuilders.ts'
+import { extractIngredientsList } from './ingredientParser.ts'
 
 interface RecipePayload {
   questions: { [key: string]: string };
@@ -26,7 +27,7 @@ export async function generateAndUploadRecipeImage(
   supabaseAdmin: ReturnType<typeof createClient>
 ): Promise<string> {
   try {
-    console.log("=== FIXED IMAGE GENERATION FLOW ===");
+    console.log("=== IMAGE GENERATION FROM SAVED RECIPE DATA ===");
     
     // Extract timeline theme from original user input
     const timelineValues = Object.values(payload.timeline);
@@ -48,27 +49,20 @@ export async function generateAndUploadRecipeImage(
     };
     console.log("✓ Controls from user:", controls);
     
-    // CRITICAL FIX: Extract ingredients DIRECTLY from enhancer field
-    console.log("=== DIRECT INGREDIENT EXTRACTION FROM ENHANCER ===");
-    const directIngredients: string[] = [];
+    // CRITICAL FIX: Extract ingredients from SAVED RECIPE DATA, not user input
+    console.log("=== EXTRACTING INGREDIENTS FROM SAVED RECIPE ===");
+    console.log("Saved recipe ingredients structure:", JSON.stringify(savedRecipe.ingredients, null, 2));
     
-    if (controls.enhancer && controls.enhancer.trim() !== '') {
-      // Split enhancer by common separators and clean up
-      const enhancerParts = controls.enhancer.split(/[,&+\s]+/).filter(part => part.trim().length > 2);
-      enhancerParts.forEach(part => {
-        const cleanPart = part.trim().toLowerCase();
-        directIngredients.push(cleanPart);
-      });
-    }
+    // Use the ingredient parser to extract from the saved recipe data
+    const recipeIngredients = extractIngredientsList(savedRecipe.ingredients);
+    console.log("✓ Ingredients extracted from SAVED RECIPE:", recipeIngredients);
+    console.log("✓ Number of ingredients from saved recipe:", recipeIngredients.length);
     
-    console.log("✓ DIRECT ingredients from enhancer:", directIngredients);
-    console.log("✓ Number of direct ingredients:", directIngredients.length);
+    // Use saved recipe ingredients as the source of truth
+    const finalIngredients = recipeIngredients.length > 0 ? recipeIngredients : ['colorful vegetables'];
+    console.log("✓ FINAL ingredients for image generation:", finalIngredients);
     
-    // Use direct ingredients as primary source
-    const finalIngredients = directIngredients.length > 0 ? directIngredients : ['beetroot', 'colorful vegetables'];
-    console.log("✓ FINAL ingredients for color extraction:", finalIngredients);
-    
-    // Generate image prompt with enhanced data
+    // Generate image prompt with data from saved recipe
     const imagePrompt = generateImagePrompt({
       timelineTheme: timelineTheme,
       emotionalContext: emotionalContext,
@@ -78,9 +72,9 @@ export async function generateAndUploadRecipeImage(
       recipeTitle: savedRecipe.title
     });
     
-    console.log("=== SENDING TO DALL-E WITH DIRECT INGREDIENT DATA ===");
+    console.log("=== SENDING TO DALL-E WITH SAVED RECIPE DATA ===");
     console.log("Final prompt:", imagePrompt);
-    console.log("Direct ingredients used:", finalIngredients);
+    console.log("Ingredients used from saved recipe:", finalIngredients);
     
     const imageResponse = await openai.images.generate({
       model: 'dall-e-3',
@@ -121,10 +115,10 @@ function generateImagePrompt(params: {
 }): string {
   const { timelineTheme, emotionalContext, dumplingShape, flavor, ingredientsList, recipeTitle } = params;
   
-  console.log("=== SIMPLIFIED IMAGE PROMPT GENERATION ===");
+  console.log("=== IMAGE PROMPT FROM SAVED RECIPE DATA ===");
   console.log("Timeline theme:", `"${timelineTheme}"`);
   console.log("Dumpling shape:", dumplingShape);
-  console.log("Ingredients list:", ingredientsList);
+  console.log("Ingredients from saved recipe:", ingredientsList);
   
   // Enhanced timeline classification
   const timelineLower = timelineTheme.toLowerCase();
@@ -146,9 +140,9 @@ function generateImagePrompt(params: {
   console.log("- Is Futuristic:", isFuturistic);
   console.log("- Is Historical:", isHistorical);
   
-  // Extract colors with enhanced vibrant mapping
+  // Extract colors from saved recipe ingredients
   const { colors, descriptions, effects } = extractIngredientColors(ingredientsList);
-  console.log("FIXED color extraction results:");
+  console.log("Color extraction from saved recipe:");
   console.log("- Colors found:", colors);
   console.log("- Number of colors:", colors.length);
   
@@ -167,20 +161,20 @@ function generateImagePrompt(params: {
   let finalPrompt = '';
   
   if (isFuturistic) {
-    console.log("🚀 Using FIXED FUTURISTIC prompt");
+    console.log("🚀 Using FUTURISTIC prompt with saved recipe data");
     finalPrompt = buildFuturisticPrompt(promptParams);
   } else if (isHistorical) {
-    console.log("🏛️ Using FIXED HISTORICAL prompt");
+    console.log("🏛️ Using HISTORICAL prompt with saved recipe data");
     finalPrompt = buildHistoricalPrompt(promptParams);
   } else {
-    console.log("🎨 Using FIXED CONTEMPORARY prompt");
+    console.log("🎨 Using CONTEMPORARY prompt with saved recipe data");
     finalPrompt = buildContemporaryPrompt(promptParams);
   }
   
   // Add explicit artistic style instructions
   finalPrompt = finalPrompt + " IMPORTANT: This should be an artistic illustration or digital art, NOT realistic food photography. Stylized and colorful like the provided reference images.";
   
-  console.log("=== FINAL FIXED PROMPT ===");
+  console.log("=== FINAL PROMPT FROM SAVED RECIPE ===");
   console.log("Prompt length:", finalPrompt.length);
   console.log("Prompt:", finalPrompt);
   
