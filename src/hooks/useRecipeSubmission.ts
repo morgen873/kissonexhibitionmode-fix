@@ -17,14 +17,15 @@ export const useRecipeSubmission = () => {
         const questionAnswers: { [key:string]: string } = {};
         const timelineAnswers: { [key: string]: string } = {};
 
-        // Process answers with better debugging
-        console.log("Processing answers:", answers);
-        console.log("Processing custom answers:", customAnswers);
-        console.log("Processing control values:", controlValues);
+        console.log("=== FRONTEND DATA PROCESSING DEBUG ===");
+        console.log("Raw answers received:", answers);
+        console.log("Raw custom answers received:", customAnswers);
+        console.log("Raw control values received:", controlValues);
 
+        // Process answers with enhanced debugging
         Object.entries(answers).forEach(([stepId, answer]) => {
             const step = steps.find(s => 'id' in s && s.id === Number(stepId));
-            console.log(`Step ${stepId}:`, step, "Answer:", answer);
+            console.log(`Processing step ${stepId}:`, step?.type, "Answer:", `"${answer}"`);
             
             if (step) {
                 if (step.type === 'question') {
@@ -32,36 +33,41 @@ export const useRecipeSubmission = () => {
                     if (questionStep.customOption && answer === questionStep.customOption.title) {
                         const customAnswer = customAnswers[Number(stepId)];
                         questionAnswers[stepId] = customAnswer || '';
-                        console.log(`Using custom answer for step ${stepId}:`, customAnswer);
+                        console.log(`✓ Using custom answer for question step ${stepId}:`, `"${customAnswer}"`);
                     } else {
                         questionAnswers[stepId] = answer;
-                        console.log(`Using regular answer for step ${stepId}:`, answer);
+                        console.log(`✓ Using regular answer for question step ${stepId}:`, `"${answer}"`);
                     }
                 } else if (step.type === 'timeline') {
                     timelineAnswers[stepId] = answer;
-                    console.log(`Timeline answer for step ${stepId}:`, answer);
+                    console.log(`✓ Timeline answer for step ${stepId}:`, `"${answer}"`);
                 }
+            } else {
+                console.warn(`⚠️ No step found for stepId ${stepId}`);
             }
         });
 
-        // Ensure we have all the required data before submitting
+        // Enhanced validation with specific feedback
         const hasQuestionAnswers = Object.keys(questionAnswers).length > 0;
         const hasTimelineAnswers = Object.keys(timelineAnswers).length > 0;
         const hasControlValues = Object.keys(controlValues).length > 0;
 
-        console.log("Data validation:");
-        console.log("- Has question answers:", hasQuestionAnswers, questionAnswers);
-        console.log("- Has timeline answers:", hasTimelineAnswers, timelineAnswers);
-        console.log("- Has control values:", hasControlValues, controlValues);
+        console.log("=== DATA VALIDATION RESULTS ===");
+        console.log("✓ Question answers:", hasQuestionAnswers ? "PRESENT" : "MISSING");
+        console.log("  Question answers object:", questionAnswers);
+        console.log("✓ Timeline answers:", hasTimelineAnswers ? "PRESENT" : "MISSING");
+        console.log("  Timeline answers object:", timelineAnswers);
+        console.log("✓ Control values:", hasControlValues ? "PRESENT" : "MISSING");
+        console.log("  Control values object:", controlValues);
 
         if (!hasQuestionAnswers) {
-            console.error("Missing question answers!");
+            console.error("❌ Missing question answers!");
         }
         if (!hasTimelineAnswers) {
-            console.error("Missing timeline answers!");
+            console.error("❌ Missing timeline answers!");
         }
         if (!hasControlValues) {
-            console.error("Missing control values!");
+            console.error("❌ Missing control values!");
         }
 
         const finalPayload = {
@@ -70,7 +76,9 @@ export const useRecipeSubmission = () => {
             controls: controlValues,
         };
 
-        console.log("Final payload being sent:", JSON.stringify(finalPayload, null, 2));
+        console.log("=== FINAL PAYLOAD TO BACKEND ===");
+        console.log(JSON.stringify(finalPayload, null, 2));
+        console.log("================================");
         
         try {
             const { data, error } = await supabase.functions.invoke('generate-recipe', {
@@ -88,7 +96,8 @@ export const useRecipeSubmission = () => {
                 throw new Error("Recipe generation failed. The function did not return a recipe.");
             }
 
-            console.log("Recipe received:", newRecipe);
+            console.log("=== RECIPE GENERATION COMPLETE ===");
+            console.log("Recipe received:", newRecipe.title);
             console.log("Recipe image URL:", newRecipe.image_url);
 
             // Create simple QR data with just the recipe URL
