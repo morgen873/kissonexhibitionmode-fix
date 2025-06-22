@@ -47,26 +47,45 @@ export function extractIngredientColors(ingredientsList: string[]): {
   const descriptions: string[] = [];
   const effects: string[] = [];
   
-  console.log("=== ENHANCED COLOR EXTRACTION FOR VIBRANT DUMPLINGS ===");
-  console.log("Analyzing ingredients for vibrant colors:", ingredientsList);
+  console.log("=== FIXED COLOR EXTRACTION FOR BEETROOT ===");
+  console.log("Analyzing ingredients for colors:", ingredientsList);
   
+  // DIRECT CHECK: If we have beetroot, add it immediately
+  const hasBeetroot = ingredientsList.some(ingredient => 
+    ingredient.toLowerCase().includes('beetroot') || 
+    ingredient.toLowerCase().includes('beet')
+  );
+  
+  if (hasBeetroot) {
+    console.log("🎯 BEETROOT DETECTED - Adding bright magenta color!");
+    colors.push('bright magenta');
+    descriptions.push('vibrant magenta coloration from beetroot');
+    effects.push('magenta glow');
+  }
+  
+  // Then check for other ingredients
   ingredientsList.forEach(ingredient => {
     const lowerIngredient = ingredient.toLowerCase();
     console.log(`Checking ingredient: "${ingredient}"`);
     
-    // Check for direct matches first
+    // Skip beetroot since we already handled it above
+    if (lowerIngredient.includes('beetroot') || lowerIngredient.includes('beet')) {
+      return;
+    }
+    
+    // Check for other matches
     for (const [key, value] of Object.entries(ingredientColors)) {
       if (lowerIngredient.includes(key)) {
         colors.push(value.color);
         descriptions.push(value.description);
         effects.push(value.effect);
-        console.log(`✓ VIBRANT color match: ${ingredient} -> ${value.color}`);
+        console.log(`✓ Color match: ${ingredient} -> ${value.color}`);
         break;
       }
     }
   });
   
-  // If no colors found, add default vibrant colors to ensure we get colorful dumplings
+  // If still no colors found, add default vibrant colors
   if (colors.length === 0) {
     console.log("❌ NO COLORS FOUND - adding default vibrant colors!");
     colors.push('rainbow', 'electric blue', 'bright pink');
@@ -75,8 +94,8 @@ export function extractIngredientColors(ingredientsList: string[]): {
     console.log("Added default vibrant colors:", colors);
   }
   
-  console.log("Final vibrant colors:", colors);
-  console.log("Colors found:", colors.length > 0 ? "✅" : "❌");
+  console.log("Final colors extracted:", colors);
+  console.log("Total colors found:", colors.length);
   
   return { colors, descriptions, effects };
 }
