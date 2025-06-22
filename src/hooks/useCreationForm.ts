@@ -1,50 +1,31 @@
 
 import { useMemo } from 'react';
-import { steps } from '@/data/creation';
-import { useFormState } from './useFormState';
-import { useAnswerHandlers } from './useAnswerHandlers';
+import { useCreationSteps } from './useCreationSteps';
+import { useCreationAnswers } from './useCreationAnswers';
 import { useRecipeSubmission } from './useRecipeSubmission';
-import { useControlsInitialization } from './useControlsInitialization';
 import { isNextDisabled } from '@/utils/formValidation';
 
 export const useCreationForm = () => {
     const {
         currentStep,
+        currentStepData,
+        nextStep,
+        prevStep,
+        resetStep
+    } = useCreationSteps();
+
+    const {
         answers,
         customAnswers,
         controlValues,
-        setAnswers,
-        setCustomAnswers,
-        setControlValues,
-        nextStep,
-        prevStep,
-        resetState
-    } = useFormState();
-
-    const currentStepData = steps[currentStep];
-
-    useControlsInitialization({
-        currentStep,
-        controlValues,
-        setControlValues
-    });
-
-    const {
         handleAnswerSelect,
         handleCustomAnswerChange,
         handleEnhancerChange,
         handleTemperatureChange,
         handleShapeChange,
-        handleFlavorChange
-    } = useAnswerHandlers({
-        answers,
-        customAnswers,
-        controlValues,
-        setAnswers,
-        setCustomAnswers,
-        setControlValues,
-        currentStep
-    });
+        handleFlavorChange,
+        resetAnswers
+    } = useCreationAnswers(currentStep);
 
     const {
         recipeResult,
@@ -58,7 +39,8 @@ export const useCreationForm = () => {
     };
 
     const handleReset = () => {
-        resetState();
+        resetStep();
+        resetAnswers();
         resetRecipe();
     };
 
