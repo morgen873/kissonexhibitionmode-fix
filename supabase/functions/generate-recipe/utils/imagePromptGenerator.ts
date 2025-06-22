@@ -15,7 +15,7 @@ interface ImagePromptParams {
 export function generateImagePrompt(params: ImagePromptParams): string {
   const { timelineTheme, emotionalContext, dumplingShape, flavor, ingredientsList, recipeTitle } = params;
   
-  console.log("=== ULTRA-FORCEFUL ARTISTIC IMAGE PROMPT GENERATION ===");
+  console.log("=== REALISTIC FOOD PHOTOGRAPHY PROMPT GENERATION ===");
   console.log("Timeline theme:", `"${timelineTheme}"`);
   console.log("Emotional context:", `"${emotionalContext}"`);
   console.log("Dumpling shape:", dumplingShape);
@@ -65,7 +65,7 @@ export function generateImagePrompt(params: ImagePromptParams): string {
   console.log("- Descriptions:", descriptions);
   console.log("- Effects:", effects);
   
-  // Create ULTRA-FORCEFUL artistic context
+  // Create comprehensive context for realistic food photography
   const comprehensiveContext = {
     timelineTheme,
     emotionalContext,
@@ -83,17 +83,17 @@ export function generateImagePrompt(params: ImagePromptParams): string {
   let finalPrompt = '';
   
   if (isFuturistic) {
-    console.log("🚀 Using ULTRA-FORCEFUL FUTURISTIC artistic prompt");
-    finalPrompt = buildUltraForcefulFuturisticPrompt(comprehensiveContext);
+    console.log("🚀 Using REALISTIC FUTURISTIC food photography prompt");
+    finalPrompt = buildRealisticFuturisticPrompt(comprehensiveContext);
   } else if (isHistorical) {
-    console.log("🏛️ Using ULTRA-FORCEFUL HISTORICAL artistic prompt");
-    finalPrompt = buildUltraForcefulHistoricalPrompt(comprehensiveContext);
+    console.log("🏛️ Using REALISTIC HISTORICAL food photography prompt");
+    finalPrompt = buildRealisticHistoricalPrompt(comprehensiveContext);
   } else {
-    console.log("🎨 Using ULTRA-FORCEFUL CONTEMPORARY artistic prompt");
-    finalPrompt = buildUltraForcefulContemporaryPrompt(comprehensiveContext);
+    console.log("🎨 Using REALISTIC CONTEMPORARY food photography prompt");
+    finalPrompt = buildRealisticContemporaryPrompt(comprehensiveContext);
   }
   
-  console.log("=== FINAL ULTRA-FORCEFUL ARTISTIC PROMPT ===");
+  console.log("=== FINAL REALISTIC FOOD PHOTOGRAPHY PROMPT ===");
   console.log("Prompt length:", finalPrompt.length);
   console.log("Full prompt:", finalPrompt);
   
@@ -152,42 +152,42 @@ function extractTimelineAtmosphere(timelineTheme: string): string {
   return 'contemporary setting with modern artistic elements';
 }
 
-function buildUltraForcefulFuturisticPrompt(context: any): string {
+function buildRealisticFuturisticPrompt(context: any): string {
   const { timelineTheme, emotionalContext, dumplingShape, flavor, ingredientsList, recipeTitle, colors, emotionalDescriptors, timelineAtmosphere } = context;
   
   const primaryColor = colors[0] || 'electric blue';
   const secondaryColor = colors[1] || 'bright pink';
   const emotionalEffects = emotionalDescriptors.join(', ');
   
-  const prompt = `ARTISTIC ILLUSTRATION ONLY - NO PHOTOGRAPHY: Create a vibrant futuristic digital art illustration of a ${dumplingShape}-shaped dumpling called "${recipeTitle}". Style: Pure digital art with neon ${primaryColor} and ${secondaryColor} colors, holographic effects, glowing translucent wrapper, cyberpunk aesthetics. The dumpling embodies ${emotionalContext} with ${emotionalEffects}. Ingredients: ${ingredientsList.join(', ')}. Setting: ${timelineAtmosphere}. CRITICAL: This must be a stylized cartoon-like digital illustration with bright neon colors, NOT realistic food photography. Vector art style with smooth gradients, glowing effects, and futuristic elements. Pure black background. Absolutely NO photorealism, NO realistic textures, NO food photography. Only vibrant digital artwork.`;
+  const prompt = `Create a vibrant futuristic digital art image of a ${dumplingShape}-shaped dumpling called "${recipeTitle}". Style: Pure image with neon ${primaryColor} and ${secondaryColor} colors, holographic effects, glowing translucent wrapper, cyberpunk aesthetics. The dumpling embodies ${emotionalContext} with ${emotionalEffects}. Ingredients: ${ingredientsList.join(', ')}. Setting: ${timelineAtmosphere}. CRITICAL: This must be a stylized image with bright neon colors, realistic food photography. Pure black background. photorealism, realistic textures, food photography. Only vibrant digital image artwork.`;
 
-  console.log("Generated ULTRA-FORCEFUL FUTURISTIC prompt:", prompt);
+  console.log("Generated REALISTIC FUTURISTIC prompt:", prompt);
   return prompt;
 }
 
-function buildUltraForcefulHistoricalPrompt(context: any): string {
+function buildRealisticHistoricalPrompt(context: any): string {
   const { timelineTheme, emotionalContext, dumplingShape, flavor, ingredientsList, recipeTitle, colors, emotionalDescriptors, timelineAtmosphere } = context;
   
   const primaryColor = colors[0] || 'deep red';
   const secondaryColor = colors[1] || 'golden yellow';
   const emotionalEffects = emotionalDescriptors.join(', ');
   
-  const prompt = `ARTISTIC PAINTING ONLY - NO PHOTOGRAPHY: Create a beautiful historical watercolor painting of a ${dumplingShape}-shaped dumpling called "${recipeTitle}". Style: Traditional watercolor art with rich ${primaryColor} and ${secondaryColor} pigments, artistic brush strokes, ornate decorative elements. The dumpling embodies ${emotionalContext} with ${emotionalEffects}. Ingredients: ${ingredientsList.join(', ')}. Setting: ${timelineAtmosphere}. CRITICAL: This must be a stylized watercolor painting with artistic coloring, NOT realistic food photography. Hand-painted illustration style with painterly effects and classical ornamentation. Pure black background. Absolutely NO photorealism, NO realistic textures, NO food photography. Only artistic painted illustration.`;
+  const prompt = `Create a beautiful historical image of a ${dumplingShape}-shaped dumpling called "${recipeTitle}". Style: image of a dumpling with ${primaryColor} and ${secondaryColor} pigments. The dumpling embodies ${emotionalContext} with ${emotionalEffects}. Ingredients: ${ingredientsList.join(', ')}. Setting: ${timelineAtmosphere}. CRITICAL: This must be a realistic food photography. Pure black background. Absolutely photorealism, realistic textures, food photography.`;
 
-  console.log("Generated ULTRA-FORCEFUL HISTORICAL prompt:", prompt);
+  console.log("Generated REALISTIC HISTORICAL prompt:", prompt);
   return prompt;
 }
 
-function buildUltraForcefulContemporaryPrompt(context: any): string {
+function buildRealisticContemporaryPrompt(context: any): string {
   const { timelineTheme, emotionalContext, dumplingShape, flavor, ingredientsList, recipeTitle, colors, emotionalDescriptors, timelineAtmosphere } = context;
   
   const primaryColor = colors[0] || 'vibrant purple';
   const secondaryColor = colors[1] || 'electric orange';
   const emotionalEffects = emotionalDescriptors.join(', ');
   
-  const prompt = `ARTISTIC GRAPHIC DESIGN ONLY - NO PHOTOGRAPHY: Create a modern graphic design illustration of a ${dumplingShape}-shaped dumpling called "${recipeTitle}". Style: Contemporary vector art with bold ${primaryColor} and ${secondaryColor} colors, clean geometric design, modern graphic elements. The dumpling embodies ${emotionalContext} with ${emotionalEffects}. Ingredients: ${ingredientsList.join(', ')}. Setting: ${timelineAtmosphere}. CRITICAL: This must be a stylized vector graphic illustration with flat design aesthetics, NOT realistic food photography. Modern digital art style with clean lines, vivid colors, and contemporary design elements. Pure black background. Absolutely NO photorealism, NO realistic textures, NO food photography. Only graphic design illustration.`;
+  const prompt = `Create a modern image of a ${dumplingShape}-shaped dumpling called "${recipeTitle}". Style: realistic image with bold ${primaryColor} and ${secondaryColor} colors, clean geometric design. The dumpling embodies ${emotionalContext} with ${emotionalEffects}. Ingredients: ${ingredientsList.join(', ')}. Setting: ${timelineAtmosphere}. realistic food photography. Modern digital art style with clean lines, vivid colors, and contemporary design elements. Pure black background. Absolutely photorealism, realistic textures, food photography.`;
 
-  console.log("Generated ULTRA-FORCEFUL CONTEMPORARY prompt:", prompt);
+  console.log("Generated REALISTIC CONTEMPORARY prompt:", prompt);
   return prompt;
 }
 
