@@ -15,18 +15,14 @@ interface ImagePromptParams {
 export function generateImagePrompt(params: ImagePromptParams): string {
   const { timelineTheme, emotionalContext, dumplingShape, flavor, ingredientsList, recipeTitle } = params;
   
-  console.log("=== ENHANCED IMAGE PROMPT GENERATION ===");
-  console.log("Timeline theme received:", timelineTheme);
-  console.log("Emotional context received:", emotionalContext);
-  console.log("Dumpling shape received:", dumplingShape);
-  console.log("Flavor received:", flavor);
-  console.log("Ingredients list received:", ingredientsList);
-  console.log("Recipe title received:", recipeTitle);
+  console.log("=== FIXED IMAGE PROMPT GENERATION ===");
+  console.log("PRIORITY 1 - Timeline theme:", `"${timelineTheme}"`);
+  console.log("PRIORITY 2 - Emotional context:", `"${emotionalContext}"`);
+  console.log("PRIORITY 3 - Physical attributes:", { dumplingShape, flavor });
+  console.log("PRIORITY 4 - Ingredients for color:", ingredientsList);
+  console.log("PRIORITY 5 - Recipe title:", `"${recipeTitle}"`);
   
-  // Extract enhanced colors and effects from ingredients
-  const { colors, descriptions, effects } = extractIngredientColors(ingredientsList);
-  
-  // Timeline classification with enhanced detection
+  // Enhanced timeline classification - this is the MOST IMPORTANT factor
   const timelineLower = timelineTheme.toLowerCase();
   const isFuturistic = timelineLower.includes('future') || 
                        timelineLower.includes('distant') || 
@@ -47,8 +43,16 @@ export function generateImagePrompt(params: ImagePromptParams): string {
                        timelineLower.includes('vintage') ||
                        timelineLower.includes('classic');
 
-  console.log("Enhanced timeline classification - Futuristic:", isFuturistic, "Historical:", isHistorical);
-  console.log("Enhanced ingredient effects found:", effects.length, "effects");
+  console.log("Timeline classification results:");
+  console.log("- Is Futuristic:", isFuturistic);
+  console.log("- Is Historical:", isHistorical);
+  console.log("- Timeline theme used:", `"${timelineTheme}"`);
+  
+  // Extract enhanced colors and effects from ingredients
+  const { colors, descriptions, effects } = extractIngredientColors(ingredientsList);
+  console.log("Color extraction results:");
+  console.log("- Colors found:", colors);
+  console.log("- Visual effects:", effects);
   
   const promptParams = {
     timelineTheme,
@@ -62,13 +66,24 @@ export function generateImagePrompt(params: ImagePromptParams): string {
     effects
   };
 
+  let finalPrompt = '';
+  
   if (isFuturistic) {
-    return buildFuturisticPrompt(promptParams);
+    console.log("🚀 Using FUTURISTIC prompt builder");
+    finalPrompt = buildFuturisticPrompt(promptParams);
   } else if (isHistorical) {
-    return buildHistoricalPrompt(promptParams);
+    console.log("🏛️ Using HISTORICAL prompt builder");
+    finalPrompt = buildHistoricalPrompt(promptParams);
   } else {
-    return buildContemporaryPrompt(promptParams);
+    console.log("🎨 Using CONTEMPORARY prompt builder");
+    finalPrompt = buildContemporaryPrompt(promptParams);
   }
+  
+  console.log("=== FINAL PROMPT GENERATED ===");
+  console.log("Prompt builder used:", isFuturistic ? "FUTURISTIC" : isHistorical ? "HISTORICAL" : "CONTEMPORARY");
+  console.log("Final prompt length:", finalPrompt.length);
+  
+  return finalPrompt;
 }
 
 // Re-export the ingredient parser for backward compatibility

@@ -35,21 +35,32 @@ serve(async (req) => {
 
     const payload: RecipePayload = await req.json()
     
-    console.log("=== RECIPE GENERATION STARTED ===");
-    console.log("Received payload:", JSON.stringify(payload, null, 2));
+    console.log("=== FIXED RECIPE GENERATION FLOW STARTED ===");
+    console.log("STEP 1: Frontend payload received and parsed");
+    console.log("Raw payload structure:", {
+      hasQuestions: !!payload.questions,
+      hasTimeline: !!payload.timeline,
+      hasControls: !!payload.controls,
+      questionKeys: Object.keys(payload.questions || {}),
+      timelineKeys: Object.keys(payload.timeline || {}),
+      controlKeys: Object.keys(payload.controls || {})
+    });
     
     // Validate that we have the required data
     const hasQuestions = payload.questions && Object.keys(payload.questions).length > 0;
     const hasTimeline = payload.timeline && Object.keys(payload.timeline).length > 0;
     const hasControls = payload.controls && Object.keys(payload.controls).length > 0;
     
-    console.log("Data validation:");
-    console.log("- Has questions:", hasQuestions);
-    console.log("- Has timeline:", hasTimeline);
-    console.log("- Has controls:", hasControls);
+    console.log("STEP 2: Data validation results:");
+    console.log("- Has questions:", hasQuestions ? "✅" : "❌");
+    console.log("- Has timeline:", hasTimeline ? "✅" : "❌");
+    console.log("- Has controls:", hasControls ? "✅" : "❌");
     
     if (!hasQuestions || !hasTimeline || !hasControls) {
-      console.error("Missing required data in payload!");
+      console.error("❌ CRITICAL: Missing required data in payload!");
+      console.error("Questions data:", payload.questions);
+      console.error("Timeline data:", payload.timeline);
+      console.error("Controls data:", payload.controls);
       return new Response(JSON.stringify({ 
         error: 'Missing required data. Please complete all steps.',
         missing: {
@@ -62,6 +73,12 @@ serve(async (req) => {
         status: 400,
       });
     }
+    
+    // Log the actual user inputs that will be used for image generation
+    console.log("STEP 3: Key user inputs for image generation:");
+    console.log("- Timeline choices:", Object.values(payload.timeline));
+    console.log("- Question answers:", Object.values(payload.questions));
+    console.log("- Control settings:", Object.values(payload.controls));
     
     const openAIKey = Deno.env.get('OPENAI_API_KEY')
     
@@ -93,15 +110,15 @@ serve(async (req) => {
       });
     }
 
-    // Generate recipe content
-    console.log("Generating recipe content...");
+    // STEP 4: Generate recipe content first
+    console.log("STEP 4: Generating recipe content with AI...");
     const recipeContent = await generateRecipeWithOpenAI(payload, openai);
-    console.log("Recipe content generated:", recipeContent.title);
+    console.log("✅ Recipe content generated:", recipeContent.title);
 
     // Validate content for exhibition appropriateness
     const validation = validateRecipeContent(recipeContent);
     if (!validation.isValid) {
-      console.log('Content validation failed:', validation.reason);
+      console.log('❌ Content validation failed:', validation.reason);
       return new Response(JSON.stringify({ 
         error: 'Recipe content not suitable for exhibition. Please try again with different inputs.',
         reason: validation.reason
@@ -111,39 +128,47 @@ serve(async (req) => {
       });
     }
 
-    // Insert recipe first to get an ID, starting with a placeholder image
-    console.log("Inserting recipe into database...");
+    // STEP 5: Insert recipe into database to get ID
+    console.log("STEP 5: Inserting recipe into database...");
     const newRecipe = await insertRecipe(supabaseAdmin, payload, recipeContent);
-    console.log("Recipe inserted with ID:", newRecipe.id);
+    console.log("✅ Recipe inserted with ID:", newRecipe.id);
 
-    // Generate and upload image with all the user data
-    console.log("Starting image generation with user data...");
+    // STEP 6: Generate image with ORIGINAL USER DATA + RECIPE DATA
+    console.log("STEP 6: Starting image generation with COMPLETE user data...");
+    console.log("Passing to image generator:");
+    console.log("- Original user payload (questions, timeline, controls)");
+    console.log("- Generated recipe content (title, ingredients)");
+    console.log("- Recipe ID for storage");
+    
     const imageUrl = await generateAndUploadRecipeImage(
-      payload,
-      recipeContent,
+      payload,      // ORIGINAL USER INPUT - this is crucial!
+      recipeContent, // AI-generated recipe content
       newRecipe.id,
       openai,
       supabaseAdmin
     );
 
-    // Update recipe with final image URL
+    // STEP 7: Update recipe with final image URL
     if (imageUrl !== '/placeholder.svg') {
       await updateRecipeImageUrl(supabaseAdmin, newRecipe.id, imageUrl);
       newRecipe.image_url = imageUrl;
-      console.log("Recipe updated with image URL:", imageUrl);
+      console.log("✅ Recipe updated with final image URL:", imageUrl);
     } else {
-      console.log("Using placeholder image");
+      console.log("❌ Using placeholder image");
     }
 
-    console.log("=== RECIPE GENERATION COMPLETED ===");
-    console.log("Returning recipe with image_url:", newRecipe.image_url);
+    console.log("=== FIXED RECIPE GENERATION COMPLETED ===");
+    console.log("Final recipe data being returned:");
+    console.log("- Title:", newRecipe.title);
+    console.log("- Image URL:", newRecipe.image_url);
+    console.log("- Recipe ID:", newRecipe.id);
     
     return new Response(JSON.stringify({ recipe: newRecipe }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 200,
     })
   } catch (error) {
-    console.error('Edge function error:', error);
+    console.error('❌ Edge function error:', error);
     return new Response(JSON.stringify({ error: error.message }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 500,

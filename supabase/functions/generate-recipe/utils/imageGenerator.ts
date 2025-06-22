@@ -18,64 +18,57 @@ export async function generateAndUploadRecipeImage(
   supabaseAdmin: ReturnType<typeof createClient>
 ): Promise<string> {
   try {
-    console.log("=== ENHANCED IMAGE GENERATION DEBUG ===");
-    console.log("Payload received:", JSON.stringify(payload, null, 2));
-    console.log("Recipe content:", JSON.stringify(recipeContent, null, 2));
+    console.log("=== FIXED DATA FLOW FOR IMAGE GENERATION ===");
+    console.log("Step 1: Received payload from frontend:", JSON.stringify(payload, null, 2));
+    console.log("Step 2: Received recipe content from AI:", JSON.stringify(recipeContent, null, 2));
     
-    // Extract timeline theme with enhanced debugging
-    console.log("=== TIMELINE EXTRACTION ===");
-    console.log("Timeline object:", payload.timeline);
-    console.log("Timeline keys:", Object.keys(payload.timeline));
-    console.log("Timeline values:", Object.values(payload.timeline));
+    // STEP 3: Extract timeline theme FIRST (this is the most important data)
+    console.log("=== STEP 3: TIMELINE EXTRACTION (PRIMARY DATA) ===");
+    const timelineValues = Object.values(payload.timeline);
+    const timelineTheme = timelineValues.length > 0 ? timelineValues[0] : 'present day';
+    console.log("✓ Timeline theme extracted:", `"${timelineTheme}"`);
     
-    const timelineEntries = Object.values(payload.timeline);
-    const timelineTheme = timelineEntries.length > 0 ? timelineEntries[0] : 'present day';
-    console.log("Extracted timeline theme:", `"${timelineTheme}"`);
+    // STEP 4: Extract emotional context from questions (secondary data)
+    console.log("=== STEP 4: EMOTIONAL CONTEXT EXTRACTION (SECONDARY DATA) ===");
+    const questionValues = Object.values(payload.questions);
+    const emotionalContext = questionValues.length > 0 ? questionValues.join(', ') : 'comfort and warmth';
+    console.log("✓ Emotional context extracted:", `"${emotionalContext}"`);
     
-    // Extract emotional context with enhanced debugging
-    console.log("=== EMOTIONAL CONTEXT EXTRACTION ===");
-    console.log("Questions object:", payload.questions);
-    console.log("Questions keys:", Object.keys(payload.questions));
-    console.log("Questions values:", Object.values(payload.questions));
-    
-    const questionAnswers = Object.values(payload.questions);
-    const emotionalContext = questionAnswers.length > 0 ? questionAnswers.join(', ') : 'comfort and warmth';
-    console.log("Extracted emotional context:", `"${emotionalContext}"`);
-    
-    // Extract control values with enhanced debugging
-    console.log("=== CONTROLS EXTRACTION ===");
-    console.log("Controls object:", payload.controls);
-    console.log("Controls keys:", Object.keys(payload.controls));
-    console.log("Controls values:", Object.values(payload.controls));
-    
-    const controlEntries = Object.values(payload.controls);
-    const controls = controlEntries.length > 0 ? controlEntries[0] : {
+    // STEP 5: Extract control values (tertiary data)
+    console.log("=== STEP 5: CONTROLS EXTRACTION (TERTIARY DATA) ===");
+    const controlValues = Object.values(payload.controls);
+    const controls = controlValues.length > 0 ? controlValues[0] : {
       shape: 'classic',
       flavor: 'mild',
       temperature: 180,
       enhancer: ''
     };
-    console.log("Extracted controls:", controls);
+    console.log("✓ Controls extracted:", controls);
     
-    // Extract key ingredients for visual representation
-    console.log("=== INGREDIENTS EXTRACTION ===");
+    // STEP 6: Extract ingredients from AI-generated recipe (supporting data)
+    console.log("=== STEP 6: INGREDIENTS EXTRACTION (SUPPORTING DATA) ===");
     const ingredientsList = extractIngredientsList(recipeContent.ingredients);
-    console.log("Final ingredients list for enhanced image:", ingredientsList);
+    console.log("✓ Ingredients extracted from recipe:", ingredientsList);
     
-    // Enhanced validation checks
-    if (!timelineTheme || timelineTheme.trim() === '' || timelineTheme === 'present day') {
-      console.warn("⚠️ Timeline theme is missing or default - this may cause generic images");
-      console.warn("Available timeline data:", payload.timeline);
-    }
-    if (!emotionalContext || emotionalContext.trim() === '') {
-      console.warn("⚠️ Emotional context is missing - this may cause generic images");
-      console.warn("Available questions data:", payload.questions);
-    }
-    if (ingredientsList.length === 0) {
-      console.warn("⚠️ No ingredients extracted - this may cause generic images");
-      console.warn("Available ingredients data:", recipeContent.ingredients);
+    // STEP 7: Validate all critical data is present
+    console.log("=== STEP 7: DATA VALIDATION ===");
+    const hasTimeline = timelineTheme && timelineTheme.trim() !== '' && timelineTheme !== 'present day';
+    const hasEmotionalContext = emotionalContext && emotionalContext.trim() !== '';
+    const hasIngredients = ingredientsList.length > 0;
+    const hasControls = controls.shape && controls.flavor;
+    
+    console.log("Timeline data quality:", hasTimeline ? "✅ GOOD" : "❌ MISSING/DEFAULT");
+    console.log("Emotional context quality:", hasEmotionalContext ? "✅ GOOD" : "❌ MISSING");
+    console.log("Ingredients data quality:", hasIngredients ? "✅ GOOD" : "❌ MISSING");
+    console.log("Controls data quality:", hasControls ? "✅ GOOD" : "❌ MISSING");
+    
+    if (!hasTimeline) {
+      console.error("❌ CRITICAL: Timeline theme is missing or default - this will cause generic images!");
+      console.error("Available timeline data:", payload.timeline);
     }
     
+    // STEP 8: Generate image prompt with all validated data in correct order
+    console.log("=== STEP 8: GENERATING IMAGE PROMPT WITH VALIDATED DATA ===");
     const imagePrompt = generateImagePrompt({
       timelineTheme: timelineTheme,
       emotionalContext: emotionalContext,
@@ -85,45 +78,43 @@ export async function generateAndUploadRecipeImage(
       recipeTitle: recipeContent.title
     });
     
-    console.log("=== ENHANCED FINAL GENERATED IMAGE PROMPT ===");
+    console.log("=== FINAL GENERATED PROMPT ===");
     console.log(imagePrompt);
-    console.log("==============================================");
+    console.log("=============================");
     
-    console.log("Sending to DALL-E with ENHANCED parameters:");
-    console.log("- Timeline theme:", `"${timelineTheme}"`);
-    console.log("- Emotional context:", `"${emotionalContext}"`);
-    console.log("- Dumpling shape:", controls.shape);
-    console.log("- Flavor:", controls.flavor);
-    console.log("- Key ingredients for color:", ingredientsList.slice(0, 3));
-    console.log("- Recipe title:", recipeContent.title);
-    console.log("- Expected visual style: Dramatic, colorful, artistic like reference images");
+    // STEP 9: Send to DALL-E with enhanced parameters
+    console.log("=== STEP 9: SENDING TO DALL-E ===");
+    console.log("Prompt length:", imagePrompt.length);
+    console.log("Timeline theme being used:", `"${timelineTheme}"`);
+    console.log("Key ingredients for visual:", ingredientsList.slice(0, 3));
     
-    // Enhanced DALL-E parameters for highest quality results
     const imageResponse = await openai.images.generate({
       model: 'dall-e-3',
       prompt: imagePrompt,
       n: 1,
       size: '1024x1024',
       response_format: 'b64_json',
-      style: 'natural',  // Natural style for more realistic, detailed results
-      quality: 'hd',     // Explicit HD quality request
+      style: 'natural',
+      quality: 'hd',
     });
     
-    console.log("✅ DALL-E image generated successfully with enhanced parameters");
+    console.log("✅ DALL-E image generated successfully");
     const imageB64 = imageResponse.data[0].b64_json;
     
+    // STEP 10: Upload to Supabase
     if (imageB64) {
+      console.log("=== STEP 10: UPLOADING TO SUPABASE ===");
       const imageUrl = await uploadImageToSupabase(imageB64, recipeId, supabaseAdmin);
       if (imageUrl) {
-        console.log("✅ Enhanced image uploaded and URL generated:", imageUrl);
+        console.log("✅ Image uploaded successfully:", imageUrl);
         return imageUrl;
       }
     }
     
-    console.log("❌ Failed to generate/upload enhanced image, using placeholder");
+    console.log("❌ Failed to generate/upload image, using placeholder");
     return '/placeholder.svg';
   } catch (error) {
-    console.error("❌ Error generating/uploading enhanced image:", error);
+    console.error("❌ Error in fixed image generation flow:", error);
     return '/placeholder.svg';
   }
 }
