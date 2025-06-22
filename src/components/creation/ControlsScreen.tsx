@@ -32,10 +32,11 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
     const flavorIndex = controls.flavor.options.indexOf(controlValues.flavor);
 
     return (
-        <div className="space-y-6 text-white/90">
+        <div className="space-y-8 text-white/90">
             <p className="text-center text-white/80 whitespace-pre-line font-mono text-sm">{stepData.description}</p>
             
-            <div className="grid grid-cols-1 gap-6 pt-2">
+            {/* Horizontal layout for knobs */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-2">
                 <div className="flex flex-col items-center gap-3">
                     <Label className="font-bold text-base font-mono">Temperature</Label>
                     <Knob
@@ -44,9 +45,9 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
                         step={1}
                         value={controlValues.temperature}
                         onValueChange={onTemperatureChange}
-                        size={100}
+                        size={80}
                     />
-                    <span className="w-24 text-center p-2 rounded-md bg-black/20 font-mono text-sm">{controlValues.temperature} {controls.temperature.unit}</span>
+                    <span className="w-20 text-center p-2 rounded-md bg-black/20 font-mono text-sm">{controlValues.temperature} {controls.temperature.unit}</span>
                 </div>
 
                 <div className="flex flex-col items-center gap-3">
@@ -57,9 +58,9 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
                         step={1}
                         value={shapeIndex}
                         onValueChange={onShapeChange}
-                        size={100}
+                        size={80}
                     />
-                    <span className="w-24 capitalize text-center p-2 rounded-md bg-black/20 font-mono text-sm">{controlValues.shape}</span>
+                    <span className="w-20 capitalize text-center p-2 rounded-md bg-black/20 font-mono text-sm">{controlValues.shape}</span>
                 </div>
 
                 <div className="flex flex-col items-center gap-3">
@@ -70,13 +71,13 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
                         step={1}
                         value={flavorIndex}
                         onValueChange={onFlavorChange}
-                        size={100}
+                        size={80}
                     />
-                    <span className="w-24 capitalize text-center p-2 rounded-md bg-black/20 font-mono text-sm">{controlValues.flavor}</span>
+                    <span className="w-20 capitalize text-center p-2 rounded-md bg-black/20 font-mono text-sm">{controlValues.flavor}</span>
                 </div>
             </div>
 
-            <div className="flex flex-col items-center gap-2 pt-2">
+            <div className="flex flex-col items-center gap-2 pt-4">
                 <Label htmlFor="enhancer" className="font-bold text-base text-center font-mono">What spice or condiment would enhance this experience?</Label>
                 <p className="text-xs text-center text-white/70 max-w-full font-mono">Salt, pepper, cinnamon, honey... This will add the final touch of flavor to your memory recipe.</p>
                 <Textarea
@@ -84,7 +85,7 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
                     value={controlValues.enhancer}
                     onChange={onEnhancerChange}
                     placeholder="e.g., A pinch of cinnamon"
-                    className="mt-2 w-full bg-black/20 border-white/20 text-white placeholder:text-white/50 focus:ring-white focus:border-white p-3 font-mono text-sm"
+                    className="mt-2 w-full max-w-md bg-black/20 border-white/20 text-white placeholder:text-white/50 focus:ring-white focus:border-white p-3 font-mono text-sm"
                     rows={2}
                 />
             </div>
