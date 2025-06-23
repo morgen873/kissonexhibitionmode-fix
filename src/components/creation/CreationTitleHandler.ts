@@ -25,5 +25,13 @@ export const shouldShowTitle = (
   hasStartedCreation: boolean,
   currentIntroStep: number
 ): boolean => {
-  return !recipeResult && !isCreatingRecipe && (!hasStartedCreation ? introSteps[currentIntroStep].type !== 'quote' : true);
+  if (recipeResult || isCreatingRecipe) return false;
+  
+  if (!hasStartedCreation) {
+    const currentStep = introSteps[currentIntroStep];
+    // Don't show title for quote steps or explanation steps (they have their own title in the card)
+    return currentStep.type !== 'quote' && currentStep.type !== 'explanation';
+  }
+  
+  return true;
 };
