@@ -6,7 +6,6 @@ import IntroNavigation from '@/components/creation/IntroNavigation';
 import CreationMainContent from '@/components/creation/CreationMainContent';
 import NavigationControls from '@/components/creation/NavigationControls';
 import RecipeResultScreen from '@/components/creation/RecipeResultScreen';
-import VideoUploader from '@/components/creation/VideoUploader';
 import { introSteps } from "@/data/introSteps";
 import { steps } from '@/data/creation';
 
@@ -39,9 +38,6 @@ interface CreationContentProps {
   handleCreationNext: () => void;
   handleCreationPrev: () => void;
   handleCreationSubmit: () => void;
-  uploadedVideos: string[];
-  onVideoUpload: (videoUrl: string) => void;
-  onVideoRemove: (videoUrl: string) => void;
 }
 
 const CreationContent: React.FC<CreationContentProps> = ({
@@ -72,10 +68,7 @@ const CreationContent: React.FC<CreationContentProps> = ({
   handleIntroPrev,
   handleCreationNext,
   handleCreationPrev,
-  handleCreationSubmit,
-  uploadedVideos,
-  onVideoUpload,
-  onVideoRemove
+  handleCreationSubmit
 }) => {
   if (isCreatingRecipe) {
     return (
@@ -93,23 +86,10 @@ const CreationContent: React.FC<CreationContentProps> = ({
   return (
     <div className="transition-opacity duration-300">
       {!hasStartedCreation ? (
-        <>
-          <IntroStepContent 
-            step={introSteps[currentIntroStep]} 
-            onNext={nextIntroStep}
-          />
-          
-          {/* Video uploader for intro steps */}
-          {currentIntroStep === 0 && (
-            <div className="mt-8">
-              <VideoUploader
-                onVideoUpload={onVideoUpload}
-                onVideoRemove={onVideoRemove}
-                uploadedVideos={uploadedVideos}
-              />
-            </div>
-          )}
-        </>
+        <IntroStepContent 
+          step={introSteps[currentIntroStep]} 
+          onNext={nextIntroStep}
+        />
       ) : (
         <CreationMainContent
           stepData={creationStepData}

@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import { useCreationForm } from '@/hooks/useCreationForm';
@@ -47,11 +48,7 @@ const Creation = () => {
     handleCreationPrev,
     handleCreationSubmit,
     nextIntroStep,
-    prevIntroStep,
-    uploadedVideos,
-    handleVideoUpload,
-    handleVideoRemove,
-    clearAllVideos
+    prevIntroStep
   } = useCreationNavigation({
     nextCreationStep,
     prevCreationStep,
@@ -97,7 +94,6 @@ const Creation = () => {
         isTransitioning={isTransitioning}
         transitionDirection={transitionDirection}
         completeTransition={completeTransition}
-        uploadedVideos={uploadedVideos}
       >
         <CreationContent
           isCreatingRecipe={isCreatingRecipe}
@@ -128,9 +124,6 @@ const Creation = () => {
           handleCreationNext={handleCreationNext}
           handleCreationPrev={handleCreationPrev}
           handleCreationSubmit={handleCreationSubmit}
-          uploadedVideos={uploadedVideos}
-          onVideoUpload={handleVideoUpload}
-          onVideoRemove={handleVideoRemove}
         />
       </CreationLayout>
     </GlobalLayout>
