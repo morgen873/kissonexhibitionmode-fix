@@ -1,4 +1,3 @@
-
 import { extractIngredientColors } from './colorExtractor.ts';
 import { extractIngredientsList } from './ingredientParser.ts';
 import { buildFuturisticPrompt, buildHistoricalPrompt, buildContemporaryPrompt } from './promptBuilders.ts';
@@ -44,26 +43,23 @@ export function generateImagePrompt(params: ImagePromptParams): string {
   
   let prompt: string;
   
-  // Enhanced timeline detection logic with specific checks - case insensitive
-  const timelineLower = timelineTheme.toLowerCase();
-  
+  // Simplified timeline detection logic with clear numerical names
   console.log("🔍 TIMELINE ANALYSIS:");
-  console.log("- Original timeline:", `"${timelineTheme}"`);
-  console.log("- Lowercase timeline:", `"${timelineLower}"`);
+  console.log("- Timeline:", `"${timelineTheme}"`);
   
   // Check for future timelines
-  if (timelineLower.includes('distant future') || timelineLower.includes('near future') || timelineLower.includes('far future')) {
+  if (timelineTheme === 'Future 1' || timelineTheme === 'Future 2') {
     console.log("🚀 USING FUTURISTIC PROMPT BUILDER");
     prompt = buildFuturisticPrompt(promptParams);
   } 
-  // Check for past timelines - FIXED: Added more specific matching
-  else if (timelineLower.includes('distant past') || timelineLower.includes('recent past') || timelineLower === 'distant past' || timelineLower === 'recent past') {
+  // Check for past timelines
+  else if (timelineTheme === 'Past 1' || timelineTheme === 'Past 2') {
     console.log("🏛️ USING HISTORICAL PROMPT BUILDER");
     prompt = buildHistoricalPrompt(promptParams);
   } 
-  // Check for present day specifically
-  else if (timelineLower.includes('present day') || timelineLower.includes('present') || timelineLower === 'present day') {
-    console.log("🏙️ USING CONTEMPORARY PROMPT BUILDER (Present Day - Explicit Match)");
+  // Check for present day
+  else if (timelineTheme === 'Present') {
+    console.log("🏙️ USING CONTEMPORARY PROMPT BUILDER (Present)");
     prompt = buildContemporaryPrompt(promptParams);
   }
   // Default fallback to contemporary
@@ -75,8 +71,8 @@ export function generateImagePrompt(params: ImagePromptParams): string {
   console.log("=== 📤 TIME-PERIOD SPECIFIC PROMPT OUTPUT ===");
   console.log("🎯 TIMELINE DETECTED:", timelineTheme);
   console.log("🎯 PROMPT TYPE:", 
-    (timelineLower.includes('distant future') || timelineLower.includes('near future') || timelineLower.includes('far future')) ? 'FUTURISTIC' : 
-    (timelineLower.includes('distant past') || timelineLower.includes('recent past') || timelineLower === 'distant past' || timelineLower === 'recent past') ? 'HISTORICAL' : 
+    (timelineTheme === 'Future 1' || timelineTheme === 'Future 2') ? 'FUTURISTIC' : 
+    (timelineTheme === 'Past 1' || timelineTheme === 'Past 2') ? 'HISTORICAL' : 
     'CONTEMPORARY'
   );
   console.log("🎯 PROMPT LENGTH:", prompt.length);
