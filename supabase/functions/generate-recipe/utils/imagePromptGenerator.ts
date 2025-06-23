@@ -1,6 +1,7 @@
 
 import { extractIngredientColors } from './colorExtractor.ts';
 import { extractIngredientsList } from './ingredientParser.ts';
+import { buildFuturisticPrompt, buildHistoricalPrompt, buildContemporaryPrompt } from './promptBuilders.ts';
 
 export interface ImagePromptParams {
   timelineTheme: string;
@@ -14,7 +15,7 @@ export interface ImagePromptParams {
 export function generateImagePrompt(params: ImagePromptParams): string {
   const { timelineTheme, emotionalContext, dumplingShape, flavor, ingredientsList, recipeTitle } = params;
   
-  console.log("=== 🔍 GPT-IMAGE-1 OPTIMIZED PROMPT GENERATION ===");
+  console.log("=== 🔍 TIME-PERIOD AWARE PROMPT GENERATION ===");
   console.log("📊 INPUT PARAMETERS:");
   console.log("- Timeline theme:", `"${timelineTheme}"`);
   console.log("- Emotional context:", `"${emotionalContext}"`);
@@ -23,42 +24,44 @@ export function generateImagePrompt(params: ImagePromptParams): string {
   console.log("- Recipe title:", `"${recipeTitle}"`);
   console.log("- Ingredients list:", ingredientsList);
   
-  // Extract ingredients text for the prompt
-  const ingredientsText = ingredientsList.length > 0 ? ingredientsList.join(', ') : 'traditional dumpling ingredients';
+  // Extract colors from ingredients for the prompt builders
+  const colors = extractIngredientColors(ingredientsList);
+  const descriptions = ingredientsList.map(ingredient => `rich ${ingredient}`);
+  const effects = ['glossy', 'appetizing', 'detailed'];
   
-  // Generate optimized prompt for GPT-IMAGE-1 (no automatic rewriting) - emphasizing SINGLE dumpling
-  const prompt = `Professional food photography of a single ${dumplingShape}-shaped dumpling with ${flavor} flavor profile, inspired by ${timelineTheme} aesthetic.
-
-ONE DUMPLING ONLY - no multiple dumplings, no duplicates, just one single dumpling centered in the frame.
-
-Ingredients visible in composition: ${ingredientsText}
-
-Visual style:
-- Hyper-realistic food photography of exactly one dumpling
-- Studio lighting with soft overhead illumination
-- Solid matte black background, no textures or gradients
-- Close-up centered composition focusing on the single dumpling
-- Shallow depth of field focusing on the one dumpling
-- Emphasis on texture, gloss, and appetizing presentation of the single dumpling
-- ${timelineTheme.toLowerCase().includes('future') ? 'Futuristic plating with clean geometric arrangement' : 'Traditional elegant plating'}
-- Only one dumpling visible in the entire image
-
-Technical specifications:
-- High resolution, professional food photography quality
-- No text, logos, or graphic elements
-- No utensils, plates, or additional objects
-- Pure black background (#000000)
-- Realistic lighting that enhances food textures
-- Commercial food photography style
-- IMPORTANT: Show only one single dumpling, no multiples`;
+  // Build the parameters object for prompt builders
+  const promptParams = {
+    timelineTheme,
+    emotionalContext,
+    dumplingShape,
+    flavor,
+    ingredientsList,
+    recipeTitle,
+    colors,
+    descriptions,
+    effects
+  };
   
-  console.log("=== 📤 GPT-IMAGE-1 OPTIMIZED PROMPT OUTPUT ===");
-  console.log("🎯 PROMPT TYPE: GPT-IMAGE-1 PROFESSIONAL FOOD PHOTOGRAPHY - SINGLE DUMPLING");
+  let prompt: string;
+  
+  // Determine which prompt builder to use based on timeline theme
+  const timelineLower = timelineTheme.toLowerCase();
+  
+  if (timelineLower.includes('future') || timelineLower.includes('distant') && timelineLower.includes('future')) {
+    console.log("🚀 USING FUTURISTIC PROMPT BUILDER");
+    prompt = buildFuturisticPrompt(promptParams);
+  } else if (timelineLower.includes('past') || timelineLower.includes('distant') && timelineLower.includes('past')) {
+    console.log("🏛️ USING HISTORICAL PROMPT BUILDER");
+    prompt = buildHistoricalPrompt(promptParams);
+  } else {
+    console.log("🏙️ USING CONTEMPORARY PROMPT BUILDER (Present Day)");
+    prompt = buildContemporaryPrompt(promptParams);
+  }
+  
+  console.log("=== 📤 TIME-PERIOD SPECIFIC PROMPT OUTPUT ===");
+  console.log("🎯 PROMPT TYPE:", timelineLower.includes('future') ? 'FUTURISTIC' : timelineLower.includes('past') ? 'HISTORICAL' : 'CONTEMPORARY');
   console.log("🎯 PROMPT LENGTH:", prompt.length);
-  console.log("🎯 FULL PROMPT:");
-  console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  console.log(prompt);
-  console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+  console.log("🎯 FIRST 200 CHARS:", prompt.substring(0, 200));
   
   return prompt;
 }
