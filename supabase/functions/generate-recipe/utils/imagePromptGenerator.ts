@@ -14,7 +14,7 @@ interface ImagePromptParams {
 export function generateImagePrompt(params: ImagePromptParams): string {
   const { timelineTheme, emotionalContext, dumplingShape, flavor, ingredientsList, recipeTitle } = params;
   
-  console.log("=== 🔍 HYPER-REALISTIC FOOD PHOTOGRAPHY PROMPT GENERATION ===");
+  console.log("=== 🔍 GPT-IMAGE-1 OPTIMIZED PROMPT GENERATION ===");
   console.log("📊 INPUT PARAMETERS:");
   console.log("- Timeline theme:", `"${timelineTheme}"`);
   console.log("- Emotional context:", `"${emotionalContext}"`);
@@ -26,28 +26,30 @@ export function generateImagePrompt(params: ImagePromptParams): string {
   // Extract ingredients text for the prompt
   const ingredientsText = ingredientsList.length > 0 ? ingredientsList.join(', ') : 'traditional dumpling ingredients';
   
-  // Generate the hyper-realistic food photography prompt using the user's exact template
-  const prompt = `Create a hyper-realistic food photography image of a single dumpling dish, based strictly on the recipe that the system created.
+  // Generate optimized prompt for GPT-IMAGE-1 (no automatic rewriting)
+  const prompt = `Professional food photography of ${dumplingShape}-shaped dumplings with ${flavor} flavor profile, inspired by ${timelineTheme} aesthetic.
 
-– Time Period: ${timelineTheme}
-– Ingredients: ${ingredientsText}
-– Preparation Style: ${dumplingShape}-shaped dumpling with ${flavor} flavor
-– Presentation: food photography, realistic HD
-– Background: **Solid black only. No textures, no shadows, no objects.**
-– Lighting: Soft overhead light, food photography style, emphasize texture and gloss.
-– Composition: Close-up, centered, realistic depth of field.
+Ingredients visible in composition: ${ingredientsText}
 
-Strict rules:
-- Do **not** add ingredients or visual elements not explicitly described, no text, no sketches, no lines.
-- Do **not** render generic dumplings.
-- Do **not** change the time period aesthetic.
-- The image must look like a professional food photograph.
-- The image must have a **solid black background** with no gradients or noise.
+Visual style:
+- Hyper-realistic food photography
+- Studio lighting with soft overhead illumination
+- Solid matte black background, no textures or gradients
+- Close-up centered composition
+- Shallow depth of field focusing on the dumplings
+- Emphasis on texture, gloss, and appetizing presentation
+- ${timelineTheme.toLowerCase().includes('future') ? 'Futuristic plating with clean geometric arrangement' : 'Traditional elegant plating'}
 
-This is not conceptual art. This is a literal, historical or futuristic dumpling based on the given inputs.`;
+Technical specifications:
+- High resolution, professional food photography quality
+- No text, logos, or graphic elements
+- No utensils, plates, or additional objects
+- Pure black background (#000000)
+- Realistic lighting that enhances food textures
+- Commercial food photography style`;
   
-  console.log("=== 📤 FINAL PROMPT OUTPUT ===");
-  console.log("🎯 PROMPT TYPE: HYPER-REALISTIC FOOD PHOTOGRAPHY");
+  console.log("=== 📤 GPT-IMAGE-1 OPTIMIZED PROMPT OUTPUT ===");
+  console.log("🎯 PROMPT TYPE: GPT-IMAGE-1 PROFESSIONAL FOOD PHOTOGRAPHY");
   console.log("🎯 PROMPT LENGTH:", prompt.length);
   console.log("🎯 FULL PROMPT:");
   console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
