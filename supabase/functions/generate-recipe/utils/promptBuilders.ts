@@ -74,16 +74,24 @@ ONE DUMPLING ONLY - no multiple dumplings, no duplicates, just one single dumpli
 Ingredients visible in composition: ${ingredientsText}
 
 Historical culinary style:
-- Hyper-realistic food photography of exactly one dumpling with traditional historical preparation
-- Rustic, handcrafted appearance with slight imperfections that show artisanal preparation
-- Traditional cooking methods visible in texture (steamed, boiled, or pan-fried appearance)
-- Authentic historical presentation on simple, traditional surface
-- Warm, natural lighting reminiscent of historical cooking environments
+- Hyper-realistic food photography of exactly one perfectly sealed dumpling with traditional historical preparation
+- Completely closed dumpling wrapper with no visible filling inside - wrapper must be fully opaque
+- Traditional handcrafted appearance with slightly rustic texture showing artisanal preparation
+- Authentic historical cooking methods visible in surface texture (steamed, boiled, or pan-fried finish)
+- Warm, natural lighting reminiscent of traditional cooking environments
+- Simple, traditional presentation on rustic wooden or earthenware surface
 - Solid matte black background, no textures or gradients
-- Close-up centered composition focusing on the single dumpling
+- Close-up centered composition focusing on the single intact dumpling
 - Emphasis on traditional food preparation techniques and authentic historical appearance
-- The dumpling should look exactly as it would have been prepared in the historical period
+- The dumpling wrapper must be completely sealed and opaque, showing no internal filling
 - Only one dumpling visible in the entire image
+
+Critical requirements:
+- Dumpling wrapper must be completely closed and sealed
+- No transparent or translucent wrapper effects
+- No visible filling or internal ingredients
+- Wrapper should be solid and opaque
+- Traditional, rustic appearance appropriate for historical period
 
 Technical specifications:
 - High resolution, professional food photography quality
@@ -117,16 +125,23 @@ ONE DUMPLING ONLY - no multiple dumplings, no duplicates, just one single dumpli
 Ingredients visible in composition: ${ingredientsText}
 
 Contemporary culinary style:
-- Hyper-realistic food photography of exactly one dumpling with modern culinary presentation
+- Hyper-realistic food photography of exactly one perfectly sealed dumpling with modern culinary presentation
+- Completely closed dumpling wrapper with no visible filling inside - wrapper must be fully opaque
 - Clean, professional preparation with contemporary cooking techniques
 - Modern plating aesthetic with attention to visual appeal
 - Restaurant-quality presentation on contemporary surface
 - Professional studio lighting with modern food photography standards
 - Solid matte black background, no textures or gradients
-- Close-up centered composition focusing on the single dumpling
+- Close-up centered composition focusing on the single intact dumpling
 - Emphasis on current culinary trends and contemporary food presentation
-- The dumpling should look as it would be served in a modern restaurant today
+- The dumpling wrapper must be completely sealed and opaque, showing no internal filling
 - Only one dumpling visible in the entire image
+
+Critical requirements:
+- Dumpling wrapper must be completely closed and sealed
+- No transparent or translucent wrapper effects
+- No visible filling or internal ingredients
+- Wrapper should be solid and opaque
 
 Technical specifications:
 - High resolution, professional food photography quality
