@@ -26,16 +26,15 @@ export async function generateAndUploadRecipeImage(
   supabaseAdmin: ReturnType<typeof createClient>
 ): Promise<string> {
   try {
-    console.log("=== COMPREHENSIVE IMAGE GENERATION WITH FULL USER CONTEXT ===");
+    console.log("=== DALL-E IMAGE GENERATION WITH ENHANCED DEBUGGING ===");
     
-    // Extract ALL user context for comprehensive image generation
+    // Extract user context with detailed logging
     const timelineValues = Object.values(payload.timeline);
     const timelineTheme = timelineValues.length > 0 ? timelineValues[0] : 'present day';
     
     const questionValues = Object.values(payload.questions);
-    const fullEmotionalContext = questionValues.join(' and '); // Use ALL question responses
+    const fullEmotionalContext = questionValues.join(' and ');
     
-    // Extract control values with comprehensive context
     const controlValues = Object.values(payload.controls)[0] || {
       shape: 'round',
       flavor: 'savory',
@@ -43,83 +42,110 @@ export async function generateAndUploadRecipeImage(
       enhancer: 'none'
     };
     
-    console.log("=== COMPREHENSIVE USER INPUT EXTRACTION FOR IMAGE ===");
+    console.log("=== CONTEXT EXTRACTION FOR VIVID IMAGE GENERATION ===");
     console.log("Timeline theme:", `"${timelineTheme}"`);
-    console.log("Full emotional context from ALL questions:", `"${fullEmotionalContext}"`);
+    console.log("Full emotional context:", `"${fullEmotionalContext}"`);
     console.log("Control values:", controlValues);
-    console.log("Recipe title from saved recipe:", `"${savedRecipe.title}"`);
-    console.log("Recipe description:", `"${savedRecipe.description}"`);
+    console.log("Recipe title:", `"${savedRecipe.title}"`);
     
-    // Extract ingredients from the SAVED recipe for accurate representation
+    // Extract ingredients from saved recipe
     const ingredientsList = extractIngredientsFromSavedRecipe(savedRecipe.ingredients);
+    console.log("Extracted ingredients:", ingredientsList);
     
-    console.log("Ingredients extracted from saved recipe:", ingredientsList);
-    
-    // Create comprehensive context combining user input AND saved recipe data
-    const comprehensiveImageContext = {
+    // Create enhanced context for vivid imagery
+    const imageContext = {
       timelineTheme,
       emotionalContext: fullEmotionalContext,
       dumplingShape: controlValues.shape,
       flavor: controlValues.flavor,
       ingredientsList,
       recipeTitle: savedRecipe.title,
-      // Add additional context from saved recipe
       recipeDescription: savedRecipe.description
     };
     
-    console.log("=== COMPREHENSIVE IMAGE CONTEXT CREATED ===");
-    console.log("Image generation will use:");
-    console.log("- Timeline theme:", comprehensiveImageContext.timelineTheme);
-    console.log("- Full emotional context:", comprehensiveImageContext.emotionalContext);
-    console.log("- Dumpling shape:", comprehensiveImageContext.dumplingShape);
-    console.log("- Flavor profile:", comprehensiveImageContext.flavor);
-    console.log("- Recipe ingredients:", comprehensiveImageContext.ingredientsList);
-    console.log("- Recipe title:", comprehensiveImageContext.recipeTitle);
+    // Generate the image prompt
+    const imagePrompt = generateImagePrompt(imageContext);
     
-    // Use the enhanced image prompt generator with COMPREHENSIVE context
-    const imagePrompt = generateImagePrompt(comprehensiveImageContext);
+    console.log("=== DALL-E REQUEST DETAILS ===");
+    console.log("Final prompt length:", imagePrompt.length);
+    console.log("Full prompt being sent to DALL-E:");
+    console.log(imagePrompt);
+    console.log("DALL-E parameters:");
+    console.log("- Model: dall-e-3");
+    console.log("- Size: 1024x1024");
+    console.log("- Quality: hd");
+    console.log("- Style: vivid");
+    console.log("- Response format: b64_json");
     
-    console.log("=== SENDING COMPREHENSIVE PROMPT TO DALL-E ===");
-    console.log("Final comprehensive image prompt:", imagePrompt);
-    console.log("Prompt length:", imagePrompt.length);
-    
-    const imageResponse = await openai.images.generate({
-      model: 'dall-e-3',
-      prompt: imagePrompt,
-      n: 1,
-      size: '1024x1024',
-      response_format: 'b64_json',
-      style: 'vivid',
-      quality: 'hd',
-    });
-    
-    console.log("✅ DALL-E response received for comprehensive image");
-    const imageB64 = imageResponse.data[0].b64_json;
-    
-    // Upload to Supabase
-    if (imageB64) {
-      const imageUrl = await uploadImageToSupabase(imageB64, recipeId, supabaseAdmin);
-      if (imageUrl) {
-        console.log("✅ Comprehensive image uploaded successfully:", imageUrl);
-        return imageUrl;
-      }
+    // Call DALL-E with enhanced error handling
+    let imageResponse;
+    try {
+      imageResponse = await openai.images.generate({
+        model: 'dall-e-3',
+        prompt: imagePrompt,
+        n: 1,
+        size: '1024x1024',
+        response_format: 'b64_json',
+        style: 'vivid',
+        quality: 'hd',
+      });
+      
+      console.log("✅ DALL-E response received successfully");
+      console.log("Response data structure:", {
+        hasData: !!imageResponse.data,
+        dataLength: imageResponse.data?.length,
+        hasB64: !!imageResponse.data?.[0]?.b64_json
+      });
+      
+    } catch (dalleError) {
+      console.error("❌ DALL-E API Error:", dalleError);
+      console.error("Error details:", {
+        message: dalleError.message,
+        status: dalleError.status,
+        code: dalleError.code
+      });
+      return '/placeholder.svg';
     }
     
-    return '/placeholder.svg';
+    const imageB64 = imageResponse.data[0]?.b64_json;
+    
+    if (!imageB64) {
+      console.error("❌ No base64 image data received from DALL-E");
+      console.error("Response structure:", JSON.stringify(imageResponse, null, 2));
+      return '/placeholder.svg';
+    }
+    
+    console.log("✅ Base64 image data received:");
+    console.log("- Base64 length:", imageB64.length);
+    console.log("- Base64 preview (first 50 chars):", imageB64.substring(0, 50));
+    
+    // Upload to Supabase with comprehensive tracking
+    console.log("=== UPLOADING TO SUPABASE ===");
+    const imageUrl = await uploadImageToSupabase(imageB64, recipeId, supabaseAdmin);
+    
+    if (imageUrl && imageUrl !== '/placeholder.svg') {
+      console.log("✅ Image upload successful!");
+      console.log("Final image URL:", imageUrl);
+      return imageUrl;
+    } else {
+      console.error("❌ Image upload failed or returned placeholder");
+      return '/placeholder.svg';
+    }
+    
   } catch (error) {
-    console.error("❌ Error in comprehensive image generation:", error);
+    console.error("❌ Critical error in image generation pipeline:", error);
+    console.error("Error stack:", error.stack);
     return '/placeholder.svg';
   }
 }
 
 function extractIngredientsFromSavedRecipe(ingredients: any): string[] {
-  console.log("=== COMPREHENSIVE INGREDIENTS EXTRACTION FROM SAVED RECIPE ===");
-  console.log("Raw saved recipe ingredients:", JSON.stringify(ingredients, null, 2));
+  console.log("=== INGREDIENTS EXTRACTION ===");
+  console.log("Raw ingredients:", JSON.stringify(ingredients, null, 2));
   
   const ingredientsList: string[] = [];
   
   if (ingredients && typeof ingredients === 'object') {
-    // Handle different possible structures of saved ingredients
     if (Array.isArray(ingredients)) {
       ingredients.forEach((item: any) => {
         if (typeof item === 'string') {
@@ -130,7 +156,6 @@ function extractIngredientsFromSavedRecipe(ingredients: any): string[] {
         }
       });
     } else {
-      // If ingredients is an object with categories
       Object.values(ingredients).forEach((categoryItems: any) => {
         if (Array.isArray(categoryItems)) {
           categoryItems.forEach((item: any) => {
@@ -150,18 +175,17 @@ function extractIngredientsFromSavedRecipe(ingredients: any): string[] {
     }
   }
   
-  console.log("Final comprehensive ingredients list for image generation:", ingredientsList);
+  console.log("Final ingredients list:", ingredientsList);
   return ingredientsList;
 }
 
 function cleanIngredientName(item: string): string {
   return item
-    .replace(/^\d+[\s\w]*\s+/, '') // Remove leading numbers and measurements
-    .split(',')[0] // Take only the first part before comma
-    .split('(')[0] // Remove parenthetical info
+    .replace(/^\d+[\s\w]*\s+/, '')
+    .split(',')[0]
+    .split('(')[0]
     .trim()
     .toLowerCase();
 }
 
-// Re-export for compatibility
 export { extractIngredientsList } from './ingredientParser.ts';
