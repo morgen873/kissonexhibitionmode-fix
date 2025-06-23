@@ -14,7 +14,7 @@ interface ImagePromptParams {
 export function generateImagePrompt(params: ImagePromptParams): string {
   const { timelineTheme, emotionalContext, dumplingShape, flavor, ingredientsList, recipeTitle } = params;
   
-  console.log("=== SIMPLIFIED DIRECT IMAGE PROMPT GENERATION ===");
+  console.log("=== HYPER-REALISTIC FOOD PHOTOGRAPHY PROMPT GENERATION ===");
   console.log("Timeline theme:", `"${timelineTheme}"`);
   console.log("Emotional context:", `"${emotionalContext}"`);
   console.log("Dumpling shape:", dumplingShape);
@@ -22,60 +22,43 @@ export function generateImagePrompt(params: ImagePromptParams): string {
   console.log("Recipe title:", `"${recipeTitle}"`);
   console.log("Ingredients list:", ingredientsList);
   
-  // Check if this is a futuristic timeline
-  const isFuturistic = timelineTheme.toLowerCase().includes('future') || 
-                      timelineTheme.toLowerCase().includes('distant') ||
-                      timelineTheme.toLowerCase().includes('advanced') ||
-                      timelineTheme.toLowerCase().includes('tomorrow');
+  const finalPrompt = generateHyperRealisticFoodPrompt(params);
   
-  let finalPrompt;
-  
-  if (isFuturistic) {
-    console.log("🚀 GENERATING SIMPLIFIED FUTURISTIC PROMPT");
-    finalPrompt = generateSimpleFuturisticPrompt(params);
-  } else {
-    console.log("📜 GENERATING SIMPLIFIED ARTISTIC PROMPT");
-    finalPrompt = generateSimpleArtisticPrompt(params);
-  }
-  
-  console.log("=== FINAL SIMPLIFIED PROMPT FOR DALL-E ===");
+  console.log("=== FINAL HYPER-REALISTIC PROMPT FOR DALL-E ===");
   console.log("Prompt length:", finalPrompt.length);
   console.log("Full prompt:", finalPrompt);
   
   return finalPrompt;
 }
 
-function generateSimpleFuturisticPrompt(params: ImagePromptParams): string {
-  const { dumplingShape, recipeTitle } = params;
+function generateHyperRealisticFoodPrompt(params: ImagePromptParams): string {
+  const { timelineTheme, dumplingShape, ingredientsList } = params;
   
-  console.log("🔮 Creating SIMPLE futuristic dumpling prompt");
+  console.log("🍽️ Creating hyper-realistic food photography prompt");
   
-  // Ultra-simple, direct futuristic prompt
-  let prompt = `A futuristic sci-fi dumpling that glows with neon light. `;
-  prompt += `The dumpling is ${dumplingShape}-shaped and has a translucent, glowing wrapper. `;
-  prompt += `Bright electric blue and pink neon colors shine through the translucent skin. `;
-  prompt += `The dumpling hovers and emits colorful light beams. `;
-  prompt += `Digital art style, not realistic food photography. `;
-  prompt += `Cyberpunk aesthetic with glowing effects. `;
-  prompt += `Black background. `;
-  prompt += `Pure illustration, not a photograph.`;
+  // Convert ingredients array to a readable string
+  const ingredientsText = ingredientsList.length > 0 ? ingredientsList.join(', ') : 'traditional dumpling ingredients';
   
-  console.log("Generated SIMPLE futuristic prompt:", prompt);
-  return prompt;
-}
+  let prompt = `Create a hyper-realistic food photography image of a single dumpling dish, based strictly on the following recipe.
 
-function generateSimpleArtisticPrompt(params: ImagePromptParams): string {
-  const { timelineTheme, dumplingShape, recipeTitle } = params;
+– Time Period: ${timelineTheme}
+– Ingredients: ${ingredientsText}
+– Preparation Style: ${dumplingShape}-shaped dumpling
+– Presentation: food photography, realistic HD
+– Background: **Solid black only. No textures, no shadows, no objects.**
+– Lighting: Soft overhead light, food photography style, emphasize texture and gloss.
+– Composition: Close-up, centered, realistic depth of field.
+
+Strict rules:
+- Do **not** add ingredients or visual elements not explicitly described.
+- Do **not** render generic dumplings.
+- Do **not** change the time period aesthetic.
+- The image must look like a professional food photograph.
+- The image must have a **solid black background** with no gradients or noise.
+
+This is not conceptual art. This is a literal, historical or futuristic dumpling based on the given inputs.`;
   
-  console.log("🎨 Creating simple artistic dumpling prompt");
-  
-  let prompt = `An artistic illustrated dumpling inspired by ${timelineTheme}. `;
-  prompt += `The dumpling is ${dumplingShape}-shaped with beautiful artistic coloring. `;
-  prompt += `Painted illustration style, not realistic photography. `;
-  prompt += `Vibrant colors and artistic brush strokes. `;
-  prompt += `Black background. `;
-  prompt += `Digital painting, not a photograph.`;
-  
+  console.log("Generated hyper-realistic food photography prompt:", prompt);
   return prompt;
 }
 
