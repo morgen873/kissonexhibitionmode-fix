@@ -39,8 +39,6 @@ const RecipeImageDisplay: React.FC<RecipeImageDisplayProps> = ({ recipe }) => {
         }
     };
     
-    const isPlaceholder = !recipe.imageUrl || recipe.imageUrl === '/placeholder.svg';
-    
     return (
         <div className="flex flex-col items-center gap-3">
             <h3 className="text-lg font-semibold font-mono">Generated Dumpling</h3>
@@ -53,14 +51,6 @@ const RecipeImageDisplay: React.FC<RecipeImageDisplayProps> = ({ recipe }) => {
                     onLoad={handleImageLoad}
                     onError={handleImageError}
                 />
-                <div className="absolute top-2 left-2 bg-black/50 text-white text-xs p-1 rounded">
-                    {isPlaceholder ? 'Placeholder' : 'Generated'}
-                </div>
-                {!isPlaceholder && (
-                    <div className="absolute bottom-2 right-2 bg-black/50 text-white text-xs p-1 rounded">
-                        HD Quality
-                    </div>
-                )}
             </div>
         </div>
     );

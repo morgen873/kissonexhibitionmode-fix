@@ -14,7 +14,7 @@ interface ImagePromptParams {
 export function generateImagePrompt(params: ImagePromptParams): string {
   const { timelineTheme, emotionalContext, dumplingShape, flavor, ingredientsList, recipeTitle } = params;
   
-  console.log("=== HOLOGRAM DISPLAY FOOD PHOTOGRAPHY PROMPT GENERATION ===");
+  console.log("=== FUTURISTIC SCI-FI DUMPLING PROMPT GENERATION ===");
   console.log("Timeline theme:", `"${timelineTheme}"`);
   console.log("Emotional context:", `"${emotionalContext}"`);
   console.log("Dumpling shape:", dumplingShape);
@@ -22,8 +22,8 @@ export function generateImagePrompt(params: ImagePromptParams): string {
   console.log("Recipe title:", `"${recipeTitle}"`);
   console.log("Ingredients list:", ingredientsList);
   
-  // Generate hologram-ready prompt using the exact structure provided
-  const finalPrompt = generateHologramPrompt({
+  // Generate ultra-futuristic prompt
+  const finalPrompt = generateFuturisticSciFiPrompt({
     timelineTheme,
     emotionalContext,
     dumplingShape,
@@ -32,131 +32,131 @@ export function generateImagePrompt(params: ImagePromptParams): string {
     recipeTitle
   });
   
-  console.log("=== FINAL HOLOGRAM DISPLAY PROMPT ===");
+  console.log("=== FINAL FUTURISTIC SCI-FI PROMPT ===");
   console.log("Prompt length:", finalPrompt.length);
   console.log("Full prompt:", finalPrompt);
   
   return finalPrompt;
 }
 
-function generateHologramPrompt(params: ImagePromptParams): string {
+function generateFuturisticSciFiPrompt(params: ImagePromptParams): string {
   const { timelineTheme, emotionalContext, dumplingShape, flavor, ingredientsList, recipeTitle } = params;
   
-  // Base hologram prompt structure
-  let prompt = "HOLOGRAM DISPLAY FOOD PHOTOGRAPHY: Professional dumpling photograph on SOLID PURE BLACK BACKGROUND (#000000). CRITICAL: The background must be completely black with no textures, patterns, or variations - pure solid black for hologram fan display. The dumpling should be beautifully lit and floating against this pure black void.";
+  // Build ultra-futuristic sci-fi dumpling prompt
+  let prompt = "FUTURISTIC SCI-FI DUMPLING: A mind-blowing, ultra-futuristic dumpling that looks like it came from 3000 years in the future. ";
   
-  // Add time period styling based on timeline theme
-  const timelineStyle = getTimelineStyling(timelineTheme);
-  prompt += ` ${timelineStyle}`;
+  // Add cyberpunk/sci-fi visual elements
+  prompt += "The dumpling has a TRANSLUCENT, GLOWING wrapper that pulses with neon bioluminescent colors - electric blues, hot magentas, acid greens, and plasma purples. ";
   
-  // Add shape description
-  const shapeDescription = getShapeDescription(dumplingShape);
-  prompt += ` ${shapeDescription}`;
+  // Add shape with futuristic twist
+  const futuristicShape = getFuturisticShapeDescription(dumplingShape);
+  prompt += `${futuristicShape} `;
   
-  // Add ingredient visual effects
-  const ingredientEffects = getIngredientVisualEffects(ingredientsList);
-  prompt += ` ${ingredientEffects}`;
+  // Add holographic and energy effects
+  prompt += "GLOWING holographic patterns spiral around the dumpling. Particle effects and energy wisps emanate from its surface. ";
   
-  // Add intensity lighting based on emotional context
-  const lightingIntensity = getIntensityLighting(emotionalContext);
-  prompt += ` ${lightingIntensity}`;
+  // Add ingredient-based sci-fi effects
+  const sciFiEffects = getSciFiIngredientEffects(ingredientsList);
+  prompt += `${sciFiEffects} `;
   
-  // Add mandatory final requirement
-  prompt += " MANDATORY: The background must be completely solid black (#000000) with no textures, surfaces, or patterns. The dumpling should appear to float in pure black space, perfect for hologram fan display. Professional food photography with the dumpling as the only visible element against pure black void.";
+  // Add timeline-specific futuristic elements
+  const timelineEffects = getFuturisticTimelineEffects(timelineTheme);
+  prompt += `${timelineEffects} `;
   
-  console.log("Generated HOLOGRAM DISPLAY prompt:", prompt);
+  // Add emotional intensity through lighting
+  const futuristicLighting = getFuturisticLighting(emotionalContext);
+  prompt += `${futuristicLighting} `;
+  
+  // Final sci-fi styling requirements
+  prompt += "STYLE: Ultra-vibrant digital art with MAXIMUM saturation. Cyberpunk aesthetic with neon glow effects, holographic materials, and plasma energy. NO realism whatsoever - pure sci-fi fantasy art. Floating against pure black void (#000000) like a futuristic hologram display. The dumpling should look like alien technology meets food art.";
+  
+  console.log("Generated FUTURISTIC SCI-FI prompt:", prompt);
   return prompt;
 }
 
-function getTimelineStyling(timelineTheme: string): string {
-  const theme = timelineTheme.toLowerCase();
-  
-  if (theme.includes('future') || theme.includes('distant') || theme.includes('advanced')) {
-    return "Futuristic style with sleek modern presentation and advanced lighting techniques.";
-  }
-  if (theme.includes('near future') || theme.includes('tomorrow')) {
-    return "Near-future style with contemporary presentation and subtle technological elements.";
-  }
-  if (theme.includes('ancient') || theme.includes('traditional') || theme.includes('past')) {
-    return "Traditional style with classic presentation and timeless plating techniques.";
-  }
-  if (theme.includes('medieval')) {
-    return "Historical style with rustic presentation and traditional craftsmanship.";
-  }
-  
-  return "Contemporary style with modern plating techniques and professional lighting.";
-}
-
-function getShapeDescription(dumplingShape: string): string {
+function getFuturisticShapeDescription(dumplingShape: string): string {
   switch (dumplingShape.toLowerCase()) {
     case 'round':
-      return "The dumpling has traditional pleated edges with rounded body.";
+      return "The dumpling has a perfect SPHERICAL form with geometric nano-tech pleats that glow with circuit-like patterns.";
     case 'crescent':
-      return "The dumpling has elegant crescent shape with delicate pleated seams.";
+      return "The dumpling forms a sleek CRESCENT shape like a futuristic spacecraft with razor-sharp glowing edges.";
     case 'square':
-      return "The dumpling has geometric square form with clean angular edges.";
+      return "The dumpling has a precise CUBIC geometry with holographic corner joints and digital grid patterns.";
     case 'triangular':
-      return "The dumpling has distinctive triangular shape with precise folded corners.";
+      return "The dumpling forms a sharp TRIANGULAR pyramid with crystalline facets that refract neon light.";
     case 'flower':
-      return "The dumpling has beautiful flower-like form with petal-shaped pleats.";
+      return "The dumpling blooms like a DIGITAL FLOWER with petal-segments that pulse with bioluminescent energy.";
     default:
-      return "The dumpling has traditional pleated edges with classic form.";
+      return "The dumpling has a futuristic bio-engineered form with glowing geometric pleats and tech-organic curves.";
   }
 }
 
-function getIngredientVisualEffects(ingredientsList: string[]): string {
+function getSciFiIngredientEffects(ingredientsList: string[]): string {
   const effects: string[] = [];
   
   ingredientsList.forEach(ingredient => {
     const ing = ingredient.toLowerCase();
     
     if (ing.includes('herb') || ing.includes('basil') || ing.includes('cilantro') || ing.includes('parsley')) {
-      effects.push("Fresh herbs visible on the dumpling surface");
+      effects.push("Microscopic green bio-lights pulse through the wrapper like living circuits");
     }
     if (ing.includes('spice') || ing.includes('pepper') || ing.includes('chili')) {
-      effects.push("Spice elements creating visual texture");
+      effects.push("Red plasma energy crackles across the surface with electric spice particles");
     }
     if (ing.includes('chocolate') || ing.includes('cocoa')) {
-      effects.push("Rich chocolate tones and glossy finish");
+      effects.push("Dark matter swirls create bronze-purple quantum effects inside the translucent shell");
     }
     if (ing.includes('cheese') || ing.includes('cream')) {
-      effects.push("Creamy textures and smooth surfaces");
+      effects.push("Liquid gold nano-particles flow like molten metal through the dumpling core");
     }
     if (ing.includes('mushroom')) {
-      effects.push("Earthy mushroom elements visible");
+      effects.push("Alien spore-lights create purple bioluminescent networks throughout");
     }
     if (ing.includes('seafood') || ing.includes('shrimp') || ing.includes('fish')) {
-      effects.push("Delicate seafood textures");
+      effects.push("Ocean-blue quantum waves ripple through the translucent bio-tech wrapper");
     }
     if (ing.includes('vegetable') || ing.includes('carrot') || ing.includes('onion')) {
-      effects.push("Colorful vegetable elements");
+      effects.push("Rainbow spectrum data-streams flow like digital vegetable DNA");
     }
   });
   
   if (effects.length === 0) {
-    return "Beautiful ingredient textures visible on the dumpling surface.";
+    effects.push("Multi-colored energy streams flow through the bio-tech wrapper like liquid starlight");
   }
   
   return effects.join('. ') + ".";
 }
 
-function getIntensityLighting(emotionalContext: string): string {
+function getFuturisticTimelineEffects(timelineTheme: string): string {
+  const theme = timelineTheme.toLowerCase();
+  
+  if (theme.includes('future') || theme.includes('distant') || theme.includes('advanced')) {
+    return "Advanced nano-technology makes the dumpling surface shimmer with self-assembling molecular patterns. Quantum field effects distort space around it.";
+  }
+  if (theme.includes('near future') || theme.includes('tomorrow')) {
+    return "Cutting-edge bio-engineering creates a dumpling with smart-material wrapper that changes color patterns dynamically.";
+  }
+  
+  return "Futuristic bio-technology creates a dumpling that pulses with alien energy signatures and otherworldly luminescence.";
+}
+
+function getFuturisticLighting(emotionalContext: string): string {
   const context = emotionalContext.toLowerCase();
   
   if (context.includes('intense') || context.includes('powerful') || context.includes('strong')) {
-    return "Dramatic lighting with strong contrasts showcasing the dumpling against pure black background.";
+    return "EXPLOSIVE neon lighting with high-energy plasma beams shooting from the dumpling in all directions.";
   }
   if (context.includes('gentle') || context.includes('soft') || context.includes('calm')) {
-    return "Soft gentle lighting creating subtle shadows against pure black background.";
+    return "Soft ethereal glow with gentle particle streams and peaceful bioluminescent pulses.";
   }
   if (context.includes('bright') || context.includes('vibrant') || context.includes('energetic')) {
-    return "Bright vibrant lighting emphasizing colors against pure black background.";
+    return "ULTRA-BRIGHT neon explosion with maximum color saturation and electric energy bursts.";
   }
   if (context.includes('warm') || context.includes('cozy') || context.includes('comfort')) {
-    return "Warm lighting creating inviting atmosphere against pure black background.";
+    return "Warm golden-orange plasma glow with cozy energy wisps and inviting light particles.";
   }
   
-  return "Balanced lighting showcasing the dumpling against pure black background.";
+  return "Dynamic multi-colored lighting with spectacular holographic effects and radiant energy displays.";
 }
 
 // Re-export the ingredient parser for backward compatibility
