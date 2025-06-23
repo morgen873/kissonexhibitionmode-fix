@@ -44,13 +44,17 @@ export function generateImagePrompt(params: ImagePromptParams): string {
   
   let prompt: string;
   
-  // Determine which prompt builder to use based on timeline theme
+  // Fixed timeline detection logic
   const timelineLower = timelineTheme.toLowerCase();
   
-  if (timelineLower.includes('future') || timelineLower.includes('distant') && timelineLower.includes('future')) {
+  console.log("🔍 TIMELINE ANALYSIS:");
+  console.log("- Original timeline:", `"${timelineTheme}"`);
+  console.log("- Lowercase timeline:", `"${timelineLower}"`);
+  
+  if (timelineLower.includes('distant future') || timelineLower.includes('near future')) {
     console.log("🚀 USING FUTURISTIC PROMPT BUILDER");
     prompt = buildFuturisticPrompt(promptParams);
-  } else if (timelineLower.includes('past') || timelineLower.includes('distant') && timelineLower.includes('past')) {
+  } else if (timelineLower.includes('distant past') || timelineLower.includes('recent past')) {
     console.log("🏛️ USING HISTORICAL PROMPT BUILDER");
     prompt = buildHistoricalPrompt(promptParams);
   } else {
@@ -59,7 +63,12 @@ export function generateImagePrompt(params: ImagePromptParams): string {
   }
   
   console.log("=== 📤 TIME-PERIOD SPECIFIC PROMPT OUTPUT ===");
-  console.log("🎯 PROMPT TYPE:", timelineLower.includes('future') ? 'FUTURISTIC' : timelineLower.includes('past') ? 'HISTORICAL' : 'CONTEMPORARY');
+  console.log("🎯 TIMELINE DETECTED:", timelineTheme);
+  console.log("🎯 PROMPT TYPE:", 
+    timelineLower.includes('future') ? 'FUTURISTIC' : 
+    timelineLower.includes('past') ? 'HISTORICAL' : 
+    'CONTEMPORARY'
+  );
   console.log("🎯 PROMPT LENGTH:", prompt.length);
   console.log("🎯 FIRST 200 CHARS:", prompt.substring(0, 200));
   
