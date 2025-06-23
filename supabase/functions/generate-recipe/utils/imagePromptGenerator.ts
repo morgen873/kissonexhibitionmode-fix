@@ -2,7 +2,7 @@
 import { extractIngredientColors } from './colorExtractor.ts';
 import { extractIngredientsList } from './ingredientParser.ts';
 
-interface ImagePromptParams {
+export interface ImagePromptParams {
   timelineTheme: string;
   emotionalContext: string;
   dumplingShape: string;
