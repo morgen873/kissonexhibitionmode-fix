@@ -30,7 +30,7 @@ const CreationContainer: React.FC<CreationContainerProps> = ({
     children
 }) => {
     return (
-        <div className={`min-h-screen bg-gradient-to-br ${theme.bg} text-white p-3 sm:p-4 lg:p-8 flex flex-col items-center justify-start transition-all duration-300 pt-16 lg:pt-8`}>
+        <div className={`min-h-screen bg-gradient-to-br ${theme.bg} text-white responsive-padding flex flex-col items-center justify-start transition-all duration-300 pt-16 lg:pt-8`}>
             {/* Simplified background effects - no blur */}
             {!hasStartedCreation && (
                 <div className="absolute inset-0 opacity-20 overflow-hidden">
@@ -41,23 +41,23 @@ const CreationContainer: React.FC<CreationContainerProps> = ({
                 </div>
             )}
 
-            <div className="w-full max-w-sm lg:max-w-4xl xl:max-w-6xl space-y-6 relative z-10">
+            <div className="responsive-container-xl space-y-6 relative z-10">
                 {/* Progress Bar at top */}
                 <div className="w-full">
                     <ProgressBar progress={progress} theme={theme} />
                 </div>
 
                 {/* Main Content Card - responsive width */}
-                <Card className={`relative w-full mx-auto bg-black/50 border-2 border-white/20 shadow-2xl ${theme.cardShadow} transition-opacity duration-300`}>
-                    <CardHeader className="p-4 lg:p-6">
+                <Card className={`relative w-full mx-auto responsive-card-dark ${theme.cardShadow} transition-opacity duration-300`}>
+                    <CardHeader className="responsive-padding-sm">
                         {showTitle && (
-                            <CardTitle className={`text-xl md:text-2xl lg:text-3xl font-black text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent drop-shadow-lg min-h-[80px] flex items-center justify-center font-mono`}>
+                            <CardTitle className={`responsive-heading-lg text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent drop-shadow-lg min-h-[80px] flex items-center justify-center font-mono`}>
                                 {title}
                             </CardTitle>
                         )}
                     </CardHeader>
                     
-                    <CardContent className="p-4 lg:p-6">
+                    <CardContent className="responsive-padding-sm">
                         {children}
                     </CardContent>
                 </Card>

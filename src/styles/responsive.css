@@ -1,0 +1,93 @@
+
+/* Responsive utility classes for consistent layouts */
+
+/* Container utilities */
+.responsive-container {
+  @apply w-full max-w-7xl mx-auto px-3 sm:px-4 lg:px-8;
+}
+
+.responsive-container-sm {
+  @apply w-full max-w-sm mx-auto px-3 sm:px-4;
+}
+
+.responsive-container-md {
+  @apply w-full max-w-md mx-auto px-3 sm:px-4;
+}
+
+.responsive-container-lg {
+  @apply w-full max-w-4xl mx-auto px-3 sm:px-4 lg:px-8;
+}
+
+.responsive-container-xl {
+  @apply w-full max-w-6xl mx-auto px-3 sm:px-4 lg:px-8;
+}
+
+/* Spacing utilities */
+.responsive-padding {
+  @apply p-3 sm:p-4 lg:p-8;
+}
+
+.responsive-padding-sm {
+  @apply p-2 sm:p-3 lg:p-4;
+}
+
+.responsive-margin {
+  @apply m-3 sm:m-4 lg:m-8;
+}
+
+.responsive-gap {
+  @apply gap-3 sm:gap-4 lg:gap-6;
+}
+
+/* Typography utilities */
+.responsive-heading-xl {
+  @apply text-2xl sm:text-3xl lg:text-4xl font-bold font-mono;
+}
+
+.responsive-heading-lg {
+  @apply text-xl sm:text-2xl lg:text-3xl font-bold font-mono;
+}
+
+.responsive-heading-md {
+  @apply text-lg sm:text-xl lg:text-2xl font-semibold font-mono;
+}
+
+.responsive-text {
+  @apply text-sm sm:text-base lg:text-lg;
+}
+
+.responsive-text-sm {
+  @apply text-xs sm:text-sm lg:text-base;
+}
+
+/* Card utilities */
+.responsive-card {
+  @apply rounded-lg shadow-lg transition-all duration-300;
+}
+
+.responsive-card-dark {
+  @apply bg-black/30 backdrop-blur-xl border-2 border-white/20 shadow-2xl rounded-lg;
+}
+
+.responsive-card-light {
+  @apply bg-white/90 backdrop-blur-sm border border-gray-200 shadow-lg rounded-lg;
+}
+
+/* Layout utilities */
+.responsive-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6;
+}
+
+.responsive-flex {
+  @apply flex flex-col sm:flex-row items-center gap-4 sm:gap-6;
+}
+
+/* Button utilities */
+.responsive-button {
+  @apply px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base rounded-lg transition-all duration-200;
+}
+
+/* Image utilities */
+.responsive-image {
+  @apply w-full h-auto max-h-48 sm:max-h-64 lg:max-h-80 object-cover rounded-lg;
+}

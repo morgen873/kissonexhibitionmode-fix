@@ -5,6 +5,7 @@ import { Database } from '@/integrations/supabase/types';
 import { Loader2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import IngredientsList from '@/components/recipe/IngredientsList';
+import GlobalLayout from '@/components/layout/GlobalLayout';
 import { testImageAccess } from '@/utils/imageDebug';
 
 type Recipe = Database['public']['Tables']['recipes']['Row'];
@@ -52,17 +53,21 @@ const RecipePage = () => {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-screen bg-gradient-to-br from-gray-900 to-slate-800 text-white">
-                <Loader2 className="h-16 w-16 animate-spin" />
-            </div>
+            <GlobalLayout variant="recipe">
+                <div className="flex justify-center items-center h-screen">
+                    <Loader2 className="h-16 w-16 animate-spin" />
+                </div>
+            </GlobalLayout>
         );
     }
 
     if (error || !recipe) {
         return (
-            <div className="flex justify-center items-center h-screen bg-gradient-to-br from-gray-900 to-slate-800 text-white">
-                <p>{error || "Recipe not found."}</p>
-            </div>
+            <GlobalLayout variant="recipe">
+                <div className="flex justify-center items-center h-screen">
+                    <p className="responsive-text">{error || "Recipe not found."}</p>
+                </div>
+            </GlobalLayout>
         );
     }
 
@@ -76,51 +81,55 @@ const RecipePage = () => {
     console.log('- Is placeholder:', isPlaceholder);
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 to-slate-800 text-white p-3 sm:p-4">
-            <Card className="max-w-sm mx-auto bg-black/30 backdrop-blur-xl border-2 border-white/20 shadow-2xl">
-                <CardHeader>
-                    <CardTitle className="text-2xl md:text-3xl font-bold text-center text-white drop-shadow-lg">{recipe.title}</CardTitle>
-                    <div className="flex justify-center mt-4">
-                        <div className="relative w-full max-w-xs">
-                            <img 
-                                src={imageUrl}
-                                alt={recipe.title} 
-                                className="rounded-lg w-full h-auto max-h-64 object-cover shadow-lg"
-                                onLoad={() => {
-                                    console.log('✅ Image loaded successfully:', imageUrl);
-                                }}
-                                onError={(e) => {
-                                    console.log('❌ Image failed to load:', imageUrl);
-                                    console.log('❌ Error details:', e);
-                                    // Only fall back if we're not already using placeholder
-                                    if (e.currentTarget.src !== '/placeholder.svg') {
-                                        console.log('🔄 Falling back to placeholder');
-                                        e.currentTarget.src = '/placeholder.svg';
-                                    }
-                                }}
-                            />
-                            <div className="absolute top-2 left-2 bg-black/50 text-white text-xs p-1 rounded">
-                                {isPlaceholder ? 'Placeholder' : 'Generated'}
+        <GlobalLayout variant="recipe">
+            <div className="responsive-padding">
+                <Card className="responsive-container-sm responsive-card-dark">
+                    <CardHeader>
+                        <CardTitle className="responsive-heading-lg text-center text-white drop-shadow-lg">
+                            {recipe.title}
+                        </CardTitle>
+                        <div className="flex justify-center mt-4">
+                            <div className="relative w-full max-w-xs">
+                                <img 
+                                    src={imageUrl}
+                                    alt={recipe.title} 
+                                    className="responsive-image shadow-lg"
+                                    onLoad={() => {
+                                        console.log('✅ Image loaded successfully:', imageUrl);
+                                    }}
+                                    onError={(e) => {
+                                        console.log('❌ Image failed to load:', imageUrl);
+                                        console.log('❌ Error details:', e);
+                                        // Only fall back if we're not already using placeholder
+                                        if (e.currentTarget.src !== '/placeholder.svg') {
+                                            console.log('🔄 Falling back to placeholder');
+                                            e.currentTarget.src = '/placeholder.svg';
+                                        }
+                                    }}
+                                />
+                                <div className="absolute top-2 left-2 bg-black/50 text-white text-xs p-1 rounded">
+                                    {isPlaceholder ? 'Placeholder' : 'Generated'}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </CardHeader>
-                <CardContent className="space-y-6 mt-3">
-                    <div>
-                        <h3 className="text-xl font-semibold mb-2 border-b-2 border-white/20 pb-2 text-white">Description</h3>
-                        <p className="text-white/80 mt-3 text-sm">{recipe.description}</p>
-                    </div>
-                     <div>
-                        <h3 className="text-xl font-semibold mb-2 border-b-2 border-white/20 pb-2 text-white">Ingredients</h3>
-                        <IngredientsList ingredients={recipe.ingredients} />
-                    </div>
-                    <div>
-                        <h3 className="text-xl font-semibold mb-2 border-b-2 border-white/20 pb-2 text-white">Cooking Instructions</h3>
-                        <pre className="text-white/80 bg-black/20 p-3 rounded-md whitespace-pre-wrap font-sans mt-3 text-sm">{recipe.cooking_recipe}</pre>
-                    </div>
-                </CardContent>
-            </Card>
-        </div>
+                    </CardHeader>
+                    <CardContent className="space-y-6 mt-3">
+                        <div>
+                            <h3 className="responsive-heading-md mb-2 border-b-2 border-white/20 pb-2 text-white">Description</h3>
+                            <p className="text-white/80 mt-3 responsive-text-sm">{recipe.description}</p>
+                        </div>
+                         <div>
+                            <h3 className="responsive-heading-md mb-2 border-b-2 border-white/20 pb-2 text-white">Ingredients</h3>
+                            <IngredientsList ingredients={recipe.ingredients} />
+                        </div>
+                        <div>
+                            <h3 className="responsive-heading-md mb-2 border-b-2 border-white/20 pb-2 text-white">Cooking Instructions</h3>
+                            <pre className="text-white/80 bg-black/20 p-3 rounded-md whitespace-pre-wrap font-sans mt-3 responsive-text-sm">{recipe.cooking_recipe}</pre>
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
+        </GlobalLayout>
     );
 };
 

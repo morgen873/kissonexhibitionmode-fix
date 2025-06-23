@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import { useCreationForm } from '@/hooks/useCreationForm';
@@ -6,6 +5,7 @@ import { useCreationNavigation } from '@/hooks/useCreationNavigation';
 import { useCreationProgress } from '@/hooks/useCreationProgress';
 import { creationTheme } from '@/components/creation/CreationTheme';
 import { getCreationTitle, shouldShowTitle } from '@/components/creation/CreationTitleHandler';
+import GlobalLayout from '@/components/layout/GlobalLayout';
 import CreationLayout from '@/components/creation/CreationLayout';
 import CreationContent from '@/components/creation/CreationContent';
 
@@ -83,47 +83,49 @@ const Creation = () => {
   const showTitle = shouldShowTitle(recipeResult, isCreatingRecipe, hasStartedCreation, currentIntroStep);
 
   return (
-    <CreationLayout
-      progress={progress}
-      theme={creationTheme}
-      title={title}
-      showTitle={showTitle}
-      hasStartedCreation={hasStartedCreation}
-      isTransitioning={isTransitioning}
-      transitionDirection={transitionDirection}
-      completeTransition={completeTransition}
-    >
-      <CreationContent
-        isCreatingRecipe={isCreatingRecipe}
-        recipeResult={recipeResult}
-        hasStartedCreation={hasStartedCreation}
-        currentIntroStep={currentIntroStep}
-        creationStep={creationStep}
-        creationStepData={creationStepData}
-        answers={answers}
-        customAnswers={customAnswers}
-        controlValues={controlValues}
+    <GlobalLayout variant="creation" showHeader={false}>
+      <CreationLayout
+        progress={progress}
         theme={creationTheme}
-        isNextDisabled={isNextDisabled}
-        onAnswerSelect={handleAnswerSelect}
-        onCustomAnswerChange={handleCustomAnswerChange}
-        onTemperatureChange={handleTemperatureChange}
-        onShapeChange={handleShapeChange}
-        onFlavorChange={handleFlavorChange}
-        onEnhancerChange={handleEnhancerChange}
-        nextIntroStep={nextIntroStep}
-        prevIntroStep={prevIntroStep}
-        prevCreationStep={prevCreationStep}
-        nextCreationStep={nextCreationStep}
-        handleSubmit={handleSubmit}
-        handleReset={handleReset}
-        handleIntroNext={handleIntroNext}
-        handleIntroPrev={handleIntroPrev}
-        handleCreationNext={handleCreationNext}
-        handleCreationPrev={handleCreationPrev}
-        handleCreationSubmit={handleCreationSubmit}
-      />
-    </CreationLayout>
+        title={title}
+        showTitle={showTitle}
+        hasStartedCreation={hasStartedCreation}
+        isTransitioning={isTransitioning}
+        transitionDirection={transitionDirection}
+        completeTransition={completeTransition}
+      >
+        <CreationContent
+          isCreatingRecipe={isCreatingRecipe}
+          recipeResult={recipeResult}
+          hasStartedCreation={hasStartedCreation}
+          currentIntroStep={currentIntroStep}
+          creationStep={creationStep}
+          creationStepData={creationStepData}
+          answers={answers}
+          customAnswers={customAnswers}
+          controlValues={controlValues}
+          theme={creationTheme}
+          isNextDisabled={isNextDisabled}
+          onAnswerSelect={handleAnswerSelect}
+          onCustomAnswerChange={handleCustomAnswerChange}
+          onTemperatureChange={handleTemperatureChange}
+          onShapeChange={handleShapeChange}
+          onFlavorChange={handleFlavorChange}
+          onEnhancerChange={handleEnhancerChange}
+          nextIntroStep={nextIntroStep}
+          prevIntroStep={prevIntroStep}
+          prevCreationStep={prevCreationStep}
+          nextCreationStep={nextCreationStep}
+          handleSubmit={handleSubmit}
+          handleReset={handleReset}
+          handleIntroNext={handleIntroNext}
+          handleIntroPrev={handleIntroPrev}
+          handleCreationNext={handleCreationNext}
+          handleCreationPrev={handleCreationPrev}
+          handleCreationSubmit={handleCreationSubmit}
+        />
+      </CreationLayout>
+    </GlobalLayout>
   );
 };
 
