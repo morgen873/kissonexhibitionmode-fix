@@ -31,10 +31,10 @@ const TimelineScreen: React.FC<TimelineScreenProps> = ({ stepData, selectedValue
                         <Tooltip key={index} delayDuration={200}>
                             <TooltipTrigger asChild>
                                 <Card
-                                    onClick={() => onSelect(option.title)}
+                                    onClick={() => onSelect(option.value || option.title)}
                                     className={cn(
                                         'cursor-pointer transition-all duration-300 bg-black/20 border-2 h-20 flex items-center justify-center text-center',
-                                        selectedValue === option.title 
+                                        selectedValue === (option.value || option.title)
                                             ? `${theme.optionSelectedBorder} ${theme.optionSelectedShadow} scale-105` 
                                             : `border-white/20 ${theme.optionHover}`
                                     )}

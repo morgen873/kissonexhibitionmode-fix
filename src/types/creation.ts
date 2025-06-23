@@ -47,6 +47,7 @@ export interface TimelineStep {
     options: {
         title: string;
         description: string;
+        value?: string;
     }[];
 }
 
