@@ -14,87 +14,114 @@ interface ImagePromptParams {
 export function generateImagePrompt(params: ImagePromptParams): string {
   const { timelineTheme, emotionalContext, dumplingShape, flavor, ingredientsList, recipeTitle } = params;
   
-  console.log("=== 🔍 DETAILED PROMPT GENERATION TRACING ===");
-  console.log("📊 INPUT PARAMETERS RECEIVED:");
+  console.log("=== 🔍 NEW SIMPLIFIED PROMPT GENERATION ===");
+  console.log("📊 INPUT PARAMETERS:");
   console.log("- Timeline theme:", `"${timelineTheme}"`);
   console.log("- Emotional context:", `"${emotionalContext}"`);
   console.log("- Dumpling shape:", dumplingShape);
   console.log("- Flavor:", flavor);
   console.log("- Recipe title:", `"${recipeTitle}"`);
   console.log("- Ingredients list:", ingredientsList);
-  console.log("- Ingredients list length:", ingredientsList.length);
-  console.log("- Timeline theme type:", typeof timelineTheme);
-  console.log("- Timeline theme toLowerCase():", timelineTheme.toLowerCase());
   
-  // Check if timeline contains futuristic keywords
-  const futuristicKeywords = ['future', 'distant', 'advanced', 'tomorrow', 'sci-fi', 'cyberpunk', 'space', 'robot', 'ai', 'technology'];
-  const isFuturistic = futuristicKeywords.some(keyword => timelineTheme.toLowerCase().includes(keyword));
+  // Check if timeline contains futuristic keywords with expanded detection
+  const futuristicKeywords = [
+    'future', 'distant', 'advanced', 'tomorrow', 'sci-fi', 'cyberpunk', 
+    'space', 'robot', 'ai', 'technology', 'neon', 'holographic', 'digital',
+    'virtual', 'synthetic', 'quantum', 'nano', 'cyber', 'techno'
+  ];
+  
+  const timelineLower = timelineTheme.toLowerCase();
+  const isFuturistic = futuristicKeywords.some(keyword => timelineLower.includes(keyword));
   
   console.log("🔍 FUTURISTIC DETECTION:");
-  console.log("- Futuristic keywords:", futuristicKeywords);
+  console.log("- Timeline text:", timelineLower);
   console.log("- Is futuristic detected:", isFuturistic);
-  console.log("- Timeline analysis:", timelineTheme.toLowerCase());
   
-  const finalPrompt = generateHyperRealisticFoodPrompt(params);
+  let finalPrompt: string;
   
-  console.log("=== 📤 FINAL PROMPT BEING SENT TO DALL-E ===");
+  if (isFuturistic) {
+    finalPrompt = generateFuturisticPrompt(params);
+  } else {
+    finalPrompt = generateHistoricalPrompt(params);
+  }
+  
+  console.log("=== 📤 FINAL PROMPT OUTPUT ===");
+  console.log("🎯 PROMPT TYPE:", isFuturistic ? "FUTURISTIC" : "HISTORICAL");
   console.log("🎯 PROMPT LENGTH:", finalPrompt.length);
-  console.log("🎯 CHARACTER COUNT:", finalPrompt.length);
-  console.log("🎯 WORD COUNT:", finalPrompt.split(' ').length);
-  console.log("🎯 FULL PROMPT TEXT:");
+  console.log("🎯 FULL PROMPT:");
   console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   console.log(finalPrompt);
   console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   
-  // Validate prompt contains expected elements
-  const promptLower = finalPrompt.toLowerCase();
-  console.log("🔍 PROMPT VALIDATION:");
-  console.log("- Contains 'futuristic':", promptLower.includes('futuristic'));
-  console.log("- Contains 'sci-fi':", promptLower.includes('sci-fi'));
-  console.log("- Contains 'neon':", promptLower.includes('neon'));
-  console.log("- Contains 'glowing':", promptLower.includes('glowing'));
-  console.log("- Contains timeline theme:", promptLower.includes(timelineTheme.toLowerCase()));
-  console.log("- Contains dumpling shape:", promptLower.includes(dumplingShape.toLowerCase()));
-  
   return finalPrompt;
 }
 
-function generateHyperRealisticFoodPrompt(params: ImagePromptParams): string {
+function generateFuturisticPrompt(params: ImagePromptParams): string {
+  const { timelineTheme, dumplingShape, ingredientsList, recipeTitle } = params;
+  
+  console.log("🚀 GENERATING FUTURISTIC PROMPT");
+  
+  const ingredientsText = ingredientsList.length > 0 ? ingredientsList.join(', ') : 'advanced synthetic ingredients';
+  
+  const prompt = `Create a stunning futuristic sci-fi dumpling image:
+
+SUBJECT: A single ${dumplingShape}-shaped dumpling with incredible futuristic design
+TIME PERIOD: ${timelineTheme} - fully embrace this futuristic aesthetic
+INGREDIENTS: ${ingredientsText} but rendered with futuristic technology
+VISUAL STYLE: Cyberpunk, neon-lit, holographic, sci-fi food art
+
+MANDATORY FUTURISTIC ELEMENTS:
+- Glowing neon colors (electric blue, hot pink, acid green)
+- Holographic textures and translucent materials
+- Digital circuit patterns or data streams
+- Metallic chrome or iridescent surfaces
+- Floating particles or energy fields
+- LED-like glowing edges
+- Futuristic plating on high-tech surfaces
+
+TECHNICAL SPECS:
+- Ultra-sharp 4K digital art quality
+- Dramatic neon lighting
+- Solid black background
+- Close-up centered composition
+- Maximum visual impact and excitement
+
+DO NOT make this look like regular food photography. This must be visually striking futuristic sci-fi art that would fit in a cyberpunk movie.`;
+
+  console.log("✅ FUTURISTIC PROMPT GENERATED");
+  return prompt;
+}
+
+function generateHistoricalPrompt(params: ImagePromptParams): string {
   const { timelineTheme, dumplingShape, ingredientsList } = params;
   
-  console.log("🍽️ HYPER-REALISTIC PROMPT GENERATION STARTED");
-  console.log("📋 PROMPT BUILDING INPUTS:");
-  console.log("- Timeline theme for prompt:", `"${timelineTheme}"`);
-  console.log("- Shape for prompt:", dumplingShape);
-  console.log("- Ingredients for prompt:", ingredientsList);
+  console.log("🏛️ GENERATING HISTORICAL PROMPT");
   
-  // Convert ingredients array to a readable string
   const ingredientsText = ingredientsList.length > 0 ? ingredientsList.join(', ') : 'traditional dumpling ingredients';
-  console.log("- Final ingredients text:", `"${ingredientsText}"`);
   
-  let prompt = `Create a hyper-realistic food photography image of a single dumpling dish, based strictly on the following recipe.
+  const prompt = `Create a realistic historical dumpling photograph:
 
-– Time Period: ${timelineTheme}
-– Ingredients: ${ingredientsText}
-– Preparation Style: ${dumplingShape}-shaped dumpling
-– Presentation: food photography, realistic HD
-– Background: **Solid black only. No textures, no shadows, no objects.**
-– Lighting: Soft overhead light, food photography style, emphasize texture and gloss.
-– Composition: Close-up, centered, realistic depth of field.
+SUBJECT: A single ${dumplingShape}-shaped dumpling
+TIME PERIOD: ${timelineTheme} - authentic to this historical era
+INGREDIENTS: ${ingredientsText}
+VISUAL STYLE: Period-accurate food photography
 
-Strict rules:
-- Do **not** add ingredients or visual elements not explicitly described.
-- Do **not** render generic dumplings.
-- Do **not** change the time period aesthetic.
-- The image must look like a professional food photograph.
-- The image must have a **solid black background** with no gradients or noise.
+HISTORICAL STYLING:
+- Authentic ingredients and preparation methods from ${timelineTheme}
+- Traditional serving vessels and utensils
+- Period-appropriate lighting and atmosphere
+- Historically accurate colors and textures
 
-This is not conceptual art. This is a literal, historical or futuristic dumpling based on the given inputs.`;
-  
-  console.log("✅ PROMPT CONSTRUCTION COMPLETE");
-  console.log("📏 Generated prompt length:", prompt.length);
-  console.log("📝 Generated prompt preview (first 200 chars):", prompt.substring(0, 200) + "...");
-  
+TECHNICAL SPECS:
+- Professional food photography
+- Realistic lighting
+- Solid black background
+- Centered composition
+- High detail and texture emphasis
+
+This should look like an authentic representation of food from ${timelineTheme}.`;
+
+  console.log("✅ HISTORICAL PROMPT GENERATED");
   return prompt;
 }
 
