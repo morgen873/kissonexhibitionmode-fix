@@ -114,8 +114,6 @@ const CreationContent: React.FC<CreationContentProps> = ({
             totalSteps={4}
             onPrev={prevIntroStep}
             onNext={nextIntroStep}
-            onTransitionPrev={handleIntroPrev}
-            onTransitionNext={handleIntroNext}
             isFirstStep={currentIntroStep === 0}
             isLastStep={currentIntroStep === introSteps.length - 1}
             buttonText={introSteps[currentIntroStep].buttonText}
