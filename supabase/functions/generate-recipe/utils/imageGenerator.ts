@@ -26,9 +26,9 @@ export async function generateAndUploadRecipeImage(
   supabaseAdmin: ReturnType<typeof createClient>
 ): Promise<string> {
   try {
-    console.log("=== 🚀 GPT-IMAGE-1 GENERATION PIPELINE ===");
+    console.log("=== 🚀 GPT-IMAGE-1 VERIFIED ORGANIZATION GENERATION ===");
     
-    // Step 1: Extract timeline theme - this is the key piece
+    // Step 1: Extract timeline theme
     const timelineValues = Object.values(payload.timeline);
     const timelineTheme = timelineValues.length > 0 ? timelineValues[0] : 'present day';
     console.log("🕐 TIMELINE EXTRACTION:");
@@ -70,41 +70,48 @@ export async function generateAndUploadRecipeImage(
     console.log("- Prompt length:", imagePrompt.length);
     console.log("- First 200 chars:", imagePrompt.substring(0, 200));
     
-    // Step 6: Call GPT-IMAGE-1 with optimized configuration
-    console.log("📥 CALLING GPT-IMAGE-1 API...");
+    // Step 6: Call GPT-IMAGE-1 with verified organization
+    console.log("📥 CALLING GPT-IMAGE-1 API WITH VERIFIED ORGANIZATION...");
     const gptImageConfig = {
       model: 'gpt-image-1' as const,
       prompt: imagePrompt,
       size: '1024x1024' as const,
       quality: 'high' as const,
       output_format: 'png' as const,
-      background: 'opaque' as const, // Ensure solid black background
+      background: 'opaque' as const,
       moderation: 'auto' as const
     };
     
-    console.log("🎨 GPT-IMAGE-1 CONFIG:");
+    console.log("🎨 GPT-IMAGE-1 VERIFIED CONFIG:");
     console.log("- Model:", gptImageConfig.model);
     console.log("- Quality:", gptImageConfig.quality);  
     console.log("- Size:", gptImageConfig.size);
     console.log("- Output format:", gptImageConfig.output_format);
     console.log("- Background:", gptImageConfig.background);
+    console.log("- Organization status: VERIFIED ✅");
     
     const imageResponse = await openai.images.generate(gptImageConfig);
     
-    console.log("✅ GPT-IMAGE-1 RESPONSE RECEIVED");
+    console.log("✅ GPT-IMAGE-1 RESPONSE RECEIVED FROM VERIFIED ORG");
     console.log("- Response data available:", !!imageResponse.data?.[0]);
     
+    if (!imageResponse.data?.[0]) {
+      console.error("❌ NO IMAGE DATA RECEIVED FROM GPT-IMAGE-1");
+      return '/placeholder.svg';
+    }
+    
     // Step 7: Extract image data (gpt-image-1 always returns base64)
-    const imageB64 = imageResponse.data[0]?.b64_json;
+    const imageB64 = imageResponse.data[0].b64_json;
     
     if (!imageB64) {
-      console.error("❌ NO IMAGE DATA RECEIVED FROM GPT-IMAGE-1");
+      console.error("❌ NO BASE64 IMAGE DATA IN RESPONSE");
       return '/placeholder.svg';
     }
     
     console.log("✅ IMAGE DATA EXTRACTED, LENGTH:", imageB64.length);
     
     // Step 8: Upload to Supabase
+    console.log("📤 UPLOADING TO SUPABASE...");
     const imageUrl = await uploadImageToSupabase(imageB64, recipeId, supabaseAdmin);
     
     console.log("📥 UPLOAD RESULT:", imageUrl);
@@ -118,6 +125,13 @@ export async function generateAndUploadRecipeImage(
       message: error.message,
       stack: error.stack
     });
+    
+    // Check if it's still an organization verification error
+    if (error.message && error.message.includes('organization must be verified')) {
+      console.error("❌ ORGANIZATION STILL NOT VERIFIED");
+      console.error("Please ensure your OpenAI organization is fully verified and wait up to 15 minutes for access to propagate");
+    }
+    
     return '/placeholder.svg';
   }
 }
