@@ -44,7 +44,7 @@ export function generateImagePrompt(params: ImagePromptParams): string {
   
   let prompt: string;
   
-  // Enhanced timeline detection logic with specific checks
+  // Enhanced timeline detection logic with specific checks - case insensitive
   const timelineLower = timelineTheme.toLowerCase();
   
   console.log("🔍 TIMELINE ANALYSIS:");
@@ -56,8 +56,8 @@ export function generateImagePrompt(params: ImagePromptParams): string {
     console.log("🚀 USING FUTURISTIC PROMPT BUILDER");
     prompt = buildFuturisticPrompt(promptParams);
   } 
-  // Check for past timelines
-  else if (timelineLower.includes('distant past') || timelineLower.includes('recent past')) {
+  // Check for past timelines - FIXED: Added more specific matching
+  else if (timelineLower.includes('distant past') || timelineLower.includes('recent past') || timelineLower === 'distant past' || timelineLower === 'recent past') {
     console.log("🏛️ USING HISTORICAL PROMPT BUILDER");
     prompt = buildHistoricalPrompt(promptParams);
   } 
@@ -76,7 +76,7 @@ export function generateImagePrompt(params: ImagePromptParams): string {
   console.log("🎯 TIMELINE DETECTED:", timelineTheme);
   console.log("🎯 PROMPT TYPE:", 
     (timelineLower.includes('distant future') || timelineLower.includes('near future') || timelineLower.includes('far future')) ? 'FUTURISTIC' : 
-    (timelineLower.includes('distant past') || timelineLower.includes('recent past')) ? 'HISTORICAL' : 
+    (timelineLower.includes('distant past') || timelineLower.includes('recent past') || timelineLower === 'distant past' || timelineLower === 'recent past') ? 'HISTORICAL' : 
     'CONTEMPORARY'
   );
   console.log("🎯 PROMPT LENGTH:", prompt.length);
