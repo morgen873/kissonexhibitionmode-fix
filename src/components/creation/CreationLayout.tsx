@@ -12,6 +12,7 @@ interface CreationLayoutProps {
   isTransitioning: boolean;
   transitionDirection: 'forward' | 'backward';
   completeTransition: () => void;
+  uploadedVideos?: string[];
   children: React.ReactNode;
 }
 
@@ -24,6 +25,7 @@ const CreationLayout: React.FC<CreationLayoutProps> = ({
   isTransitioning,
   transitionDirection,
   completeTransition,
+  uploadedVideos = [],
   children
 }) => {
   return (
@@ -43,6 +45,7 @@ const CreationLayout: React.FC<CreationLayoutProps> = ({
         isVisible={isTransitioning}
         direction={transitionDirection}
         onComplete={completeTransition}
+        customVideos={uploadedVideos}
       />
 
       {/* Footer for intro flow - made more compact */}

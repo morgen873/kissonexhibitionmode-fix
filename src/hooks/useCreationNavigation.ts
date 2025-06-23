@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
 import { useTransition } from '@/hooks/useTransition';
+import { useVideoUpload } from '@/hooks/useVideoUpload';
 import { introSteps } from "@/data/introSteps";
 
 interface UseCreationNavigationProps {
@@ -15,6 +16,7 @@ export const useCreationNavigation = ({
   handleSubmit
 }: UseCreationNavigationProps) => {
   const { isTransitioning, transitionDirection, startTransition, completeTransition } = useTransition();
+  const { uploadedVideos, handleVideoUpload, handleVideoRemove, clearAllVideos } = useVideoUpload();
   const [currentIntroStep, setCurrentIntroStep] = useState(0);
   const [hasStartedCreation, setHasStartedCreation] = useState(false);
 
@@ -83,6 +85,11 @@ export const useCreationNavigation = ({
     handleCreationPrev,
     handleCreationSubmit,
     nextIntroStep,
-    prevIntroStep
+    prevIntroStep,
+    // Video management
+    uploadedVideos,
+    handleVideoUpload,
+    handleVideoRemove,
+    clearAllVideos
   };
 };

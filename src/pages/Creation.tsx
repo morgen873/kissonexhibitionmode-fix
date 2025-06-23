@@ -47,7 +47,11 @@ const Creation = () => {
     handleCreationPrev,
     handleCreationSubmit,
     nextIntroStep,
-    prevIntroStep
+    prevIntroStep,
+    uploadedVideos,
+    handleVideoUpload,
+    handleVideoRemove,
+    clearAllVideos
   } = useCreationNavigation({
     nextCreationStep,
     prevCreationStep,
@@ -93,6 +97,7 @@ const Creation = () => {
         isTransitioning={isTransitioning}
         transitionDirection={transitionDirection}
         completeTransition={completeTransition}
+        uploadedVideos={uploadedVideos}
       >
         <CreationContent
           isCreatingRecipe={isCreatingRecipe}
@@ -123,6 +128,9 @@ const Creation = () => {
           handleCreationNext={handleCreationNext}
           handleCreationPrev={handleCreationPrev}
           handleCreationSubmit={handleCreationSubmit}
+          uploadedVideos={uploadedVideos}
+          onVideoUpload={handleVideoUpload}
+          onVideoRemove={handleVideoRemove}
         />
       </CreationLayout>
     </GlobalLayout>
