@@ -44,29 +44,39 @@ export function generateImagePrompt(params: ImagePromptParams): string {
   
   let prompt: string;
   
-  // Fixed timeline detection logic
+  // Enhanced timeline detection logic with specific checks
   const timelineLower = timelineTheme.toLowerCase();
   
   console.log("🔍 TIMELINE ANALYSIS:");
   console.log("- Original timeline:", `"${timelineTheme}"`);
   console.log("- Lowercase timeline:", `"${timelineLower}"`);
   
-  if (timelineLower.includes('distant future') || timelineLower.includes('near future')) {
+  // Check for future timelines
+  if (timelineLower.includes('distant future') || timelineLower.includes('near future') || timelineLower.includes('far future')) {
     console.log("🚀 USING FUTURISTIC PROMPT BUILDER");
     prompt = buildFuturisticPrompt(promptParams);
-  } else if (timelineLower.includes('distant past') || timelineLower.includes('recent past')) {
+  } 
+  // Check for past timelines
+  else if (timelineLower.includes('distant past') || timelineLower.includes('recent past')) {
     console.log("🏛️ USING HISTORICAL PROMPT BUILDER");
     prompt = buildHistoricalPrompt(promptParams);
-  } else {
-    console.log("🏙️ USING CONTEMPORARY PROMPT BUILDER (Present Day)");
+  } 
+  // Check for present day specifically
+  else if (timelineLower.includes('present day') || timelineLower.includes('present') || timelineLower === 'present day') {
+    console.log("🏙️ USING CONTEMPORARY PROMPT BUILDER (Present Day - Explicit Match)");
+    prompt = buildContemporaryPrompt(promptParams);
+  }
+  // Default fallback to contemporary
+  else {
+    console.log("🏙️ USING CONTEMPORARY PROMPT BUILDER (Default Fallback)");
     prompt = buildContemporaryPrompt(promptParams);
   }
   
   console.log("=== 📤 TIME-PERIOD SPECIFIC PROMPT OUTPUT ===");
   console.log("🎯 TIMELINE DETECTED:", timelineTheme);
   console.log("🎯 PROMPT TYPE:", 
-    timelineLower.includes('future') ? 'FUTURISTIC' : 
-    timelineLower.includes('past') ? 'HISTORICAL' : 
+    (timelineLower.includes('distant future') || timelineLower.includes('near future') || timelineLower.includes('far future')) ? 'FUTURISTIC' : 
+    (timelineLower.includes('distant past') || timelineLower.includes('recent past')) ? 'HISTORICAL' : 
     'CONTEMPORARY'
   );
   console.log("🎯 PROMPT LENGTH:", prompt.length);
