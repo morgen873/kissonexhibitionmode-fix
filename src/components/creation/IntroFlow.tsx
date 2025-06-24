@@ -82,9 +82,10 @@ const IntroFlow = ({ onComplete }: IntroFlowProps) => {
         return (
           <div className="text-center max-w-4xl mx-auto">
             <blockquote className="text-4xl md:text-6xl font-black leading-tight mb-8">
-              <span className="bg-gradient-to-r from-yellow-300 via-pink-300 to-cyan-300 bg-clip-text text-transparent drop-shadow-2xl block max-w-[600px] mx-auto">
-                EVERY DUMPLING IS A PORTAL,<br />EVERY BITE A TIME MACHINE
-              </span>
+              <div className="bg-gradient-to-r from-yellow-300 via-pink-300 to-cyan-300 bg-clip-text text-transparent drop-shadow-2xl">
+                <div>EVERY DUMPLING IS A PORTAL,</div>
+                <div>EVERY BITE A TIME MACHINE</div>
+              </div>
             </blockquote>
             <p className="text-2xl md:text-3xl text-white font-black mb-12 leading-relaxed">
               {step.description}
