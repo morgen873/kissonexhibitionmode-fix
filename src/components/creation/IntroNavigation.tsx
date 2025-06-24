@@ -67,12 +67,14 @@ const IntroNavigation: React.FC<IntroNavigationProps> = ({
                     ))}
                 </div>
                 
-                <Button 
-                    onClick={handleNextClick} 
-                    className="bg-gradient-to-r from-black to-gray-800 text-white font-mono text-sm hover:from-gray-800 hover:to-black"
-                >
-                    {isLastStep ? buttonText : 'Next'}
-                </Button>
+                <div className="flex justify-center">
+                    <Button 
+                        onClick={handleNextClick} 
+                        className="bg-gradient-to-r from-black to-gray-800 text-white font-mono text-sm hover:from-gray-800 hover:to-black"
+                    >
+                        {isLastStep ? buttonText : 'Next'}
+                    </Button>
+                </div>
             </div>
         </div>
     );
