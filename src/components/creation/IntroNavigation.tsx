@@ -56,7 +56,7 @@ const IntroNavigation: React.FC<IntroNavigationProps> = ({
                     <ArrowLeft className="mr-2 h-4 w-4" /> Back
                 </Button>
                 
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center justify-center space-x-2">
                     {Array.from({ length: totalSteps - 1 }).map((_, index) => (
                         <div 
                             key={index} 
