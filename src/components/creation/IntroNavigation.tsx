@@ -46,7 +46,7 @@ const IntroNavigation: React.FC<IntroNavigationProps> = ({
 
     return (
         <div className="w-full mt-6">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center relative">
                 <Button 
                     onClick={handlePrevClick} 
                     variant="ghost" 
@@ -56,7 +56,7 @@ const IntroNavigation: React.FC<IntroNavigationProps> = ({
                     <ArrowLeft className="mr-2 h-4 w-4" /> Back
                 </Button>
                 
-                <div className="flex items-center justify-center space-x-2">
+                <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center space-x-2">
                     {Array.from({ length: totalSteps - 1 }).map((_, index) => (
                         <div 
                             key={index} 
