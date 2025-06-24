@@ -24,10 +24,10 @@ const ShapeSlider: React.FC<ShapeSliderProps> = ({
     return (
         <div className="space-y-4">
             <div className="flex justify-between items-center">
-                <Label className="font-bold text-lg font-serif text-amber-900">Shape</Label>
-                <div className="flex items-center gap-3 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-100 to-orange-100 border border-amber-200/50 shadow-sm">
-                    <ShapeIcon shape={selectedOption} size={20} className="text-amber-800" />
-                    <span className="capitalize font-serif text-base text-amber-900">
+                <Label className="font-bold text-lg font-mono text-green-400">Shape</Label>
+                <div className="flex items-center gap-3 px-4 py-2 rounded-xl bg-gradient-to-r from-green-400 to-emerald-500 border border-green-400/30 shadow-lg shadow-green-400/20">
+                    <ShapeIcon shape={selectedOption} size={20} className="text-black" />
+                    <span className="capitalize font-mono text-base text-black">
                         {selectedOption}
                     </span>
                 </div>
@@ -52,19 +52,19 @@ const ShapeSlider: React.FC<ShapeSliderProps> = ({
                     >
                         <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${
                             index === value 
-                                ? 'bg-gradient-to-br from-amber-200 to-orange-200 shadow-lg shadow-amber-900/20 border border-amber-300' 
-                                : 'bg-amber-50/50 border border-amber-100'
+                                ? 'bg-gradient-to-br from-green-400 to-emerald-500 shadow-lg shadow-green-400/20 border border-green-300' 
+                                : 'bg-green-900/20 border border-green-400/20'
                         }`}>
                             <ShapeIcon 
                                 shape={option} 
                                 size={16} 
                                 className={`transition-colors duration-300 ${
-                                    index === value ? 'text-amber-800' : 'text-amber-400'
+                                    index === value ? 'text-black' : 'text-green-400'
                                 }`}
                             />
                         </div>
-                        <span className={`text-sm font-serif capitalize transition-colors duration-300 ${
-                            index === value ? 'text-amber-900 font-semibold' : 'text-amber-600'
+                        <span className={`text-sm font-mono capitalize transition-colors duration-300 ${
+                            index === value ? 'text-green-400 font-semibold' : 'text-green-600'
                         }`}>
                             {option}
                         </span>
