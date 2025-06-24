@@ -75,12 +75,10 @@ const RecipePage = () => {
 
     // Simple image URL logic - use what's in the database or fallback to placeholder
     const imageUrl = recipe.image_url || '/placeholder.svg';
-    const isPlaceholder = !recipe.image_url || recipe.image_url === '/placeholder.svg';
 
     console.log('Image URL decision:');
     console.log('- Database image_url:', recipe.image_url);
     console.log('- Final image URL to use:', imageUrl);
-    console.log('- Is placeholder:', isPlaceholder);
 
     return (
         <GlobalLayout variant="recipe">
@@ -108,9 +106,6 @@ const RecipePage = () => {
                                         }
                                     }}
                                 />
-                                <div className={`absolute top-2 left-2 ${currentTheme.colors.surface} ${currentTheme.colors.textSecondary} text-xs p-1 ${currentTheme.effects.borderRadius}`}>
-                                    {isPlaceholder ? 'Placeholder' : 'Generated'}
-                                </div>
                             </div>
                         </div>
                     </CardHeader>
