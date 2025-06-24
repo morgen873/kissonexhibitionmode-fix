@@ -38,7 +38,7 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
     const isFlavorSweet = controlValues.flavor === 'sweet';
 
     return (
-        <div className="w-full h-full flex flex-col justify-start items-start space-y-6 text-white/90 pt-0 mt-0 overflow-y-auto">
+        <div className="w-full flex flex-col justify-start items-start space-y-6 text-white/90 overflow-y-auto max-h-full">
             <p className="text-center text-white/80 whitespace-pre-line font-mono text-sm mb-6 w-full">
                 {stepData.description}
             </p>
