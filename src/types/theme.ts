@@ -30,4 +30,4 @@ export interface Theme {
   };
 }
 
-export type ThemeId = 'industrial';
+export type ThemeId = 'epicure' | 'industrial';

@@ -2,6 +2,36 @@
 import { Theme } from '@/types/theme';
 
 export const themes: Record<string, Theme> = {
+  epicure: {
+    id: 'epicure',
+    name: 'Epicure',
+    description: 'Warm, elegant design inspired by premium culinary experiences',
+    preview: 'bg-gradient-to-br from-amber-50 via-orange-50 to-red-50',
+    colors: {
+      primary: 'text-amber-900',
+      secondary: 'text-orange-800',
+      accent: 'text-red-600',
+      background: 'bg-gradient-to-br from-amber-50 via-orange-50 to-red-50',
+      surface: 'bg-white/80 backdrop-blur-xl border border-amber-200/50',
+      text: 'text-gray-900',
+      textSecondary: 'text-gray-700',
+      border: 'border-amber-200/50',
+    },
+    fonts: {
+      primary: 'font-serif',
+      secondary: 'font-sans',
+    },
+    spacing: {
+      container: 'px-4 sm:px-6 lg:px-8',
+      section: 'py-8 sm:py-12 lg:py-16',
+      card: 'p-6 sm:p-8 lg:p-10',
+    },
+    effects: {
+      blur: 'backdrop-blur-xl',
+      shadow: 'shadow-xl shadow-amber-900/10',
+      borderRadius: 'rounded-2xl',
+    },
+  },
   industrial: {
     id: 'industrial',
     name: 'Industrial',

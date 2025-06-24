@@ -41,15 +41,15 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
     const isFlavorSweet = controlValues.flavor === 'sweet';
 
     return (
-        <div className="max-w-2xl mx-auto space-y-12 text-white/90">
-            <p className="text-center text-white/80 whitespace-pre-line font-mono text-sm leading-relaxed">
+        <div className="max-w-3xl mx-auto space-y-8 text-amber-900">
+            <p className="text-center text-amber-800 whitespace-pre-line font-serif text-lg leading-relaxed">
                 {stepData.description}
             </p>
             
             {/* Vertical layout for controls */}
-            <div className="space-y-10">
+            <div className="space-y-8">
                 {/* Temperature Control */}
-                <div className="bg-black/10 p-6 rounded-lg border border-white/10 backdrop-blur-sm">
+                <div className="bg-gradient-to-br from-white/80 to-amber-50/80 backdrop-blur-xl p-8 rounded-2xl border border-amber-200/50 shadow-xl shadow-amber-900/10">
                     <TemperatureSlider
                         value={controlValues.temperature}
                         min={controls.temperature.min}
@@ -60,7 +60,7 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
                 </div>
 
                 {/* Shape Control */}
-                <div className="bg-black/10 p-6 rounded-lg border border-white/10 backdrop-blur-sm">
+                <div className="bg-gradient-to-br from-white/80 to-amber-50/80 backdrop-blur-xl p-8 rounded-2xl border border-amber-200/50 shadow-xl shadow-amber-900/10">
                     <ShapeSlider
                         value={shapeIndex}
                         options={controls.shape.options}
@@ -70,26 +70,26 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
                 </div>
 
                 {/* Flavor Control */}
-                <div className="bg-black/10 p-6 rounded-lg border border-white/10 backdrop-blur-sm">
-                    <div className="space-y-4">
-                        <Label className="font-bold text-base font-mono text-white">Flavor Profile</Label>
+                <div className="bg-gradient-to-br from-white/80 to-amber-50/80 backdrop-blur-xl p-8 rounded-2xl border border-amber-200/50 shadow-xl shadow-amber-900/10">
+                    <div className="space-y-6">
+                        <Label className="font-bold text-lg font-serif text-amber-900 block text-center">Flavor Profile</Label>
                         <div className="flex justify-center">
-                            <div className="flex items-center gap-4 bg-black/20 p-4 rounded-lg border border-white/10">
-                                <span className={`font-mono text-sm transition-colors ${!isFlavorSweet ? 'text-white font-semibold' : 'text-white/50'}`}>
+                            <div className="flex items-center gap-6 bg-gradient-to-r from-amber-100/80 to-orange-100/80 p-6 rounded-xl border border-amber-200/50 shadow-sm">
+                                <span className={`font-serif text-lg transition-colors duration-300 ${!isFlavorSweet ? 'text-amber-900 font-semibold' : 'text-amber-600'}`}>
                                     Savory
                                 </span>
                                 <Switch
                                     checked={isFlavorSweet}
                                     onCheckedChange={handleFlavorSwitch}
-                                    className="data-[state=checked]:bg-white/30 data-[state=unchecked]:bg-white/10 border border-white/20"
+                                    className="data-[state=checked]:bg-gradient-to-r data-[state=checked]:from-amber-400 data-[state=checked]:to-red-500 data-[state=unchecked]:bg-amber-200 border border-amber-300"
                                 />
-                                <span className={`font-mono text-sm transition-colors ${isFlavorSweet ? 'text-white font-semibold' : 'text-white/50'}`}>
+                                <span className={`font-serif text-lg transition-colors duration-300 ${isFlavorSweet ? 'text-amber-900 font-semibold' : 'text-amber-600'}`}>
                                     Sweet
                                 </span>
                             </div>
                         </div>
                         <div className="text-center">
-                            <span className="px-3 py-1 rounded-md bg-black/30 font-mono text-sm text-white border border-white/20 capitalize">
+                            <span className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-100 to-orange-100 font-serif text-base text-amber-900 border border-amber-200/50 shadow-sm capitalize">
                                 {controlValues.flavor}
                             </span>
                         </div>
@@ -97,12 +97,12 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
                 </div>
 
                 {/* Enhancer Control */}
-                <div className="bg-black/10 p-6 rounded-lg border border-white/10 backdrop-blur-sm">
-                    <div className="space-y-4">
-                        <Label htmlFor="enhancer" className="font-bold text-base text-center font-mono text-white block">
+                <div className="bg-gradient-to-br from-white/80 to-amber-50/80 backdrop-blur-xl p-8 rounded-2xl border border-amber-200/50 shadow-xl shadow-amber-900/10">
+                    <div className="space-y-6">
+                        <Label htmlFor="enhancer" className="font-bold text-lg text-center font-serif text-amber-900 block">
                             What spice or condiment would enhance this experience?
                         </Label>
-                        <p className="text-xs text-center text-white/70 font-mono leading-relaxed">
+                        <p className="text-base text-center text-amber-700 font-serif leading-relaxed">
                             Salt, pepper, cinnamon, honey... This will add the final touch of flavor to your memory recipe.
                         </p>
                         <Textarea
@@ -110,8 +110,8 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
                             value={controlValues.enhancer}
                             onChange={onEnhancerChange}
                             placeholder="e.g., A pinch of cinnamon"
-                            className="w-full bg-black/20 border-white/20 text-white placeholder:text-white/50 focus:ring-white focus:border-white p-4 font-mono text-sm resize-none"
-                            rows={3}
+                            className="w-full bg-gradient-to-br from-white/90 to-amber-50/90 border-amber-200 text-amber-900 placeholder:text-amber-500 focus:ring-amber-400 focus:border-amber-400 p-6 font-serif text-base resize-none rounded-xl shadow-sm"
+                            rows={4}
                         />
                     </div>
                 </div>

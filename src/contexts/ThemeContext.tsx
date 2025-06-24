@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode, useState } from 'react';
 import { Theme, ThemeId } from '@/types/theme';
 import { themes } from '@/data/themes';
 
@@ -17,11 +17,10 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const themeId: ThemeId = 'industrial';
+  const [themeId, setThemeId] = useState<ThemeId>('epicure');
 
   const setTheme = (newThemeId: ThemeId) => {
-    // Theme is now fixed to industrial, so this function does nothing
-    console.log('Theme switching disabled - using Industrial theme');
+    setThemeId(newThemeId);
   };
 
   const currentTheme = themes[themeId];

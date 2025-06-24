@@ -25,8 +25,8 @@ const TemperatureSlider: React.FC<TemperatureSliderProps> = ({
     return (
         <div className="space-y-4">
             <div className="flex justify-between items-center">
-                <Label className="font-bold text-base font-mono text-white">Temperature</Label>
-                <span className="px-3 py-1 rounded-md bg-black/30 font-mono text-sm text-white border border-white/20">
+                <Label className="font-bold text-lg font-serif text-amber-900">Temperature</Label>
+                <span className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-100 to-orange-100 font-serif text-base text-amber-900 border border-amber-200/50 shadow-sm">
                     {value} {unit}
                 </span>
             </div>
@@ -40,7 +40,7 @@ const TemperatureSlider: React.FC<TemperatureSliderProps> = ({
                     className="w-full"
                 />
             </div>
-            <div className="flex justify-between text-xs text-white/60 font-mono px-2">
+            <div className="flex justify-between text-sm text-amber-700 font-serif px-2">
                 <span>{min}{unit}</span>
                 <span>{max}{unit}</span>
             </div>

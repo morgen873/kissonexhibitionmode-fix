@@ -24,10 +24,10 @@ const ShapeSlider: React.FC<ShapeSliderProps> = ({
     return (
         <div className="space-y-4">
             <div className="flex justify-between items-center">
-                <Label className="font-bold text-base font-mono text-white">Shape</Label>
-                <div className="flex items-center gap-2 px-3 py-1 rounded-md bg-black/30 border border-white/20">
-                    <ShapeIcon shape={selectedOption} size={16} className="text-white" />
-                    <span className="capitalize font-mono text-sm text-white">
+                <Label className="font-bold text-lg font-serif text-amber-900">Shape</Label>
+                <div className="flex items-center gap-3 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-100 to-orange-100 border border-amber-200/50 shadow-sm">
+                    <ShapeIcon shape={selectedOption} size={20} className="text-amber-800" />
+                    <span className="capitalize font-serif text-base text-amber-900">
                         {selectedOption}
                     </span>
                 </div>
@@ -46,25 +46,25 @@ const ShapeSlider: React.FC<ShapeSliderProps> = ({
                 {options.map((option, index) => (
                     <div
                         key={option}
-                        className={`flex flex-col items-center gap-1 transition-all ${
+                        className={`flex flex-col items-center gap-2 transition-all duration-300 ${
                             index === value ? 'scale-110' : 'scale-90 opacity-60'
                         }`}
                     >
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${
                             index === value 
-                                ? 'bg-white/20 shadow-lg shadow-white/25' 
-                                : 'bg-black/20'
+                                ? 'bg-gradient-to-br from-amber-200 to-orange-200 shadow-lg shadow-amber-900/20 border border-amber-300' 
+                                : 'bg-amber-50/50 border border-amber-100'
                         }`}>
                             <ShapeIcon 
                                 shape={option} 
-                                size={14} 
-                                className={`transition-colors ${
-                                    index === value ? 'text-white' : 'text-white/40'
+                                size={16} 
+                                className={`transition-colors duration-300 ${
+                                    index === value ? 'text-amber-800' : 'text-amber-400'
                                 }`}
                             />
                         </div>
-                        <span className={`text-xs font-mono capitalize transition-colors ${
-                            index === value ? 'text-white' : 'text-white/40'
+                        <span className={`text-sm font-serif capitalize transition-colors duration-300 ${
+                            index === value ? 'text-amber-900 font-semibold' : 'text-amber-600'
                         }`}>
                             {option}
                         </span>
