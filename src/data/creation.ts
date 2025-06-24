@@ -173,6 +173,10 @@ export const steps: Step[] = [
                 options: ["savory", "sweet"],
                 defaultValue: "savory",
             },
+            enhancer: {
+                placeholder: "Add any special touches or modifications...",
+                defaultValue: "",
+            },
         }
     },
     {
