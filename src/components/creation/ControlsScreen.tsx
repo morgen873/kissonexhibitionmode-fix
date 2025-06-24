@@ -2,6 +2,7 @@
 import React from 'react';
 import { ControlsStep } from '@/types/creation';
 import Knob from '@/components/ui/Knob';
+import KnobWithIcons from '@/components/ui/KnobWithIcons';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 
@@ -52,13 +53,15 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
 
                 <div className="flex flex-col items-center gap-3">
                     <Label className="font-bold text-base font-mono">Shape</Label>
-                     <Knob
+                    <KnobWithIcons
                         min={0}
                         max={controls.shape.options.length - 1}
                         step={1}
                         value={shapeIndex}
                         onValueChange={onShapeChange}
                         size={80}
+                        options={controls.shape.options}
+                        selectedOption={controlValues.shape}
                     />
                     <span className="w-20 capitalize text-center p-2 rounded-md bg-black/20 font-mono text-sm">{controlValues.shape}</span>
                 </div>
