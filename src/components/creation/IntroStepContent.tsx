@@ -16,7 +16,7 @@ const IntroStepContent: React.FC<IntroStepContentProps> = ({
   const renderStepContent = () => {
     switch (step.type) {
       case 'hero':
-        return <div className="text-center max-w-sm mx-auto px-4">
+        return <div className="text-center max-w-lg mx-auto px-4">
                         <img src="/lovable-uploads/64d3de25-5e40-498e-8a21-28d15db9a050.png" alt="KissOn Logo" className="mx-auto mb-6 w-48 filter grayscale" />
                         
                         <p className="text-lg text-white font-bold mb-8 font-mono">
