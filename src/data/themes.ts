@@ -95,17 +95,17 @@ export const themes: Record<string, Theme> = {
   industrial: {
     id: 'industrial',
     name: 'Industrial',
-    description: 'Raw concrete and steel with liquid glass elements',
+    description: 'Raw concrete and steel with magnifying glass optics',
     preview: 'bg-gradient-to-br from-slate-800 via-gray-700 to-zinc-800',
     colors: {
       primary: 'text-zinc-100',
-      secondary: 'text-zinc-300/90',
+      secondary: 'text-zinc-300/95',
       accent: 'text-orange-400',
       background: 'bg-gradient-to-br from-slate-800 via-gray-700 to-zinc-800',
-      surface: 'bg-white/[0.08] backdrop-blur-2xl border border-white/[0.12] shadow-2xl shadow-black/50',
+      surface: 'bg-white/[0.03] backdrop-blur-3xl border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.1),inset_0_-1px_0_rgba(0,0,0,0.2)] before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/[0.02] before:to-transparent before:rounded-inherit',
       text: 'text-zinc-100',
-      textSecondary: 'text-zinc-300/90',
-      border: 'border-white/[0.12]',
+      textSecondary: 'text-zinc-300/95',
+      border: 'border-white/[0.08]',
     },
     fonts: {
       primary: 'font-mono',
@@ -117,9 +117,9 @@ export const themes: Record<string, Theme> = {
       card: 'p-3 sm:p-4 lg:p-6',
     },
     effects: {
-      blur: 'backdrop-blur-2xl',
-      shadow: 'shadow-2xl shadow-black/50 drop-shadow-lg',
-      borderRadius: 'rounded-2xl',
+      blur: 'backdrop-blur-3xl',
+      shadow: 'shadow-[0_8px_32px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.1),inset_0_-1px_0_rgba(0,0,0,0.2)] before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/[0.02] before:to-transparent before:rounded-inherit drop-shadow-2xl',
+      borderRadius: 'rounded-3xl',
     },
   },
   nature: {
