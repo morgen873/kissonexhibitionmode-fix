@@ -5,6 +5,9 @@ import { CreationState } from './useCreationState';
 
 interface UseCreationHandlersProps extends CreationState {
   currentStep: number;
+  setAnswers: (answers: { [key: number]: string }) => void;
+  setCustomAnswers: (customAnswers: { [key: number]: string }) => void;
+  setControlValues: (controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } } | ((prev: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } }) => { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } })) => void;
 }
 
 export const useCreationHandlers = ({
