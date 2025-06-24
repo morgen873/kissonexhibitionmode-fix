@@ -95,17 +95,17 @@ export const themes: Record<string, Theme> = {
   industrial: {
     id: 'industrial',
     name: 'Industrial',
-    description: 'Raw concrete and steel aesthetic',
+    description: 'Raw concrete and steel with liquid glass elements',
     preview: 'bg-gradient-to-br from-slate-800 via-gray-700 to-zinc-800',
     colors: {
       primary: 'text-zinc-100',
-      secondary: 'text-zinc-300',
+      secondary: 'text-zinc-300/90',
       accent: 'text-orange-400',
       background: 'bg-gradient-to-br from-slate-800 via-gray-700 to-zinc-800',
-      surface: 'bg-zinc-900/50 backdrop-blur-sm border border-zinc-600',
+      surface: 'bg-white/[0.08] backdrop-blur-2xl border border-white/[0.12] shadow-2xl shadow-black/50',
       text: 'text-zinc-100',
-      textSecondary: 'text-zinc-300',
-      border: 'border-zinc-600',
+      textSecondary: 'text-zinc-300/90',
+      border: 'border-white/[0.12]',
     },
     fonts: {
       primary: 'font-mono',
@@ -117,9 +117,9 @@ export const themes: Record<string, Theme> = {
       card: 'p-3 sm:p-4 lg:p-6',
     },
     effects: {
-      blur: 'backdrop-blur-sm',
-      shadow: 'shadow-2xl shadow-black/50',
-      borderRadius: 'rounded-sm',
+      blur: 'backdrop-blur-2xl',
+      shadow: 'shadow-2xl shadow-black/50 drop-shadow-lg',
+      borderRadius: 'rounded-2xl',
     },
   },
   nature: {
