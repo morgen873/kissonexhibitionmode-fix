@@ -5,6 +5,7 @@ import Knob from '@/components/ui/Knob';
 import KnobWithIcons from '@/components/ui/KnobWithIcons';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Toggle } from '@/components/ui/toggle';
 
 interface ControlsScreenProps {
     stepData: ControlsStep;
@@ -30,13 +31,20 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
 }) => {
     const { controls } = stepData;
     const shapeIndex = controls.shape.options.indexOf(controlValues.shape);
-    const flavorIndex = controls.flavor.options.indexOf(controlValues.flavor);
+
+    const handleFlavorToggle = (pressed: boolean) => {
+        // When pressed (true), set to "sweet" (index 1), when not pressed (false), set to "savory" (index 0)
+        const newIndex = pressed ? 1 : 0;
+        onFlavorChange(newIndex);
+    };
+
+    const isFlavorSweet = controlValues.flavor === 'sweet';
 
     return (
         <div className="space-y-8 text-white/90">
             <p className="text-center text-white/80 whitespace-pre-line font-mono text-sm">{stepData.description}</p>
             
-            {/* Horizontal layout for knobs */}
+            {/* Horizontal layout for controls */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-2">
                 <div className="flex flex-col items-center gap-3">
                     <Label className="font-bold text-base font-mono">Temperature</Label>
@@ -68,14 +76,22 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
 
                 <div className="flex flex-col items-center gap-3">
                     <Label className="font-bold text-base font-mono">Flavor</Label>
-                     <Knob
-                        min={0}
-                        max={controls.flavor.options.length - 1}
-                        step={1}
-                        value={flavorIndex}
-                        onValueChange={onFlavorChange}
-                        size={80}
-                    />
+                    <div className="flex flex-col items-center gap-4">
+                        <div className="flex items-center gap-3 bg-black/20 p-3 rounded-lg">
+                            <span className={`font-mono text-sm transition-colors ${!isFlavorSweet ? 'text-white' : 'text-white/50'}`}>
+                                Savory
+                            </span>
+                            <Toggle
+                                pressed={isFlavorSweet}
+                                onPressedChange={handleFlavorToggle}
+                                className="data-[state=on]:bg-white/30 data-[state=off]:bg-white/10 border border-white/20 text-white hover:bg-white/20"
+                                size="sm"
+                            />
+                            <span className={`font-mono text-sm transition-colors ${isFlavorSweet ? 'text-white' : 'text-white/50'}`}>
+                                Sweet
+                            </span>
+                        </div>
+                    </div>
                     <span className="w-20 capitalize text-center p-2 rounded-md bg-black/20 font-mono text-sm">{controlValues.flavor}</span>
                 </div>
             </div>
