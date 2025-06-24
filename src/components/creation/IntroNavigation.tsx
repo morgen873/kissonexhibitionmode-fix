@@ -56,25 +56,36 @@ const IntroNavigation: React.FC<IntroNavigationProps> = ({
                     <ArrowLeft className="mr-2 h-4 w-4" /> Back
                 </Button>
                 
-                <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center space-x-2">
-                    {Array.from({ length: totalSteps - 1 }).map((_, index) => (
-                        <div 
-                            key={index} 
-                            className={`w-2 h-2 rounded-full transition-colors ${
-                                currentStep === index + 1 ? 'bg-white' : 'bg-white/30'
-                            }`} 
-                        />
-                    ))}
-                </div>
-                
-                <div className="flex justify-center">
-                    <Button 
-                        onClick={handleNextClick} 
-                        className="bg-gradient-to-r from-black to-gray-800 text-white font-mono text-sm hover:from-gray-800 hover:to-black"
-                    >
-                        {isLastStep ? buttonText : 'Next'}
-                    </Button>
-                </div>
+                {isLastStep ? (
+                    <div className="absolute left-1/2 transform -translate-x-1/2">
+                        <Button 
+                            onClick={handleNextClick} 
+                            className="bg-gradient-to-r from-black to-gray-800 text-white font-mono text-sm hover:from-gray-800 hover:to-black"
+                        >
+                            {buttonText}
+                        </Button>
+                    </div>
+                ) : (
+                    <>
+                        <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center space-x-2">
+                            {Array.from({ length: totalSteps - 1 }).map((_, index) => (
+                                <div 
+                                    key={index} 
+                                    className={`w-2 h-2 rounded-full transition-colors ${
+                                        currentStep === index + 1 ? 'bg-white' : 'bg-white/30'
+                                    }`} 
+                                />
+                            ))}
+                        </div>
+                        
+                        <Button 
+                            onClick={handleNextClick} 
+                            className="bg-gradient-to-r from-black to-gray-800 text-white font-mono text-sm hover:from-gray-800 hover:to-black"
+                        >
+                            Next
+                        </Button>
+                    </>
+                )}
             </div>
         </div>
     );
