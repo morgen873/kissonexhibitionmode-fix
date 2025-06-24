@@ -42,7 +42,7 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
                     <Knob
                         min={controls.temperature.min}
                         max={controls.temperature.max}
-                        step={1}
+                        step={10}
                         value={controlValues.temperature}
                         onValueChange={onTemperatureChange}
                         size={80}
