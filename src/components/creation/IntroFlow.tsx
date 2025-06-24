@@ -82,11 +82,11 @@ const IntroFlow = ({ onComplete }: IntroFlowProps) => {
         return (
           <div className="text-center max-w-4xl mx-auto">
             <blockquote className="text-4xl md:text-6xl font-black leading-tight mb-8">
-              <span className="bg-gradient-to-r from-yellow-300 via-pink-300 to-cyan-300 bg-clip-text text-transparent drop-shadow-2xl">
-                {step.title}
+              <span className="bg-gradient-to-r from-yellow-300 via-pink-300 to-cyan-300 bg-clip-text text-transparent drop-shadow-2xl block max-w-[600px] mx-auto">
+                EVERY DUMPLING IS A PORTAL,<br />EVERY BITE A TIME MACHINE
               </span>
             </blockquote>
-            <p className="text-2xl md:text-3xl text-white font-black mb-12 leading-relaxed max-w-[400px] mx-auto">
+            <p className="text-2xl md:text-3xl text-white font-black mb-12 leading-relaxed">
               {step.description}
             </p>
           </div>
@@ -124,7 +124,7 @@ const IntroFlow = ({ onComplete }: IntroFlowProps) => {
               <ArrowLeft className="mr-2" /> Back
             </Button>
             
-            <div className="flex items-center justify-center space-x-2 flex-1">
+            <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center space-x-2">
               {introSteps.slice(1, 4).map((_, index) => (
                 <div 
                   key={index} 
