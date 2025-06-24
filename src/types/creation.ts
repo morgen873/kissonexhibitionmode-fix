@@ -36,6 +36,10 @@ export interface ControlsStep {
             options: string[];
             defaultValue: string;
         };
+        enhancer?: {
+            placeholder: string;
+            defaultValue: string;
+        };
     };
 }
 
