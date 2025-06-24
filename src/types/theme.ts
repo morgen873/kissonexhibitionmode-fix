@@ -30,4 +30,4 @@ export interface Theme {
   };
 }
 
-export type ThemeId = 'minimalist' | 'modern' | 'elegant' | 'industrial' | 'nature';
+export type ThemeId = 'industrial';

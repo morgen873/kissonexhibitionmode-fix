@@ -9,7 +9,6 @@ import NotFound from "./pages/NotFound";
 import Creation from "./pages/Creation";
 import RecipePage from "./pages/RecipePage";
 import MainLayout from "./components/layout/MainLayout";
-import ThemeToggle from "./components/theme/ThemeToggle";
 
 const queryClient = new QueryClient();
 
@@ -19,7 +18,6 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <ThemeToggle />
         <BrowserRouter>
           <Routes>
             <Route element={<MainLayout />}>

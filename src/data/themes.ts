@@ -2,96 +2,6 @@
 import { Theme } from '@/types/theme';
 
 export const themes: Record<string, Theme> = {
-  minimalist: {
-    id: 'minimalist',
-    name: 'Minimalist',
-    description: 'Clean black and white design with Courier font',
-    preview: 'bg-gradient-to-br from-black via-gray-900 to-black',
-    colors: {
-      primary: 'text-white',
-      secondary: 'text-white/80',
-      accent: 'text-white',
-      background: 'bg-gradient-to-br from-black via-gray-900 to-black',
-      surface: 'bg-black/30 backdrop-blur-xl border-2 border-white/20',
-      text: 'text-white',
-      textSecondary: 'text-white/80',
-      border: 'border-white/20',
-    },
-    fonts: {
-      primary: 'font-mono',
-      secondary: 'font-mono',
-    },
-    spacing: {
-      container: 'px-3 sm:px-4 lg:px-8',
-      section: 'py-6 sm:py-8 lg:py-12',
-      card: 'p-4 sm:p-6 lg:p-8',
-    },
-    effects: {
-      blur: 'backdrop-blur-xl',
-      shadow: 'shadow-2xl',
-      borderRadius: 'rounded-lg',
-    },
-  },
-  modern: {
-    id: 'modern',
-    name: 'Modern',
-    description: 'Vibrant gradients with contemporary styling',
-    preview: 'bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600',
-    colors: {
-      primary: 'text-white',
-      secondary: 'text-white/90',
-      accent: 'text-yellow-300',
-      background: 'bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600',
-      surface: 'bg-white/10 backdrop-blur-md border border-white/30',
-      text: 'text-white',
-      textSecondary: 'text-white/90',
-      border: 'border-white/30',
-    },
-    fonts: {
-      primary: 'font-sans',
-      secondary: 'font-light',
-    },
-    spacing: {
-      container: 'px-4 sm:px-6 lg:px-10',
-      section: 'py-8 sm:py-12 lg:py-16',
-      card: 'p-6 sm:p-8 lg:p-10',
-    },
-    effects: {
-      blur: 'backdrop-blur-md',
-      shadow: 'shadow-xl',
-      borderRadius: 'rounded-2xl',
-    },
-  },
-  elegant: {
-    id: 'elegant',
-    name: 'Elegant',
-    description: 'Sophisticated earth tones with refined typography',
-    preview: 'bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50',
-    colors: {
-      primary: 'text-amber-900',
-      secondary: 'text-amber-700',
-      accent: 'text-orange-600',
-      background: 'bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50',
-      surface: 'bg-white/80 backdrop-blur-sm border border-amber-200',
-      text: 'text-amber-900',
-      textSecondary: 'text-amber-700',
-      border: 'border-amber-200',
-    },
-    fonts: {
-      primary: 'font-serif',
-      secondary: 'font-light',
-    },
-    spacing: {
-      container: 'px-6 sm:px-8 lg:px-12',
-      section: 'py-10 sm:py-14 lg:py-20',
-      card: 'p-8 sm:p-10 lg:p-12',
-    },
-    effects: {
-      blur: 'backdrop-blur-sm',
-      shadow: 'shadow-lg',
-      borderRadius: 'rounded-xl',
-    },
-  },
   industrial: {
     id: 'industrial',
     name: 'Industrial',
@@ -119,36 +29,6 @@ export const themes: Record<string, Theme> = {
     effects: {
       blur: 'backdrop-blur-3xl',
       shadow: 'shadow-[0_8px_40px_rgba(0,0,0,0.9)] drop-shadow-2xl',
-      borderRadius: 'rounded-3xl',
-    },
-  },
-  nature: {
-    id: 'nature',
-    name: 'Nature',
-    description: 'Organic greens and natural textures',
-    preview: 'bg-gradient-to-br from-green-800 via-emerald-700 to-teal-800',
-    colors: {
-      primary: 'text-green-50',
-      secondary: 'text-green-100',
-      accent: 'text-yellow-300',
-      background: 'bg-gradient-to-br from-green-800 via-emerald-700 to-teal-800',
-      surface: 'bg-green-900/40 backdrop-blur-md border border-green-500/30',
-      text: 'text-green-50',
-      textSecondary: 'text-green-100',
-      border: 'border-green-500/30',
-    },
-    fonts: {
-      primary: 'font-sans',
-      secondary: 'font-normal',
-    },
-    spacing: {
-      container: 'px-4 sm:px-6 lg:px-8',
-      section: 'py-8 sm:py-10 lg:py-14',
-      card: 'p-5 sm:p-7 lg:p-9',
-    },
-    effects: {
-      blur: 'backdrop-blur-md',
-      shadow: 'shadow-xl shadow-green-900/25',
       borderRadius: 'rounded-3xl',
     },
   },

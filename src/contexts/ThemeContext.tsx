@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode } from 'react';
 import { Theme, ThemeId } from '@/types/theme';
 import { themes } from '@/data/themes';
 
@@ -17,18 +17,11 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const [themeId, setThemeId] = useState<ThemeId>('minimalist');
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('selectedTheme') as ThemeId;
-    if (savedTheme && themes[savedTheme]) {
-      setThemeId(savedTheme);
-    }
-  }, []);
+  const themeId: ThemeId = 'industrial';
 
   const setTheme = (newThemeId: ThemeId) => {
-    setThemeId(newThemeId);
-    localStorage.setItem('selectedTheme', newThemeId);
+    // Theme is now fixed to industrial, so this function does nothing
+    console.log('Theme switching disabled - using Industrial theme');
   };
 
   const currentTheme = themes[themeId];
