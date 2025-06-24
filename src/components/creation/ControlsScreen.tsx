@@ -38,7 +38,7 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
     const isFlavorSweet = controlValues.flavor === 'sweet';
 
     return (
-        <div className="w-full h-full flex flex-col justify-start items-start space-y-6 text-white/90 pt-0 mt-0">
+        <div className="w-full h-full flex flex-col justify-start items-start space-y-6 text-white/90 pt-0 mt-0 overflow-y-auto">
             <p className="text-center text-white/80 whitespace-pre-line font-mono text-sm mb-6 w-full">
                 {stepData.description}
             </p>
@@ -64,7 +64,7 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
                 />
             </div>
 
-            {/* Flavor Control */}
+            {/* Flavor Control - TOGGLE SWITCH ONLY */}
             <div className="w-full bg-black/20 backdrop-blur-sm border border-green-400/20 rounded-2xl p-6 shadow-lg shadow-green-400/5">
                 <div className="space-y-4">
                     <div className="flex justify-between items-center">
