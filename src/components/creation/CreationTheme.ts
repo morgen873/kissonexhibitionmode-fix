@@ -1,11 +1,11 @@
 
 export const creationTheme = { 
-  bg: "from-amber-50 via-orange-50 to-red-50",
-  progress: "from-amber-600 to-red-500",
-  cardShadow: "shadow-amber-900/10",
-  title: "from-amber-900 to-red-800",
-  optionSelectedBorder: "border-amber-400",
-  optionSelectedShadow: "shadow-amber-400/25",
-  optionHover: "hover:bg-amber-100/50",
-  textAreaFocus: "focus:ring-amber-500 focus:border-amber-400"
+  bg: "from-black via-gray-900 to-black",
+  progress: "from-green-400 to-emerald-500",
+  cardShadow: "shadow-green-400/10",
+  title: "from-green-400 to-emerald-300",
+  optionSelectedBorder: "border-green-400",
+  optionSelectedShadow: "shadow-green-400/25",
+  optionHover: "hover:bg-green-900/20",
+  textAreaFocus: "focus:ring-green-400 focus:border-green-400"
 };
