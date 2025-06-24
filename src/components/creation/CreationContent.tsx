@@ -50,7 +50,9 @@ const CreationContent: React.FC<CreationContentProps> = ({
     return (
       <div className="flex flex-col items-center justify-center h-64 space-y-4">
         <Loader2 className="h-12 w-12 animate-spin text-white" />
-        <p className="text-lg font-semibold text-white/80 font-mono">Creating your recipe...</p>
+        <p className="text-lg font-semibold text-white/80 font-mono text-center">
+          We are making your KissOn recipe, please be patient, because memories last forever...
+        </p>
       </div>
     );
   }
