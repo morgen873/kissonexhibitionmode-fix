@@ -45,11 +45,11 @@ const CreationLayout: React.FC<CreationLayoutProps> = ({
         onComplete={completeTransition}
       />
 
-      {/* Footer for intro flow - elegant Epicure style */}
+      {/* Footer for intro flow - Epicure style with black and green theme */}
       {!hasStartedCreation && (
-        <footer className="relative z-10 bg-gradient-to-r from-amber-50/90 to-orange-50/90 backdrop-blur-xl text-amber-900 mt-8 w-full text-center border-t border-amber-200/50 py-6 shadow-lg">
-          <p className="text-base font-serif">
-            A CULINARY MEMORY PROJECT BY <span className="bg-gradient-to-r from-amber-600 to-red-600 bg-clip-text text-transparent font-bold mx-1">OREN/LUPE</span>
+        <footer className="relative z-10 bg-black/90 backdrop-blur-xl border-t border-green-400/30 text-green-100 mt-8 w-full text-center py-6 shadow-xl shadow-green-400/10">
+          <p className="text-base font-mono">
+            A CULINARY MEMORY PROJECT BY <span className="bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent font-bold mx-1">OREN/LUPE</span>
           </p>
         </footer>
       )}

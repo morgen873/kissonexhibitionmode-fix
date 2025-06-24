@@ -18,12 +18,12 @@ const NotFound = () => {
   return (
     <GlobalLayout variant="default">
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center responsive-padding">
-          <h1 className={`responsive-heading-xl mb-4 ${currentTheme.colors.primary}`}>404</h1>
-          <p className={`responsive-text ${currentTheme.colors.textSecondary} mb-4`}>Oops! Page not found</p>
+        <div className={`text-center ${currentTheme.spacing.container}`}>
+          <h1 className={`text-6xl font-bold mb-4 ${currentTheme.colors.primary} ${currentTheme.fonts.primary}`}>404</h1>
+          <p className={`text-xl ${currentTheme.colors.textSecondary} ${currentTheme.fonts.secondary} mb-6`}>Oops! Page not found</p>
           <Link 
             to="/creation" 
-            className={`${currentTheme.colors.accent} hover:opacity-70 underline responsive-text transition-colors duration-200`}
+            className={`${currentTheme.colors.accent} hover:opacity-70 underline text-lg ${currentTheme.fonts.primary} transition-opacity duration-200`}
           >
             Return to Home
           </Link>
