@@ -1,71 +1,83 @@
 
-import { useMemo } from 'react';
 import { useCreationSteps } from './useCreationSteps';
-import { useCreationAnswers } from './useCreationAnswers';
+import { useCreationState } from './creation/useCreationState';
+import { useCreationHandlers } from './creation/useCreationHandlers';
+import { useCreationValidation } from './creation/useCreationValidation';
 import { useRecipeSubmission } from './useRecipeSubmission';
-import { isNextDisabled } from '@/utils/formValidation';
 
 export const useCreationForm = () => {
-    const {
-        currentStep,
-        currentStepData,
-        nextStep,
-        prevStep,
-        resetStep
-    } = useCreationSteps();
+  const {
+    currentStep,
+    currentStepData,
+    nextStep,
+    prevStep,
+    resetStep
+  } = useCreationSteps();
 
-    const {
-        answers,
-        customAnswers,
-        controlValues,
-        handleAnswerSelect,
-        handleCustomAnswerChange,
-        handleEnhancerChange,
-        handleTemperatureChange,
-        handleShapeChange,
-        handleFlavorChange,
-        resetAnswers
-    } = useCreationAnswers(currentStep);
+  const {
+    answers,
+    customAnswers,
+    controlValues,
+    setAnswers,
+    setCustomAnswers,
+    setControlValues,
+    resetState
+  } = useCreationState();
 
-    const {
-        recipeResult,
-        isCreatingRecipe,
-        handleSubmit: submitRecipe,
-        resetRecipe
-    } = useRecipeSubmission();
+  const {
+    handleAnswerSelect,
+    handleCustomAnswerChange,
+    handleEnhancerChange,
+    handleTemperatureChange,
+    handleShapeChange,
+    handleFlavorChange
+  } = useCreationHandlers({
+    currentStep,
+    answers,
+    customAnswers,
+    controlValues,
+    setAnswers,
+    setCustomAnswers,
+    setControlValues
+  });
 
-    const handleSubmit = async () => {
-        await submitRecipe(answers, customAnswers, controlValues);
-    };
+  const { isNextDisabled } = useCreationValidation(currentStep, answers, customAnswers);
 
-    const handleReset = () => {
-        resetStep();
-        resetAnswers();
-        resetRecipe();
-    };
+  const {
+    recipeResult,
+    isCreatingRecipe,
+    handleSubmit: submitRecipe,
+    resetRecipe
+  } = useRecipeSubmission();
 
-    const isNextDisabledValue = useMemo(() => {
-        return isNextDisabled(currentStep, answers, customAnswers);
-    }, [currentStep, answers, customAnswers]);
+  const handleSubmit = async () => {
+    await submitRecipe(answers, customAnswers, controlValues);
+  };
 
-    return {
-        currentStep,
-        currentStepData,
-        answers,
-        customAnswers,
-        controlValues,
-        recipeResult,
-        isCreatingRecipe,
-        isNextDisabled: isNextDisabledValue,
-        handleAnswerSelect,
-        handleCustomAnswerChange,
-        handleEnhancerChange,
-        handleTemperatureChange,
-        handleShapeChange,
-        handleFlavorChange,
-        nextStep,
-        prevStep,
-        handleSubmit,
-        handleReset,
-    };
+  const handleReset = () => {
+    resetStep();
+    resetState();
+    resetRecipe();
+  };
+
+  return {
+    currentStep,
+    currentStepData,
+    answers,
+    customAnswers,
+    controlValues,
+    recipeResult,
+    isCreatingRecipe,
+    isNextDisabled,
+    handleAnswerSelect,
+    handleCustomAnswerChange,
+    handleEnhancerChange,
+    handleTemperatureChange,
+    handleShapeChange,
+    handleFlavorChange,
+    nextStep,
+    prevStep,
+    handleSubmit,
+    handleReset,
+  };
 };

@@ -8,36 +8,14 @@ import NavigationControls from '@/components/creation/NavigationControls';
 import RecipeResultScreen from '@/components/creation/RecipeResultScreen';
 import { introSteps } from "@/data/introSteps";
 import { steps } from '@/data/creation';
+import { CreationContentHandlers, CreationContentState, CreationContentNavigation } from '@/types/creationTypes';
 
-interface CreationContentProps {
-  isCreatingRecipe: boolean;
-  recipeResult: any;
+interface CreationContentProps extends CreationContentHandlers, CreationContentState, CreationContentNavigation {
   hasStartedCreation: boolean;
   currentIntroStep: number;
   creationStep: number;
   creationStepData: any;
-  answers: { [key: number]: string };
-  customAnswers: { [key: number]: string };
-  controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } };
   theme: any;
-  isNextDisabled: boolean;
-  onAnswerSelect: (optionTitle: string) => void;
-  onCustomAnswerChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  onTemperatureChange: (value: number) => void;
-  onShapeChange: (value: number) => void;
-  onFlavorChange: (value: number) => void;
-  onEnhancerChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  nextIntroStep: () => void;
-  prevIntroStep: () => void;
-  prevCreationStep: () => void;
-  nextCreationStep: () => void;
-  handleSubmit: () => void;
-  handleReset: () => void;
-  handleIntroNext: () => void;
-  handleIntroPrev: () => void;
-  handleCreationNext: () => void;
-  handleCreationPrev: () => void;
-  handleCreationSubmit: () => void;
 }
 
 const CreationContent: React.FC<CreationContentProps> = ({
@@ -60,8 +38,6 @@ const CreationContent: React.FC<CreationContentProps> = ({
   onEnhancerChange,
   nextIntroStep,
   prevIntroStep,
-  prevCreationStep,
-  nextCreationStep,
   handleSubmit,
   handleReset,
   handleIntroNext,
@@ -123,8 +99,8 @@ const CreationContent: React.FC<CreationContentProps> = ({
         <NavigationControls 
           currentStep={creationStep} 
           stepsLength={steps.length} 
-          prevStep={prevCreationStep} 
-          nextStep={nextCreationStep} 
+          prevStep={prevIntroStep} 
+          nextStep={nextIntroStep} 
           handleSubmit={handleSubmit}
           onTransitionNext={creationStep === steps.length - 1 ? handleCreationSubmit : handleCreationNext}
           onTransitionPrev={handleCreationPrev}

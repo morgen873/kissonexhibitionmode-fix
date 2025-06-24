@@ -1,55 +1,25 @@
 
-import { useState } from 'react';
-import { useAnswerHandlers } from './useAnswerHandlers';
-import { useControlsInitialization } from './useControlsInitialization';
+// This hook has been refactored and split into smaller, focused hooks:
+// - useCreationState: Manages state
+// - useCreationHandlers: Handles user interactions
+// - useCreationValidation: Validates form state
+// 
+// Please use the new useCreationForm hook which orchestrates all these concerns
+// or use the individual hooks directly for more granular control.
+
+import { useCreationState } from './creation/useCreationState';
+import { useCreationHandlers } from './creation/useCreationHandlers';
 
 export const useCreationAnswers = (currentStep: number) => {
-    const [answers, setAnswers] = useState<{ [key: number]: string }>({});
-    const [customAnswers, setCustomAnswers] = useState<{ [key: number]: string }>({});
-    const [controlValues, setControlValues] = useState<{ [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } }>({});
+  const state = useCreationState();
+  const handlers = useCreationHandlers({
+    currentStep,
+    ...state
+  });
 
-    useControlsInitialization({
-        currentStep,
-        controlValues,
-        setControlValues
-    });
-
-    const {
-        handleAnswerSelect,
-        handleCustomAnswerChange,
-        handleEnhancerChange,
-        handleTemperatureChange,
-        handleShapeChange,
-        handleFlavorChange
-    } = useAnswerHandlers({
-        answers,
-        customAnswers,
-        controlValues,
-        setAnswers,
-        setCustomAnswers,
-        setControlValues,
-        currentStep
-    });
-
-    const resetAnswers = () => {
-        setAnswers({});
-        setCustomAnswers({});
-        setControlValues({});
-    };
-
-    return {
-        answers,
-        customAnswers,
-        controlValues,
-        setAnswers,
-        setCustomAnswers,
-        setControlValues,
-        handleAnswerSelect,
-        handleCustomAnswerChange,
-        handleEnhancerChange,
-        handleTemperatureChange,
-        handleShapeChange,
-        handleFlavorChange,
-        resetAnswers
-    };
+  return {
+    ...state,
+    ...handlers,
+    resetAnswers: state.resetState
+  };
 };
