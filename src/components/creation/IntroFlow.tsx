@@ -1,5 +1,3 @@
-
-
 import { useState } from 'react';
 import { introSteps, IntroStepData } from '@/data/introSteps';
 import { Card, CardContent } from '@/components/ui/card';
@@ -51,7 +49,7 @@ const IntroFlow = ({
                                     {(step.title as string[])[1]}
                                 </span>
                             </h3>
-                            <p className="text-white font-bold py-[10px] text-lg leading-relaxed max-w-xs mx-auto">
+                            <p className="text-white font-bold py-[10px] text-lg leading-relaxed max-w-[200px] mx-auto">
                                 {step.description}
                             </p>
                         </CardContent>
@@ -63,7 +61,7 @@ const IntroFlow = ({
                                 {step.title}
                             </span>
                         </blockquote>
-                        <p className="text-2xl md:text-3xl text-white font-black mb-12 leading-relaxed max-w-2xl mx-auto">
+                        <p className="text-2xl md:text-3xl text-white font-black mb-12 leading-relaxed max-w-[400px] mx-auto">
                             {step.description}
                         </p>
                     </div>;
@@ -106,4 +104,3 @@ const IntroFlow = ({
         </div>;
 };
 export default IntroFlow;
-
