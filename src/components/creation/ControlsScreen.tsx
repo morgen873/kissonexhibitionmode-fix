@@ -34,13 +34,13 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
     };
 
     return (
-        <div className="w-full space-y-8 text-white/90">
-            <p className="text-center text-white/80 whitespace-pre-line font-mono text-sm mb-8">
+        <div className="w-full h-full flex flex-col justify-start items-start space-y-6 text-white/90 pt-0 mt-0">
+            <p className="text-center text-white/80 whitespace-pre-line font-mono text-sm mb-6 w-full">
                 {stepData.description}
             </p>
             
             {/* Temperature Control */}
-            <div className="bg-black/20 backdrop-blur-sm border border-green-400/20 rounded-2xl p-6 shadow-lg shadow-green-400/5">
+            <div className="w-full bg-black/20 backdrop-blur-sm border border-green-400/20 rounded-2xl p-6 shadow-lg shadow-green-400/5">
                 <TemperatureSlider
                     value={controlValues.temperature}
                     min={controls.temperature.min}
@@ -51,7 +51,7 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
             </div>
 
             {/* Shape Control */}
-            <div className="bg-black/20 backdrop-blur-sm border border-green-400/20 rounded-2xl p-6 shadow-lg shadow-green-400/5">
+            <div className="w-full bg-black/20 backdrop-blur-sm border border-green-400/20 rounded-2xl p-6 shadow-lg shadow-green-400/5">
                 <ShapeSlider
                     value={getShapeIndex()}
                     options={controls.shape.options}
@@ -61,7 +61,7 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
             </div>
 
             {/* Flavor Control */}
-            <div className="bg-black/20 backdrop-blur-sm border border-green-400/20 rounded-2xl p-6 shadow-lg shadow-green-400/5">
+            <div className="w-full bg-black/20 backdrop-blur-sm border border-green-400/20 rounded-2xl p-6 shadow-lg shadow-green-400/5">
                 <div className="space-y-4">
                     <div className="flex justify-between items-center">
                         <span className="font-bold text-lg font-mono text-green-400">Flavor</span>
@@ -81,7 +81,7 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
             </div>
 
             {/* Enhancer Input */}
-            <div className="bg-black/20 backdrop-blur-sm border border-green-400/20 rounded-2xl p-6 shadow-lg shadow-green-400/5">
+            <div className="w-full bg-black/20 backdrop-blur-sm border border-green-400/20 rounded-2xl p-6 shadow-lg shadow-green-400/5">
                 <EnhancerInput 
                     value={controlValues.enhancer}
                     onChange={onEnhancerChange}
