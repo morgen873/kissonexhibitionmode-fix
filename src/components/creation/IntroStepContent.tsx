@@ -45,13 +45,13 @@ const IntroStepContent: React.FC<IntroStepContentProps> = ({
                         </CardContent>
                     </Card>;
       case 'quote':
-        return <div className="text-center max-w-sm mx-auto px-4">
+        return <div className="text-center max-w-sm mx-auto px-4 flex flex-col items-center justify-center">
                         <blockquote className="text-3xl md:text-4xl font-black leading-tight mb-6 font-mono">
-                            <span className="bg-gradient-to-r from-white via-gray-300 to-white bg-clip-text text-transparent drop-shadow-2xl px-0 py-0 my-0 mx-0 text-xl text-center font-extrabold">
+                            <span className="bg-gradient-to-r from-white via-gray-300 to-white bg-clip-text text-transparent drop-shadow-2xl text-xl text-center font-extrabold block">
                                 {step.title}
                             </span>
                         </blockquote>
-                        <p className="text-xl text-white font-black mb-8 font-mono">
+                        <p className="text-xl text-white font-black mb-8 font-mono text-center">
                             {step.description}
                         </p>
                     </div>;
