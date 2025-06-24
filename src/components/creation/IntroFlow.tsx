@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { introSteps, IntroStepData } from '@/data/introSteps';
 import { Card, CardContent } from '@/components/ui/card';
@@ -45,9 +46,7 @@ const IntroFlow = ({
                                 <Icon className="h-10 w-10 text-white" />
                             </div>}
                             <h3 className="font-black text-white mb-6 drop-shadow-lg text-3xl">
-                                {(step.title as string[])[0]}
-                                <br />
-                                <span className={`bg-gradient-to-r ${step.theme?.titleGradient} bg-clip-text text-transparent`}>
+                                {(step.title as string[])[0]} <span className={`bg-gradient-to-r ${step.theme?.titleGradient} bg-clip-text text-transparent`}>
                                     {(step.title as string[])[1]}
                                 </span>
                             </h3>
