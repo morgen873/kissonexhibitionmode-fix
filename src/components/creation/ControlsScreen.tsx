@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ControlsStep } from '@/types/creation';
 import TemperatureSlider from '@/components/ui/TemperatureSlider';
 import ShapeSlider from '@/components/ui/ShapeSlider';
@@ -24,7 +24,26 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
     onFlavorChange,
     onEnhancerChange
 }) => {
+    const containerRef = useRef<HTMLDivElement>(null);
     const { controls } = stepData;
+
+    // Force scroll to top when component mounts
+    useEffect(() => {
+        console.log('ControlsScreen mounted, forcing scroll to top');
+        if (containerRef.current) {
+            containerRef.current.scrollTop = 0;
+            console.log('Container scrollTop set to 0');
+        }
+        
+        // Also try to scroll any parent containers to top
+        const scrollableParents = document.querySelectorAll('[class*="overflow"]');
+        scrollableParents.forEach(parent => {
+            (parent as HTMLElement).scrollTop = 0;
+        });
+        
+        // Force window scroll to top as well
+        window.scrollTo(0, 0);
+    }, []);
 
     const getShapeIndex = () => {
         return controls.shape.options.indexOf(controlValues.shape);
@@ -38,7 +57,11 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
     const isFlavorSweet = controlValues.flavor === 'sweet';
 
     return (
-        <div className="w-full flex flex-col justify-start items-start space-y-6 text-white/90 overflow-y-auto max-h-full">
+        <div 
+            ref={containerRef}
+            className="w-full flex flex-col space-y-6 text-white/90 overflow-y-auto"
+            style={{ scrollBehavior: 'auto' }}
+        >
             <p className="text-center text-white/80 whitespace-pre-line font-mono text-sm mb-6 w-full">
                 {stepData.description}
             </p>
