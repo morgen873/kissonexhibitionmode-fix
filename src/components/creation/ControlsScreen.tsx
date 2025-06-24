@@ -5,7 +5,7 @@ import Knob from '@/components/ui/Knob';
 import KnobWithIcons from '@/components/ui/KnobWithIcons';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Toggle } from '@/components/ui/toggle';
+import { Switch } from '@/components/ui/switch';
 
 interface ControlsScreenProps {
     stepData: ControlsStep;
@@ -32,9 +32,9 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
     const { controls } = stepData;
     const shapeIndex = controls.shape.options.indexOf(controlValues.shape);
 
-    const handleFlavorToggle = (pressed: boolean) => {
-        // When pressed (true), set to "sweet" (index 1), when not pressed (false), set to "savory" (index 0)
-        const newIndex = pressed ? 1 : 0;
+    const handleFlavorSwitch = (checked: boolean) => {
+        // When checked (true), set to "sweet" (index 1), when not checked (false), set to "savory" (index 0)
+        const newIndex = checked ? 1 : 0;
         onFlavorChange(newIndex);
     };
 
@@ -81,11 +81,10 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
                             <span className={`font-mono text-sm transition-colors ${!isFlavorSweet ? 'text-white' : 'text-white/50'}`}>
                                 Savory
                             </span>
-                            <Toggle
-                                pressed={isFlavorSweet}
-                                onPressedChange={handleFlavorToggle}
-                                className="data-[state=on]:bg-white/30 data-[state=off]:bg-white/10 border border-white/20 text-white hover:bg-white/20"
-                                size="sm"
+                            <Switch
+                                checked={isFlavorSweet}
+                                onCheckedChange={handleFlavorSwitch}
+                                className="data-[state=checked]:bg-white/30 data-[state=unchecked]:bg-white/10 border border-white/20"
                             />
                             <span className={`font-mono text-sm transition-colors ${isFlavorSweet ? 'text-white' : 'text-white/50'}`}>
                                 Sweet
