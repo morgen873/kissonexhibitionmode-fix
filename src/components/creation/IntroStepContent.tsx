@@ -20,7 +20,7 @@ const IntroStepContent: React.FC<IntroStepContentProps> = ({
                         <img src="/lovable-uploads/64d3de25-5e40-498e-8a21-28d15db9a050.png" alt="KissOn Logo" className="mx-auto mb-6 w-48 filter grayscale" />
                         
                         <p className="text-lg text-white font-bold mb-8 font-mono">
-                            {step.description}
+                            Our AI transforms your feelings into delicious,{'\n'}one-of-a-kind dumpling recipes.
                         </p>
                         
                         <Button onClick={handleNextClick} size="lg" className="bg-gradient-to-r from-black via-gray-800 to-black hover:from-gray-800 hover:via-black hover:to-gray-800 text-white font-bold shadow-lg transition-all duration-300 transform hover:scale-105 border-2 border-white/20 px-8 py-4 text-xl rounded-xl font-mono">
