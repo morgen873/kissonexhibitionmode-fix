@@ -1,4 +1,5 @@
 
+
 import { useState } from 'react';
 import { introSteps, IntroStepData } from '@/data/introSteps';
 import { Card, CardContent } from '@/components/ui/card';
@@ -50,7 +51,7 @@ const IntroFlow = ({
                                     {(step.title as string[])[1]}
                                 </span>
                             </h3>
-                            <p className="text-white font-bold py-[10px] text-base">
+                            <p className="text-white font-bold py-[10px] text-lg leading-relaxed max-w-xs mx-auto">
                                 {step.description}
                             </p>
                         </CardContent>
@@ -62,7 +63,7 @@ const IntroFlow = ({
                                 {step.title}
                             </span>
                         </blockquote>
-                        <p className="text-2xl text-white font-black mb-12">
+                        <p className="text-2xl md:text-3xl text-white font-black mb-12 leading-relaxed max-w-2xl mx-auto">
                             {step.description}
                         </p>
                     </div>;
@@ -88,7 +89,7 @@ const IntroFlow = ({
                         <Button onClick={prevStep} variant="ghost" className="text-white hover:bg-white/10 disabled:opacity-50" disabled={currentStep === 0}>
                             <ArrowLeft className="mr-2" /> Back
                         </Button>
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center justify-center space-x-2 flex-1">
                             {introSteps.slice(1, 4).map((_, index) => <div key={index} className={`w-3 h-3 rounded-full transition-colors ${currentStep === index + 1 ? 'bg-white' : 'bg-white/30'}`} />)}
                         </div>
                         <Button onClick={nextStep} className="bg-gradient-to-r from-pink-500 to-purple-500 text-white">
@@ -105,3 +106,4 @@ const IntroFlow = ({
         </div>;
 };
 export default IntroFlow;
+
