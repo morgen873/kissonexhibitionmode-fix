@@ -25,6 +25,7 @@ const NavigationControls: React.FC<NavigationControlsProps> = ({
   onTransitionPrev
 }) => {
   const handleNextClick = () => {
+    console.log('NavigationControls: Next button clicked');
     if (onTransitionNext) {
       onTransitionNext();
     } else {
@@ -33,6 +34,7 @@ const NavigationControls: React.FC<NavigationControlsProps> = ({
   };
 
   const handlePrevClick = () => {
+    console.log('NavigationControls: Previous button clicked');
     if (onTransitionPrev) {
       onTransitionPrev();
     } else {
@@ -41,6 +43,7 @@ const NavigationControls: React.FC<NavigationControlsProps> = ({
   };
 
   const handleSubmitClick = () => {
+    console.log('NavigationControls: Submit button clicked');
     if (onTransitionNext) {
       onTransitionNext();
     } else {
@@ -58,12 +61,21 @@ const NavigationControls: React.FC<NavigationControlsProps> = ({
       >
         <ArrowUp className="mr-2 h-4 w-4" /> Back
       </Button>
+      
       {currentStep === stepsLength - 1 ? (
-        <Button onClick={handleSubmitClick} disabled={isNextDisabled} className="bg-gradient-to-r from-black to-gray-800 text-white font-mono text-sm">
+        <Button 
+          onClick={handleSubmitClick} 
+          disabled={isNextDisabled} 
+          className="bg-gradient-to-r from-black to-gray-800 text-white font-mono text-sm hover:from-gray-800 hover:to-black"
+        >
           Create Recipe <Zap className="ml-2 h-4 w-4" />
         </Button>
       ) : (
-        <Button onClick={handleNextClick} disabled={isNextDisabled} className="px-6 bg-gradient-to-r from-black to-gray-800 text-white font-mono text-sm">
+        <Button 
+          onClick={handleNextClick} 
+          disabled={isNextDisabled} 
+          className="px-6 bg-gradient-to-r from-black to-gray-800 text-white font-mono text-sm hover:from-gray-800 hover:to-black"
+        >
           Continue <ArrowDown className="ml-2 h-4 w-4" />
         </Button>
       )}

@@ -27,6 +27,7 @@ const IntroNavigation: React.FC<IntroNavigationProps> = ({
     onTransitionPrev
 }) => {
     const handleNextClick = () => {
+        console.log('IntroNavigation: Next button clicked');
         if (onTransitionNext) {
             onTransitionNext();
         } else {
@@ -35,6 +36,7 @@ const IntroNavigation: React.FC<IntroNavigationProps> = ({
     };
 
     const handlePrevClick = () => {
+        console.log('IntroNavigation: Previous button clicked');
         if (onTransitionPrev) {
             onTransitionPrev();
         } else {
@@ -53,6 +55,7 @@ const IntroNavigation: React.FC<IntroNavigationProps> = ({
                 >
                     <ArrowLeft className="mr-2 h-4 w-4" /> Back
                 </Button>
+                
                 <div className="flex items-center space-x-2">
                     {Array.from({ length: totalSteps - 1 }).map((_, index) => (
                         <div 
@@ -63,7 +66,11 @@ const IntroNavigation: React.FC<IntroNavigationProps> = ({
                         />
                     ))}
                 </div>
-                <Button onClick={handleNextClick} className="bg-gradient-to-r from-black to-gray-800 text-white font-mono text-sm">
+                
+                <Button 
+                    onClick={handleNextClick} 
+                    className="bg-gradient-to-r from-black to-gray-800 text-white font-mono text-sm hover:from-gray-800 hover:to-black"
+                >
                     {isLastStep ? buttonText : 'Next'}
                 </Button>
             </div>
