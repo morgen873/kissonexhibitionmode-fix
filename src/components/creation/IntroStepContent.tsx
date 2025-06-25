@@ -21,21 +21,21 @@ const IntroStepContent: React.FC<IntroStepContentProps> = ({
     switch (step.type) {
       case 'hero':
         return (
-          <div className="flex flex-col items-center justify-center text-center px-4 py-8 space-y-6">
+          <div className="flex flex-col items-center justify-center text-center px-6 sm:px-8 lg:px-12 py-12 sm:py-16 lg:py-20 space-y-8 sm:space-y-10 lg:space-y-12">
             <img 
               src="/lovable-uploads/64d3de25-5e40-498e-8a21-28d15db9a050.png" 
               alt="KissOn Logo" 
-              className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 filter grayscale" 
+              className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 filter grayscale mb-4 sm:mb-6 lg:mb-8" 
             />
             
-            <p className="text-base sm:text-lg text-white font-bold font-mono leading-relaxed max-w-md">
+            <p className="text-base sm:text-lg lg:text-xl text-white font-bold font-mono leading-relaxed max-w-md sm:max-w-lg lg:max-w-xl px-4 sm:px-6">
               Our AI transforms your feelings into delicious, one-of-a-kind dumpling recipes.
             </p>
             
             <Button 
               onClick={handleNextClick} 
               size="lg" 
-              className="bg-gradient-to-r from-black via-gray-800 to-black hover:from-gray-800 hover:via-black hover:to-gray-800 text-white font-bold shadow-lg transition-all duration-300 transform hover:scale-105 border-2 border-white/20 px-8 py-4 text-xl rounded-xl font-mono"
+              className="bg-gradient-to-r from-black via-gray-800 to-black hover:from-gray-800 hover:via-black hover:to-gray-800 text-white font-bold shadow-lg transition-all duration-300 transform hover:scale-105 border-2 border-white/20 px-8 py-4 sm:px-10 sm:py-5 lg:px-12 lg:py-6 text-lg sm:text-xl lg:text-2xl rounded-xl font-mono mt-4 sm:mt-6 lg:mt-8"
             >
               {step.buttonText}
             </Button>
@@ -44,9 +44,9 @@ const IntroStepContent: React.FC<IntroStepContentProps> = ({
       case 'explanation':
         const Icon = step.icon;
         return (
-          <div className="flex justify-center px-4">
+          <div className="flex justify-center px-6 sm:px-8 py-8 sm:py-12">
             <Card className="bg-transparent border-4 border-white/20 transition-all duration-300 shadow-2xl shadow-black/25 w-full max-w-sm">
-              <CardContent className="p-4 text-center">
+              <CardContent className="p-6 sm:p-8 text-center">
                 {Icon && (
                   <div className="w-16 h-16 bg-gradient-to-r from-black via-gray-800 to-black rounded-full flex items-center justify-center mx-auto mb-6">
                     <Icon className="h-8 w-8 text-white" />
@@ -66,13 +66,13 @@ const IntroStepContent: React.FC<IntroStepContentProps> = ({
         );
       case 'quote':
         return (
-          <div className="flex flex-col items-center justify-center text-center px-4 space-y-6">
-            <blockquote className="text-lg sm:text-xl md:text-2xl font-black leading-tight font-mono max-w-lg">
+          <div className="flex flex-col items-center justify-center text-center px-6 sm:px-8 lg:px-12 py-8 sm:py-12 lg:py-16 space-y-6 sm:space-y-8">
+            <blockquote className="text-lg sm:text-xl md:text-2xl font-black leading-tight font-mono max-w-lg px-4">
               <span className="bg-gradient-to-r from-white via-gray-300 to-white bg-clip-text text-transparent drop-shadow-2xl font-extrabold">
                 {step.title}
               </span>
             </blockquote>
-            <p className="text-lg sm:text-xl text-white font-black font-mono leading-relaxed">
+            <p className="text-lg sm:text-xl text-white font-black font-mono leading-relaxed px-4">
               {step.description}
             </p>
           </div>
@@ -83,7 +83,7 @@ const IntroStepContent: React.FC<IntroStepContentProps> = ({
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[60vh] w-full">
+    <div className="flex items-center justify-center min-h-[70vh] w-full">
       {renderStepContent()}
     </div>
   );
