@@ -12,6 +12,8 @@ interface CreationLayoutProps {
   hasStartedCreation: boolean;
   isTransitioning: boolean;
   transitionDirection: 'forward' | 'backward';
+  transitionVariant?: 'geometric' | 'particle' | 'wave' | 'minimal' | 'loading' | 'video';
+  transitionVideoUrl?: string;
   completeTransition: () => void;
   children: React.ReactNode;
 }
@@ -24,6 +26,8 @@ const CreationLayout: React.FC<CreationLayoutProps> = ({
   hasStartedCreation,
   isTransitioning,
   transitionDirection,
+  transitionVariant = 'geometric',
+  transitionVideoUrl,
   completeTransition,
   children
 }) => {
@@ -43,12 +47,13 @@ const CreationLayout: React.FC<CreationLayoutProps> = ({
         </CreationContainer>
       </AnimatedContainer>
 
-      {/* New Transition Animation Overlay with geometric variant */}
+      {/* Enhanced Transition Animation with Video Support */}
       <TransitionAnimation
         isVisible={isTransitioning}
         direction={transitionDirection}
         onComplete={completeTransition}
-        variant="geometric"
+        variant={transitionVariant}
+        videoUrl={transitionVideoUrl}
       />
 
       {/* Enhanced Footer with animations */}

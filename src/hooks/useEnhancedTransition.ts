@@ -6,6 +6,8 @@ export interface TransitionConfig {
   easing?: string;
   stagger?: number;
   direction?: 'forward' | 'backward';
+  variant?: 'geometric' | 'particle' | 'wave' | 'minimal' | 'loading' | 'video';
+  videoUrl?: string;
   onStart?: () => void;
   onComplete?: () => void;
 }
@@ -24,8 +26,11 @@ export const useEnhancedTransition = () => {
       duration: 300,
       easing: 'ease-out',
       direction: 'forward',
+      variant: 'geometric',
       ...config
     };
+
+    console.log('Starting enhanced transition with config:', defaultConfig);
 
     setTransitionConfig(defaultConfig);
     setIsTransitioning(true);
@@ -36,7 +41,13 @@ export const useEnhancedTransition = () => {
       defaultConfig.onStart();
     }
 
-    // Auto-complete transition after duration
+    // For video transitions, don't auto-complete - let the video handle it
+    if (defaultConfig.variant === 'video') {
+      console.log('Video transition started, waiting for video completion');
+      return;
+    }
+
+    // Auto-complete transition after duration for non-video variants
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
@@ -47,6 +58,7 @@ export const useEnhancedTransition = () => {
   }, []);
 
   const completeTransition = useCallback(() => {
+    console.log('Completing enhanced transition');
     setIsTransitioning(false);
     
     if (callbackRef.current) {
@@ -65,6 +77,7 @@ export const useEnhancedTransition = () => {
   }, [transitionConfig]);
 
   const cancelTransition = useCallback(() => {
+    console.log('Cancelling enhanced transition');
     setIsTransitioning(false);
     callbackRef.current = null;
     
@@ -73,6 +86,19 @@ export const useEnhancedTransition = () => {
       timeoutRef.current = null;
     }
   }, []);
+
+  // Video-specific methods
+  const startVideoTransition = useCallback((
+    callback: () => void,
+    videoUrl: string,
+    options: Omit<TransitionConfig, 'variant' | 'videoUrl'> = {}
+  ) => {
+    startTransition(callback, {
+      ...options,
+      variant: 'video',
+      videoUrl
+    });
+  }, [startTransition]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -87,6 +113,7 @@ export const useEnhancedTransition = () => {
     isTransitioning,
     transitionConfig,
     startTransition,
+    startVideoTransition,
     completeTransition,
     cancelTransition
   };
@@ -110,4 +137,20 @@ export const EASING_FUNCTIONS = {
   bounce: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
   smooth: 'cubic-bezier(0.4, 0, 0.2, 1)',
   sharp: 'cubic-bezier(0.4, 0, 0.6, 1)'
+} as const;
+
+// Video transition presets
+export const VIDEO_TRANSITION_PRESETS = {
+  dumpling: {
+    duration: 2000,
+    easing: 'smooth',
+  },
+  cooking: {
+    duration: 3000,
+    easing: 'ease-out',
+  },
+  steam: {
+    duration: 1500,
+    easing: 'ease-in-out',
+  }
 } as const;
