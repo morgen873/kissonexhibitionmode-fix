@@ -8,7 +8,7 @@ export interface VideoUploadResult {
 }
 
 export class VideoUploader {
-  private static readonly BUCKET_NAME = 'transition_videos';
+  private static readonly BUCKET_NAME = 'videos';
   private static readonly MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
   private static readonly ALLOWED_TYPES = ['video/mp4', 'video/webm', 'video/ogg'];
 

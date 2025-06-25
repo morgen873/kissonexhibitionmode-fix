@@ -2,16 +2,23 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import VideoUploadInterface from './VideoUploadInterface';
+import VideoSelector from './VideoSelector';
 import { useEnhancedTransition } from '@/hooks/useEnhancedTransition';
 import TransitionAnimation from './TransitionAnimation';
 
 const VideoTransitionTest: React.FC = () => {
   const [uploadedVideoUrl, setUploadedVideoUrl] = useState<string | null>(null);
+  const [selectedVideoUrl, setSelectedVideoUrl] = useState<string | null>(null);
   const { isTransitioning, startVideoTransition, completeTransition } = useEnhancedTransition();
 
   const handleVideoUploaded = (videoUrl: string) => {
     console.log('Video uploaded:', videoUrl);
     setUploadedVideoUrl(videoUrl);
+  };
+
+  const handleVideoSelected = (videoUrl: string) => {
+    console.log('Video selected:', videoUrl);
+    setSelectedVideoUrl(videoUrl);
   };
 
   const handleTestTransition = (videoUrl: string) => {
@@ -42,21 +49,28 @@ const VideoTransitionTest: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black p-8">
-      <div className="max-w-4xl mx-auto space-y-8">
+      <div className="max-w-6xl mx-auto space-y-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-green-400 font-mono mb-4">
             Video Transition Test Lab
           </h1>
           <p className="text-green-400/70 font-mono">
-            Upload a video and test it as a transition animation
+            Upload new videos or select from existing library to test as transition animations
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid lg:grid-cols-3 gap-8">
           {/* Video Upload Interface */}
           <VideoUploadInterface
             onVideoUploaded={handleVideoUploaded}
             onTestTransition={handleTestTransition}
+          />
+
+          {/* Video Library Selector */}
+          <VideoSelector
+            onVideoSelect={handleVideoSelected}
+            onTestTransition={handleTestTransition}
+            selectedVideoUrl={selectedVideoUrl || undefined}
           />
 
           {/* Test Controls */}
@@ -72,6 +86,16 @@ const VideoTransitionTest: React.FC = () => {
                     disabled={isTransitioning}
                   >
                     Test Uploaded Video
+                  </Button>
+                )}
+
+                {selectedVideoUrl && selectedVideoUrl !== uploadedVideoUrl && (
+                  <Button
+                    onClick={() => handleTestTransition(selectedVideoUrl)}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-mono"
+                    disabled={isTransitioning}
+                  >
+                    Test Selected Video
                   </Button>
                 )}
 
@@ -92,15 +116,26 @@ const VideoTransitionTest: React.FC = () => {
               </div>
             </div>
 
-            {/* Video Info */}
-            {uploadedVideoUrl && (
-              <div className="bg-black/90 border border-green-400/30 rounded-lg p-4">
-                <h4 className="text-green-400 font-mono text-sm mb-2">Video URL:</h4>
-                <p className="text-green-400/70 font-mono text-xs break-all">
-                  {uploadedVideoUrl}
-                </p>
-              </div>
-            )}
+            {/* Current Selection Info */}
+            <div className="space-y-3">
+              {uploadedVideoUrl && (
+                <div className="bg-black/90 border border-green-400/30 rounded-lg p-4">
+                  <h4 className="text-green-400 font-mono text-sm mb-2">Uploaded Video:</h4>
+                  <p className="text-green-400/70 font-mono text-xs break-all">
+                    {uploadedVideoUrl}
+                  </p>
+                </div>
+              )}
+
+              {selectedVideoUrl && (
+                <div className="bg-black/90 border border-blue-400/30 rounded-lg p-4">
+                  <h4 className="text-blue-400 font-mono text-sm mb-2">Selected Video:</h4>
+                  <p className="text-blue-400/70 font-mono text-xs break-all">
+                    {selectedVideoUrl}
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -110,7 +145,7 @@ const VideoTransitionTest: React.FC = () => {
         isVisible={isTransitioning}
         onComplete={completeTransition}
         variant="video"
-        videoUrl={uploadedVideoUrl || undefined}
+        videoUrl={(selectedVideoUrl || uploadedVideoUrl) || undefined}
       />
     </div>
   );
