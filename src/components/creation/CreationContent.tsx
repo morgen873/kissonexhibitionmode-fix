@@ -92,6 +92,7 @@ const CreationContent: React.FC<CreationContentProps> = ({
             isFirstStep={currentIntroStep === 0}
             isLastStep={currentIntroStep === introSteps.length - 1}
             buttonText={introSteps[currentIntroStep].buttonText}
+            step={introSteps[currentIntroStep]}
           />
         )
       ) : (
