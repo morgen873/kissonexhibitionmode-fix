@@ -63,7 +63,7 @@ const LandingPage = () => {
         {/* Footer */}
         <footer className="absolute bottom-6 left-0 right-0 text-center">
           <p className="text-white/60 font-mono">
-            A DESIGN PROJECT BY <span className="bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent font-bold">OREN/LUPE</span>
+            A DESIGN PROJECT BY <span className="text-transparent bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text font-bold">OREN/LUPE</span>
           </p>
         </footer>
       </div>
