@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { introSteps } from "@/data/introSteps";
 
@@ -93,7 +94,7 @@ export const useCreationNavigation = ({
     isTransitioning,
     transitionGifUrl,
     transitionDirection: 'forward' as const,
-    transitionVariant: 'gif' as const,
+    transitionVariant: 'minimal' as const, // Changed from 'gif' to 'minimal'
     completeTransition,
     handleIntroNext,
     handleIntroPrev,
