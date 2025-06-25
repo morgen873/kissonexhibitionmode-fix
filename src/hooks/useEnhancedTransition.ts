@@ -6,8 +6,7 @@ export interface TransitionConfig {
   easing?: string;
   stagger?: number;
   direction?: 'forward' | 'backward';
-  variant?: 'geometric' | 'particle' | 'wave' | 'minimal' | 'loading' | 'video';
-  videoUrl?: string;
+  variant?: 'geometric' | 'particle' | 'wave' | 'minimal' | 'loading';
   onStart?: () => void;
   onComplete?: () => void;
 }
@@ -41,13 +40,7 @@ export const useEnhancedTransition = () => {
       defaultConfig.onStart();
     }
 
-    // For video transitions, don't auto-complete - let the video handle it
-    if (defaultConfig.variant === 'video') {
-      console.log('Video transition started, waiting for video completion');
-      return;
-    }
-
-    // Auto-complete transition after duration for non-video variants
+    // Auto-complete transition after duration
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
@@ -87,19 +80,6 @@ export const useEnhancedTransition = () => {
     }
   }, []);
 
-  // Video-specific methods
-  const startVideoTransition = useCallback((
-    callback: () => void,
-    videoUrl: string,
-    options: Omit<TransitionConfig, 'variant' | 'videoUrl'> = {}
-  ) => {
-    startTransition(callback, {
-      ...options,
-      variant: 'video',
-      videoUrl
-    });
-  }, [startTransition]);
-
   // Cleanup on unmount
   useEffect(() => {
     return () => {
@@ -113,7 +93,6 @@ export const useEnhancedTransition = () => {
     isTransitioning,
     transitionConfig,
     startTransition,
-    startVideoTransition,
     completeTransition,
     cancelTransition
   };
@@ -137,20 +116,4 @@ export const EASING_FUNCTIONS = {
   bounce: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
   smooth: 'cubic-bezier(0.4, 0, 0.2, 1)',
   sharp: 'cubic-bezier(0.4, 0, 0.6, 1)'
-} as const;
-
-// Video transition presets
-export const VIDEO_TRANSITION_PRESETS = {
-  dumpling: {
-    duration: 2000,
-    easing: 'smooth',
-  },
-  cooking: {
-    duration: 3000,
-    easing: 'ease-out',
-  },
-  steam: {
-    duration: 1500,
-    easing: 'ease-in-out',
-  }
 } as const;

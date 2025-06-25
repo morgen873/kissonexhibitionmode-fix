@@ -1,32 +1,22 @@
+
 import React, { useEffect, useState } from 'react';
 import { LoadingSpinner } from '@/components/ui/EnhancedAnimations';
-import VideoTransition from './VideoTransition';
 
 interface TransitionAnimationProps {
   isVisible: boolean;
   onComplete: () => void;
   direction?: 'forward' | 'backward';
-  variant?: 'geometric' | 'particle' | 'wave' | 'minimal' | 'loading' | 'video';
-  videoUrl?: string;
+  variant?: 'geometric' | 'particle' | 'wave' | 'minimal' | 'loading';
 }
 
 const TransitionAnimation: React.FC<TransitionAnimationProps> = ({
   isVisible,
   onComplete,
   direction = 'forward',
-  variant = 'geometric',
-  videoUrl
+  variant = 'geometric'
 }) => {
   const [animationPhase, setAnimationPhase] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-
-  // Preserved dumpling images for future use (not currently active)
-  const dumplingImages = [
-    '/lovable-uploads/9e669733-5c8a-4971-926a-51a8a6711aca.png',
-    '/lovable-uploads/504c7d32-e678-4269-92bd-2bcbb41ed83d.png',
-    '/lovable-uploads/35e09118-6751-4e82-addf-f64a1c994622.png',
-    '/lovable-uploads/630333bc-01ff-4495-b5d9-812404b6e842.png'
-  ];
 
   useEffect(() => {
     if (!isVisible) {
@@ -37,12 +27,6 @@ const TransitionAnimation: React.FC<TransitionAnimationProps> = ({
 
     setIsAnimating(true);
     console.log('TransitionAnimation: Starting new animation variant:', variant);
-    
-    if (variant === 'video') {
-      console.log('TransitionAnimation: Using video variant with URL:', videoUrl);
-      // Video transition will handle its own completion
-      return;
-    }
     
     if (variant === 'minimal') {
       setTimeout(() => {
@@ -84,25 +68,9 @@ const TransitionAnimation: React.FC<TransitionAnimationProps> = ({
       setIsAnimating(false);
       setAnimationPhase(0);
     };
-  }, [isVisible, onComplete, variant, videoUrl]);
+  }, [isVisible, onComplete, variant]);
 
   if (!isVisible) return null;
-
-  // Handle video variant
-  if (variant === 'video' && videoUrl) {
-    return (
-      <VideoTransition
-        videoUrl={videoUrl}
-        isVisible={isVisible}
-        onComplete={onComplete}
-        onError={(error) => {
-          console.error('Video transition error:', error);
-          // Fallback to geometric animation on error
-        }}
-        fallbackVariant="geometric"
-      />
-    );
-  }
 
   if (variant === 'minimal') {
     return (
