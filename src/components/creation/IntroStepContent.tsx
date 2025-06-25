@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -21,11 +20,11 @@ const IntroStepContent: React.FC<IntroStepContentProps> = ({
     switch (step.type) {
       case 'hero':
         return (
-          <div className="flex flex-col items-center justify-center text-center px-4 sm:px-6 py-8 sm:py-12 space-y-6 sm:space-y-8">
+          <div className="flex flex-col items-center justify-center text-center px-4 sm:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6">
             <img 
               src="/lovable-uploads/64d3de25-5e40-498e-8a21-28d15db9a050.png" 
               alt="KissOn Logo" 
-              className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 filter grayscale mb-4" 
+              className="w-28 h-28 sm:w-36 sm:h-36 lg:w-40 lg:h-40 filter grayscale mb-2" 
             />
             
             <p className="text-base sm:text-lg lg:text-xl text-white font-bold font-mono leading-relaxed max-w-md sm:max-w-lg px-4">
@@ -35,7 +34,7 @@ const IntroStepContent: React.FC<IntroStepContentProps> = ({
             <Button 
               onClick={handleNextClick} 
               size="lg" 
-              className="bg-gradient-to-r from-black via-gray-800 to-black hover:from-gray-800 hover:via-black hover:to-gray-800 text-white font-bold shadow-lg transition-all duration-300 transform hover:scale-105 border-2 border-white/20 px-8 py-4 sm:px-10 sm:py-5 text-lg sm:text-xl rounded-xl font-mono mt-4"
+              className="bg-gradient-to-r from-black via-gray-800 to-black hover:from-gray-800 hover:via-black hover:to-gray-800 text-white font-bold shadow-lg transition-all duration-300 transform hover:scale-105 border-2 border-white/20 px-8 py-4 sm:px-10 sm:py-5 text-lg sm:text-xl rounded-xl font-mono mt-2"
             >
               {step.buttonText}
             </Button>
@@ -83,7 +82,7 @@ const IntroStepContent: React.FC<IntroStepContentProps> = ({
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[60vh] w-full">
+    <div className="flex items-center justify-center min-h-[40vh] w-full">
       {renderStepContent()}
     </div>
   );
