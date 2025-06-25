@@ -39,12 +39,7 @@ const CreationContent: React.FC<CreationContentProps> = ({
   nextIntroStep,
   prevIntroStep,
   handleSubmit,
-  handleReset,
-  handleIntroNext,
-  handleIntroPrev,
-  handleCreationNext,
-  handleCreationPrev,
-  handleCreationSubmit
+  handleReset
 }) => {
   if (isCreatingRecipe) {
     return (
@@ -104,8 +99,6 @@ const CreationContent: React.FC<CreationContentProps> = ({
           prevStep={prevIntroStep} 
           nextStep={nextIntroStep} 
           handleSubmit={handleSubmit}
-          onTransitionNext={creationStep === steps.length - 1 ? handleCreationSubmit : handleCreationNext}
-          onTransitionPrev={handleCreationPrev}
           isNextDisabled={isNextDisabled} 
         />
       )}

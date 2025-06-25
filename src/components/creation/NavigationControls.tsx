@@ -10,8 +10,6 @@ interface NavigationControlsProps {
   nextStep: () => void;
   handleSubmit: () => void;
   isNextDisabled: boolean;
-  onTransitionNext?: () => void;
-  onTransitionPrev?: () => void;
 }
 
 const NavigationControls: React.FC<NavigationControlsProps> = ({
@@ -20,35 +18,21 @@ const NavigationControls: React.FC<NavigationControlsProps> = ({
   prevStep,
   nextStep,
   handleSubmit,
-  isNextDisabled,
-  onTransitionNext,
-  onTransitionPrev
+  isNextDisabled
 }) => {
   const handleNextClick = () => {
     console.log('NavigationControls: Next button clicked');
-    if (onTransitionNext) {
-      onTransitionNext();
-    } else {
-      nextStep();
-    }
+    nextStep();
   };
 
   const handlePrevClick = () => {
     console.log('NavigationControls: Previous button clicked');
-    if (onTransitionPrev) {
-      onTransitionPrev();
-    } else {
-      prevStep();
-    }
+    prevStep();
   };
 
   const handleSubmitClick = () => {
     console.log('NavigationControls: Submit button clicked');
-    if (onTransitionNext) {
-      onTransitionNext();
-    } else {
-      handleSubmit();
-    }
+    handleSubmit();
   };
 
   return (

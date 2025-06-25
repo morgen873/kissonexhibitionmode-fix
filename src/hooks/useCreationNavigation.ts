@@ -1,6 +1,4 @@
-
 import { useState } from 'react';
-import { useEnhancedTransition } from '@/hooks/useEnhancedTransition';
 import { introSteps } from "@/data/introSteps";
 
 interface UseCreationNavigationProps {
@@ -14,65 +12,37 @@ export const useCreationNavigation = ({
   prevCreationStep,
   handleSubmit
 }: UseCreationNavigationProps) => {
-  const { isTransitioning, transitionConfig, startTransition, completeTransition } = useEnhancedTransition();
   const [currentIntroStep, setCurrentIntroStep] = useState(0);
   const [hasStartedCreation, setHasStartedCreation] = useState(false);
 
-  // Transition handlers for intro steps
+  // Simple navigation handlers without transitions
   const handleIntroNext = () => {
-    startTransition(() => {
-      if (currentIntroStep < introSteps.length - 1) {
-        setCurrentIntroStep(currentIntroStep + 1);
-      } else {
-        setHasStartedCreation(true);
-      }
-    }, {
-      variant: 'geometric',
-      direction: 'forward'
-    });
+    if (currentIntroStep < introSteps.length - 1) {
+      setCurrentIntroStep(currentIntroStep + 1);
+    } else {
+      setHasStartedCreation(true);
+    }
   };
 
   const handleIntroPrev = () => {
-    startTransition(() => {
-      if (currentIntroStep > 0) {
-        setCurrentIntroStep(currentIntroStep - 1);
-      }
-    }, {
-      variant: 'geometric',
-      direction: 'backward'
-    });
+    if (currentIntroStep > 0) {
+      setCurrentIntroStep(currentIntroStep - 1);
+    }
   };
 
-  // Transition handlers for creation steps
   const handleCreationNext = () => {
-    startTransition(() => {
-      nextCreationStep();
-    }, {
-      variant: 'particle',
-      direction: 'forward'
-    });
+    nextCreationStep();
   };
 
   const handleCreationPrev = () => {
-    startTransition(() => {
-      prevCreationStep();
-    }, {
-      variant: 'wave',
-      direction: 'backward'
-    });
+    prevCreationStep();
   };
 
   const handleCreationSubmit = () => {
-    startTransition(() => {
-      handleSubmit();
-    }, {
-      variant: 'loading',
-      direction: 'forward',
-      duration: 1500
-    });
+    handleSubmit();
   };
 
-  // Regular non-transition handlers
+  // Keep the same interface for backward compatibility
   const nextIntroStep = () => {
     if (currentIntroStep < introSteps.length - 1) {
       setCurrentIntroStep(currentIntroStep + 1);
@@ -90,10 +60,10 @@ export const useCreationNavigation = ({
   return {
     currentIntroStep,
     hasStartedCreation,
-    isTransitioning,
-    transitionDirection: transitionConfig.direction || 'forward',
-    transitionVariant: transitionConfig.variant || 'geometric',
-    completeTransition,
+    isTransitioning: false, // Always false now
+    transitionDirection: 'forward' as const,
+    transitionVariant: 'geometric' as const,
+    completeTransition: () => {}, // No-op function
     handleIntroNext,
     handleIntroPrev,
     handleCreationNext,
