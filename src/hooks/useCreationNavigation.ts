@@ -42,6 +42,12 @@ export const useCreationNavigation = ({
     handleSubmit();
   };
 
+  // Reset navigation to hero page
+  const resetNavigation = () => {
+    setCurrentIntroStep(0);
+    setHasStartedCreation(false);
+  };
+
   // Keep the same interface for backward compatibility
   const nextIntroStep = () => {
     if (currentIntroStep < introSteps.length - 1) {
@@ -70,6 +76,7 @@ export const useCreationNavigation = ({
     handleCreationPrev,
     handleCreationSubmit,
     nextIntroStep,
-    prevIntroStep
+    prevIntroStep,
+    resetNavigation
   };
 };

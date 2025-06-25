@@ -49,7 +49,8 @@ const Creation = () => {
     handleCreationPrev,
     handleCreationSubmit,
     nextIntroStep,
-    prevIntroStep
+    prevIntroStep,
+    resetNavigation
   } = useCreationNavigation({
     nextCreationStep,
     prevCreationStep,
@@ -79,8 +80,7 @@ const Creation = () => {
   // Combined reset function that resets both form and navigation to hero page
   const handleReset = () => {
     resetForm(); // Reset the form data
-    // Reset navigation to hero page - this will be handled by the navigation hook
-    window.location.reload(); // Simple way to reset everything to initial state
+    resetNavigation(); // Reset navigation to hero page
   };
 
   const title = getCreationTitle({
