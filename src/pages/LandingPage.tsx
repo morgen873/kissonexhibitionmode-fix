@@ -1,77 +1,18 @@
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { VideoRetriever } from '@/utils/videoRetriever';
 import { ArrowRight } from 'lucide-react';
 
 const LandingPage = () => {
   const navigate = useNavigate();
-  const [videoUrl, setVideoUrl] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const loadStoveVideo = async () => {
-      try {
-        const videos = await VideoRetriever.getAvailableVideos();
-        const stoveVideo = videos.find(video => video.name.toLowerCase().includes('stove'));
-        
-        if (stoveVideo) {
-          setVideoUrl(stoveVideo.url);
-        } else {
-          console.log('Stove video not found, available videos:', videos.map(v => v.name));
-        }
-      } catch (error) {
-        console.error('Failed to load stove video:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadStoveVideo();
-  }, []);
 
   const handleEnterApp = () => {
     navigate('/creation');
   };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-white text-xl font-mono animate-pulse">Loading...</div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-black overflow-hidden relative">
-      {/* Video Background */}
-      {videoUrl && (
-        <div className="absolute inset-0 w-full h-full">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              console.error('Video error:', e);
-            }}
-          >
-            <source src={videoUrl} type="video/mp4" />
-            <source src={videoUrl} type="image/gif" />
-          </video>
-          
-          {/* Dark overlay for better text readability */}
-          <div className="absolute inset-0 bg-black/40" />
-        </div>
-      )}
-
-      {/* Fallback background if video doesn't load */}
-      {!videoUrl && (
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-pink-900 to-orange-900" />
-      )}
-
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-pink-900 to-orange-900 overflow-hidden relative">
       {/* Content Overlay */}
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 text-center">
         <div className="max-w-4xl mx-auto">
