@@ -41,6 +41,9 @@ const Creation = () => {
     hasStartedCreation,
     isTransitioning,
     transitionDirection,
+    transitionVariant,
+    transitionVideoUrl,
+    selectedVideoUrl,
     completeTransition,
     handleIntroNext,
     handleIntroPrev,
@@ -48,7 +51,9 @@ const Creation = () => {
     handleCreationPrev,
     handleCreationSubmit,
     nextIntroStep,
-    prevIntroStep
+    prevIntroStep,
+    selectVideo,
+    clearSelection
   } = useCreationNavigation({
     nextCreationStep,
     prevCreationStep,
@@ -93,7 +98,11 @@ const Creation = () => {
         hasStartedCreation={hasStartedCreation}
         isTransitioning={isTransitioning}
         transitionDirection={transitionDirection}
+        transitionVariant={transitionVariant}
+        transitionVideoUrl={transitionVideoUrl}
+        selectedVideoUrl={selectedVideoUrl}
         completeTransition={completeTransition}
+        onVideoSelect={selectVideo}
       >
         <CreationContent
           isCreatingRecipe={isCreatingRecipe}
