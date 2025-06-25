@@ -52,12 +52,12 @@ const NavigationControls: React.FC<NavigationControlsProps> = ({
   };
 
   return (
-    <div className="flex justify-between mt-6">
+    <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4 sm:gap-0 w-full">
       <Button 
         onClick={handlePrevClick} 
         disabled={currentStep === 0} 
         variant="ghost" 
-        className="text-white hover:bg-white/10 disabled:opacity-50 font-mono text-sm"
+        className="text-white hover:bg-white/10 disabled:opacity-50 font-mono text-sm w-full sm:w-auto order-2 sm:order-1"
       >
         <ArrowUp className="mr-2 h-4 w-4" /> Back
       </Button>
@@ -66,7 +66,7 @@ const NavigationControls: React.FC<NavigationControlsProps> = ({
         <Button 
           onClick={handleSubmitClick} 
           disabled={isNextDisabled} 
-          className="bg-gradient-to-r from-black to-gray-800 text-white font-mono text-sm hover:from-gray-800 hover:to-black"
+          className="bg-gradient-to-r from-black to-gray-800 text-white font-mono text-sm hover:from-gray-800 hover:to-black w-full sm:w-auto order-1 sm:order-2"
         >
           Create Recipe <Zap className="ml-2 h-4 w-4" />
         </Button>
@@ -74,7 +74,7 @@ const NavigationControls: React.FC<NavigationControlsProps> = ({
         <Button 
           onClick={handleNextClick} 
           disabled={isNextDisabled} 
-          className="px-6 bg-gradient-to-r from-black to-gray-800 text-white font-mono text-sm hover:from-gray-800 hover:to-black"
+          className="px-6 bg-gradient-to-r from-black to-gray-800 text-white font-mono text-sm hover:from-gray-800 hover:to-black w-full sm:w-auto order-1 sm:order-2"
         >
           Continue <ArrowDown className="ml-2 h-4 w-4" />
         </Button>
