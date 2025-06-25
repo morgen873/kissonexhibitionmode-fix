@@ -43,12 +43,12 @@ const CreationLayout: React.FC<CreationLayoutProps> = ({
         </CreationContainer>
       </AnimatedContainer>
 
-      {/* Enhanced Transition Animation Overlay */}
+      {/* New Transition Animation Overlay with geometric variant */}
       <TransitionAnimation
         isVisible={isTransitioning}
         direction={transitionDirection}
         onComplete={completeTransition}
-        variant="images"
+        variant="geometric"
       />
 
       {/* Enhanced Footer with animations */}
