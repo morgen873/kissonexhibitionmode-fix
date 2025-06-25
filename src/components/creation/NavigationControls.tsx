@@ -7,7 +7,7 @@ interface NavigationControlsProps {
   currentStep: number;
   stepsLength: number;
   prevStep: () => void;
-  nextStep: () => void;
+  nextStep: (currentStep?: number) => void;
   handleSubmit: () => void;
   isNextDisabled: boolean;
 }
@@ -21,8 +21,9 @@ const NavigationControls: React.FC<NavigationControlsProps> = ({
   isNextDisabled
 }) => {
   const handleNextClick = () => {
-    console.log('NavigationControls: Next button clicked');
-    nextStep();
+    console.log('NavigationControls: Next button clicked for step:', currentStep);
+    // Pass current step to enable GIF transition logic
+    nextStep(currentStep);
   };
 
   const handlePrevClick = () => {
