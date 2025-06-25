@@ -25,9 +25,10 @@ const RecipeActionButtons: React.FC<RecipeActionButtonsProps> = ({ recipe, onRes
             <Button 
                 onClick={onReset} 
                 variant="outline" 
-                className="bg-transparent hover:bg-white/10 text-white mb-8 border-white font-mono"
+                size="icon"
+                className="bg-transparent hover:bg-white/10 text-white mb-8 border-white"
             >
-                <Home className="mr-2" /> Home
+                <Home />
             </Button>
         </div>
     );
