@@ -59,16 +59,6 @@ const LandingPage = () => {
             </p>
           </div>
         </div>
-
-        {/* Footer */}
-        <footer className="absolute bottom-6 left-0 right-0 text-center">
-          <p className="text-white/80 font-mono text-lg">
-            A DESIGN PROJECT BY{' '}
-            <span className="text-yellow-400 font-bold bg-black/60 px-3 py-1 rounded-md border border-yellow-400/30">
-              OREN/LUPE
-            </span>
-          </p>
-        </footer>
       </div>
     </div>
   );
