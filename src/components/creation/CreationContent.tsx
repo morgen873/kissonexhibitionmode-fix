@@ -38,6 +38,8 @@ const CreationContent: React.FC<CreationContentProps> = ({
   onEnhancerChange,
   nextIntroStep,
   prevIntroStep,
+  prevCreationStep,
+  nextCreationStep,
   handleSubmit,
   handleReset
 }) => {
@@ -96,8 +98,8 @@ const CreationContent: React.FC<CreationContentProps> = ({
         <NavigationControls 
           currentStep={creationStep} 
           stepsLength={steps.length} 
-          prevStep={prevIntroStep} 
-          nextStep={nextIntroStep} 
+          prevStep={prevCreationStep} 
+          nextStep={nextCreationStep} 
           handleSubmit={handleSubmit}
           isNextDisabled={isNextDisabled} 
         />
