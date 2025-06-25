@@ -72,7 +72,6 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
                     value={controlValues.temperature}
                     min={controls.temperature.min}
                     max={controls.temperature.max}
-                    unit={controls.temperature.unit}
                     onValueChange={onTemperatureChange}
                 />
             </div>
