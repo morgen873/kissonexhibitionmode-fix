@@ -64,7 +64,7 @@ const LandingPage = () => {
         <footer className="absolute bottom-6 left-0 right-0 text-center">
           <p className="text-white/60 font-mono">
             A DESIGN PROJECT BY{' '}
-            <span className="text-yellow-300 font-bold text-shadow-lg">
+            <span className="text-yellow-300 font-bold">
               OREN/LUPE
             </span>
           </p>
