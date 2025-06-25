@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import { useCreationForm } from '@/hooks/useCreationForm';
@@ -9,6 +8,7 @@ import { getCreationTitle, shouldShowTitle } from '@/components/creation/Creatio
 import GlobalLayout from '@/components/layout/GlobalLayout';
 import CreationLayout from '@/components/creation/CreationLayout';
 import CreationContent from '@/components/creation/CreationContent';
+import GifTransition from '@/components/creation/GifTransition';
 
 interface OutletContextType {
   setHeaderVisible: (visible: boolean) => void;
@@ -40,6 +40,7 @@ const Creation = () => {
     currentIntroStep,
     hasStartedCreation,
     isTransitioning,
+    transitionGifUrl,
     transitionDirection,
     transitionVariant,
     completeTransition,
@@ -92,50 +93,62 @@ const Creation = () => {
   const showTitle = shouldShowTitle(recipeResult, isCreatingRecipe, hasStartedCreation, currentIntroStep);
 
   return (
-    <GlobalLayout variant="creation" showHeader={false}>
-      <CreationLayout
-        progress={progress}
-        theme={creationTheme}
-        title={title}
-        showTitle={showTitle}
-        hasStartedCreation={hasStartedCreation}
-        isTransitioning={isTransitioning}
-        transitionDirection={transitionDirection}
-        transitionVariant={transitionVariant}
-        completeTransition={completeTransition}
-      >
-        <CreationContent
-          isCreatingRecipe={isCreatingRecipe}
-          recipeResult={recipeResult}
-          hasStartedCreation={hasStartedCreation}
-          currentIntroStep={currentIntroStep}
-          creationStep={creationStep}
-          creationStepData={creationStepData}
-          answers={answers}
-          customAnswers={customAnswers}
-          controlValues={controlValues}
-          theme={creationTheme}
-          isNextDisabled={isNextDisabled}
-          onAnswerSelect={handleAnswerSelect}
-          onCustomAnswerChange={handleCustomAnswerChange}
-          onTemperatureChange={handleTemperatureChange}
-          onShapeChange={handleShapeChange}
-          onFlavorChange={handleFlavorChange}
-          onEnhancerChange={handleEnhancerChange}
-          nextIntroStep={nextIntroStep}
-          prevIntroStep={prevIntroStep}
-          prevCreationStep={prevCreationStep}
-          nextCreationStep={nextCreationStep}
-          handleSubmit={handleSubmit}
-          handleReset={handleReset}
-          handleIntroNext={handleIntroNext}
-          handleIntroPrev={handleIntroPrev}
-          handleCreationNext={handleCreationNext}
-          handleCreationPrev={handleCreationPrev}
-          handleCreationSubmit={handleCreationSubmit}
+    <>
+      {/* GIF Transition Overlay */}
+      {isTransitioning && transitionGifUrl && (
+        <GifTransition
+          gifUrl={transitionGifUrl}
+          isVisible={isTransitioning}
+          onComplete={completeTransition}
+          duration={3000}
         />
-      </CreationLayout>
-    </GlobalLayout>
+      )}
+
+      <GlobalLayout variant="creation" showHeader={false}>
+        <CreationLayout
+          progress={progress}
+          theme={creationTheme}
+          title={title}
+          showTitle={showTitle}
+          hasStartedCreation={hasStartedCreation}
+          isTransitioning={isTransitioning}
+          transitionDirection={transitionDirection}
+          transitionVariant={transitionVariant}
+          completeTransition={completeTransition}
+        >
+          <CreationContent
+            isCreatingRecipe={isCreatingRecipe}
+            recipeResult={recipeResult}
+            hasStartedCreation={hasStartedCreation}
+            currentIntroStep={currentIntroStep}
+            creationStep={creationStep}
+            creationStepData={creationStepData}
+            answers={answers}
+            customAnswers={customAnswers}
+            controlValues={controlValues}
+            theme={creationTheme}
+            isNextDisabled={isNextDisabled}
+            onAnswerSelect={handleAnswerSelect}
+            onCustomAnswerChange={handleCustomAnswerChange}
+            onTemperatureChange={handleTemperatureChange}
+            onShapeChange={handleShapeChange}
+            onFlavorChange={handleFlavorChange}
+            onEnhancerChange={handleEnhancerChange}
+            nextIntroStep={nextIntroStep}
+            prevIntroStep={prevIntroStep}
+            prevCreationStep={prevCreationStep}
+            nextCreationStep={nextCreationStep}
+            handleSubmit={handleSubmit}
+            handleReset={handleReset}
+            handleIntroNext={handleIntroNext}
+            handleIntroPrev={handleIntroPrev}
+            handleCreationNext={handleCreationNext}
+            handleCreationPrev={handleCreationPrev}
+            handleCreationSubmit={handleCreationSubmit}
+          />
+        </CreationLayout>
+      </GlobalLayout>
+    </>
   );
 };
 

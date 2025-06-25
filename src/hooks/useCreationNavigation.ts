@@ -14,9 +14,20 @@ export const useCreationNavigation = ({
 }: UseCreationNavigationProps) => {
   const [currentIntroStep, setCurrentIntroStep] = useState(0);
   const [hasStartedCreation, setHasStartedCreation] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [transitionGifUrl, setTransitionGifUrl] = useState<string>('');
 
-  // Simple navigation handlers without transitions
-  const handleIntroNext = () => {
+  // Simple navigation handlers with transition support
+  const handleIntroNext = (gifUrl?: string) => {
+    if (gifUrl) {
+      setTransitionGifUrl(gifUrl);
+      setIsTransitioning(true);
+    } else {
+      proceedToNextIntroStep();
+    }
+  };
+
+  const proceedToNextIntroStep = () => {
     if (currentIntroStep < introSteps.length - 1) {
       setCurrentIntroStep(currentIntroStep + 1);
     } else {
@@ -30,8 +41,13 @@ export const useCreationNavigation = ({
     }
   };
 
-  const handleCreationNext = () => {
-    nextCreationStep();
+  const handleCreationNext = (gifUrl?: string) => {
+    if (gifUrl) {
+      setTransitionGifUrl(gifUrl);
+      setIsTransitioning(true);
+    } else {
+      nextCreationStep();
+    }
   };
 
   const handleCreationPrev = () => {
@@ -42,34 +58,43 @@ export const useCreationNavigation = ({
     handleSubmit();
   };
 
+  const completeTransition = () => {
+    setIsTransitioning(false);
+    setTransitionGifUrl('');
+    
+    // Complete the actual navigation step
+    if (hasStartedCreation) {
+      nextCreationStep();
+    } else {
+      proceedToNextIntroStep();
+    }
+  };
+
   // Reset navigation to hero page
   const resetNavigation = () => {
     setCurrentIntroStep(0);
     setHasStartedCreation(false);
+    setIsTransitioning(false);
+    setTransitionGifUrl('');
   };
 
   // Keep the same interface for backward compatibility
-  const nextIntroStep = () => {
-    if (currentIntroStep < introSteps.length - 1) {
-      setCurrentIntroStep(currentIntroStep + 1);
-    } else {
-      setHasStartedCreation(true);
-    }
+  const nextIntroStep = (gifUrl?: string) => {
+    handleIntroNext(gifUrl);
   };
 
   const prevIntroStep = () => {
-    if (currentIntroStep > 0) {
-      setCurrentIntroStep(currentIntroStep - 1);
-    }
+    handleIntroPrev();
   };
 
   return {
     currentIntroStep,
     hasStartedCreation,
-    isTransitioning: false, // Always false now
+    isTransitioning,
+    transitionGifUrl,
     transitionDirection: 'forward' as const,
-    transitionVariant: 'geometric' as const,
-    completeTransition: () => {}, // No-op function
+    transitionVariant: 'gif' as const,
+    completeTransition,
     handleIntroNext,
     handleIntroPrev,
     handleCreationNext,
