@@ -53,12 +53,12 @@ const CreationLayout: React.FC<CreationLayoutProps> = ({
         variant={transitionVariant}
       />
 
-      {/* Enhanced Footer with animations */}
+      {/* Enhanced Footer with better text visibility */}
       {!hasStartedCreation && (
         <AnimatedContainer variant="slide" delay={200}>
-          <footer className="relative z-10 bg-black/90 backdrop-blur-xl border-t border-green-400/30 text-green-100 mt-4 sm:mt-8 w-full text-center py-4 sm:py-6 shadow-xl shadow-green-400/10 hover-glow transition-all duration-300">
-            <p className="text-sm sm:text-base font-mono px-4">
-              A DESIGN PROJECT BY <span className="bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent font-bold mx-1 animate-shimmer">OREN/LUPE</span>
+          <footer className="relative z-10 bg-black/95 backdrop-blur-xl border-t border-green-400/30 text-green-100 mt-4 sm:mt-8 w-full text-center py-6 sm:py-8 shadow-xl shadow-green-400/10 transition-all duration-300">
+            <p className="text-base sm:text-lg font-mono px-4 font-semibold">
+              A DESIGN PROJECT BY <span className="text-green-400 font-bold mx-1 drop-shadow-lg hover:text-green-300 transition-colors duration-300">OREN/LUPE</span>
             </p>
           </footer>
         </AnimatedContainer>
