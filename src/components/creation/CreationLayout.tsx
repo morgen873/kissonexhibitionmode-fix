@@ -2,6 +2,7 @@
 import React from 'react';
 import CreationContainer from '@/components/creation/CreationContainer';
 import TransitionAnimation from '@/components/creation/TransitionAnimation';
+import { AnimatedContainer } from '@/components/ui/EnhancedAnimations';
 
 interface CreationLayoutProps {
   progress: number;
@@ -28,30 +29,37 @@ const CreationLayout: React.FC<CreationLayoutProps> = ({
 }) => {
   return (
     <div className="min-h-screen w-full overflow-x-hidden">
-      <CreationContainer
-        progress={progress}
-        theme={theme}
-        title={title}
-        showTitle={showTitle}
-        hasStartedCreation={hasStartedCreation}
-      >
-        {children}
-      </CreationContainer>
+      <AnimatedContainer variant="fade" duration="normal">
+        <CreationContainer
+          progress={progress}
+          theme={theme}
+          title={title}
+          showTitle={showTitle}
+          hasStartedCreation={hasStartedCreation}
+        >
+          <AnimatedContainer variant="slide" delay={100}>
+            {children}
+          </AnimatedContainer>
+        </CreationContainer>
+      </AnimatedContainer>
 
-      {/* Transition Animation Overlay */}
+      {/* Enhanced Transition Animation Overlay */}
       <TransitionAnimation
         isVisible={isTransitioning}
         direction={transitionDirection}
         onComplete={completeTransition}
+        variant="images"
       />
 
-      {/* Footer for intro flow - Epicure style with black and green theme */}
+      {/* Enhanced Footer with animations */}
       {!hasStartedCreation && (
-        <footer className="relative z-10 bg-black/90 backdrop-blur-xl border-t border-green-400/30 text-green-100 mt-4 sm:mt-8 w-full text-center py-4 sm:py-6 shadow-xl shadow-green-400/10">
-          <p className="text-sm sm:text-base font-mono px-4">
-            A DESIGN PROJECT BY <span className="bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent font-bold mx-1">OREN/LUPE</span>
-          </p>
-        </footer>
+        <AnimatedContainer variant="slide" delay={200}>
+          <footer className="relative z-10 bg-black/90 backdrop-blur-xl border-t border-green-400/30 text-green-100 mt-4 sm:mt-8 w-full text-center py-4 sm:py-6 shadow-xl shadow-green-400/10 hover-glow transition-all duration-300">
+            <p className="text-sm sm:text-base font-mono px-4">
+              A DESIGN PROJECT BY <span className="bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent font-bold mx-1 animate-shimmer">OREN/LUPE</span>
+            </p>
+          </footer>
+        </AnimatedContainer>
       )}
     </div>
   );
