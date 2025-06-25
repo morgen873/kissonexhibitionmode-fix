@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Printer, RotateCcw } from 'lucide-react';
+import { Printer, Home } from 'lucide-react';
 import { RecipeResult } from '@/types/creation';
 import { useRecipePrint } from '@/hooks/useRecipePrint';
 
@@ -27,7 +27,7 @@ const RecipeActionButtons: React.FC<RecipeActionButtonsProps> = ({ recipe, onRes
                 variant="outline" 
                 className="bg-transparent hover:bg-white/10 text-white mb-8 border-white font-mono"
             >
-                <RotateCcw className="mr-2" /> Create Another
+                <Home className="mr-2" /> Home
             </Button>
         </div>
     );
