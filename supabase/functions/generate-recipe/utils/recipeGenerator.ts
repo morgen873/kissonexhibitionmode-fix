@@ -9,8 +9,9 @@ interface RecipePayload {
 
 export async function generateRecipeWithOpenAI(payload: RecipePayload, openai: OpenAI) {
   const prompt = `
-    You are a creative chef specializing in "Memory KissOn" dumplings. A user has provided the following inputs to create a unique recipe.
-    Your task is to generate a dumpling recipe that meticulously incorporates all the user's choices.
+    You are a creative chef specializing in "Memory KissOn" dumplings for a public culinary exhibition. 
+    A user has provided the following inputs to create a unique, family-friendly recipe suitable for all audiences.
+    Your task is to generate a dumpling recipe that incorporates all the user's choices while being appropriate for a public exhibition.
 
     User Inputs:
     - Questions & Answers: ${JSON.stringify(payload.questions, null, 2)}
@@ -19,19 +20,27 @@ export async function generateRecipeWithOpenAI(payload: RecipePayload, openai: O
 
     **Crucial Instructions:**
     The "Timeline selection" is the most important input. It defines the entire theme of the dumpling.
-    - If the timeline is futuristic (e.g., "Distant Future"), the recipe must be avant-garde. Use experimental ingredients like lab-grown proteins, nutrient pastes, or molecular gastronomy techniques. The description and title should sound futuristic.
-    - If the timeline is historical (e.g., "Ancient Past"), the recipe must be traditional, using ingredients and methods authentic to that period.
-    - All other inputs (questions, controls) should be interpreted through the lens of the selected timeline. For example, a "spicy" flavor in a futuristic context might mean using a synthetic capsaicin extract, while in a historical context it would be a specific type of chili pepper.
+    - If the timeline is futuristic (e.g., "Future 1", "Future 2"), use innovative culinary techniques and modern ingredients. Focus on molecular gastronomy, lab-grown proteins, and futuristic cooking methods.
+    - If the timeline is historical (e.g., "Past 1", "Past 2"), use traditional ingredients and authentic historical cooking methods. Focus on heritage techniques and time-honored ingredients.
+    - If the timeline is present day ("Present"), use contemporary cooking techniques with modern, accessible ingredients.
+    - All other inputs (questions, controls) should be interpreted through the lens of the selected timeline.
+
+    **Exhibition Guidelines:**
+    - Use only family-friendly, professional culinary language
+    - Focus on cooking techniques, ingredient combinations, and sensory descriptions
+    - Avoid any potentially controversial or inappropriate content
+    - Keep descriptions warm, welcoming, and suitable for all ages
+    - Emphasize the cultural and emotional aspects of cooking and sharing food
 
     Generate the following information in a JSON format. Do not include any text outside of the JSON object.
     The JSON object should have these exact keys: "title", "description", "ingredients", "cooking_recipe".
-    - "title": A creative and appealing name for the dumpling recipe, fitting the timeline.
-    - "description": A short, one-paragraph description of the dumplings, capturing their essence and strongly reflecting the chosen timeline.
-    - "ingredients": A JSON object where keys are categories (e.g., "Dough", "Filling") and values are arrays of strings, with each string being an ingredient (e.g., "1 cup all-purpose flour"). The ingredients MUST match the timeline's theme.
-    - "cooking_recipe": A string containing numbered, step-by-step instructions for preparing and cooking the dumplings. The steps should also reflect the timeline. Use \\n for newlines between steps.
+    - "title": A creative and appealing name for the dumpling recipe, fitting the timeline (maximum 100 characters)
+    - "description": A warm, family-friendly paragraph describing the dumplings and their connection to the timeline and emotions (maximum 500 characters)
+    - "ingredients": A JSON object where keys are categories (e.g., "Dough", "Filling") and values are arrays of strings, with each string being an ingredient with measurements
+    - "cooking_recipe": A string containing clear, numbered, step-by-step instructions using professional cooking terminology (use \\n for newlines between steps)
   `;
 
-  console.log("Generating recipe with OpenAI...");
+  console.log("Generating exhibition-appropriate recipe with OpenAI...");
   const response = await openai.chat.completions.create({
     model: 'gpt-4o-mini',
     messages: [{ role: 'user', content: prompt }],
@@ -39,7 +48,7 @@ export async function generateRecipeWithOpenAI(payload: RecipePayload, openai: O
   });
 
   const recipeContent = JSON.parse(response.choices[0].message.content);
-  console.log("Recipe generated successfully:", recipeContent.title);
+  console.log("Exhibition-appropriate recipe generated successfully:", recipeContent.title);
   
   return recipeContent;
 }
