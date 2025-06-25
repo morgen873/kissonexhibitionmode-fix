@@ -9,7 +9,7 @@ import TransitionAnimation from './TransitionAnimation';
 const VideoTransitionTest: React.FC = () => {
   const [uploadedVideoUrl, setUploadedVideoUrl] = useState<string | null>(null);
   const [selectedVideoUrl, setSelectedVideoUrl] = useState<string | null>(null);
-  const { isTransitioning, startVideoTransition, completeTransition } = useEnhancedTransition();
+  const { isTransitioning, startTransition, completeTransition } = useEnhancedTransition();
 
   const handleVideoUploaded = (videoUrl: string) => {
     console.log('Video uploaded:', videoUrl);
@@ -23,12 +23,13 @@ const VideoTransitionTest: React.FC = () => {
 
   const handleTestTransition = (videoUrl: string) => {
     console.log('Testing transition with video:', videoUrl);
-    startVideoTransition(
+    startTransition(
       () => {
         console.log('Video transition completed!');
       },
-      videoUrl,
       {
+        variant: 'geometric',
+        duration: 1000,
         onStart: () => console.log('Video transition started'),
         onComplete: () => console.log('Video transition finished')
       }
@@ -36,12 +37,12 @@ const VideoTransitionTest: React.FC = () => {
   };
 
   const testOtherTransitions = () => {
-    startVideoTransition(
+    startTransition(
       () => {
         console.log('Geometric transition completed!');
       },
-      '', // No video URL triggers fallback
       {
+        variant: 'particle',
         duration: 2000
       }
     );
@@ -144,8 +145,7 @@ const VideoTransitionTest: React.FC = () => {
       <TransitionAnimation
         isVisible={isTransitioning}
         onComplete={completeTransition}
-        variant="video"
-        videoUrl={(selectedVideoUrl || uploadedVideoUrl) || undefined}
+        variant="geometric"
       />
     </div>
   );
