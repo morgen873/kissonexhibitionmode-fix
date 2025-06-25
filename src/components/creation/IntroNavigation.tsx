@@ -7,11 +7,12 @@ interface IntroNavigationProps {
     currentStep: number;
     totalSteps: number;
     onPrev: () => void;
-    onNext: (gifUrl?: string) => void;
+    onNext: () => void;
     isFirstStep: boolean;
     isLastStep: boolean;
     buttonText: string;
-    step?: any; // Add step prop to access GIF URL
+    onTransitionNext?: () => void;
+    onTransitionPrev?: () => void;
 }
 
 const IntroNavigation: React.FC<IntroNavigationProps> = ({
@@ -22,14 +23,13 @@ const IntroNavigation: React.FC<IntroNavigationProps> = ({
     isFirstStep,
     isLastStep,
     buttonText,
-    step
+    onTransitionNext,
+    onTransitionPrev
 }) => {
     const handleNextClick = () => {
         console.log('IntroNavigation: Next button clicked');
-        // If this step has a GIF URL, trigger the transition
-        if (step?.gifUrl) {
-            console.log('Triggering GIF transition from navigation with URL:', step.gifUrl);
-            onNext(step.gifUrl);
+        if (onTransitionNext) {
+            onTransitionNext();
         } else {
             onNext();
         }
@@ -37,7 +37,11 @@ const IntroNavigation: React.FC<IntroNavigationProps> = ({
 
     const handlePrevClick = () => {
         console.log('IntroNavigation: Previous button clicked');
-        onPrev();
+        if (onTransitionPrev) {
+            onTransitionPrev();
+        } else {
+            onPrev();
+        }
     };
 
     return (

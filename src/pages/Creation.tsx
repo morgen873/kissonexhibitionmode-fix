@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import { useCreationForm } from '@/hooks/useCreationForm';
@@ -93,11 +92,6 @@ const Creation = () => {
 
   const showTitle = shouldShowTitle(recipeResult, isCreatingRecipe, hasStartedCreation, currentIntroStep);
 
-  // Wrapper for creation navigation that passes current step
-  const handleCreationNextWithStep = (currentStep?: number) => {
-    handleCreationNext(currentStep);
-  };
-
   return (
     <>
       {/* GIF Transition Overlay */}
@@ -143,7 +137,7 @@ const Creation = () => {
             nextIntroStep={nextIntroStep}
             prevIntroStep={prevIntroStep}
             prevCreationStep={prevCreationStep}
-            nextCreationStep={handleCreationNextWithStep}
+            nextCreationStep={nextCreationStep}
             handleSubmit={handleSubmit}
             handleReset={handleReset}
             handleIntroNext={handleIntroNext}

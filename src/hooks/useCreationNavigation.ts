@@ -1,7 +1,5 @@
-
 import { useState } from 'react';
 import { introSteps } from "@/data/introSteps";
-import { steps } from '@/data/creation';
 
 interface UseCreationNavigationProps {
   nextCreationStep: () => void;
@@ -43,20 +41,13 @@ export const useCreationNavigation = ({
     }
   };
 
-  const handleCreationNext = (creationStep?: number) => {
-    // Check if current step has a GIF URL for transition
-    if (hasStartedCreation && creationStep !== undefined) {
-      const currentStepData = steps[creationStep];
-      if (currentStepData?.gifUrl) {
-        console.log('Triggering GIF transition for creation step:', creationStep, 'with URL:', currentStepData.gifUrl);
-        setTransitionGifUrl(currentStepData.gifUrl);
-        setIsTransitioning(true);
-        return;
-      }
+  const handleCreationNext = (gifUrl?: string) => {
+    if (gifUrl) {
+      setTransitionGifUrl(gifUrl);
+      setIsTransitioning(true);
+    } else {
+      nextCreationStep();
     }
-    
-    // If no GIF transition, proceed normally
-    nextCreationStep();
   };
 
   const handleCreationPrev = () => {
@@ -102,7 +93,7 @@ export const useCreationNavigation = ({
     isTransitioning,
     transitionGifUrl,
     transitionDirection: 'forward' as const,
-    transitionVariant: 'minimal' as const,
+    transitionVariant: 'gif' as const,
     completeTransition,
     handleIntroNext,
     handleIntroPrev,

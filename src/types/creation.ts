@@ -2,22 +2,18 @@
 export interface QuestionStep {
     type: 'question';
     id: number;
-    title: string;
-    description: string;
+    question: string;
     options: { title: string; description: string; }[];
     customOption?: {
         title: string;
         placeholder: string;
     };
-    gifUrl?: string;
 }
 
 export interface ExplanationStep {
     type: 'explanation';
-    id: number;
     title: string;
     description: string;
-    gifUrl?: string;
 }
 
 export interface ControlsStep {
@@ -27,31 +23,24 @@ export interface ControlsStep {
     description: string;
     controls: {
         temperature: {
-            label: string;
             min: number;
             max: number;
+            unit: string;
             defaultValue: number;
-            icon: any;
         };
         shape: {
-            label: string;
             options: string[];
-            defaultIndex: number;
-            icon: any;
+            defaultValue: string;
         };
         flavor: {
-            label: string;
             options: string[];
-            defaultIndex: number;
-            icon: any;
+            defaultValue: string;
         };
-        enhancer: {
-            label: string;
+        enhancer?: {
             placeholder: string;
-            icon: any;
+            defaultValue: string;
         };
     };
-    gifUrl?: string;
 }
 
 export interface TimelineStep {
@@ -64,13 +53,9 @@ export interface TimelineStep {
         description: string;
         value?: string;
     }[];
-    gifUrl?: string;
 }
 
 export type Step = QuestionStep | ExplanationStep | ControlsStep | TimelineStep;
-
-// Add the missing CreationStep type as an alias for Step
-export type CreationStep = Step;
 
 export interface RecipeResult {
     name: string;
