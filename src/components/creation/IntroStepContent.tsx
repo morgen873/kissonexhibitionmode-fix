@@ -21,21 +21,21 @@ const IntroStepContent: React.FC<IntroStepContentProps> = ({
     switch (step.type) {
       case 'hero':
         return (
-          <div className="w-full max-w-lg mx-auto px-4 text-center">
+          <div className="flex flex-col items-center justify-center text-center px-4 py-8 space-y-6">
             <img 
               src="/lovable-uploads/64d3de25-5e40-498e-8a21-28d15db9a050.png" 
               alt="KissOn Logo" 
-              className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 mx-auto mb-6 filter grayscale" 
+              className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 filter grayscale" 
             />
             
-            <p className="text-base sm:text-lg text-white font-bold mb-8 font-mono leading-relaxed">
-              Our AI transforms your feelings into delicious,{'\n'}one-of-a-kind dumpling recipes.
+            <p className="text-base sm:text-lg text-white font-bold font-mono leading-relaxed max-w-md">
+              Our AI transforms your feelings into delicious, one-of-a-kind dumpling recipes.
             </p>
             
             <Button 
               onClick={handleNextClick} 
               size="lg" 
-              className="bg-gradient-to-r from-black via-gray-800 to-black hover:from-gray-800 hover:via-black hover:to-gray-800 text-white font-bold shadow-lg transition-all duration-300 transform hover:scale-105 border-2 border-white/20 px-8 py-4 text-xl rounded-xl font-mono mx-auto"
+              className="bg-gradient-to-r from-black via-gray-800 to-black hover:from-gray-800 hover:via-black hover:to-gray-800 text-white font-bold shadow-lg transition-all duration-300 transform hover:scale-105 border-2 border-white/20 px-8 py-4 text-xl rounded-xl font-mono"
             >
               {step.buttonText}
             </Button>
@@ -44,8 +44,8 @@ const IntroStepContent: React.FC<IntroStepContentProps> = ({
       case 'explanation':
         const Icon = step.icon;
         return (
-          <div className="w-full max-w-sm mx-auto px-4">
-            <Card className="bg-transparent border-4 border-white/20 transition-all duration-300 shadow-2xl shadow-black/25">
+          <div className="flex justify-center px-4">
+            <Card className="bg-transparent border-4 border-white/20 transition-all duration-300 shadow-2xl shadow-black/25 w-full max-w-sm">
               <CardContent className="p-4 text-center">
                 {Icon && (
                   <div className="w-16 h-16 bg-gradient-to-r from-black via-gray-800 to-black rounded-full flex items-center justify-center mx-auto mb-6">
@@ -66,13 +66,13 @@ const IntroStepContent: React.FC<IntroStepContentProps> = ({
         );
       case 'quote':
         return (
-          <div className="w-full max-w-sm mx-auto px-4 text-center">
-            <blockquote className="text-2xl sm:text-3xl md:text-4xl font-black leading-tight mb-6 font-mono">
-              <span className="bg-gradient-to-r from-white via-gray-300 to-white bg-clip-text text-transparent drop-shadow-2xl text-lg sm:text-xl font-extrabold block">
+          <div className="flex flex-col items-center justify-center text-center px-4 space-y-6">
+            <blockquote className="text-lg sm:text-xl md:text-2xl font-black leading-tight font-mono max-w-lg">
+              <span className="bg-gradient-to-r from-white via-gray-300 to-white bg-clip-text text-transparent drop-shadow-2xl font-extrabold">
                 {step.title}
               </span>
             </blockquote>
-            <p className="text-lg sm:text-xl text-white font-black mb-8 font-mono leading-relaxed">
+            <p className="text-lg sm:text-xl text-white font-black font-mono leading-relaxed">
               {step.description}
             </p>
           </div>
@@ -83,9 +83,9 @@ const IntroStepContent: React.FC<IntroStepContentProps> = ({
   };
 
   return (
-    <main className="flex items-center justify-center min-h-[60vh] w-full px-4">
+    <div className="flex items-center justify-center min-h-[60vh] w-full">
       {renderStepContent()}
-    </main>
+    </div>
   );
 };
 
