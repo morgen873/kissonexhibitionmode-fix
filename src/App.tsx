@@ -8,7 +8,6 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import NotFound from "./pages/NotFound";
 import Creation from "./pages/Creation";
 import RecipePage from "./pages/RecipePage";
-import LandingPage from "./pages/LandingPage";
 import MainLayout from "./components/layout/MainLayout";
 import VideoTransitionTest from "./components/creation/VideoTransitionTest";
 
@@ -22,7 +21,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<LandingPage />} />
+            <Route path="/" element={<Navigate to="/creation" replace />} />
             <Route element={<MainLayout />}>
               <Route path="/creation" element={<Creation />} />
               <Route path="/recipe/:id" element={<RecipePage />} />
