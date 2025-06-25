@@ -35,12 +35,12 @@ const CreationContainer: React.FC<CreationContainerProps> = ({
     const { currentTheme } = useTheme();
 
     return (
-        <div className={`min-h-screen ${currentTheme.colors.background} ${currentTheme.colors.text} responsive-padding flex flex-col items-center justify-start transition-all duration-300 pt-16 lg:pt-8 relative overflow-hidden`}>
+        <div className={`min-h-screen w-full ${currentTheme.colors.background} ${currentTheme.colors.text} px-3 sm:px-4 lg:px-8 py-4 sm:py-8 lg:py-16 flex flex-col items-center justify-start transition-all duration-300 relative overflow-hidden`}>
             {/* Network Background */}
             <NetworkBackground className="z-0" />
             
-            {/* Floating Animated Icons */}
-            <div className="absolute inset-0 z-0 pointer-events-none">
+            {/* Floating Animated Icons - Hidden on mobile for better performance */}
+            <div className="absolute inset-0 z-0 pointer-events-none hidden sm:block">
                 <AnimatedEggIcon className="absolute top-20 left-10 text-green-400 opacity-30" />
                 <AnimatedLeafIcon className="absolute top-32 right-20 text-emerald-300 opacity-40" />
                 <AnimatedChefHatIcon className="absolute bottom-40 left-20 text-green-500 opacity-25" />
@@ -54,7 +54,7 @@ const CreationContainer: React.FC<CreationContainerProps> = ({
             <div className="absolute inset-0 bg-gradient-to-br from-green-900/10 via-transparent to-emerald-900/10 z-0"></div>
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent z-0"></div>
 
-            <div className="responsive-container-xl space-y-6 relative z-10">
+            <div className="w-full max-w-4xl mx-auto space-y-4 sm:space-y-6 relative z-10">
                 {/* Progress Bar at top */}
                 <div className="w-full">
                     <ProgressBar progress={progress} theme={theme} />
@@ -62,15 +62,15 @@ const CreationContainer: React.FC<CreationContainerProps> = ({
 
                 {/* Main Content Card - using current theme with enhanced styling */}
                 <Card className={`relative w-full mx-auto ${currentTheme.colors.surface} ${currentTheme.effects.shadow} ${currentTheme.effects.borderRadius} transition-all duration-300 backdrop-blur-2xl border-2 ${currentTheme.colors.border} shadow-2xl shadow-green-400/5`}>
-                    <CardHeader className="responsive-padding-sm">
+                    <CardHeader className="p-3 sm:p-4 lg:p-6">
                         {showTitle && (
-                            <CardTitle className={`responsive-heading-lg text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent drop-shadow-lg min-h-[80px] flex items-center justify-center ${currentTheme.fonts.primary} font-bold`}>
+                            <CardTitle className={`text-lg sm:text-xl lg:text-2xl text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent drop-shadow-lg min-h-[60px] sm:min-h-[80px] flex items-center justify-center ${currentTheme.fonts.primary} font-bold`}>
                                 {title}
                             </CardTitle>
                         )}
                     </CardHeader>
                     
-                    <CardContent className="responsive-padding-sm">
+                    <CardContent className="p-3 sm:p-4 lg:p-6">
                         {children}
                     </CardContent>
                 </Card>
