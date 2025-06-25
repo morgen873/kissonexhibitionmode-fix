@@ -1,41 +1,38 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ProgressBar from './ProgressBar';
 import NetworkBackground from '@/components/ui/NetworkBackground';
 import { AnimatedEggIcon, AnimatedLeafIcon, AnimatedChefHatIcon, AnimatedCarrotIcon, AnimatedAppleIcon } from '@/components/ui/AnimatedCulinaryIcons';
 import { useTheme } from '@/contexts/ThemeContext';
-
 interface CreationContainerProps {
-    progress: number;
-    theme: {
-        bg: string;
-        progress: string;
-        cardShadow: string;
-        title: string;
-        optionSelectedBorder: string;
-        optionSelectedShadow: string;
-        optionHover: string;
-        textAreaFocus: string;
-    };
-    title?: string;
-    showTitle: boolean;
-    hasStartedCreation: boolean;
-    children: React.ReactNode;
+  progress: number;
+  theme: {
+    bg: string;
+    progress: string;
+    cardShadow: string;
+    title: string;
+    optionSelectedBorder: string;
+    optionSelectedShadow: string;
+    optionHover: string;
+    textAreaFocus: string;
+  };
+  title?: string;
+  showTitle: boolean;
+  hasStartedCreation: boolean;
+  children: React.ReactNode;
 }
-
 const CreationContainer: React.FC<CreationContainerProps> = ({
-    progress,
-    theme,
-    title,
-    showTitle,
-    hasStartedCreation,
-    children
+  progress,
+  theme,
+  title,
+  showTitle,
+  hasStartedCreation,
+  children
 }) => {
-    const { currentTheme } = useTheme();
-
-    return (
-        <div className={`min-h-screen w-full ${currentTheme.colors.background} ${currentTheme.colors.text} transition-all duration-300 relative overflow-hidden`}>
+  const {
+    currentTheme
+  } = useTheme();
+  return <div className={`min-h-screen w-full ${currentTheme.colors.background} ${currentTheme.colors.text} transition-all duration-300 relative overflow-hidden`}>
             {/* Network Background */}
             <NetworkBackground className="z-0" />
             
@@ -63,14 +60,12 @@ const CreationContainer: React.FC<CreationContainerProps> = ({
                 </div>
 
                 {/* Main Content Card - Centered */}
-                <div className="flex-1 flex items-center justify-center px-3 sm:px-4 lg:px-8 py-4 sm:py-8">
+                <div className="flex-1 flex items-center justify-center px-3 lg:px-8 py-4 sm:py-0 sm:px-0">
                     <Card className={`w-full max-w-4xl ${currentTheme.colors.surface} ${currentTheme.effects.shadow} ${currentTheme.effects.borderRadius} transition-all duration-300 backdrop-blur-2xl border-2 ${currentTheme.colors.border} shadow-2xl shadow-green-400/5`}>
-                        <CardHeader className="p-3 sm:p-4 lg:p-6">
-                            {showTitle && (
-                                <CardTitle className={`text-lg sm:text-xl lg:text-2xl text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent drop-shadow-lg min-h-[60px] sm:min-h-[80px] flex items-center justify-center ${currentTheme.fonts.primary} font-bold`}>
+                        <CardHeader className="p-3 sm:p-4 lg:p-6 py-0 px-0">
+                            {showTitle && <CardTitle className={`text-lg sm:text-xl lg:text-2xl text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent drop-shadow-lg min-h-[60px] sm:min-h-[80px] flex items-center justify-center ${currentTheme.fonts.primary} font-bold`}>
                                     {title}
-                                </CardTitle>
-                            )}
+                                </CardTitle>}
                         </CardHeader>
                         
                         <CardContent className="p-3 sm:p-4 lg:p-6">
@@ -79,8 +74,6 @@ const CreationContainer: React.FC<CreationContainerProps> = ({
                     </Card>
                 </div>
             </div>
-        </div>
-    );
+        </div>;
 };
-
 export default CreationContainer;
