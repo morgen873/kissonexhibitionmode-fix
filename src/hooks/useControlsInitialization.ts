@@ -22,8 +22,8 @@ export const useControlsInitialization = ({
                 ...prev,
                 [currentStepData.id]: {
                     temperature: controls.temperature.defaultValue,
-                    shape: controls.shape.defaultValue,
-                    flavor: controls.flavor.defaultValue,
+                    shape: controls.shape.options[controls.shape.defaultIndex],
+                    flavor: controls.flavor.options[controls.flavor.defaultIndex],
                     enhancer: '',
                 }
             }));
