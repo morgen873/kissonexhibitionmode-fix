@@ -20,7 +20,7 @@ const StandbyLanding: React.FC = () => {
 
       {/* Title at the top - using flex-1 to push it to top third */}
       <div className="relative z-10 text-center px-4 flex-1 flex items-center justify-center">
-        <h1 className="text-4xl sm:text-6xl font-bold text-white font-mono drop-shadow-2xl py-0">
+        <h1 className="text-4xl font-bold text-white font-mono drop-shadow-2xl py-0 sm:text-7xl">
           KissOn
         </h1>
       </div>
