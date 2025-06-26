@@ -74,8 +74,31 @@ const GifTransition: React.FC<GifTransitionProps> = ({
       className="fixed inset-0 z-50 bg-black flex items-center justify-center overflow-hidden"
       style={{ zIndex: 9999 }}
     >
+      {/* Show GIF immediately, even while loading */}
+      <img
+        src={gifUrl}
+        alt="Transition animation"
+        className="w-screen h-screen object-cover"
+        style={{ 
+          objectFit: 'cover',
+          objectPosition: 'center',
+          width: '100vw',
+          height: '100vh'
+        }}
+        onLoad={() => {
+          console.log('GIF image element loaded');
+          setIsLoading(false);
+        }}
+        onError={() => {
+          console.error('GIF image element failed to load');
+          setHasError(true);
+          setIsLoading(false);
+        }}
+      />
+      
+      {/* Only show loading overlay if still loading */}
       {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black">
+        <div className="absolute inset-0 flex items-center justify-center bg-black/50">
           <div className="text-center space-y-4">
             <div className="w-16 h-16 border-4 border-green-400 border-t-transparent rounded-full animate-spin mx-auto"></div>
             <p className="text-green-400 font-mono">Loading transition...</p>
@@ -83,27 +106,14 @@ const GifTransition: React.FC<GifTransitionProps> = ({
         </div>
       )}
       
+      {/* Show error overlay if failed to load */}
       {hasError && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black">
+        <div className="absolute inset-0 flex items-center justify-center bg-black/80">
           <div className="text-center space-y-4">
             <p className="text-red-400 font-mono">Failed to load transition</p>
-            <p className="text-white/60 font-mono text-sm">Continuing...</p>
+            <p className="text-white/60 font-mono text-sm">URL: {gifUrl}</p>
           </div>
         </div>
-      )}
-      
-      {!isLoading && !hasError && (
-        <img
-          src={gifUrl}
-          alt="Transition animation"
-          className="w-screen h-screen object-cover"
-          style={{ 
-            objectFit: 'cover',
-            objectPosition: 'center',
-            width: '100vw',
-            height: '100vh'
-          }}
-        />
       )}
     </div>
   );
