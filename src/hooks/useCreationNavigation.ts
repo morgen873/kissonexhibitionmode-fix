@@ -60,6 +60,7 @@ export const useCreationNavigation = ({
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [transitionGifUrl, setTransitionGifUrl] = useState<string>('');
   const [pendingSubmission, setPendingSubmission] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false); // New state to prevent double submissions
 
   // Enhanced navigation handlers with GIF transition support
   const handleIntroNext = () => {
@@ -94,16 +95,24 @@ export const useCreationNavigation = ({
   const handleCreationNext = () => {
     console.log('HandleCreationNext called for step:', currentCreationStep);
     
+    // Prevent multiple submissions when already submitting
+    if (isSubmitting) {
+      console.log('Already submitting, ignoring additional clicks');
+      return;
+    }
+    
     // Check if we're at the last step (timeline step)
     if (currentCreationStep >= steps.length - 1) {
       console.log('At final step, starting final transition and recipe submission');
+      setIsSubmitting(true); // Prevent additional submissions
+      
       const gifUrl = getTransitionGif(currentCreationStep, false, hasStartedCreation);
       
       if (gifUrl) {
         console.log('Starting final GIF transition with URL:', gifUrl);
         setTransitionGifUrl(gifUrl);
         setIsTransitioning(true);
-        setPendingSubmission(true); // Mark that we need to submit after GIF
+        setPendingSubmission(true);
         // Start recipe submission immediately so it can process during GIF
         handleSubmit();
       } else {
@@ -130,7 +139,10 @@ export const useCreationNavigation = ({
   };
 
   const handleCreationSubmit = () => {
-    handleSubmit();
+    if (!isSubmitting) {
+      setIsSubmitting(true);
+      handleSubmit();
+    }
   };
 
   const completeTransition = () => {
@@ -145,7 +157,7 @@ export const useCreationNavigation = ({
         console.log('Final transition completed, recipe submission should be in progress');
         setPendingSubmission(false);
         // Don't call handleSubmit again - it was already called
-        // The recipe result should already be processing or ready
+        // Don't advance step - we're done with navigation
       } else {
         nextCreationStep();
       }
@@ -161,6 +173,7 @@ export const useCreationNavigation = ({
     setIsTransitioning(false);
     setTransitionGifUrl('');
     setPendingSubmission(false);
+    setIsSubmitting(false); // Reset submission state
   };
 
   // Backward compatibility methods
