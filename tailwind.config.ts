@@ -20,9 +20,9 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				'sans': ['Inter', 'system-ui', 'sans-serif'],
-				'serif': ['Playfair Display', 'Georgia', 'serif'],
-				'mono': ['Courier New', 'Courier', 'monospace'],
+				'sans': ['Secular One', 'system-ui', 'sans-serif'],
+				'serif': ['Secular One', 'system-ui', 'sans-serif'],
+				'mono': ['Secular One', 'system-ui', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',

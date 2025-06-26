@@ -30,7 +30,7 @@ const StandbyLanding: React.FC = () => {
         <Button 
           onClick={handleEnter} 
           size="lg" 
-          className="bg-transparent hover:bg-transparent text-white font-bold transition-all duration-300 transform hover:scale-105 px-8 py-6 text-xl rounded-full font-mono"
+          className="bg-transparent hover:bg-transparent text-white font-bold transition-all duration-300 transform hover:scale-105 px-8 py-6 text-xl rounded-full font-sans"
           style={{
             textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(255,255,255,0.3)'
           }}

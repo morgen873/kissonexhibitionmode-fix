@@ -39,7 +39,7 @@ const TimelineScreen: React.FC<TimelineScreenProps> = ({ stepData, selectedValue
 
     return (
         <div className="w-full flex flex-col items-center space-y-6 text-white/90">
-             <p className="text-center text-white/80 whitespace-pre-line font-mono text-sm">{stepData.description}</p>
+             <p className="text-center text-white/80 whitespace-pre-line font-sans text-sm">{stepData.description}</p>
             <TooltipProvider>
                 <div className="grid grid-cols-2 gap-3 w-full">
                     {stepData.options.map((option, index) => (
@@ -55,12 +55,12 @@ const TimelineScreen: React.FC<TimelineScreenProps> = ({ stepData, selectedValue
                                     )}
                                 >
                                     <CardContent className="p-3 flex items-center justify-center">
-                                        <span className="text-sm font-semibold font-mono text-white text-center">{option.title}</span>
+                                        <span className="text-sm font-semibold font-sans text-white text-center">{option.title}</span>
                                     </CardContent>
                                 </Card>
                             </TooltipTrigger>
                             <TooltipContent side="bottom" className="max-w-xs bg-black/80 text-white border-white/20 p-3">
-                                <p className="font-mono text-sm text-center">{option.description}</p>
+                                <p className="font-sans text-sm text-center">{option.description}</p>
                             </TooltipContent>
                         </Tooltip>
                     ))}

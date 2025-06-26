@@ -50,7 +50,7 @@ const IntroNavigation: React.FC<IntroNavigationProps> = ({
                     <Button 
                         onClick={handlePrevClick} 
                         variant="ghost" 
-                        className="text-white hover:bg-white/10 disabled:opacity-50 font-mono text-sm w-full sm:w-auto order-2 sm:order-1" 
+                        className="text-white hover:bg-white/10 disabled:opacity-50 font-sans text-sm w-full sm:w-auto order-2 sm:order-1" 
                         disabled={currentStep === 1}
                     >
                         Back
@@ -58,7 +58,7 @@ const IntroNavigation: React.FC<IntroNavigationProps> = ({
                     
                     <Button 
                         onClick={handleNextClick} 
-                        className="bg-gradient-to-r from-black to-gray-800 text-white font-mono text-sm hover:from-gray-800 hover:to-black w-full sm:w-auto order-1 sm:order-2"
+                        className="bg-gradient-to-r from-black to-gray-800 text-white font-sans text-sm hover:from-gray-800 hover:to-black w-full sm:w-auto order-1 sm:order-2"
                     >
                         {buttonText}
                     </Button>
@@ -68,7 +68,7 @@ const IntroNavigation: React.FC<IntroNavigationProps> = ({
                     <Button 
                         onClick={handlePrevClick} 
                         variant="ghost" 
-                        className="text-white hover:bg-white/10 disabled:opacity-50 font-mono text-sm w-full sm:w-auto order-2 sm:order-1" 
+                        className="text-white hover:bg-white/10 disabled:opacity-50 font-sans text-sm w-full sm:w-auto order-2 sm:order-1" 
                         disabled={currentStep === 1}
                     >
                         Back
@@ -87,7 +87,7 @@ const IntroNavigation: React.FC<IntroNavigationProps> = ({
                     
                     <Button 
                         onClick={handleNextClick} 
-                        className="bg-gradient-to-r from-black to-gray-800 text-white font-mono text-sm hover:from-gray-800 hover:to-black w-full sm:w-auto order-1 sm:order-3"
+                        className="bg-gradient-to-r from-black to-gray-800 text-white font-sans text-sm hover:from-gray-800 hover:to-black w-full sm:w-auto order-1 sm:order-3"
                     >
                         Next
                     </Button>

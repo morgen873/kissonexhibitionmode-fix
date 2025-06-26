@@ -44,7 +44,7 @@ const CreationLayout: React.FC<CreationLayoutProps> = ({
       {!hasStartedCreation && (
         <AnimatedContainer variant="slide" delay={200}>
           <footer className="relative z-10 bg-black/95 backdrop-blur-xl border-t border-green-400/30 text-green-100 mt-4 sm:mt-8 w-full text-center sm:py-8 shadow-xl shadow-green-400/10 transition-all duration-300 py-0 my-0">
-            <p className="text-base sm:text-lg font-mono px-4 font-semibold">
+            <p className="text-base sm:text-lg font-sans px-4 font-semibold">
               A DESIGN PROJECT BY <span className="text-green-400 font-bold mx-1 drop-shadow-lg hover:text-green-300 transition-colors duration-300">OREN/LUPE</span>
             </p>
           </footer>

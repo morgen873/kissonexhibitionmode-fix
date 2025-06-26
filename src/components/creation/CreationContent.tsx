@@ -47,7 +47,7 @@ const CreationContent: React.FC<CreationContentProps> = ({
     return (
       <div className="flex flex-col items-center justify-center h-48 sm:h-64 space-y-4 px-4">
         <Loader2 className="h-8 w-8 sm:h-12 sm:w-12 animate-spin text-white" />
-        <p className="text-base sm:text-lg font-semibold text-white/80 font-mono text-center max-w-xs sm:max-w-md leading-relaxed">
+        <p className="text-base sm:text-lg font-semibold text-white/80 font-sans text-center max-w-xs sm:max-w-md leading-relaxed">
           We are making your KissOn recipe, please be patient, because memories last forever...
         </p>
       </div>

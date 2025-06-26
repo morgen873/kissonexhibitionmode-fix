@@ -18,7 +18,7 @@ export const themes: Record<string, Theme> = {
       border: 'border-green-400/20',
     },
     fonts: {
-      primary: 'font-mono',
+      primary: 'font-sans',
       secondary: 'font-sans',
     },
     spacing: {
@@ -48,8 +48,8 @@ export const themes: Record<string, Theme> = {
       border: 'border-white/[0.05]',
     },
     fonts: {
-      primary: 'font-mono',
-      secondary: 'font-bold',
+      primary: 'font-sans',
+      secondary: 'font-sans',
     },
     spacing: {
       container: 'px-2 sm:px-4 lg:px-6',
