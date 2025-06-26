@@ -24,28 +24,44 @@ const GifTransition: React.FC<GifTransitionProps> = ({
       return;
     }
 
+    console.log('GifTransition: Loading GIF:', gifUrl);
+
     // Preload the GIF
     const img = new Image();
-    img.onload = () => {
+    
+    const handleLoad = () => {
+      console.log('GIF loaded successfully');
       setIsLoading(false);
+      
       // Auto-complete the transition after the specified duration
       const timer = setTimeout(() => {
+        console.log('GIF transition duration completed, calling onComplete');
         onComplete();
       }, duration);
 
       return () => clearTimeout(timer);
     };
     
-    img.onerror = () => {
+    const handleError = () => {
+      console.error('GIF failed to load:', gifUrl);
       setHasError(true);
       setIsLoading(false);
+      
       // Still complete the transition even if GIF fails to load
       setTimeout(() => {
         onComplete();
       }, 1000);
     };
 
+    img.onload = handleLoad;
+    img.onerror = handleError;
     img.src = gifUrl;
+
+    // Cleanup function
+    return () => {
+      img.onload = null;
+      img.onerror = null;
+    };
   }, [isVisible, gifUrl, onComplete, duration]);
 
   if (!isVisible) {
@@ -83,12 +99,14 @@ const GifTransition: React.FC<GifTransitionProps> = ({
       <img
         src={gifUrl}
         alt="Transition animation"
-        className={`w-full h-full object-cover transition-opacity duration-300 ${
+        className={`w-screen h-screen object-cover transition-opacity duration-300 ${
           isLoading ? 'opacity-0' : 'opacity-100'
         }`}
         style={{ 
           objectFit: 'cover',
-          objectPosition: 'center'
+          objectPosition: 'center',
+          width: '100vw',
+          height: '100vh'
         }}
       />
     </div>
