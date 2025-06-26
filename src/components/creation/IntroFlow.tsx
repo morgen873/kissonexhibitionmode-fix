@@ -87,42 +87,55 @@ const IntroFlow = ({ onComplete }: IntroFlowProps) => {
         <div className="absolute top-1/2 right-1/4 w-48 h-48 bg-gradient-to-r from-indigo-400 to-purple-600 rounded-full blur-3xl animate-pulse"></div>
       </div>
 
-      <main className="relative z-10 flex flex-col items-center justify-center flex-grow w-full my-[29px]">
-        {renderStepContent(stepData)}
-      </main>
-
-      <div className="relative z-10 w-full max-w-2xl mt-8">
-        <div className="flex justify-between items-center">
+      <main className="relative z-10 flex flex-col items-center justify-center flex-grow w-full my-[29px] max-w-4xl mx-auto">
+        <div className="relative flex items-center justify-center w-full">
+          {/* Left Arrow (Back) */}
           <Button 
             onClick={prevStep} 
             variant="ghost" 
-            className="text-white hover:bg-white/10 disabled:opacity-50" 
-            disabled={currentStep === 1} // Disable when at first visible step
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 text-white hover:bg-white/10 disabled:opacity-30 w-12 h-12 rounded-full p-0 z-10" 
+            disabled={currentStep === 1}
           >
-            <ArrowLeft className="mr-2" /> Back
+            <ArrowLeft className="h-8 w-8" />
           </Button>
           
-          <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center space-x-2">
-            {/* Show dots for steps 1-3 (explanation steps) */}
-            {introSteps.slice(1, 4).map((_, index) => (
-              <div 
-                key={index} 
-                className={`w-3 h-3 rounded-full transition-colors ${
-                  currentStep === index + 1 ? 'bg-white' : 'bg-white/30'
-                }`} 
-              />
-            ))}
+          {/* Main Content */}
+          <div className="flex-1 flex justify-center">
+            {renderStepContent(stepData)}
           </div>
           
+          {/* Right Arrow (Next) */}
           <Button 
             onClick={nextStep} 
-            className="bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:from-pink-400 hover:to-purple-400"
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:from-pink-400 hover:to-purple-400 w-12 h-12 rounded-full p-0 z-10"
           >
-            {currentStep === introSteps.length - 1 ? stepData.buttonText : 'Next'} 
-            <ArrowRight className="ml-2" />
+            <ArrowRight className="h-8 w-8" />
           </Button>
         </div>
-      </div>
+        
+        {/* Progress dots */}
+        <div className="flex items-center space-x-2 mt-8">
+          {/* Show dots for steps 1-3 (explanation steps) */}
+          {introSteps.slice(1, 4).map((_, index) => (
+            <div 
+              key={index} 
+              className={`w-3 h-3 rounded-full transition-colors ${
+                currentStep === index + 1 ? 'bg-white' : 'bg-white/30'
+              }`} 
+            />
+          ))}
+        </div>
+        
+        {/* Special button for last step */}
+        {currentStep === introSteps.length - 1 && (
+          <Button 
+            onClick={nextStep} 
+            className="bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:from-pink-400 hover:to-purple-400 mt-6 px-8 py-3 text-lg font-mono"
+          >
+            {stepData.buttonText}
+          </Button>
+        )}
+      </main>
       
       <footer className="relative z-10 bg-black/50 backdrop-blur-md text-white mt-8 w-full text-center border-t-2 border-white/20 py-[10px] my-[30px]">
         <p className="text-lg font-black">
