@@ -89,14 +89,14 @@ const IntroFlow = ({ onComplete }: IntroFlowProps) => {
 
       <main className="relative z-10 flex flex-col items-center justify-center flex-grow w-full my-[29px] max-w-6xl mx-auto">
         <div className="relative flex items-center justify-center w-full gap-8">
-          {/* Left Arrow (Back) - Make it more prominent */}
+          {/* Left Arrow (Back) - Large and prominent */}
           <Button 
             onClick={prevStep} 
             variant="ghost" 
-            className="text-white hover:bg-white/20 disabled:opacity-30 w-20 h-20 rounded-full p-0 flex-shrink-0 border-2 border-white/30 hover:border-white/50 transition-all duration-300" 
+            className="text-white hover:bg-white/20 disabled:opacity-30 w-24 h-24 rounded-full p-0 flex-shrink-0 border-4 border-white/40 hover:border-white/60 transition-all duration-300 shadow-2xl" 
             disabled={currentStep === 1}
           >
-            <ArrowLeft className="h-12 w-12" />
+            <ArrowLeft className="h-16 w-16" />
           </Button>
           
           {/* Main Content */}
@@ -104,12 +104,12 @@ const IntroFlow = ({ onComplete }: IntroFlowProps) => {
             {renderStepContent(stepData)}
           </div>
           
-          {/* Right Arrow (Next) - Make it more prominent */}
+          {/* Right Arrow (Next) - Large and prominent */}
           <Button 
             onClick={nextStep} 
-            className="bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:from-pink-400 hover:to-purple-400 w-20 h-20 rounded-full p-0 flex-shrink-0 border-2 border-white/30 hover:border-white/50 transition-all duration-300 shadow-xl"
+            className="bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:from-pink-400 hover:to-purple-400 w-24 h-24 rounded-full p-0 flex-shrink-0 border-4 border-white/40 hover:border-white/60 transition-all duration-300 shadow-2xl"
           >
-            <ArrowRight className="h-12 w-12" />
+            <ArrowRight className="h-16 w-16" />
           </Button>
         </div>
         

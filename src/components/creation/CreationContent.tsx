@@ -1,24 +1,44 @@
 
-import React from 'react';
-import { Loader2 } from 'lucide-react';
-import IntroStepContent from '@/components/creation/IntroStepContent';
-import IntroNavigation from '@/components/creation/IntroNavigation';
-import CreationMainContent from '@/components/creation/CreationMainContent';
-import NavigationControls from '@/components/creation/NavigationControls';
-import RecipeResultScreen from '@/components/creation/RecipeResultScreen';
-import { introSteps } from "@/data/introSteps";
-import { steps } from '@/data/creation';
-import { CreationContentHandlers, CreationContentState, CreationContentNavigation } from '@/types/creationTypes';
+import IntroFlow from './IntroFlow';
+import IntroStepContent from './IntroStepContent';
+import QuestionScreen from './QuestionScreen';
+import ControlsScreen from './ControlsScreen';
+import TimelineScreen from './TimelineScreen';
+import RecipeResultScreen from './RecipeResultScreen';
+import { introSteps } from '@/data/introSteps';
 
-interface CreationContentProps extends CreationContentHandlers, CreationContentState, CreationContentNavigation {
+interface CreationContentProps {
+  isCreatingRecipe: boolean;
+  recipeResult: any;
   hasStartedCreation: boolean;
   currentIntroStep: number;
   creationStep: number;
   creationStepData: any;
+  answers: Record<string, string>;
+  customAnswers: Record<string, string>;
+  controlValues: any;
   theme: any;
+  isNextDisabled: boolean;
+  onAnswerSelect: (stepId: string, answer: string) => void;
+  onCustomAnswerChange: (stepId: string, value: string) => void;
+  onTemperatureChange: (value: number) => void;
+  onShapeChange: (value: number) => void;
+  onFlavorChange: (value: number) => void;
+  onEnhancerChange: (value: string) => void;
+  nextIntroStep: () => void;
+  prevIntroStep: () => void;
+  prevCreationStep: () => void;
+  nextCreationStep: () => void;
+  handleSubmit: () => void;
+  handleReset: () => void;
+  handleIntroNext: () => void;
+  handleIntroPrev: () => void;
+  handleCreationNext: () => void;
+  handleCreationPrev: () => void;
+  handleCreationSubmit: () => void;
 }
 
-const CreationContent: React.FC<CreationContentProps> = ({
+const CreationContent = ({
   isCreatingRecipe,
   recipeResult,
   hasStartedCreation,
@@ -41,67 +61,60 @@ const CreationContent: React.FC<CreationContentProps> = ({
   prevCreationStep,
   nextCreationStep,
   handleSubmit,
-  handleReset
-}) => {
-  if (isCreatingRecipe) {
+  handleReset,
+  handleIntroNext,
+  handleIntroPrev,
+  handleCreationNext,
+  handleCreationPrev,
+  handleCreationSubmit
+}: CreationContentProps) => {
+  
+  // Show recipe result
+  if (recipeResult) {
     return (
-      <div className="flex flex-col items-center justify-center h-48 sm:h-64 space-y-4 px-4">
-        <Loader2 className="h-8 w-8 sm:h-12 sm:w-12 animate-spin text-white" />
-        <p className="text-base sm:text-lg font-semibold text-white/80 font-mono text-center max-w-xs sm:max-w-md leading-relaxed">
-          We are making your KissOn recipe, please be patient, because memories last forever...
-        </p>
-      </div>
+      <RecipeResultScreen
+        recipeResult={recipeResult}
+        isCreatingRecipe={isCreatingRecipe}
+        onReset={handleReset}
+        theme={theme}
+      />
     );
   }
 
-  if (recipeResult) {
-    return <RecipeResultScreen recipe={recipeResult} onReset={handleReset} />;
+  // Show intro flow (with built-in navigation)
+  if (!hasStartedCreation) {
+    return <IntroFlow onComplete={() => handleIntroNext()} />;
   }
 
+  // Show creation steps
   return (
-    <div className="transition-opacity duration-300 w-full">
-      {!hasStartedCreation ? (
-        <IntroStepContent 
-          step={introSteps[currentIntroStep]} 
-          onNext={nextIntroStep}
-        />
-      ) : (
-        <CreationMainContent
+    <div className="w-full">
+      {creationStepData?.type === 'question' && (
+        <QuestionScreen
           stepData={creationStepData}
-          answers={answers}
-          customAnswers={customAnswers}
-          controlValues={controlValues}
-          theme={theme}
+          answer={answers[creationStepData.id] || ''}
+          customAnswer={customAnswers[creationStepData.id] || ''}
           onAnswerSelect={onAnswerSelect}
           onCustomAnswerChange={onCustomAnswerChange}
+          theme={theme}
+        />
+      )}
+
+      {creationStepData?.type === 'controls' && (
+        <ControlsScreen
+          controlValues={controlValues}
           onTemperatureChange={onTemperatureChange}
           onShapeChange={onShapeChange}
           onFlavorChange={onFlavorChange}
           onEnhancerChange={onEnhancerChange}
+          theme={theme}
         />
       )}
-      
-      {/* Navigation Controls */}
-      {!hasStartedCreation ? (
-        introSteps[currentIntroStep].type !== 'hero' && (
-          <IntroNavigation
-            currentStep={currentIntroStep}
-            totalSteps={4}
-            onPrev={prevIntroStep}
-            onNext={nextIntroStep}
-            isFirstStep={currentIntroStep === 0}
-            isLastStep={currentIntroStep === introSteps.length - 1}
-            buttonText={introSteps[currentIntroStep].buttonText}
-          />
-        )
-      ) : (
-        <NavigationControls 
-          currentStep={creationStep} 
-          stepsLength={steps.length} 
-          prevStep={prevCreationStep} 
-          nextStep={nextCreationStep} 
-          handleSubmit={handleSubmit}
-          isNextDisabled={isNextDisabled} 
+
+      {creationStepData?.type === 'timeline' && (
+        <TimelineScreen
+          onSubmit={handleCreationSubmit}
+          theme={theme}
         />
       )}
     </div>
