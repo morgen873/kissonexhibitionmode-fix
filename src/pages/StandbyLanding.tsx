@@ -29,7 +29,7 @@ const StandbyLanding: React.FC = () => {
       <div className="absolute inset-0 bg-black/40"></div>
 
       {/* Title at the top */}
-      <div className="relative z-10 text-center px-4 pt-16 sm:pt-20">
+      <div className="relative z-10 text-center px-4 pt-24 sm:pt-32">
         <h1 className="text-4xl sm:text-6xl font-bold text-white font-mono drop-shadow-2xl">
           KissOn
         </h1>
@@ -43,7 +43,7 @@ const StandbyLanding: React.FC = () => {
       </div>
 
       {/* Button at the bottom */}
-      <div className="relative z-10 text-center px-4 pb-16 sm:pb-20">
+      <div className="relative z-10 text-center px-4 pb-24 sm:pb-32">
         <Button 
           onClick={handleEnter}
           size="lg" 
