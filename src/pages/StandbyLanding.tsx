@@ -27,7 +27,7 @@ const StandbyLanding: React.FC = () => {
         {/* Two transparent buttons positioned over the hotplates */}
         <div className="absolute inset-0">
           {/* Left button over left hotplate */}
-          <div className="absolute" style={{ left: '32%', top: '42%', transform: 'translate(-50%, -50%)' }}>
+          <div className="absolute" style={{ left: '28%', top: '38%', transform: 'translate(-50%, -50%)' }}>
             <Button 
               onClick={handleEnter} 
               size="lg" 
@@ -41,7 +41,7 @@ const StandbyLanding: React.FC = () => {
           </div>
           
           {/* Right button over right hotplate */}
-          <div className="absolute" style={{ left: '68%', top: '42%', transform: 'translate(-50%, -50%)' }}>
+          <div className="absolute" style={{ left: '72%', top: '38%', transform: 'translate(-50%, -50%)' }}>
             <Button 
               onClick={handleEnter} 
               size="lg" 
