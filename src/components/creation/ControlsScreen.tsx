@@ -1,10 +1,10 @@
 
 import React, { useEffect, useRef } from 'react';
 import { ControlsStep } from '@/types/creation';
-import TemperatureSlider from '@/components/ui/TemperatureSlider';
-import ShapeSlider from '@/components/ui/ShapeSlider';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import Knob from '@/components/ui/Knob';
+import KnobWithIcons from '@/components/ui/KnobWithIcons';
 import EnhancerInput from './EnhancerInput';
 
 interface ControlsScreenProps {
@@ -66,28 +66,57 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
                 {stepData.description}
             </p>
             
-            {/* Temperature Control */}
+            {/* Temperature Control - Round Knob */}
             <div className="w-full bg-black/20 backdrop-blur-sm border border-green-400/20 rounded-2xl p-6 shadow-lg shadow-green-400/5">
-                <TemperatureSlider
-                    value={controlValues.temperature}
-                    min={controls.temperature.min}
-                    max={controls.temperature.max}
-                    unit={controls.temperature.unit}
-                    onValueChange={onTemperatureChange}
-                />
+                <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                        <Label className="font-bold text-lg font-mono text-green-400">Temperature</Label>
+                        <div className="flex items-center gap-3 px-4 py-2 rounded-xl bg-gradient-to-r from-green-400 to-emerald-500 border border-green-400/30 shadow-lg shadow-green-400/20">
+                            <span className="font-mono text-base text-black">
+                                {controlValues.temperature}°{controls.temperature.unit}
+                            </span>
+                        </div>
+                    </div>
+                    <div className="flex justify-center">
+                        <Knob
+                            min={controls.temperature.min}
+                            max={controls.temperature.max}
+                            value={controlValues.temperature}
+                            onValueChange={onTemperatureChange}
+                            size={120}
+                            step={1}
+                        />
+                    </div>
+                </div>
             </div>
 
-            {/* Shape Control */}
+            {/* Shape Control - Round Knob with Icons */}
             <div className="w-full bg-black/20 backdrop-blur-sm border border-green-400/20 rounded-2xl p-6 shadow-lg shadow-green-400/5">
-                <ShapeSlider
-                    value={getShapeIndex()}
-                    options={controls.shape.options}
-                    selectedOption={controlValues.shape}
-                    onValueChange={onShapeChange}
-                />
+                <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                        <Label className="font-bold text-lg font-mono text-green-400">Shape</Label>
+                        <div className="flex items-center gap-3 px-4 py-2 rounded-xl bg-gradient-to-r from-green-400 to-emerald-500 border border-green-400/30 shadow-lg shadow-green-400/20">
+                            <span className="capitalize font-mono text-base text-black">
+                                {controlValues.shape}
+                            </span>
+                        </div>
+                    </div>
+                    <div className="flex justify-center">
+                        <KnobWithIcons
+                            min={0}
+                            max={controls.shape.options.length - 1}
+                            value={getShapeIndex()}
+                            onValueChange={onShapeChange}
+                            size={120}
+                            step={1}
+                            options={controls.shape.options}
+                            selectedOption={controlValues.shape}
+                        />
+                    </div>
+                </div>
             </div>
 
-            {/* Flavor Control - TOGGLE SWITCH ONLY */}
+            {/* Flavor Control - Vertical Toggle Button */}
             <div className="w-full bg-black/20 backdrop-blur-sm border border-green-400/20 rounded-2xl p-6 shadow-lg shadow-green-400/5">
                 <div className="space-y-4">
                     <div className="flex justify-between items-center">
@@ -98,18 +127,20 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
                             </span>
                         </div>
                     </div>
-                    <div className="flex items-center justify-center space-x-4">
-                        <span className={`font-mono text-base transition-colors ${!isFlavorSweet ? 'text-green-400 font-semibold' : 'text-green-600'}`}>
-                            Savory
-                        </span>
-                        <Switch
-                            checked={isFlavorSweet}
-                            onCheckedChange={handleFlavorToggle}
-                            className="data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-green-900/50"
-                        />
-                        <span className={`font-mono text-base transition-colors ${isFlavorSweet ? 'text-green-400 font-semibold' : 'text-green-600'}`}>
-                            Sweet
-                        </span>
+                    <div className="flex justify-center">
+                        <div className="flex flex-col items-center space-y-4 h-[120px] justify-center">
+                            <span className={`font-mono text-sm transition-colors ${isFlavorSweet ? 'text-green-400 font-semibold' : 'text-green-600'}`}>
+                                Sweet
+                            </span>
+                            <Switch
+                                checked={!isFlavorSweet}
+                                onCheckedChange={(checked) => handleFlavorToggle(!checked)}
+                                className="data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-green-900/50 rotate-90"
+                            />
+                            <span className={`font-mono text-sm transition-colors ${!isFlavorSweet ? 'text-green-400 font-semibold' : 'text-green-600'}`}>
+                                Savory
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
