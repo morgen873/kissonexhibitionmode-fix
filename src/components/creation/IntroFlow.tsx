@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { introSteps, IntroStepData } from '@/data/introSteps';
 import { Card, CardContent } from '@/components/ui/card';
@@ -38,7 +37,7 @@ const IntroFlow = ({ onComplete }: IntroFlowProps) => {
             <img 
               src="https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//stove.gif" 
               alt="Cooking on stovetop" 
-              className="mx-auto mb-8 w-64 h-64 object-cover rounded-lg" 
+              className="mx-auto mb-8 w-full max-w-4xl h-auto max-h-[60vh] object-cover rounded-lg" 
             />
             
             <p className="text-xl text-white font-bold max-w-3xl mx-auto drop-shadow-lg mb-12 md:text-xl">
