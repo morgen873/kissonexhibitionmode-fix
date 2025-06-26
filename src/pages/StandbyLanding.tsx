@@ -29,13 +29,7 @@ const StandbyLanding: React.FC = () => {
       <div className="absolute inset-0 bg-black/40"></div>
 
       {/* Content overlay */}
-      <div className="relative z-10 text-center space-y-8 px-4">
-        <img 
-          src="/lovable-uploads/64d3de25-5e40-498e-8a21-28d15db9a050.png" 
-          alt="KissOn Logo" 
-          className="w-32 h-32 sm:w-40 sm:h-40 mx-auto filter grayscale mb-4" 
-        />
-        
+      <div className="relative z-10 text-center space-y-8 px-4">        
         <h1 className="text-4xl sm:text-6xl font-bold text-white font-mono drop-shadow-2xl">
           KissOn
         </h1>
