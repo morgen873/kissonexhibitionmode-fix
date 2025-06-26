@@ -11,9 +11,9 @@ const StandbyLanding: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-black flex flex-col items-center justify-end relative overflow-hidden">
-      {/* Full screen looping GIF */}
-      <div className="absolute inset-0 w-full h-full">
+    <div className="min-h-screen w-full bg-black flex flex-col">
+      {/* GIF container - takes most of the screen */}
+      <div className="flex-1 relative overflow-hidden">
         <img 
           src="https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//stove.gif" 
           alt="Cooking on stovetop" 
@@ -23,13 +23,12 @@ const StandbyLanding: React.FC = () => {
             objectPosition: 'center'
           }} 
         />
+        {/* Dark overlay for better contrast with button below */}
+        <div className="absolute inset-0 bg-black/20"></div>
       </div>
 
-      {/* Dark overlay for better text visibility */}
-      <div className="absolute inset-0 bg-black/40"></div>
-
-      {/* Button at the bottom */}
-      <div className="relative z-10 text-center px-4 pb-20">
+      {/* Button section below the GIF */}
+      <div className="bg-black text-center px-4 py-8">
         <Button 
           onClick={handleEnter} 
           size="lg" 
