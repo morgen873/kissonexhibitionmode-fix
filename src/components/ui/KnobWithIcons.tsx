@@ -39,36 +39,65 @@ const KnobWithIcons: React.FC<KnobWithIconsProps> = ({
         return Math.max(min, Math.min(max, newValue));
     }, [min, max, minAngle, maxAngle, step]);
 
-    const handleMouseMove = useCallback((e: MouseEvent) => {
-        if (!knobRef.current) return;
+    const calculateAngleFromPosition = useCallback((clientX: number, clientY: number) => {
+        if (!knobRef.current) return null;
         const { left, top, width, height } = knobRef.current.getBoundingClientRect();
         const centerX = left + width / 2;
         const centerY = top + height / 2;
         
-        const dx = e.clientX - centerX;
-        const dy = e.clientY - centerY;
+        const dx = clientX - centerX;
+        const dy = clientY - centerY;
         
         let angleDeg = Math.atan2(dx, -dy) * (180 / Math.PI);
-
         angleDeg = Math.max(minAngle, Math.min(maxAngle, angleDeg));
+        
+        return angleDeg;
+    }, [minAngle, maxAngle]);
+
+    const handleMove = useCallback((clientX: number, clientY: number) => {
+        const angleDeg = calculateAngleFromPosition(clientX, clientY);
+        if (angleDeg === null) return;
 
         const newValue = angleToValue(angleDeg);
         
         if (onValueChange && newValue !== value) {
             onValueChange(newValue);
         }
-    }, [angleToValue, maxAngle, minAngle, onValueChange, value]);
+    }, [calculateAngleFromPosition, angleToValue, onValueChange, value]);
+
+    const handleMouseMove = useCallback((e: MouseEvent) => {
+        handleMove(e.clientX, e.clientY);
+    }, [handleMove]);
+
+    const handleTouchMove = useCallback((e: TouchEvent) => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        if (touch) {
+            handleMove(touch.clientX, touch.clientY);
+        }
+    }, [handleMove]);
 
     const handleMouseUp = useCallback(() => {
         window.removeEventListener('mousemove', handleMouseMove);
         window.removeEventListener('mouseup', handleMouseUp);
     }, [handleMouseMove]);
+
+    const handleTouchEnd = useCallback(() => {
+        window.removeEventListener('touchmove', handleTouchMove);
+        window.removeEventListener('touchend', handleTouchEnd);
+    }, [handleTouchMove]);
     
     const handleMouseDown = useCallback((e: React.MouseEvent) => {
         e.preventDefault();
         window.addEventListener('mousemove', handleMouseMove);
         window.addEventListener('mouseup', handleMouseUp);
     }, [handleMouseMove, handleMouseUp]);
+
+    const handleTouchStart = useCallback((e: React.TouchEvent) => {
+        e.preventDefault();
+        window.addEventListener('touchmove', handleTouchMove, { passive: false });
+        window.addEventListener('touchend', handleTouchEnd);
+    }, [handleTouchMove, handleTouchEnd]);
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
         let newValue = value;
@@ -150,12 +179,13 @@ const KnobWithIcons: React.FC<KnobWithIconsProps> = ({
                 className={cn(
                     "absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2",
                     "rounded-full bg-gray-900 border-2 border-gray-700 shadow-inner cursor-pointer select-none",
-                    "flex items-center justify-center",
+                    "flex items-center justify-center touch-none",
                     "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-white",
                     className
                 )}
                 style={{ width: size, height: size }}
                 onMouseDown={handleMouseDown}
+                onTouchStart={handleTouchStart}
                 onKeyDown={handleKeyDown}
                 tabIndex={0}
                 role="slider"
