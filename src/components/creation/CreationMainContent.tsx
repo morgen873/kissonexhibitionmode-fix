@@ -24,6 +24,7 @@ interface CreationMainContentProps {
     onShapeChange: (value: number) => void;
     onFlavorChange: (value: number) => void;
     onEnhancerChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+    onAutoAdvance?: () => void;
 }
 
 const CreationMainContent: React.FC<CreationMainContentProps> = ({
@@ -37,7 +38,8 @@ const CreationMainContent: React.FC<CreationMainContentProps> = ({
     onTemperatureChange,
     onShapeChange,
     onFlavorChange,
-    onEnhancerChange
+    onEnhancerChange,
+    onAutoAdvance
 }) => {
     // Create a profanity-filtered enhancer change handler
     const handleEnhancerChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -61,6 +63,7 @@ const CreationMainContent: React.FC<CreationMainContentProps> = ({
                 handleAnswerSelect={onAnswerSelect} 
                 customAnswers={customAnswers} 
                 handleCustomAnswerChange={onCustomAnswerChange} 
+                onAutoAdvance={onAutoAdvance}
                 theme={theme} 
             />
         );
@@ -72,6 +75,7 @@ const CreationMainContent: React.FC<CreationMainContentProps> = ({
                 stepData={stepData as TimelineStep} 
                 selectedValue={answers[stepData.id] || ''} 
                 onSelect={onAnswerSelect} 
+                onAutoAdvance={onAutoAdvance}
                 theme={theme} 
             />
         );

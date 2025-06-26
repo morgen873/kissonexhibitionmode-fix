@@ -58,6 +58,11 @@ const CreationContent: React.FC<CreationContentProps> = ({
     return <RecipeResultScreen recipe={recipeResult} onReset={handleReset} />;
   }
 
+  // Check if current step should hide navigation (question or timeline steps)
+  const shouldHideNavigation = hasStartedCreation && 
+    creationStepData && 
+    (creationStepData.type === 'question' || creationStepData.type === 'timeline');
+
   return (
     <div className="transition-opacity duration-300 w-full">
       {!hasStartedCreation ? (
@@ -78,31 +83,36 @@ const CreationContent: React.FC<CreationContentProps> = ({
           onShapeChange={onShapeChange}
           onFlavorChange={onFlavorChange}
           onEnhancerChange={onEnhancerChange}
+          onAutoAdvance={nextCreationStep}
         />
       )}
       
-      {/* Navigation Controls */}
-      {!hasStartedCreation ? (
-        introSteps[currentIntroStep].type !== 'hero' && (
-          <IntroNavigation
-            currentStep={currentIntroStep}
-            totalSteps={4}
-            onPrev={prevIntroStep}
-            onNext={nextIntroStep}
-            isFirstStep={currentIntroStep === 0}
-            isLastStep={currentIntroStep === introSteps.length - 1}
-            buttonText={introSteps[currentIntroStep].buttonText}
-          />
-        )
-      ) : (
-        <NavigationControls 
-          currentStep={creationStep} 
-          stepsLength={steps.length} 
-          prevStep={prevCreationStep} 
-          nextStep={nextCreationStep} 
-          handleSubmit={handleSubmit}
-          isNextDisabled={isNextDisabled} 
-        />
+      {/* Navigation Controls - Hidden for question and timeline steps */}
+      {!shouldHideNavigation && (
+        <>
+          {!hasStartedCreation ? (
+            introSteps[currentIntroStep].type !== 'hero' && (
+              <IntroNavigation
+                currentStep={currentIntroStep}
+                totalSteps={4}
+                onPrev={prevIntroStep}
+                onNext={nextIntroStep}
+                isFirstStep={currentIntroStep === 0}
+                isLastStep={currentIntroStep === introSteps.length - 1}
+                buttonText={introSteps[currentIntroStep].buttonText}
+              />
+            )
+          ) : (
+            <NavigationControls 
+              currentStep={creationStep} 
+              stepsLength={steps.length} 
+              prevStep={prevCreationStep} 
+              nextStep={nextCreationStep} 
+              handleSubmit={handleSubmit}
+              isNextDisabled={isNextDisabled} 
+            />
+          )}
+        </>
       )}
     </div>
   );

@@ -9,6 +9,7 @@ interface QuestionScreenProps {
     handleAnswerSelect: (optionTitle: string) => void;
     customAnswers: { [key: number]: string };
     handleCustomAnswerChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+    onAutoAdvance?: () => void;
     theme: {
         optionSelectedBorder: string;
         optionSelectedShadow: string;
@@ -23,9 +24,21 @@ const QuestionScreen: React.FC<QuestionScreenProps> = ({
     handleAnswerSelect,
     customAnswers,
     handleCustomAnswerChange,
+    onAutoAdvance,
     theme
 }) => {
     const [profanityWarning, setProfanityWarning] = useState(false);
+
+    const handleOptionSelect = (optionTitle: string) => {
+        handleAnswerSelect(optionTitle);
+        
+        // Auto-advance for non-custom options
+        if (!stepData.customOption || optionTitle !== stepData.customOption.title) {
+            setTimeout(() => {
+                onAutoAdvance?.();
+            }, 300); // Small delay for visual feedback
+        }
+    };
 
     const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const text = e.target.value;
@@ -54,7 +67,7 @@ const QuestionScreen: React.FC<QuestionScreenProps> = ({
                 {regularOptions.map((option) => (
                     <div
                         key={option.title}
-                        onClick={() => handleAnswerSelect(option.title)}
+                        onClick={() => handleOptionSelect(option.title)}
                         className={`
                             p-4 rounded-lg transition-all duration-300 cursor-pointer font-mono text-center
                             ${answers[stepData.id] === option.title
@@ -73,7 +86,7 @@ const QuestionScreen: React.FC<QuestionScreenProps> = ({
             {hasCustomOption && (
                 <div className="w-full">
                     <div
-                        onClick={() => handleAnswerSelect(stepData.customOption!.title)}
+                        onClick={() => handleOptionSelect(stepData.customOption!.title)}
                         className={`
                             p-4 rounded-lg transition-all duration-300 cursor-pointer font-mono text-center w-full
                             ${answers[stepData.id] === stepData.customOption!.title
@@ -99,6 +112,14 @@ const QuestionScreen: React.FC<QuestionScreenProps> = ({
                                 value={customAnswers[stepData.id] || ''}
                                 onChange={handleTextChange}
                                 placeholder={stepData.customOption!.placeholder}
+                                onBlur={() => {
+                                    // Auto-advance when user finishes typing and has content
+                                    if (customAnswers[stepData.id] && customAnswers[stepData.id].trim().length > 0) {
+                                        setTimeout(() => {
+                                            onAutoAdvance?.();
+                                        }, 500);
+                                    }
+                                }}
                             />
                             {profanityWarning && (
                                 <p className="text-red-400 text-sm mt-2 font-mono text-center">

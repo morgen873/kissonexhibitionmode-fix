@@ -14,6 +14,7 @@ interface TimelineScreenProps {
     stepData: TimelineStep;
     selectedValue: string;
     onSelect: (value: string) => void;
+    onAutoAdvance?: () => void;
     theme: {
         optionSelectedBorder: string;
         optionSelectedShadow: string;
@@ -21,7 +22,16 @@ interface TimelineScreenProps {
     };
 }
 
-const TimelineScreen: React.FC<TimelineScreenProps> = ({ stepData, selectedValue, onSelect, theme }) => {
+const TimelineScreen: React.FC<TimelineScreenProps> = ({ stepData, selectedValue, onSelect, onAutoAdvance, theme }) => {
+    const handleOptionSelect = (value: string) => {
+        onSelect(value);
+        
+        // Auto-advance after selection
+        setTimeout(() => {
+            onAutoAdvance?.();
+        }, 300); // Small delay for visual feedback
+    };
+
     return (
         <div className="w-full flex flex-col items-center space-y-6 text-white/90">
              <p className="text-center text-white/80 whitespace-pre-line font-mono text-sm">{stepData.description}</p>
@@ -31,7 +41,7 @@ const TimelineScreen: React.FC<TimelineScreenProps> = ({ stepData, selectedValue
                         <Tooltip key={index} delayDuration={200}>
                             <TooltipTrigger asChild>
                                 <Card
-                                    onClick={() => onSelect(option.value || option.title)}
+                                    onClick={() => handleOptionSelect(option.value || option.title)}
                                     className={cn(
                                         'cursor-pointer transition-all duration-300 bg-black/20 border-2 h-20 flex items-center justify-center text-center',
                                         selectedValue === (option.value || option.title)
