@@ -28,22 +28,22 @@ const StandbyLanding: React.FC = () => {
       {/* Dark overlay for better text visibility */}
       <div className="absolute inset-0 bg-black/40"></div>
 
-      {/* Title at the top */}
-      <div className="relative z-10 text-center px-4 pt-24 sm:pt-32">
+      {/* Title at the top - using flex-1 to push it to top third */}
+      <div className="relative z-10 text-center px-4 flex-1 flex items-center justify-center">
         <h1 className="text-4xl sm:text-6xl font-bold text-white font-mono drop-shadow-2xl">
           KissOn
         </h1>
       </div>
 
-      {/* Sentence in the middle */}
-      <div className="relative z-10 text-center px-4">
+      {/* Sentence in the middle - using flex-1 to center it */}
+      <div className="relative z-10 text-center px-4 flex-1 flex items-center justify-center">
         <p className="text-lg sm:text-xl text-white/90 font-mono max-w-md mx-auto leading-relaxed drop-shadow-lg">
           Transform your feelings into delicious dumpling recipes
         </p>
       </div>
 
-      {/* Button at the bottom */}
-      <div className="relative z-10 text-center px-4 pb-24 sm:pb-32">
+      {/* Button at the bottom - using flex-1 to push it to bottom third */}
+      <div className="relative z-10 text-center px-4 flex-1 flex items-center justify-center">
         <Button 
           onClick={handleEnter}
           size="lg" 
