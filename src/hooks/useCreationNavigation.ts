@@ -60,7 +60,6 @@ export const useCreationNavigation = ({
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [transitionGifUrl, setTransitionGifUrl] = useState<string>('');
   const [pendingSubmission, setPendingSubmission] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false); // New state to prevent double submissions
 
   // Enhanced navigation handlers with GIF transition support
   const handleIntroNext = () => {
@@ -95,31 +94,10 @@ export const useCreationNavigation = ({
   const handleCreationNext = () => {
     console.log('HandleCreationNext called for step:', currentCreationStep);
     
-    // Prevent multiple submissions when already submitting
-    if (isSubmitting) {
-      console.log('Already submitting, ignoring additional clicks');
-      return;
-    }
-    
-    // Check if we're at the last step (timeline step)
+    // Check if we're at the last step (timeline step) - but don't submit yet
     if (currentCreationStep >= steps.length - 1) {
-      console.log('At final step, starting final transition and recipe submission');
-      setIsSubmitting(true); // Prevent additional submissions
-      
-      const gifUrl = getTransitionGif(currentCreationStep, false, hasStartedCreation);
-      
-      if (gifUrl) {
-        console.log('Starting final GIF transition with URL:', gifUrl);
-        setTransitionGifUrl(gifUrl);
-        setIsTransitioning(true);
-        setPendingSubmission(true);
-        // Start recipe submission immediately so it can process during GIF
-        handleSubmit();
-      } else {
-        console.log('No final GIF, submitting directly');
-        handleSubmit();
-      }
-      return;
+      console.log('At timeline step - this should be handled by timeline selection, not navigation');
+      return; // Let the timeline handle its own submission
     }
     
     const gifUrl = getTransitionGif(currentCreationStep, false, hasStartedCreation);
@@ -138,11 +116,27 @@ export const useCreationNavigation = ({
     prevCreationStep();
   };
 
-  const handleCreationSubmit = () => {
-    if (!isSubmitting) {
-      setIsSubmitting(true);
+  // This is called specifically by the timeline selection
+  const handleTimelineSubmission = () => {
+    console.log('Timeline selection completed, starting final submission');
+    
+    const gifUrl = getTransitionGif(currentCreationStep, false, hasStartedCreation);
+    
+    if (gifUrl) {
+      console.log('Starting final GIF transition with URL:', gifUrl);
+      setTransitionGifUrl(gifUrl);
+      setIsTransitioning(true);
+      setPendingSubmission(true);
+      // Start recipe submission during GIF
+      handleSubmit();
+    } else {
+      console.log('No final GIF, submitting directly');
       handleSubmit();
     }
+  };
+
+  const handleCreationSubmit = () => {
+    handleSubmit();
   };
 
   const completeTransition = () => {
@@ -173,7 +167,6 @@ export const useCreationNavigation = ({
     setIsTransitioning(false);
     setTransitionGifUrl('');
     setPendingSubmission(false);
-    setIsSubmitting(false); // Reset submission state
   };
 
   // Backward compatibility methods
@@ -198,6 +191,7 @@ export const useCreationNavigation = ({
     handleCreationNext,
     handleCreationPrev,
     handleCreationSubmit,
+    handleTimelineSubmission, // New method for timeline-specific submission
     nextIntroStep,
     prevIntroStep,
     resetNavigation

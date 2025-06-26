@@ -27,13 +27,13 @@ const TimelineScreen: React.FC<TimelineScreenProps> = ({ stepData, selectedValue
         console.log('Timeline option selected:', value);
         onSelect(value);
         
-        // For timeline step, trigger auto-advance immediately since this is the final selection
+        // For timeline step, trigger auto-advance after selection is processed
         if (onAutoAdvance) {
             console.log('Timeline selection complete, triggering auto-advance');
-            // Small delay to ensure the selection is processed
+            // Small delay to ensure the selection is processed and saved
             setTimeout(() => {
                 onAutoAdvance();
-            }, 100); // Reduced delay for faster response
+            }, 200);
         }
     };
 

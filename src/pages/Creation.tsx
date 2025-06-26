@@ -50,6 +50,7 @@ const Creation = () => {
     handleCreationNext,
     handleCreationPrev,
     handleCreationSubmit,
+    handleTimelineSubmission,
     nextIntroStep,
     prevIntroStep,
     resetNavigation
@@ -93,6 +94,16 @@ const Creation = () => {
   });
 
   const showTitle = shouldShowTitle(recipeResult, isCreatingRecipe, hasStartedCreation, currentIntroStep);
+
+  // Determine which auto-advance function to use based on step type
+  const getAutoAdvanceFunction = () => {
+    if (hasStartedCreation && creationStepData?.type === 'timeline') {
+      // For timeline step, use the special timeline submission handler
+      return handleTimelineSubmission;
+    }
+    // For other steps, use normal navigation
+    return handleCreationNext;
+  };
 
   return (
     <>
@@ -139,7 +150,7 @@ const Creation = () => {
             nextIntroStep={nextIntroStep}
             prevIntroStep={prevIntroStep}
             prevCreationStep={prevCreationStep}
-            nextCreationStep={handleCreationNext} // Use the hook's function directly
+            nextCreationStep={getAutoAdvanceFunction()} // Use the appropriate auto-advance function
             handleSubmit={handleSubmit}
             handleReset={handleReset}
             handleIntroNext={handleIntroNext}
