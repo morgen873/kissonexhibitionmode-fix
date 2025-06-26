@@ -1,18 +1,16 @@
+
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+
 interface IntroStepContentProps {
   step: any;
   onNext: () => void;
 }
+
 const IntroStepContent: React.FC<IntroStepContentProps> = ({
   step,
   onNext
 }) => {
-  const handleNextClick = () => {
-    console.log('IntroStepContent: Next button clicked');
-    onNext();
-  };
   const renderStepContent = () => {
     switch (step.type) {
       case 'hero':
@@ -26,10 +24,6 @@ const IntroStepContent: React.FC<IntroStepContentProps> = ({
             <p className="text-base sm:text-lg lg:text-xl text-white font-bold font-mono leading-relaxed max-w-md sm:max-w-lg px-4">
               Our AI transforms your feelings into delicious, one-of-a-kind dumpling recipes.
             </p>
-            
-            <Button onClick={handleNextClick} size="lg" className="bg-gradient-to-r from-black via-gray-800 to-black hover:from-gray-800 hover:via-black hover:to-gray-800 text-white font-bold shadow-lg transition-all duration-300 transform hover:scale-105 border-2 border-white/20 px-8 py-4 sm:px-10 sm:py-5 text-lg sm:text-xl rounded-xl font-mono mt-2">
-              {step.buttonText}
-            </Button>
           </div>;
       case 'explanation':
         const Icon = step.icon;
@@ -65,8 +59,10 @@ const IntroStepContent: React.FC<IntroStepContentProps> = ({
         return null;
     }
   };
+
   return <div className="flex items-center justify-center min-h-[40vh] w-full">
       {renderStepContent()}
     </div>;
 };
+
 export default IntroStepContent;
