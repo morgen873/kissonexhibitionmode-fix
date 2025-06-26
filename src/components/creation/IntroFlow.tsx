@@ -87,29 +87,29 @@ const IntroFlow = ({ onComplete }: IntroFlowProps) => {
         <div className="absolute top-1/2 right-1/4 w-48 h-48 bg-gradient-to-r from-indigo-400 to-purple-600 rounded-full blur-3xl animate-pulse"></div>
       </div>
 
-      <main className="relative z-10 flex flex-col items-center justify-center flex-grow w-full my-[29px] max-w-4xl mx-auto">
-        <div className="relative flex items-center justify-center w-full">
+      <main className="relative z-10 flex flex-col items-center justify-center flex-grow w-full my-[29px] max-w-6xl mx-auto">
+        <div className="relative flex items-center justify-center w-full gap-8">
           {/* Left Arrow (Back) */}
           <Button 
             onClick={prevStep} 
             variant="ghost" 
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 text-white hover:bg-white/10 disabled:opacity-30 w-12 h-12 rounded-full p-0 z-10" 
+            className="text-white hover:bg-white/10 disabled:opacity-30 w-16 h-16 rounded-full p-0 flex-shrink-0" 
             disabled={currentStep === 1}
           >
-            <ArrowLeft className="h-8 w-8" />
+            <ArrowLeft className="h-10 w-10" />
           </Button>
           
           {/* Main Content */}
-          <div className="flex-1 flex justify-center">
+          <div className="flex-1 flex justify-center max-w-2xl">
             {renderStepContent(stepData)}
           </div>
           
           {/* Right Arrow (Next) */}
           <Button 
             onClick={nextStep} 
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:from-pink-400 hover:to-purple-400 w-12 h-12 rounded-full p-0 z-10"
+            className="bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:from-pink-400 hover:to-purple-400 w-16 h-16 rounded-full p-0 flex-shrink-0"
           >
-            <ArrowRight className="h-8 w-8" />
+            <ArrowRight className="h-10 w-10" />
           </Button>
         </div>
         
