@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from 'lucide-react';
 
 interface IntroNavigationProps {
     currentStep: number;
@@ -52,9 +51,9 @@ const IntroNavigation: React.FC<IntroNavigationProps> = ({
                         onClick={handlePrevClick} 
                         variant="ghost" 
                         className="text-white hover:bg-white/10 disabled:opacity-50 font-mono text-sm w-full sm:w-auto order-2 sm:order-1" 
-                        disabled={currentStep === 1} // Changed from isFirstStep to check step 1
+                        disabled={currentStep === 1}
                     >
-                        <ArrowLeft className="mr-2 h-4 w-4" /> Back
+                        Back
                     </Button>
                     
                     <Button 
@@ -70,9 +69,9 @@ const IntroNavigation: React.FC<IntroNavigationProps> = ({
                         onClick={handlePrevClick} 
                         variant="ghost" 
                         className="text-white hover:bg-white/10 disabled:opacity-50 font-mono text-sm w-full sm:w-auto order-2 sm:order-1" 
-                        disabled={currentStep === 1} // Changed from isFirstStep to check step 1
+                        disabled={currentStep === 1}
                     >
-                        <ArrowLeft className="mr-2 h-4 w-4" /> Back
+                        Back
                     </Button>
                     
                     <div className="flex items-center space-x-2 order-3 sm:order-2 sm:absolute sm:left-1/2 sm:transform sm:-translate-x-1/2">

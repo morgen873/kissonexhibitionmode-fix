@@ -26,7 +26,7 @@ const RecipeActionButtons: React.FC<RecipeActionButtonsProps> = ({ recipe, onRes
         <div className="flex flex-col items-center gap-4">
             <div className="flex flex-wrap justify-center gap-4">
                 <Button onClick={handlePrint} className="bg-gradient-to-r from-black to-gray-800 text-white font-mono">
-                    <Printer /> Print Label
+                    <Printer className="mr-2 h-4 w-4" /> Print Label
                 </Button>
             </div>
             <Button 
