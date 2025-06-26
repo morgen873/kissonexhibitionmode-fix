@@ -123,6 +123,7 @@ export const steps: Step[] = [
             { title: "Bittersweet sadness", description: "A beautiful ache of what was." },
             { title: "Silence", description: "A peaceful and contemplative state." },
             { title: "Love", description: "A deep and affectionate connection." },
+            { title: "Fear", description: "An intense emotion of facing the unknown." },
             { title: "Add your own emotional ingredient", description: "Define a unique emotion for your recipe." },
         ],
         customOption: {
