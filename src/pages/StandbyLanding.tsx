@@ -24,18 +24,31 @@ const StandbyLanding: React.FC = () => {
           }} 
         />
         
-        {/* Button positioned between the stove surfaces */}
+        {/* Two transparent buttons positioned over the hotplates */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="transform translate-y-8">
+          <div className="flex gap-32 transform translate-y-8">
+            {/* Left button over left hotplate */}
             <Button 
               onClick={handleEnter} 
               size="lg" 
-              className="bg-transparent hover:bg-white/10 text-white font-bold transition-all duration-300 transform hover:scale-105 border-2 border-white/30 hover:border-white/50 px-10 py-6 text-xl rounded-xl font-mono shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)]"
+              className="bg-transparent hover:bg-transparent text-white font-bold transition-all duration-300 transform hover:scale-105 px-8 py-6 text-xl rounded-full font-mono"
               style={{
                 textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(255,255,255,0.3)'
               }}
             >
-              Enter Experience
+              ENTER
+            </Button>
+            
+            {/* Right button over right hotplate */}
+            <Button 
+              onClick={handleEnter} 
+              size="lg" 
+              className="bg-transparent hover:bg-transparent text-white font-bold transition-all duration-300 transform hover:scale-105 px-8 py-6 text-xl rounded-full font-mono"
+              style={{
+                textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(255,255,255,0.3)'
+              }}
+            >
+              EXPERIENCE
             </Button>
           </div>
         </div>
