@@ -32,7 +32,7 @@ const EnhancerInput: React.FC<EnhancerInputProps> = ({
     return (
         <div className="space-y-2">
             <textarea
-                rows={3}
+                rows={2}
                 className={`w-full bg-white/10 border rounded-lg p-4 text-white block transition focus:ring-white focus:border-white font-mono text-center resize-none ${
                     profanityWarning ? 'border-red-500 border-2' : 'border-white/20'
                 }`}
