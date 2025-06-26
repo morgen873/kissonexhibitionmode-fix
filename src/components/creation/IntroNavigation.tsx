@@ -52,7 +52,7 @@ const IntroNavigation: React.FC<IntroNavigationProps> = ({
                         onClick={handlePrevClick} 
                         variant="ghost" 
                         className="text-white hover:bg-white/10 disabled:opacity-50 font-mono text-sm w-full sm:w-auto order-2 sm:order-1" 
-                        disabled={isFirstStep}
+                        disabled={currentStep === 1} // Changed from isFirstStep to check step 1
                     >
                         <ArrowLeft className="mr-2 h-4 w-4" /> Back
                     </Button>
@@ -70,7 +70,7 @@ const IntroNavigation: React.FC<IntroNavigationProps> = ({
                         onClick={handlePrevClick} 
                         variant="ghost" 
                         className="text-white hover:bg-white/10 disabled:opacity-50 font-mono text-sm w-full sm:w-auto order-2 sm:order-1" 
-                        disabled={isFirstStep}
+                        disabled={currentStep === 1} // Changed from isFirstStep to check step 1
                     >
                         <ArrowLeft className="mr-2 h-4 w-4" /> Back
                     </Button>

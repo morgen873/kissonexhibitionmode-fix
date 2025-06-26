@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { introSteps } from "@/data/introSteps";
 
@@ -13,7 +14,7 @@ const getTransitionGif = (fromStep: number, isIntro: boolean, hasStartedCreation
   console.log('Getting transition GIF for:', { fromStep, isIntro, hasStartedCreation });
   
   if (isIntro) {
-    // Intro step transitions
+    // Intro step transitions (now starting from step 1, not 0)
     if (fromStep === 4) { // Quote Step -> Creation begins
       console.log('Returning 3d-kisson GIF for quote step transition');
       return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//3d-kisson.gif";
@@ -52,7 +53,8 @@ export const useCreationNavigation = ({
   handleSubmit,
   currentCreationStep = 0
 }: UseCreationNavigationProps) => {
-  const [currentIntroStep, setCurrentIntroStep] = useState(0);
+  // Start intro at step 1 instead of 0 (skipping hero step)
+  const [currentIntroStep, setCurrentIntroStep] = useState(1);
   const [hasStartedCreation, setHasStartedCreation] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [transitionGifUrl, setTransitionGifUrl] = useState<string>('');
@@ -81,7 +83,8 @@ export const useCreationNavigation = ({
   };
 
   const handleIntroPrev = () => {
-    if (currentIntroStep > 0) {
+    // Don't allow going back to step 0 (hero step)
+    if (currentIntroStep > 1) {
       setCurrentIntroStep(currentIntroStep - 1);
     }
   };
@@ -123,7 +126,7 @@ export const useCreationNavigation = ({
 
   // Reset navigation to standby page
   const resetNavigation = () => {
-    setCurrentIntroStep(0);
+    setCurrentIntroStep(1); // Reset to step 1 instead of 0
     setHasStartedCreation(false);
     setIsTransitioning(false);
     setTransitionGifUrl('');

@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { introSteps, IntroStepData } from '@/data/introSteps';
 import { Card, CardContent } from '@/components/ui/card';
@@ -9,7 +10,8 @@ interface IntroFlowProps {
 }
 
 const IntroFlow = ({ onComplete }: IntroFlowProps) => {
-  const [currentStep, setCurrentStep] = useState(0);
+  // Start at step 1 (heart icon) instead of step 0 (hero)
+  const [currentStep, setCurrentStep] = useState(1);
   const stepData = introSteps[currentStep];
 
   const nextStep = () => {
@@ -24,37 +26,14 @@ const IntroFlow = ({ onComplete }: IntroFlowProps) => {
 
   const prevStep = () => {
     console.log('Previous step clicked, current step:', currentStep);
-    if (currentStep > 0) {
+    // Don't allow going back to step 0 (hero step)
+    if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
   };
 
   const renderStepContent = (step: IntroStepData) => {
     switch (step.type) {
-      case 'hero':
-        return (
-          <div className="text-center max-w-6xl mx-0 px-0 bg-inherit my-0 py-0">
-            <img 
-              src="https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//stove.gif" 
-              alt="Cooking on stovetop" 
-              className="mx-auto mb-8 w-full max-w-4xl h-auto max-h-[60vh] object-cover rounded-lg" 
-            />
-            
-            <p className="text-xl text-white font-bold max-w-3xl mx-auto drop-shadow-lg mb-12 md:text-xl">
-              {step.description}
-            </p>
-            
-            <Button 
-              onClick={nextStep} 
-              size="lg" 
-              className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 hover:from-pink-400 hover:via-purple-400 hover:to-cyan-400 text-white font-bold shadow-lg hover:shadow-pink-500/25 transition-all duration-300 transform hover:scale-105 border-2 border-white/20 backdrop-blur-sm px-10 py-6 text-2xl rounded-2xl"
-            >
-              {step.buttonText}
-              <ArrowRight className="ml-3 h-6 w-6" />
-            </Button>
-          </div>
-        );
-      
       case 'explanation':
         const Icon = step.icon;
         return (
@@ -112,39 +91,38 @@ const IntroFlow = ({ onComplete }: IntroFlowProps) => {
         {renderStepContent(stepData)}
       </main>
 
-      {stepData.type !== 'hero' && (
-        <div className="relative z-10 w-full max-w-2xl mt-8">
-          <div className="flex justify-between items-center">
-            <Button 
-              onClick={prevStep} 
-              variant="ghost" 
-              className="text-white hover:bg-white/10 disabled:opacity-50" 
-              disabled={currentStep === 0}
-            >
-              <ArrowLeft className="mr-2" /> Back
-            </Button>
-            
-            <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center space-x-2">
-              {introSteps.slice(1, 4).map((_, index) => (
-                <div 
-                  key={index} 
-                  className={`w-3 h-3 rounded-full transition-colors ${
-                    currentStep === index + 1 ? 'bg-white' : 'bg-white/30'
-                  }`} 
-                />
-              ))}
-            </div>
-            
-            <Button 
-              onClick={nextStep} 
-              className="bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:from-pink-400 hover:to-purple-400"
-            >
-              {currentStep === introSteps.length - 1 ? stepData.buttonText : 'Next'} 
-              <ArrowRight className="ml-2" />
-            </Button>
+      <div className="relative z-10 w-full max-w-2xl mt-8">
+        <div className="flex justify-between items-center">
+          <Button 
+            onClick={prevStep} 
+            variant="ghost" 
+            className="text-white hover:bg-white/10 disabled:opacity-50" 
+            disabled={currentStep === 1} // Disable when at first visible step
+          >
+            <ArrowLeft className="mr-2" /> Back
+          </Button>
+          
+          <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center space-x-2">
+            {/* Show dots for steps 1-3 (explanation steps) */}
+            {introSteps.slice(1, 4).map((_, index) => (
+              <div 
+                key={index} 
+                className={`w-3 h-3 rounded-full transition-colors ${
+                  currentStep === index + 1 ? 'bg-white' : 'bg-white/30'
+                }`} 
+              />
+            ))}
           </div>
+          
+          <Button 
+            onClick={nextStep} 
+            className="bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:from-pink-400 hover:to-purple-400"
+          >
+            {currentStep === introSteps.length - 1 ? stepData.buttonText : 'Next'} 
+            <ArrowRight className="ml-2" />
+          </Button>
         </div>
-      )}
+      </div>
       
       <footer className="relative z-10 bg-black/50 backdrop-blur-md text-white mt-8 w-full text-center border-t-2 border-white/20 py-[10px] my-[30px]">
         <p className="text-lg font-black">
