@@ -56,6 +56,38 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
 
     const isFlavorSweet = controlValues.flavor === 'sweet';
 
+    // Generate temperature markings for analog oven dial
+    const generateTempMarkings = () => {
+        const markings = [];
+        const minTemp = controls.temperature.min;
+        const maxTemp = controls.temperature.max;
+        const step = 50; // Show markings every 50 degrees
+        const minAngle = -135;
+        const maxAngle = 135;
+        const totalAngle = maxAngle - minAngle;
+        
+        for (let temp = minTemp; temp <= maxTemp; temp += step) {
+            const percent = (temp - minTemp) / (maxTemp - minTemp);
+            const angle = minAngle + (percent * totalAngle);
+            const radians = (angle * Math.PI) / 180;
+            const radius = 120 * 0.65; // Position markings outside the knob
+            
+            const x = Math.sin(radians) * radius;
+            const y = -Math.cos(radians) * radius;
+            
+            markings.push({
+                temp,
+                x,
+                y,
+                angle
+            });
+        }
+        
+        return markings;
+    };
+
+    const tempMarkings = generateTempMarkings();
+
     return (
         <div 
             ref={containerRef}
@@ -78,14 +110,38 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
                             </span>
                         </div>
                     </div>
-                    <Knob
-                        min={controls.temperature.min}
-                        max={controls.temperature.max}
-                        value={controlValues.temperature}
-                        onValueChange={onTemperatureChange}
-                        size={120}
-                        step={10}
-                    />
+                    <div className="relative" style={{ width: 120 * 1.6, height: 120 * 1.6 }}>
+                        {/* Temperature markings around the knob */}
+                        {tempMarkings.map((marking) => (
+                            <div
+                                key={marking.temp}
+                                className="absolute flex items-center justify-center"
+                                style={{
+                                    left: '50%',
+                                    top: '50%',
+                                    transform: `translate(-50%, -50%) translate(${marking.x}px, ${marking.y}px)`,
+                                }}
+                            >
+                                <div className="w-6 h-6 rounded-full bg-black/20 flex items-center justify-center">
+                                    <span className="text-xs font-mono text-white/80">
+                                        {marking.temp}
+                                    </span>
+                                </div>
+                            </div>
+                        ))}
+                        
+                        {/* Temperature knob */}
+                        <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                            <Knob
+                                min={controls.temperature.min}
+                                max={controls.temperature.max}
+                                value={controlValues.temperature}
+                                onValueChange={onTemperatureChange}
+                                size={120}
+                                step={10}
+                            />
+                        </div>
+                    </div>
                 </div>
 
                 {/* Shape Control */}
