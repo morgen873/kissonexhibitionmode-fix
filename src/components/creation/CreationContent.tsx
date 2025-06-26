@@ -73,10 +73,8 @@ const CreationContent = ({
   if (recipeResult) {
     return (
       <RecipeResultScreen
-        recipeResult={recipeResult}
-        isCreatingRecipe={isCreatingRecipe}
+        recipe={recipeResult}
         onReset={handleReset}
-        theme={theme}
       />
     );
   }
@@ -92,8 +90,8 @@ const CreationContent = ({
       {creationStepData?.type === 'question' && (
         <QuestionScreen
           stepData={creationStepData}
-          answer={answers[creationStepData.id] || ''}
-          customAnswer={customAnswers[creationStepData.id] || ''}
+          answers={answers}
+          customAnswers={customAnswers}
           onAnswerSelect={onAnswerSelect}
           onCustomAnswerChange={onCustomAnswerChange}
           theme={theme}
@@ -113,7 +111,9 @@ const CreationContent = ({
 
       {creationStepData?.type === 'timeline' && (
         <TimelineScreen
-          onSubmit={handleCreationSubmit}
+          stepData={creationStepData}
+          answers={answers}
+          onAnswerSelect={onAnswerSelect}
           theme={theme}
         />
       )}
