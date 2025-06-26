@@ -89,14 +89,14 @@ const IntroFlow = ({ onComplete }: IntroFlowProps) => {
 
       <main className="relative z-10 flex flex-col items-center justify-center flex-grow w-full my-[29px] max-w-6xl mx-auto">
         <div className="relative flex items-center justify-center w-full gap-8">
-          {/* Left Arrow (Back) */}
+          {/* Left Arrow (Back) - Make it more prominent */}
           <Button 
             onClick={prevStep} 
             variant="ghost" 
-            className="text-white hover:bg-white/10 disabled:opacity-30 w-16 h-16 rounded-full p-0 flex-shrink-0" 
+            className="text-white hover:bg-white/20 disabled:opacity-30 w-20 h-20 rounded-full p-0 flex-shrink-0 border-2 border-white/30 hover:border-white/50 transition-all duration-300" 
             disabled={currentStep === 1}
           >
-            <ArrowLeft className="h-10 w-10" />
+            <ArrowLeft className="h-12 w-12" />
           </Button>
           
           {/* Main Content */}
@@ -104,12 +104,12 @@ const IntroFlow = ({ onComplete }: IntroFlowProps) => {
             {renderStepContent(stepData)}
           </div>
           
-          {/* Right Arrow (Next) */}
+          {/* Right Arrow (Next) - Make it more prominent */}
           <Button 
             onClick={nextStep} 
-            className="bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:from-pink-400 hover:to-purple-400 w-16 h-16 rounded-full p-0 flex-shrink-0"
+            className="bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:from-pink-400 hover:to-purple-400 w-20 h-20 rounded-full p-0 flex-shrink-0 border-2 border-white/30 hover:border-white/50 transition-all duration-300 shadow-xl"
           >
-            <ArrowRight className="h-10 w-10" />
+            <ArrowRight className="h-12 w-12" />
           </Button>
         </div>
         
@@ -126,11 +126,11 @@ const IntroFlow = ({ onComplete }: IntroFlowProps) => {
           ))}
         </div>
         
-        {/* Special button for last step */}
+        {/* Special button for last step - only show if we're on the quote step */}
         {currentStep === introSteps.length - 1 && (
           <Button 
             onClick={nextStep} 
-            className="bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:from-pink-400 hover:to-purple-400 mt-6 px-8 py-3 text-lg font-mono"
+            className="bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:from-pink-400 hover:to-purple-400 mt-8 px-12 py-4 text-xl font-mono rounded-full shadow-xl border-2 border-white/30"
           >
             {stepData.buttonText}
           </Button>
