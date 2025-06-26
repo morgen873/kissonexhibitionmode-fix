@@ -6,6 +6,7 @@ interface UseCreationNavigationProps {
   nextCreationStep: () => void;
   prevCreationStep: () => void;
   handleSubmit: () => void;
+  currentCreationStep?: number; // Add current step to get transition GIF
 }
 
 // GIF mappings for specific transitions
@@ -28,7 +29,8 @@ const getTransitionGif = (fromStep: number, isIntro: boolean, hasStartedCreation
 export const useCreationNavigation = ({
   nextCreationStep,
   prevCreationStep,
-  handleSubmit
+  handleSubmit,
+  currentCreationStep = 0
 }: UseCreationNavigationProps) => {
   const [currentIntroStep, setCurrentIntroStep] = useState(0);
   const [hasStartedCreation, setHasStartedCreation] = useState(false);
@@ -61,8 +63,9 @@ export const useCreationNavigation = ({
     }
   };
 
-  const handleCreationNext = (creationStep: number) => {
-    const gifUrl = getTransitionGif(creationStep, false, hasStartedCreation);
+  // Updated to use the current creation step from props instead of parameter
+  const handleCreationNext = () => {
+    const gifUrl = getTransitionGif(currentCreationStep, false, hasStartedCreation);
     
     if (gifUrl) {
       setTransitionGifUrl(gifUrl);

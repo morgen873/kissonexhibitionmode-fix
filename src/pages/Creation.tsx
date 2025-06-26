@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import { useCreationForm } from '@/hooks/useCreationForm';
@@ -55,7 +56,8 @@ const Creation = () => {
   } = useCreationNavigation({
     nextCreationStep,
     prevCreationStep,
-    handleSubmit
+    handleSubmit,
+    currentCreationStep: creationStep // Pass current creation step
   });
 
   const { progress } = useCreationProgress({
@@ -91,11 +93,6 @@ const Creation = () => {
   });
 
   const showTitle = shouldShowTitle(recipeResult, isCreatingRecipe, hasStartedCreation, currentIntroStep);
-
-  // Enhanced next step handler that passes current step info
-  const enhancedNextCreationStep = () => {
-    handleCreationNext(creationStep);
-  };
 
   return (
     <>
@@ -142,7 +139,7 @@ const Creation = () => {
             nextIntroStep={nextIntroStep}
             prevIntroStep={prevIntroStep}
             prevCreationStep={prevCreationStep}
-            nextCreationStep={enhancedNextCreationStep}
+            nextCreationStep={handleCreationNext} // Use the hook's function directly
             handleSubmit={handleSubmit}
             handleReset={handleReset}
             handleIntroNext={handleIntroNext}
