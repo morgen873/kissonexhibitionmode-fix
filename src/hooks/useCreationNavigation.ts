@@ -93,7 +93,7 @@ export const useCreationNavigation = ({
     isTransitioning,
     transitionGifUrl,
     transitionDirection: 'forward' as const,
-    transitionVariant: 'gif' as const,
+    transitionVariant: 'loading' as const,
     completeTransition,
     handleIntroNext,
     handleIntroPrev,
