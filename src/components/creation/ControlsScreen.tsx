@@ -67,7 +67,7 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
             </p>
             
             {/* All Controls in One Line */}
-            <div className="grid grid-cols-3 gap-6">
+            <div className="flex justify-center items-start gap-8">
                 {/* Temperature Control */}
                 <div className="flex flex-col items-center space-y-4">
                     <div className="flex flex-col items-center gap-2">
@@ -84,7 +84,7 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
                         value={controlValues.temperature}
                         onValueChange={onTemperatureChange}
                         size={120}
-                        step={1}
+                        step={10}
                     />
                 </div>
 
