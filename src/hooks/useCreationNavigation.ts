@@ -59,6 +59,7 @@ export const useCreationNavigation = ({
   const [hasStartedCreation, setHasStartedCreation] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [transitionGifUrl, setTransitionGifUrl] = useState<string>('');
+  const [pendingSubmission, setPendingSubmission] = useState(false);
 
   // Enhanced navigation handlers with GIF transition support
   const handleIntroNext = () => {
@@ -95,13 +96,16 @@ export const useCreationNavigation = ({
     
     // Check if we're at the last step (timeline step)
     if (currentCreationStep >= steps.length - 1) {
-      console.log('At final step, triggering submission instead of next step');
+      console.log('At final step, starting final transition and recipe submission');
       const gifUrl = getTransitionGif(currentCreationStep, false, hasStartedCreation);
       
       if (gifUrl) {
         console.log('Starting final GIF transition with URL:', gifUrl);
         setTransitionGifUrl(gifUrl);
         setIsTransitioning(true);
+        setPendingSubmission(true); // Mark that we need to submit after GIF
+        // Start recipe submission immediately so it can process during GIF
+        handleSubmit();
       } else {
         console.log('No final GIF, submitting directly');
         handleSubmit();
@@ -130,16 +134,18 @@ export const useCreationNavigation = ({
   };
 
   const completeTransition = () => {
-    console.log('Completing transition');
+    console.log('Completing transition, pendingSubmission:', pendingSubmission);
     setIsTransitioning(false);
     setTransitionGifUrl('');
     
     // Complete the actual navigation step
     if (hasStartedCreation) {
-      // Check if we were at the final step
-      if (currentCreationStep >= steps.length - 1) {
-        console.log('Final transition completed, submitting recipe');
-        handleSubmit();
+      // Check if we were at the final step with pending submission
+      if (pendingSubmission) {
+        console.log('Final transition completed, recipe submission should be in progress');
+        setPendingSubmission(false);
+        // Don't call handleSubmit again - it was already called
+        // The recipe result should already be processing or ready
       } else {
         nextCreationStep();
       }
@@ -154,6 +160,7 @@ export const useCreationNavigation = ({
     setHasStartedCreation(false);
     setIsTransitioning(false);
     setTransitionGifUrl('');
+    setPendingSubmission(false);
   };
 
   // Backward compatibility methods
