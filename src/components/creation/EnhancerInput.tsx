@@ -11,7 +11,7 @@ interface EnhancerInputProps {
 const EnhancerInput: React.FC<EnhancerInputProps> = ({
     value,
     onChange,
-    placeholder = "Add spice, herbs, or condiments to enhance your recipe..."
+    placeholder = "You can add a special ingredient here..."
 }) => {
     const [profanityWarning, setProfanityWarning] = useState(false);
 
