@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
 import { introSteps } from "@/data/introSteps";
+import { steps } from '@/data/creation';
 
 interface UseCreationNavigationProps {
   nextCreationStep: () => void;
@@ -37,8 +38,8 @@ const getTransitionGif = (fromStep: number, isIntro: boolean, hasStartedCreation
       console.log('Returning 04step GIF for creation step 6');
       return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//04step.gif";
     }
-    if (fromStep === 7) { // Timeline Selection step
-      console.log('Returning 05step GIF for creation step 7');
+    if (fromStep === 7) { // Timeline Selection step - final step
+      console.log('Returning 05step GIF for final timeline step');
       return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//05step.gif";
     }
   }
@@ -91,6 +92,23 @@ export const useCreationNavigation = ({
 
   const handleCreationNext = () => {
     console.log('HandleCreationNext called for step:', currentCreationStep);
+    
+    // Check if we're at the last step (timeline step)
+    if (currentCreationStep >= steps.length - 1) {
+      console.log('At final step, triggering submission instead of next step');
+      const gifUrl = getTransitionGif(currentCreationStep, false, hasStartedCreation);
+      
+      if (gifUrl) {
+        console.log('Starting final GIF transition with URL:', gifUrl);
+        setTransitionGifUrl(gifUrl);
+        setIsTransitioning(true);
+      } else {
+        console.log('No final GIF, submitting directly');
+        handleSubmit();
+      }
+      return;
+    }
+    
     const gifUrl = getTransitionGif(currentCreationStep, false, hasStartedCreation);
     
     if (gifUrl) {
@@ -118,7 +136,13 @@ export const useCreationNavigation = ({
     
     // Complete the actual navigation step
     if (hasStartedCreation) {
-      nextCreationStep();
+      // Check if we were at the final step
+      if (currentCreationStep >= steps.length - 1) {
+        console.log('Final transition completed, submitting recipe');
+        handleSubmit();
+      } else {
+        nextCreationStep();
+      }
     } else {
       proceedToNextIntroStep();
     }
