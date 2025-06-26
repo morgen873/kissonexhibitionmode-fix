@@ -4,7 +4,7 @@ import { useOutletContext } from "react-router-dom";
 import { useCreationForm } from '@/hooks/useCreationForm';
 import { useCreationNavigation } from '@/hooks/useCreationNavigation';
 import { useCreationProgress } from '@/hooks/useCreationProgress';
-import { creationTheme } from '@/components/creation/CreationTheme';
+import { stepThemes } from '@/data/creation';
 import { getCreationTitle, shouldShowTitle } from '@/components/creation/CreationTitleHandler';
 import GlobalLayout from '@/components/layout/GlobalLayout';
 import CreationLayout from '@/components/creation/CreationLayout';
@@ -70,6 +70,17 @@ const Creation = () => {
 
   const { setHeaderVisible } = useOutletContext<OutletContextType>() || {};
 
+  // Get the current theme based on the creation step
+  const getCurrentTheme = () => {
+    if (!hasStartedCreation || creationStep >= stepThemes.length) {
+      // Use the first theme for intro steps or fallback
+      return stepThemes[0];
+    }
+    return stepThemes[creationStep];
+  };
+
+  const currentTheme = getCurrentTheme();
+
   useEffect(() => {
     if (setHeaderVisible) {
       setHeaderVisible(false);
@@ -120,7 +131,7 @@ const Creation = () => {
       <GlobalLayout variant="creation" showHeader={false}>
         <CreationLayout
           progress={progress}
-          theme={creationTheme}
+          theme={currentTheme}
           title={title}
           showTitle={showTitle}
           hasStartedCreation={hasStartedCreation}
@@ -139,7 +150,7 @@ const Creation = () => {
             answers={answers}
             customAnswers={customAnswers}
             controlValues={controlValues}
-            theme={creationTheme}
+            theme={currentTheme}
             isNextDisabled={isNextDisabled}
             onAnswerSelect={handleAnswerSelect}
             onCustomAnswerChange={handleCustomAnswerChange}
