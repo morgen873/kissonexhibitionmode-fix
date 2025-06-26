@@ -15,7 +15,7 @@ const StandbyLanding: React.FC = () => {
       {/* Full screen looping GIF */}
       <div className="absolute inset-0 w-full h-full">
         <img
-          src="https://ncvgpkzguvlypyxhfnuk.supabase.co/storage/v1/object/public/video-bucket/stove-top-cooking.gif"
+          src="https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//stove.gif"
           alt="Cooking on stovetop"
           className="w-full h-full object-cover"
           style={{ 

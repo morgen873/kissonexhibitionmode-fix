@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { introSteps } from "@/data/introSteps";
 
@@ -15,35 +14,31 @@ const getTransitionGif = (fromStep: number, isIntro: boolean, hasStartedCreation
   
   if (isIntro) {
     // Intro step transitions
-    if (fromStep === 0) {
-      console.log('Returning stove-top-cooking GIF for intro step 0');
-      return "https://ncvgpkzguvlypyxhfnuk.supabase.co/storage/v1/object/public/video-bucket/stove-top-cooking.gif";
-    }
-    if (fromStep === 1) {
-      console.log('Returning open-food GIF for intro step 1');
-      return "https://ncvgpkzguvlypyxhfnuk.supabase.co/storage/v1/object/public/video-bucket/open-food.gif";
-    }
-    if (fromStep === 2) {
-      console.log('Returning making-dumplings GIF for intro step 2');
-      return "https://ncvgpkzguvlypyxhfnuk.supabase.co/storage/v1/object/public/video-bucket/making-dumplings.gif";
-    }
-    if (fromStep === 3) {
-      console.log('Returning dumpling-boiling GIF for intro step 3');
-      return "https://ncvgpkzguvlypyxhfnuk.supabase.co/storage/v1/object/public/video-bucket/dumpling-boiling.gif";
+    if (fromStep === 4) { // Quote Step -> Creation begins
+      console.log('Returning 3d-kisson GIF for quote step transition');
+      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//3d-kisson.gif";
     }
   } else if (hasStartedCreation) {
-    // Creation step transitions  
-    if (fromStep === 1) {
-      console.log('Returning open-food GIF for creation step 1');
-      return "https://ncvgpkzguvlypyxhfnuk.supabase.co/storage/v1/object/public/video-bucket/open-food.gif";
+    // Creation step transitions
+    if (fromStep === 1) { // Memory Question step
+      console.log('Returning 01step GIF for creation step 1');
+      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//01step.gif";
     }
-    if (fromStep === 3) {
-      console.log('Returning making-dumplings GIF for creation step 3');
-      return "https://ncvgpkzguvlypyxhfnuk.supabase.co/storage/v1/object/public/video-bucket/making-dumplings.gif";
+    if (fromStep === 3) { // Emotional Ingredients step
+      console.log('Returning 02step GIF for creation step 3');
+      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//02step.gif";
     }
-    if (fromStep === 4) {
-      console.log('Returning dumpling-boiling GIF for creation step 4');
-      return "https://ncvgpkzguvlypyxhfnuk.supabase.co/storage/v1/object/public/video-bucket/dumpling-boiling.gif";
+    if (fromStep === 5) { // Dedication Question step
+      console.log('Returning 03step GIF for creation step 5');
+      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//03step.gif";
+    }
+    if (fromStep === 6) { // Controls Step
+      console.log('Returning 04step GIF for creation step 6');
+      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//04step.gif";
+    }
+    if (fromStep === 7) { // Timeline Selection step
+      console.log('Returning 05step GIF for creation step 7');
+      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//05step.gif";
     }
   }
   
