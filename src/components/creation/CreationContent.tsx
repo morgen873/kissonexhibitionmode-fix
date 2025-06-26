@@ -92,8 +92,10 @@ const CreationContent = ({
           stepData={creationStepData}
           answers={answers}
           customAnswers={customAnswers}
-          onAnswerSelect={onAnswerSelect}
-          onCustomAnswerChange={onCustomAnswerChange}
+          handleAnswerSelect={onAnswerSelect}
+          handleCustomAnswerChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+            onCustomAnswerChange(creationStepData.id.toString(), e.target.value);
+          }}
           theme={theme}
         />
       )}
@@ -104,7 +106,9 @@ const CreationContent = ({
           onTemperatureChange={onTemperatureChange}
           onShapeChange={onShapeChange}
           onFlavorChange={onFlavorChange}
-          onEnhancerChange={onEnhancerChange}
+          onEnhancerChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+            onEnhancerChange(e.target.value);
+          }}
           theme={theme}
         />
       )}
@@ -112,8 +116,8 @@ const CreationContent = ({
       {creationStepData?.type === 'timeline' && (
         <TimelineScreen
           stepData={creationStepData}
-          answers={answers}
-          onAnswerSelect={onAnswerSelect}
+          selectedValue={answers[creationStepData.id] || ''}
+          onSelect={onAnswerSelect}
           theme={theme}
         />
       )}
