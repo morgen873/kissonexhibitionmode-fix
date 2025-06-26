@@ -32,6 +32,7 @@ const GifTransition: React.FC<GifTransitionProps> = ({
     const handleLoad = () => {
       console.log('GIF loaded successfully');
       setIsLoading(false);
+      setHasError(false);
       
       // Auto-complete the transition after the specified duration
       const timer = setTimeout(() => {
@@ -68,20 +69,6 @@ const GifTransition: React.FC<GifTransitionProps> = ({
     return null;
   }
 
-  if (hasError) {
-    return (
-      <div 
-        className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
-        style={{ zIndex: 9999 }}
-      >
-        <div className="text-center space-y-4">
-          <div className="w-16 h-16 border-4 border-green-400 border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <p className="text-green-400 font-mono">Loading transition...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div 
       className="fixed inset-0 z-50 bg-black flex items-center justify-center overflow-hidden"
@@ -96,19 +83,28 @@ const GifTransition: React.FC<GifTransitionProps> = ({
         </div>
       )}
       
-      <img
-        src={gifUrl}
-        alt="Transition animation"
-        className={`w-screen h-screen object-cover transition-opacity duration-300 ${
-          isLoading ? 'opacity-0' : 'opacity-100'
-        }`}
-        style={{ 
-          objectFit: 'cover',
-          objectPosition: 'center',
-          width: '100vw',
-          height: '100vh'
-        }}
-      />
+      {hasError && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black">
+          <div className="text-center space-y-4">
+            <p className="text-red-400 font-mono">Failed to load transition</p>
+            <p className="text-white/60 font-mono text-sm">Continuing...</p>
+          </div>
+        </div>
+      )}
+      
+      {!isLoading && !hasError && (
+        <img
+          src={gifUrl}
+          alt="Transition animation"
+          className="w-screen h-screen object-cover"
+          style={{ 
+            objectFit: 'cover',
+            objectPosition: 'center',
+            width: '100vw',
+            height: '100vh'
+          }}
+        />
+      )}
     </div>
   );
 };
