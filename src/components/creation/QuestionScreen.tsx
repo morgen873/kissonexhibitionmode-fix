@@ -41,8 +41,10 @@ const QuestionScreen: React.FC<QuestionScreenProps> = ({
         }
     };
 
-    // Separate regular options from custom option
-    const regularOptions = stepData.options;
+    // Filter out the custom option from regular options to avoid duplication
+    const regularOptions = stepData.options.filter(option => 
+        !stepData.customOption || option.title !== stepData.customOption.title
+    );
     const hasCustomOption = stepData.customOption;
 
     return (
