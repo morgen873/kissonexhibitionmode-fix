@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import NotFound from "./pages/NotFound";
 import Creation from "./pages/Creation";
 import RecipePage from "./pages/RecipePage";
+import StandbyLanding from "./pages/StandbyLanding";
 import MainLayout from "./components/layout/MainLayout";
 import VideoTransitionTest from "./components/creation/VideoTransitionTest";
 
@@ -21,7 +22,8 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Navigate to="/creation" replace />} />
+            <Route path="/" element={<Navigate to="/standby" replace />} />
+            <Route path="/standby" element={<StandbyLanding />} />
             <Route element={<MainLayout />}>
               <Route path="/creation" element={<Creation />} />
               <Route path="/recipe/:id" element={<RecipePage />} />

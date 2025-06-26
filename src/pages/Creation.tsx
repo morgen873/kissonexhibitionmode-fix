@@ -92,6 +92,11 @@ const Creation = () => {
 
   const showTitle = shouldShowTitle(recipeResult, isCreatingRecipe, hasStartedCreation, currentIntroStep);
 
+  // Enhanced next step handler that passes current step info
+  const enhancedNextCreationStep = () => {
+    handleCreationNext(creationStep);
+  };
+
   return (
     <>
       {/* GIF Transition Overlay */}
@@ -137,7 +142,7 @@ const Creation = () => {
             nextIntroStep={nextIntroStep}
             prevIntroStep={prevIntroStep}
             prevCreationStep={prevCreationStep}
-            nextCreationStep={nextCreationStep}
+            nextCreationStep={enhancedNextCreationStep}
             handleSubmit={handleSubmit}
             handleReset={handleReset}
             handleIntroNext={handleIntroNext}

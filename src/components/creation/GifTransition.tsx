@@ -5,14 +5,14 @@ interface GifTransitionProps {
   gifUrl: string;
   isVisible: boolean;
   onComplete: () => void;
-  duration?: number; // How long to show the GIF
+  duration?: number;
 }
 
 const GifTransition: React.FC<GifTransitionProps> = ({
   gifUrl,
   isVisible,
   onComplete,
-  duration = 3000 // Default 3 seconds
+  duration = 3000
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
@@ -83,11 +83,11 @@ const GifTransition: React.FC<GifTransitionProps> = ({
       <img
         src={gifUrl}
         alt="Transition animation"
-        className={`max-w-full max-h-full object-contain transition-opacity duration-300 ${
+        className={`w-full h-full object-cover transition-opacity duration-300 ${
           isLoading ? 'opacity-0' : 'opacity-100'
         }`}
         style={{ 
-          objectFit: 'contain',
+          objectFit: 'cover',
           objectPosition: 'center'
         }}
       />

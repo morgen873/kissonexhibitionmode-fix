@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { introSteps } from "@/data/introSteps";
 
@@ -6,6 +7,23 @@ interface UseCreationNavigationProps {
   prevCreationStep: () => void;
   handleSubmit: () => void;
 }
+
+// GIF mappings for specific transitions
+const getTransitionGif = (fromStep: number, isIntro: boolean, hasStartedCreation: boolean): string | undefined => {
+  if (isIntro) {
+    // Intro step transitions
+    if (fromStep === 0) return "https://ncvgpkzguvlypyxhfnuk.supabase.co/storage/v1/object/public/video-bucket/stove-top-cooking.gif";
+    if (fromStep === 1) return "https://ncvgpkzguvlypyxhfnuk.supabase.co/storage/v1/object/public/video-bucket/open-food.gif";
+    if (fromStep === 2) return "https://ncvgpkzguvlypyxhfnuk.supabase.co/storage/v1/object/public/video-bucket/making-dumplings.gif";
+    if (fromStep === 3) return "https://ncvgpkzguvlypyxhfnuk.supabase.co/storage/v1/object/public/video-bucket/dumpling-boiling.gif";
+  } else if (hasStartedCreation) {
+    // Creation step transitions  
+    if (fromStep === 1) return "https://ncvgpkzguvlypyxhfnuk.supabase.co/storage/v1/object/public/video-bucket/open-food.gif";
+    if (fromStep === 3) return "https://ncvgpkzguvlypyxhfnuk.supabase.co/storage/v1/object/public/video-bucket/making-dumplings.gif";
+    if (fromStep === 4) return "https://ncvgpkzguvlypyxhfnuk.supabase.co/storage/v1/object/public/video-bucket/dumpling-boiling.gif";
+  }
+  return undefined;
+};
 
 export const useCreationNavigation = ({
   nextCreationStep,
@@ -17,8 +35,10 @@ export const useCreationNavigation = ({
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [transitionGifUrl, setTransitionGifUrl] = useState<string>('');
 
-  // Simple navigation handlers with transition support
-  const handleIntroNext = (gifUrl?: string) => {
+  // Enhanced navigation handlers with GIF transition support
+  const handleIntroNext = () => {
+    const gifUrl = getTransitionGif(currentIntroStep, true, hasStartedCreation);
+    
     if (gifUrl) {
       setTransitionGifUrl(gifUrl);
       setIsTransitioning(true);
@@ -41,7 +61,9 @@ export const useCreationNavigation = ({
     }
   };
 
-  const handleCreationNext = (gifUrl?: string) => {
+  const handleCreationNext = (creationStep: number) => {
+    const gifUrl = getTransitionGif(creationStep, false, hasStartedCreation);
+    
     if (gifUrl) {
       setTransitionGifUrl(gifUrl);
       setIsTransitioning(true);
@@ -70,7 +92,7 @@ export const useCreationNavigation = ({
     }
   };
 
-  // Reset navigation to hero page
+  // Reset navigation to standby page
   const resetNavigation = () => {
     setCurrentIntroStep(0);
     setHasStartedCreation(false);
@@ -78,9 +100,9 @@ export const useCreationNavigation = ({
     setTransitionGifUrl('');
   };
 
-  // Keep the same interface for backward compatibility
-  const nextIntroStep = (gifUrl?: string) => {
-    handleIntroNext(gifUrl);
+  // Backward compatibility methods
+  const nextIntroStep = () => {
+    handleIntroNext();
   };
 
   const prevIntroStep = () => {
