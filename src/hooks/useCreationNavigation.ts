@@ -24,23 +24,23 @@ const getTransitionGif = (fromStep: number, isIntro: boolean, hasStartedCreation
     // Creation step transitions
     if (fromStep === 1) { // Memory Question step
       console.log('Returning 01step GIF for creation step 1');
-      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//01step.mp4";
+      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//01step.gif";
     }
     if (fromStep === 3) { // Emotional Ingredients step
       console.log('Returning 02step GIF for creation step 3');
-      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//02step.mp4";
+      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//02step.gif";
     }
     if (fromStep === 5) { // Dedication Question step
       console.log('Returning 03step GIF for creation step 5');
-      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//03step.mp4";
+      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//03step.gif";
     }
     if (fromStep === 6) { // Controls Step
       console.log('Returning 04step GIF for creation step 6');
-      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//04step.mp4";
+      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//04step.gif";
     }
     if (fromStep === 7) { // Timeline Selection step - final step
       console.log('Returning 05step GIF for final timeline step');
-      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//05step.mp4";
+      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//05step.gif";
     }
   }
   

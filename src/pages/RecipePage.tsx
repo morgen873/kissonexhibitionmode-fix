@@ -19,12 +19,8 @@ const RecipePage = () => {
     const { currentTheme } = useTheme();
 
     useEffect(() => {
-        console.log('RecipePage component is rendering! Current URL:', window.location.href);
-        console.log('Received ID parameter:', id);
-        
         const fetchRecipe = async () => {
             if (!id) {
-                console.log('No ID provided to RecipePage');
                 setError("No recipe ID provided.");
                 setLoading(false);
                 return;

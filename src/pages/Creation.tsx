@@ -2,21 +2,20 @@
 import { useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import { useCreationForm } from '@/hooks/useCreationForm';
-import { useVideoNavigation } from '@/hooks/useVideoNavigation';
+import { useCreationNavigation } from '@/hooks/useCreationNavigation';
 import { useCreationProgress } from '@/hooks/useCreationProgress';
 import { stepThemes } from '@/data/creation';
 import { getCreationTitle, shouldShowTitle } from '@/components/creation/CreationTitleHandler';
 import GlobalLayout from '@/components/layout/GlobalLayout';
 import CreationLayout from '@/components/creation/CreationLayout';
 import CreationContent from '@/components/creation/CreationContent';
-
+import GifTransition from '@/components/creation/GifTransition';
 
 interface OutletContextType {
   setHeaderVisible: (visible: boolean) => void;
 }
 
 const Creation = () => {
-  console.log('Creation component is rendering! Current URL:', window.location.href);
   const {
     currentStep: creationStep,
     currentStepData: creationStepData,
@@ -42,7 +41,7 @@ const Creation = () => {
     currentIntroStep,
     hasStartedCreation,
     isTransitioning,
-    transitionVideoUrl,
+    transitionGifUrl,
     transitionDirection,
     transitionVariant,
     completeTransition,
@@ -55,7 +54,7 @@ const Creation = () => {
     nextIntroStep,
     prevIntroStep,
     resetNavigation
-  } = useVideoNavigation({
+  } = useCreationNavigation({
     nextCreationStep,
     prevCreationStep,
     handleSubmit,
@@ -119,6 +118,15 @@ const Creation = () => {
 
   return (
     <>
+      {/* GIF Transition Overlay */}
+      {isTransitioning && transitionGifUrl && (
+        <GifTransition
+          gifUrl={transitionGifUrl}
+          isVisible={isTransitioning}
+          onComplete={completeTransition}
+          duration={3000}
+        />
+      )}
 
       <GlobalLayout variant="creation" showHeader={false}>
         <CreationLayout
@@ -129,7 +137,7 @@ const Creation = () => {
           hasStartedCreation={hasStartedCreation}
           isTransitioning={isTransitioning}
           transitionDirection={transitionDirection}
-          transitionVariant={transitionVariant as 'geometric' | 'particle' | 'wave' | 'minimal' | 'loading'}
+          transitionVariant={transitionVariant}
           completeTransition={completeTransition}
         >
           <CreationContent

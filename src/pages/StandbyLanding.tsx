@@ -25,8 +25,8 @@ const StandbyLanding: React.FC = () => {
         />
       </div>
       
-      {/* Bottom buttons */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center space-y-4">
+      {/* Bottom button */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2" style={{ transform: 'translate(calc(-50% + 30px), 0)' }}>
         <Button 
           onClick={handleEnter} 
           size="lg" 
@@ -37,7 +37,6 @@ const StandbyLanding: React.FC = () => {
         >
           ENTER EXPERIENCE
         </Button>
-        
       </div>
     </div>
   );
