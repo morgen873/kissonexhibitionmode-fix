@@ -111,8 +111,8 @@ const Creation = () => {
   // Determine which auto-advance function to use based on step type
   const getAutoAdvanceFunction = () => {
     if (hasStartedCreation && creationStepData?.type === 'timeline') {
-      // For timeline step, use the special timeline submission handler
-      return handleTimelineSubmission;
+      // For timeline step, return a function that accepts the selected value
+      return (timelineValue?: string) => handleTimelineSubmission(timelineValue);
     }
     // For other steps, use normal navigation
     return handleCreationNext;

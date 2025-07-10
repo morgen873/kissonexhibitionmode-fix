@@ -13,7 +13,8 @@ export class RecipeService {
   static processAnswers(
     answers: { [key: number]: string },
     customAnswers: { [key: number]: string },
-    controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } }
+    controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } },
+    timelineValue?: string
   ): RecipePayload {
     const questionAnswers: { [key: string]: string } = {};
     const timelineAnswers: { [key: string]: string } = {};
@@ -37,6 +38,16 @@ export class RecipeService {
         }
       }
     });
+
+    // If we have a direct timeline value, use it instead of relying on state
+    if (timelineValue) {
+      console.log('Using direct timeline value:', timelineValue);
+      // Find the timeline step to get its ID
+      const timelineStep = steps.find(s => s.type === 'timeline');
+      if (timelineStep && 'id' in timelineStep) {
+        timelineAnswers[timelineStep.id.toString()] = timelineValue;
+      }
+    }
 
     return {
       questions: questionAnswers,

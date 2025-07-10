@@ -50,8 +50,8 @@ export const useCreationForm = () => {
     resetRecipe
   } = useRecipeSubmission();
 
-  const handleSubmit = async () => {
-    await submitRecipe(answers, customAnswers, controlValues);
+  const handleSubmit = async (timelineValue?: string) => {
+    await submitRecipe(answers, customAnswers, controlValues, timelineValue);
   };
 
   const handleReset = () => {

@@ -14,7 +14,7 @@ interface TimelineScreenProps {
     stepData: TimelineStep;
     selectedValue: string;
     onSelect: (value: string) => void;
-    onAutoAdvance?: () => void;
+    onAutoAdvance?: (value?: string) => void; // Updated to accept optional value
     theme: {
         optionSelectedBorder: string;
         optionSelectedShadow: string;
@@ -29,14 +29,13 @@ const TimelineScreen: React.FC<TimelineScreenProps> = ({ stepData, selectedValue
         // Save the selection first
         onSelect(value);
         
-        // For timeline step, trigger auto-advance after selection is processed
+        // For timeline step, trigger auto-advance with the selected value
         if (onAutoAdvance) {
-            console.log('Timeline selection complete, triggering auto-advance');
-            // Use React's scheduling to ensure state update is processed
+            console.log('Timeline selection complete, triggering auto-advance with value:', value);
+            // Pass the selected value directly to bypass race condition
             setTimeout(() => {
-                // Pass the selected value directly to ensure it's captured
-                onAutoAdvance();
-            }, 300); // Increased delay to ensure state update
+                onAutoAdvance(value); // Pass value directly
+            }, 200);
         }
     };
 

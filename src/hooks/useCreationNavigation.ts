@@ -6,7 +6,7 @@ import { steps } from '@/data/creation';
 interface UseCreationNavigationProps {
   nextCreationStep: () => void;
   prevCreationStep: () => void;
-  handleSubmit: () => void;
+  handleSubmit: (timelineValue?: string) => void; // Updated to accept optional timeline value
   currentCreationStep?: number;
 }
 
@@ -117,8 +117,8 @@ export const useCreationNavigation = ({
   };
 
   // This is called specifically by the timeline selection
-  const handleTimelineSubmission = () => {
-    console.log('Timeline selection completed, starting final submission');
+  const handleTimelineSubmission = (timelineValue?: string) => {
+    console.log('Timeline selection completed, starting final submission with value:', timelineValue);
     
     const mediaUrl = getTransitionMedia(currentCreationStep, false, hasStartedCreation);
     
@@ -127,15 +127,15 @@ export const useCreationNavigation = ({
       setTransitionGifUrl(mediaUrl);
       setIsTransitioning(true);
       setPendingSubmission(true);
-      // Add a small delay to ensure all state updates are processed before submission
+      // Pass the timeline value directly to handleSubmit
       setTimeout(() => {
-        handleSubmit();
+        handleSubmit(timelineValue);
       }, 100);
     } else {
       console.log('No final media, submitting directly');
-      // Add a small delay here too to ensure state consistency
+      // Pass the timeline value directly to handleSubmit
       setTimeout(() => {
-        handleSubmit();
+        handleSubmit(timelineValue);
       }, 100);
     }
   };

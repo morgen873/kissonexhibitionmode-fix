@@ -10,12 +10,13 @@ export const useRecipeSubmission = () => {
   const handleSubmit = async (
     answers: { [key: number]: string },
     customAnswers: { [key: number]: string },
-    controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } }
+    controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } },
+    timelineValue?: string
   ) => {
     setIsCreatingRecipe(true);
     
     try {
-      const payload = RecipeService.processAnswers(answers, customAnswers, controlValues);
+      const payload = RecipeService.processAnswers(answers, customAnswers, controlValues, timelineValue);
       const newRecipe = await RecipeService.generateRecipe(payload);
       const recipeUrl = RecipeService.createRecipeUrl(newRecipe.id);
 
