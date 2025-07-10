@@ -1,4 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft, Home, Settings } from 'lucide-react';
 import VideoManagementInterface from '@/components/creation/VideoManagementInterface';
 
 const VideoManager: React.FC = () => {
@@ -13,13 +16,38 @@ const VideoManager: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black p-8">
       <div className="max-w-4xl mx-auto space-y-8">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-green-400 font-mono mb-4">
-            Video Transition Manager
-          </h1>
-          <p className="text-green-400/70 font-mono">
-            Upload, manage, and test MP4 videos for recipe creation transitions
-          </p>
+        {/* Header with Navigation */}
+        <div className="flex items-center justify-between">
+          <div className="text-center flex-1">
+            <h1 className="text-3xl font-bold text-green-400 font-mono mb-4">
+              Video Transition Manager
+            </h1>
+            <p className="text-green-400/70 font-mono">
+              Upload, manage, and test MP4 videos for recipe creation transitions
+            </p>
+          </div>
+          
+          {/* Navigation */}
+          <div className="flex items-center space-x-2">
+            <Link to="/">
+              <Button variant="outline" size="sm" className="border-green-400/50 text-green-400 hover:bg-green-400/10">
+                <Home className="w-4 h-4 mr-2" />
+                Home
+              </Button>
+            </Link>
+            <Link to="/creation">
+              <Button variant="outline" size="sm" className="border-green-400/50 text-green-400 hover:bg-green-400/10">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Creation
+              </Button>
+            </Link>
+            <Link to="/video-test">
+              <Button variant="outline" size="sm" className="border-blue-400/50 text-blue-400 hover:bg-blue-400/10">
+                <Settings className="w-4 h-4 mr-2" />
+                Video Test
+              </Button>
+            </Link>
+          </div>
         </div>
 
         <VideoManagementInterface
