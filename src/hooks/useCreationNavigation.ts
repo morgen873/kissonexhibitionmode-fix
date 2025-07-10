@@ -18,7 +18,7 @@ const getTransitionMedia = (fromStep: number, isIntro: boolean, hasStartedCreati
     // Intro step transitions (now starting from step 1, not 0)
     if (fromStep === 4) { // Quote Step -> Creation begins
       console.log('Returning 3d-kisson media for quote step transition');
-      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//3d-kisson.gif";
+      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//3d-kisson.mp4";
     }
   } else if (hasStartedCreation) {
     // Creation step transitions
