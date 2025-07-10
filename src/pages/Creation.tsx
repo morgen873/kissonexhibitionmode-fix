@@ -10,6 +10,8 @@ import GlobalLayout from '@/components/layout/GlobalLayout';
 import CreationLayout from '@/components/creation/CreationLayout';
 import CreationContent from '@/components/creation/CreationContent';
 import GifTransition from '@/components/creation/GifTransition';
+import VideoTransition from '@/components/creation/VideoTransition';
+import { detectTransitionFileType, isVideoFile } from '@/utils/fileTypeDetector';
 
 interface OutletContextType {
   setHeaderVisible: (visible: boolean) => void;
@@ -116,16 +118,31 @@ const Creation = () => {
     return handleCreationNext;
   };
 
+  // Detect file type for proper transition component
+  const transitionFileType = detectTransitionFileType(transitionGifUrl);
+  const useVideoTransition = isVideoFile(transitionFileType);
+
   return (
     <>
-      {/* GIF Transition Overlay */}
+      {/* Transition Overlay - Dynamic based on file type */}
       {isTransitioning && transitionGifUrl && (
-        <GifTransition
-          gifUrl={transitionGifUrl}
-          isVisible={isTransitioning}
-          onComplete={completeTransition}
-          duration={3000}
-        />
+        <>
+          {useVideoTransition ? (
+            <VideoTransition
+              videoUrl={transitionGifUrl}
+              isVisible={isTransitioning}
+              onComplete={completeTransition}
+              duration={3000}
+            />
+          ) : (
+            <GifTransition
+              gifUrl={transitionGifUrl}
+              isVisible={isTransitioning}
+              onComplete={completeTransition}
+              duration={3000}
+            />
+          )}
+        </>
       )}
 
       <GlobalLayout variant="creation" showHeader={false}>

@@ -10,41 +10,41 @@ interface UseCreationNavigationProps {
   currentCreationStep?: number;
 }
 
-// GIF mappings for specific transitions
-const getTransitionGif = (fromStep: number, isIntro: boolean, hasStartedCreation: boolean): string | undefined => {
-  console.log('Getting transition GIF for:', { fromStep, isIntro, hasStartedCreation });
+// Media file mappings for specific transitions (GIFs and MP4s)
+const getTransitionMedia = (fromStep: number, isIntro: boolean, hasStartedCreation: boolean): string | undefined => {
+  console.log('Getting transition media for:', { fromStep, isIntro, hasStartedCreation });
   
   if (isIntro) {
     // Intro step transitions (now starting from step 1, not 0)
     if (fromStep === 4) { // Quote Step -> Creation begins
-      console.log('Returning 3d-kisson GIF for quote step transition');
+      console.log('Returning 3d-kisson media for quote step transition');
       return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//3d-kisson.gif";
     }
   } else if (hasStartedCreation) {
     // Creation step transitions
     if (fromStep === 1) { // Memory Question step
-      console.log('Returning 01step GIF for creation step 1');
+      console.log('Returning 01step media for creation step 1');
       return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//01step.mp4";
     }
     if (fromStep === 3) { // Emotional Ingredients step
-      console.log('Returning 02step GIF for creation step 3');
+      console.log('Returning 02step media for creation step 3');
       return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//02step.mp4";
     }
     if (fromStep === 5) { // Dedication Question step
-      console.log('Returning 03step GIF for creation step 5');
+      console.log('Returning 03step media for creation step 5');
       return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//03step.mp4";
     }
     if (fromStep === 6) { // Controls Step
-      console.log('Returning 04step GIF for creation step 6');
+      console.log('Returning 04step media for creation step 6');
       return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//04step.mp4";
     }
     if (fromStep === 7) { // Timeline Selection step - final step
-      console.log('Returning 05step GIF for final timeline step');
+      console.log('Returning 05step media for final timeline step');
       return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//05step.mp4";
     }
   }
   
-  console.log('No GIF found for transition');
+  console.log('No media found for transition');
   return undefined;
 };
 
@@ -61,17 +61,17 @@ export const useCreationNavigation = ({
   const [transitionGifUrl, setTransitionGifUrl] = useState<string>('');
   const [pendingSubmission, setPendingSubmission] = useState(false);
 
-  // Enhanced navigation handlers with GIF transition support
+  // Enhanced navigation handlers with media transition support
   const handleIntroNext = () => {
     console.log('HandleIntroNext called for step:', currentIntroStep);
-    const gifUrl = getTransitionGif(currentIntroStep, true, hasStartedCreation);
+    const mediaUrl = getTransitionMedia(currentIntroStep, true, hasStartedCreation);
     
-    if (gifUrl) {
-      console.log('Starting GIF transition with URL:', gifUrl);
-      setTransitionGifUrl(gifUrl);
+    if (mediaUrl) {
+      console.log('Starting transition with URL:', mediaUrl);
+      setTransitionGifUrl(mediaUrl);
       setIsTransitioning(true);
     } else {
-      console.log('No GIF for this transition, proceeding directly');
+      console.log('No media for this transition, proceeding directly');
       proceedToNextIntroStep();
     }
   };
@@ -100,14 +100,14 @@ export const useCreationNavigation = ({
       return; // Let the timeline handle its own submission
     }
     
-    const gifUrl = getTransitionGif(currentCreationStep, false, hasStartedCreation);
+    const mediaUrl = getTransitionMedia(currentCreationStep, false, hasStartedCreation);
     
-    if (gifUrl) {
-      console.log('Starting GIF transition with URL:', gifUrl);
-      setTransitionGifUrl(gifUrl);
+    if (mediaUrl) {
+      console.log('Starting transition with URL:', mediaUrl);
+      setTransitionGifUrl(mediaUrl);
       setIsTransitioning(true);
     } else {
-      console.log('No GIF for this transition, proceeding directly');
+      console.log('No media for this transition, proceeding directly');
       nextCreationStep();
     }
   };
@@ -120,17 +120,17 @@ export const useCreationNavigation = ({
   const handleTimelineSubmission = () => {
     console.log('Timeline selection completed, starting final submission');
     
-    const gifUrl = getTransitionGif(currentCreationStep, false, hasStartedCreation);
+    const mediaUrl = getTransitionMedia(currentCreationStep, false, hasStartedCreation);
     
-    if (gifUrl) {
-      console.log('Starting final GIF transition with URL:', gifUrl);
-      setTransitionGifUrl(gifUrl);
+    if (mediaUrl) {
+      console.log('Starting final transition with URL:', mediaUrl);
+      setTransitionGifUrl(mediaUrl);
       setIsTransitioning(true);
       setPendingSubmission(true);
       // Start recipe submission during GIF
       handleSubmit();
     } else {
-      console.log('No final GIF, submitting directly');
+      console.log('No final media, submitting directly');
       handleSubmit();
     }
   };
