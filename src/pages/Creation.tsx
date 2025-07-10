@@ -2,14 +2,14 @@
 import { useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import { useCreationForm } from '@/hooks/useCreationForm';
-import { useCreationNavigation } from '@/hooks/useCreationNavigation';
+import { useVideoNavigation } from '@/hooks/useVideoNavigation';
 import { useCreationProgress } from '@/hooks/useCreationProgress';
 import { stepThemes } from '@/data/creation';
 import { getCreationTitle, shouldShowTitle } from '@/components/creation/CreationTitleHandler';
 import GlobalLayout from '@/components/layout/GlobalLayout';
 import CreationLayout from '@/components/creation/CreationLayout';
 import CreationContent from '@/components/creation/CreationContent';
-import GifTransition from '@/components/creation/GifTransition';
+import VideoTransition from '@/components/creation/VideoTransition';
 
 interface OutletContextType {
   setHeaderVisible: (visible: boolean) => void;
@@ -41,7 +41,7 @@ const Creation = () => {
     currentIntroStep,
     hasStartedCreation,
     isTransitioning,
-    transitionGifUrl,
+    transitionVideoUrl,
     transitionDirection,
     transitionVariant,
     completeTransition,
@@ -53,8 +53,11 @@ const Creation = () => {
     handleTimelineSubmission,
     nextIntroStep,
     prevIntroStep,
-    resetNavigation
-  } = useCreationNavigation({
+    resetNavigation,
+    availableVideos,
+    videosLoaded,
+    refreshVideos
+  } = useVideoNavigation({
     nextCreationStep,
     prevCreationStep,
     handleSubmit,
@@ -118,13 +121,14 @@ const Creation = () => {
 
   return (
     <>
-      {/* GIF Transition Overlay */}
-      {isTransitioning && transitionGifUrl && (
-        <GifTransition
-          gifUrl={transitionGifUrl}
+      {/* Video Transition Overlay */}
+      {isTransitioning && transitionVideoUrl && (
+        <VideoTransition
+          videoUrl={transitionVideoUrl}
           isVisible={isTransitioning}
           onComplete={completeTransition}
-          duration={3000}
+          duration={2000}
+          fallbackVariant="geometric"
         />
       )}
 
@@ -137,7 +141,7 @@ const Creation = () => {
           hasStartedCreation={hasStartedCreation}
           isTransitioning={isTransitioning}
           transitionDirection={transitionDirection}
-          transitionVariant={transitionVariant}
+          transitionVariant={transitionVariant as 'geometric' | 'particle' | 'wave' | 'minimal' | 'loading'}
           completeTransition={completeTransition}
         >
           <CreationContent

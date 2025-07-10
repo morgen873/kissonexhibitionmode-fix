@@ -11,7 +11,7 @@ interface CreationLayoutProps {
   hasStartedCreation: boolean;
   isTransitioning: boolean;
   transitionDirection: 'forward' | 'backward';
-  transitionVariant?: 'geometric' | 'particle' | 'wave' | 'minimal' | 'loading';
+  transitionVariant?: 'geometric' | 'particle' | 'wave' | 'minimal' | 'loading' | 'video';
   completeTransition: () => void;
   children: React.ReactNode;
 }
