@@ -16,6 +16,7 @@ interface OutletContextType {
 }
 
 const Creation = () => {
+  console.log('Creation component is rendering! Current URL:', window.location.href);
   const {
     currentStep: creationStep,
     currentStepData: creationStepData,
