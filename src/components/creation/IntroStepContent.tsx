@@ -19,7 +19,7 @@ const IntroStepContent: React.FC<IntroStepContentProps> = ({
       case 'hero':
         return <div className="flex flex-col items-center justify-center text-center px-4 py-4 space-y-4 sm:space-y-6 sm:py-0 sm:px-0">
             <img 
-              src="https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//stove.gif" 
+              src="https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//stove.mp4" 
               alt="Cooking on stovetop" 
               className="w-full max-w-4xl h-auto max-h-[60vh] object-cover rounded-lg mb-2" 
             />
