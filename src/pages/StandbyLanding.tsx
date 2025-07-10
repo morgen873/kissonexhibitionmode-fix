@@ -15,7 +15,7 @@ const StandbyLanding: React.FC = () => {
       {/* Full screen GIF */}
       <div className="flex-1 relative overflow-hidden">
         <img 
-          src="https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//stove.gif" 
+          src="https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//stove.mp4" 
           alt="Cooking on stovetop" 
           className="w-full h-full object-cover" 
           style={{
@@ -25,8 +25,8 @@ const StandbyLanding: React.FC = () => {
         />
       </div>
       
-      {/* Bottom button */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2" style={{ transform: 'translate(calc(-50% + 30px), 0)' }}>
+      {/* Bottom buttons */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center space-y-4">
         <Button 
           onClick={handleEnter} 
           size="lg" 
@@ -36,6 +36,16 @@ const StandbyLanding: React.FC = () => {
           }}
         >
           ENTER EXPERIENCE
+        </Button>
+        
+        {/* Quick access to video manager */}
+        <Button 
+          onClick={() => navigate('/video-manager')} 
+          size="sm" 
+          variant="outline"
+          className="bg-black/50 border-green-400/50 text-green-400 hover:bg-green-400/10 hover:border-green-400 backdrop-blur-sm font-mono"
+        >
+          🎬 Manage Videos
         </Button>
       </div>
     </div>
