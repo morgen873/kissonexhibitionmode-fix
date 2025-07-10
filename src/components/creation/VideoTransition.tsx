@@ -9,6 +9,7 @@ interface VideoTransitionProps {
   onError?: (error: string) => void;
   fallbackVariant?: 'geometric' | 'particle' | 'wave';
   duration?: number;
+  isCreatingRecipe?: boolean;
 }
 
 const VideoTransition: React.FC<VideoTransitionProps> = ({
@@ -17,12 +18,14 @@ const VideoTransition: React.FC<VideoTransitionProps> = ({
   onComplete,
   onError,
   fallbackVariant = 'geometric',
-  duration = 2000
+  duration = 2000,
+  isCreatingRecipe = false
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [showFallback, setShowFallback] = useState(false);
+  const [videoCompleted, setVideoCompleted] = useState(false);
 
   useEffect(() => {
     if (!isVisible) {
@@ -45,8 +48,8 @@ const VideoTransition: React.FC<VideoTransitionProps> = ({
     };
 
     const handleEnded = () => {
-      console.log('Video transition completed');
-      onComplete();
+      console.log('Video playback completed');
+      setVideoCompleted(true);
     };
 
     const handleError = (errorMessage: string) => {
@@ -85,6 +88,14 @@ const VideoTransition: React.FC<VideoTransitionProps> = ({
     };
   }, [isVisible, videoUrl, onComplete, onError, isLoading, hasError]);
 
+  // Separate effect to handle completion when recipe is ready
+  useEffect(() => {
+    if (videoCompleted && !isCreatingRecipe && isVisible) {
+      console.log('Video completed and recipe ready, completing transition');
+      onComplete();
+    }
+  }, [videoCompleted, isCreatingRecipe, isVisible, onComplete]);
+
   if (!isVisible) return null;
 
   if (showFallback) {
@@ -108,11 +119,11 @@ const VideoTransition: React.FC<VideoTransitionProps> = ({
       className="fixed top-0 left-0 w-screen h-screen bg-black flex items-center justify-center overflow-hidden"
       style={{ zIndex: 9999 }}
     >
-      {isLoading && (
+      {(isLoading || (videoCompleted && isCreatingRecipe)) && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-black">
           <LoadingSpinner size="lg" variant="spin" />
           <p className="text-white text-lg font-mono mt-4 animate-pulse">
-            Loading transition...
+            {isLoading ? 'Loading transition...' : 'Creating your recipe...'}
           </p>
         </div>
       )}

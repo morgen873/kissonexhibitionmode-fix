@@ -6,16 +6,19 @@ interface GifTransitionProps {
   isVisible: boolean;
   onComplete: () => void;
   duration?: number;
+  isCreatingRecipe?: boolean;
 }
 
 const GifTransition: React.FC<GifTransitionProps> = ({
   gifUrl,
   isVisible,
   onComplete,
-  duration = 3000
+  duration = 3000,
+  isCreatingRecipe = false
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
+  const [gifCompleted, setGifCompleted] = useState(false);
 
   useEffect(() => {
     if (!isVisible) {
@@ -34,10 +37,10 @@ const GifTransition: React.FC<GifTransitionProps> = ({
       setIsLoading(false);
       setHasError(false);
       
-      // Auto-complete the transition after the specified duration
+      // Mark GIF as completed after the initial duration, but don't call onComplete yet
       const timer = setTimeout(() => {
-        console.log('GIF transition duration completed, calling onComplete');
-        onComplete();
+        console.log('GIF initial duration completed');
+        setGifCompleted(true);
       }, duration);
 
       return () => clearTimeout(timer);
@@ -64,6 +67,14 @@ const GifTransition: React.FC<GifTransitionProps> = ({
       img.onerror = null;
     };
   }, [isVisible, gifUrl, onComplete, duration]);
+
+  // Separate effect to handle completion when recipe is ready
+  useEffect(() => {
+    if (gifCompleted && !isCreatingRecipe && isVisible) {
+      console.log('GIF completed and recipe ready, completing transition');
+      onComplete();
+    }
+  }, [gifCompleted, isCreatingRecipe, isVisible, onComplete]);
 
   if (!isVisible) {
     return null;
@@ -96,12 +107,14 @@ const GifTransition: React.FC<GifTransitionProps> = ({
         }}
       />
       
-      {/* Only show loading overlay if still loading */}
-      {isLoading && (
+      {/* Only show loading overlay if still loading or waiting for recipe */}
+      {(isLoading || (gifCompleted && isCreatingRecipe)) && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/50">
           <div className="text-center space-y-4">
             <div className="w-16 h-16 border-4 border-green-400 border-t-transparent rounded-full animate-spin mx-auto"></div>
-            <p className="text-green-400 font-mono">Loading transition...</p>
+            <p className="text-green-400 font-mono">
+              {isLoading ? 'Loading transition...' : 'Creating your recipe...'}
+            </p>
           </div>
         </div>
       )}

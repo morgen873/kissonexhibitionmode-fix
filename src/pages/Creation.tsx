@@ -133,6 +133,7 @@ const Creation = () => {
               isVisible={isTransitioning}
               onComplete={completeTransition}
               duration={3000}
+              isCreatingRecipe={isCreatingRecipe}
             />
           ) : (
             <GifTransition
@@ -140,6 +141,7 @@ const Creation = () => {
               isVisible={isTransitioning}
               onComplete={completeTransition}
               duration={3000}
+              isCreatingRecipe={isCreatingRecipe}
             />
           )}
         </>
