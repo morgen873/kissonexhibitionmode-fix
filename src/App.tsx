@@ -10,8 +10,6 @@ import Creation from "./pages/Creation";
 import RecipePage from "./pages/RecipePage";
 import StandbyLanding from "./pages/StandbyLanding";
 import MainLayout from "./components/layout/MainLayout";
-import VideoTransitionTest from "./components/creation/VideoTransitionTest";
-import VideoManager from "./pages/VideoManager";
 
 const queryClient = new QueryClient();
 
@@ -29,8 +27,6 @@ const App = () => (
               <Route path="/creation" element={<Creation />} />
               <Route path="/recipe/:id" element={<RecipePage />} />
             </Route>
-            <Route path="/video-test" element={<VideoTransitionTest />} />
-            <Route path="/video-manager" element={<VideoManager />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

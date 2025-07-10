@@ -9,7 +9,7 @@ import { getCreationTitle, shouldShowTitle } from '@/components/creation/Creatio
 import GlobalLayout from '@/components/layout/GlobalLayout';
 import CreationLayout from '@/components/creation/CreationLayout';
 import CreationContent from '@/components/creation/CreationContent';
-import VideoTransition from '@/components/creation/VideoTransition';
+
 
 interface OutletContextType {
   setHeaderVisible: (visible: boolean) => void;
@@ -53,10 +53,7 @@ const Creation = () => {
     handleTimelineSubmission,
     nextIntroStep,
     prevIntroStep,
-    resetNavigation,
-    availableVideos,
-    videosLoaded,
-    refreshVideos
+    resetNavigation
   } = useVideoNavigation({
     nextCreationStep,
     prevCreationStep,
@@ -121,16 +118,6 @@ const Creation = () => {
 
   return (
     <>
-      {/* Video Transition Overlay */}
-      {isTransitioning && transitionVideoUrl && (
-        <VideoTransition
-          videoUrl={transitionVideoUrl}
-          isVisible={isTransitioning}
-          onComplete={completeTransition}
-          duration={2000}
-          fallbackVariant="geometric"
-        />
-      )}
 
       <GlobalLayout variant="creation" showHeader={false}>
         <CreationLayout

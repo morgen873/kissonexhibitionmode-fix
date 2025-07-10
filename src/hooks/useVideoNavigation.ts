@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { introSteps } from "@/data/introSteps";
 import { steps } from '@/data/creation';
-import { VideoRetriever, VideoFile } from '@/utils/videoRetriever';
 
 interface UseVideoNavigationProps {
   nextCreationStep: () => void;
@@ -28,54 +27,18 @@ const DEFAULT_TRANSITION_VIDEOS = {
 const getTransitionVideo = (
   fromStep: number, 
   isIntro: boolean, 
-  hasStartedCreation: boolean,
-  availableVideos: VideoFile[]
+  hasStartedCreation: boolean
 ): string | undefined => {
   console.log('Getting transition video for:', { fromStep, isIntro, hasStartedCreation });
-  
-  let targetVideoName = '';
   
   if (isIntro) {
     // Intro step transitions
     if (fromStep === 4) { // Quote Step -> Creation begins
-      targetVideoName = '3d-kisson';
+      return DEFAULT_TRANSITION_VIDEOS.intro[fromStep as keyof typeof DEFAULT_TRANSITION_VIDEOS.intro];
     }
   } else if (hasStartedCreation) {
     // Creation step transitions
-    const stepVideoMap: { [key: number]: string } = {
-      1: '01step',
-      3: '02step', 
-      5: '03step',
-      6: '04step',
-      7: '05step'
-    };
-    
-    targetVideoName = stepVideoMap[fromStep] || '';
-  }
-  
-  if (!targetVideoName) {
-    console.log('No video mapping found for this transition');
-    return undefined;
-  }
-  
-  // Try to find the video in the available videos first
-  const dynamicVideo = availableVideos.find(video => 
-    video.name.toLowerCase().includes(targetVideoName.toLowerCase())
-  );
-  
-  if (dynamicVideo) {
-    console.log('Found dynamic video:', dynamicVideo.url);
-    return dynamicVideo.url;
-  }
-  
-  // Fallback to default URLs
-  const fallbackUrl = isIntro 
-    ? DEFAULT_TRANSITION_VIDEOS.intro[fromStep as keyof typeof DEFAULT_TRANSITION_VIDEOS.intro]
-    : DEFAULT_TRANSITION_VIDEOS.creation[fromStep as keyof typeof DEFAULT_TRANSITION_VIDEOS.creation];
-    
-  if (fallbackUrl) {
-    console.log('Using fallback video URL:', fallbackUrl);
-    return fallbackUrl;
+    return DEFAULT_TRANSITION_VIDEOS.creation[fromStep as keyof typeof DEFAULT_TRANSITION_VIDEOS.creation];
   }
   
   console.log('No video found for transition');
@@ -94,31 +57,11 @@ export const useVideoNavigation = ({
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [transitionVideoUrl, setTransitionVideoUrl] = useState<string>('');
   const [pendingSubmission, setPendingSubmission] = useState(false);
-  const [availableVideos, setAvailableVideos] = useState<VideoFile[]>([]);
-  const [videosLoaded, setVideosLoaded] = useState(false);
-
-  // Load available videos on mount
-  useEffect(() => {
-    const loadVideos = async () => {
-      try {
-        console.log('Loading available videos from Supabase...');
-        const videos = await VideoRetriever.getAvailableVideos();
-        console.log('Loaded videos:', videos.map(v => ({ name: v.name, url: v.url })));
-        setAvailableVideos(videos);
-        setVideosLoaded(true);
-      } catch (error) {
-        console.error('Failed to load videos:', error);
-        setVideosLoaded(true); // Still set to true to allow fallback URLs
-      }
-    };
-
-    loadVideos();
-  }, []);
 
   // Enhanced navigation handlers with video transition support
   const handleIntroNext = () => {
     console.log('HandleIntroNext called for step:', currentIntroStep);
-    const videoUrl = getTransitionVideo(currentIntroStep, true, hasStartedCreation, availableVideos);
+    const videoUrl = getTransitionVideo(currentIntroStep, true, hasStartedCreation);
     
     if (videoUrl) {
       console.log('Starting video transition with URL:', videoUrl);
@@ -154,7 +97,7 @@ export const useVideoNavigation = ({
       return; // Let the timeline handle its own submission
     }
     
-    const videoUrl = getTransitionVideo(currentCreationStep, false, hasStartedCreation, availableVideos);
+    const videoUrl = getTransitionVideo(currentCreationStep, false, hasStartedCreation);
     
     if (videoUrl) {
       console.log('Starting video transition with URL:', videoUrl);
@@ -174,7 +117,7 @@ export const useVideoNavigation = ({
   const handleTimelineSubmission = () => {
     console.log('Timeline selection completed, starting final submission');
     
-    const videoUrl = getTransitionVideo(currentCreationStep, false, hasStartedCreation, availableVideos);
+    const videoUrl = getTransitionVideo(currentCreationStep, false, hasStartedCreation);
     
     if (videoUrl) {
       console.log('Starting final video transition with URL:', videoUrl);
@@ -232,16 +175,6 @@ export const useVideoNavigation = ({
     handleIntroPrev();
   };
 
-  // Method to refresh available videos
-  const refreshVideos = async () => {
-    try {
-      const videos = await VideoRetriever.getAvailableVideos();
-      setAvailableVideos(videos);
-      console.log('Videos refreshed:', videos.length, 'videos loaded');
-    } catch (error) {
-      console.error('Failed to refresh videos:', error);
-    }
-  };
 
   return {
     currentIntroStep,
@@ -259,10 +192,6 @@ export const useVideoNavigation = ({
     handleTimelineSubmission, // New method for timeline-specific submission
     nextIntroStep,
     prevIntroStep,
-    resetNavigation,
-    // Video management
-    availableVideos,
-    videosLoaded,
-    refreshVideos
+    resetNavigation
   };
 };
