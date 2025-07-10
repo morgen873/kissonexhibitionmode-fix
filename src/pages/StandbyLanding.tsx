@@ -38,15 +38,6 @@ const StandbyLanding: React.FC = () => {
           ENTER EXPERIENCE
         </Button>
         
-        {/* Quick access to video manager */}
-        <Button 
-          onClick={() => navigate('/video-manager')} 
-          size="sm" 
-          variant="outline"
-          className="bg-black/50 border-green-400/50 text-green-400 hover:bg-green-400/10 hover:border-green-400 backdrop-blur-sm font-mono"
-        >
-          🎬 Manage Videos
-        </Button>
       </div>
     </div>
   );
