@@ -127,11 +127,16 @@ export const useCreationNavigation = ({
       setTransitionGifUrl(mediaUrl);
       setIsTransitioning(true);
       setPendingSubmission(true);
-      // Start recipe submission during GIF
-      handleSubmit();
+      // Add a small delay to ensure all state updates are processed before submission
+      setTimeout(() => {
+        handleSubmit();
+      }, 100);
     } else {
       console.log('No final media, submitting directly');
-      handleSubmit();
+      // Add a small delay here too to ensure state consistency
+      setTimeout(() => {
+        handleSubmit();
+      }, 100);
     }
   };
 

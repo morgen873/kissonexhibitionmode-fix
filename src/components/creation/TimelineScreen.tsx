@@ -25,15 +25,18 @@ interface TimelineScreenProps {
 const TimelineScreen: React.FC<TimelineScreenProps> = ({ stepData, selectedValue, onSelect, onAutoAdvance, theme }) => {
     const handleOptionSelect = (value: string) => {
         console.log('Timeline option selected:', value);
+        
+        // Save the selection first
         onSelect(value);
         
         // For timeline step, trigger auto-advance after selection is processed
         if (onAutoAdvance) {
             console.log('Timeline selection complete, triggering auto-advance');
-            // Small delay to ensure the selection is processed and saved
+            // Use React's scheduling to ensure state update is processed
             setTimeout(() => {
+                // Pass the selected value directly to ensure it's captured
                 onAutoAdvance();
-            }, 200);
+            }, 300); // Increased delay to ensure state update
         }
     };
 
