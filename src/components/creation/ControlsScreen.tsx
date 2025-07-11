@@ -55,7 +55,7 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
     <div ref={containerRef} className="w-full flex flex-col touch-spacing text-white/90 overflow-y-auto touch-safe-area" style={{
       scrollBehavior: 'auto'
     }}>
-      <p className="text-center text-white/80 whitespace-pre-line font-mono mb-6 touch:mb-8 w-full responsive-text font-bold">
+      <p className="text-center text-white/80 whitespace-pre-line font-mono mb-6 w-full responsive-text font-bold">
         {stepData.description}
       </p>
       
@@ -69,8 +69,8 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
       <ControlsValues controls={controls} controlValues={controlValues} />
 
       {/* Enhancer Input */}
-      <div className="w-full bg-black/20 backdrop-blur-sm border-2 touch:border-4 border-green-400/20 rounded-2xl touch:rounded-3xl touch-padding shadow-lg shadow-green-400/5">
-        <EnhancerInput 
+      <div className="w-full bg-black/20 backdrop-blur-sm border-2 border-green-400/20 rounded-2xl touch-padding shadow-lg shadow-green-400/5">
+        <EnhancerInput
           value={controlValues.enhancer} 
           onChange={onEnhancerChange} 
           placeholder="You can add a special ingredient here..."

@@ -63,21 +63,21 @@ const QuestionScreen: React.FC<QuestionScreenProps> = ({
     return (
         <>
             {/* Grid layout for regular options */}
-            <div className="touch-grid mb-6 touch:mb-8">
+            <div className="touch-grid mb-6">
                 {regularOptions.map((option) => (
                     <div
                         key={option.title}
                         onClick={() => handleOptionSelect(option.title)}
                         className={`
-                            touch-padding rounded-lg touch:rounded-xl transition-all duration-300 cursor-pointer font-mono text-center touch-target active:scale-95
+                            touch-padding rounded-lg transition-all duration-300 cursor-pointer font-mono text-center touch-target active:scale-95
                             ${answers[stepData.id] === option.title
-                                ? `bg-white/20 border-2 touch:border-4 ${theme.optionSelectedBorder} scale-105 shadow-lg ${theme.optionSelectedShadow}`
-                                : `bg-white/10 border-2 touch:border-4 border-white/20 ${theme.optionHover} hover:scale-102`
+                                ? `bg-white/20 border-2 ${theme.optionSelectedBorder} scale-105 shadow-lg ${theme.optionSelectedShadow}`
+                                : `bg-white/10 border-2 border-white/20 ${theme.optionHover} hover:scale-102`
                             }
                         `}
                     >
                         <h4 className="font-bold responsive-text text-white font-mono text-center">{option.title}</h4>
-                        <p className="responsive-text-sm text-white/80 mt-2 touch:mt-3 font-mono text-center">{option.description}</p>
+                        <p className="responsive-text-sm text-white/80 mt-2 font-mono text-center">{option.description}</p>
                     </div>
                 ))}
             </div>
@@ -88,27 +88,27 @@ const QuestionScreen: React.FC<QuestionScreenProps> = ({
                     <div
                         onClick={() => handleOptionSelect(stepData.customOption!.title)}
                         className={`
-                            touch-padding rounded-lg touch:rounded-xl transition-all duration-300 cursor-pointer font-mono text-center w-full touch-target active:scale-95
+                            touch-padding rounded-lg transition-all duration-300 cursor-pointer font-mono text-center w-full touch-target active:scale-95
                             ${answers[stepData.id] === stepData.customOption!.title
-                                ? `bg-white/20 border-2 touch:border-4 ${theme.optionSelectedBorder} scale-105 shadow-lg ${theme.optionSelectedShadow}`
-                                : `bg-white/10 border-2 touch:border-4 border-white/20 ${theme.optionHover} hover:scale-102`
+                                ? `bg-white/20 border-2 ${theme.optionSelectedBorder} scale-105 shadow-lg ${theme.optionSelectedShadow}`
+                                : `bg-white/10 border-2 border-white/20 ${theme.optionHover} hover:scale-102`
                             }
                         `}
                     >
                         <h4 className="font-bold responsive-text text-white font-mono text-center">{stepData.customOption!.title}</h4>
-                        <p className="responsive-text-sm text-white/80 mt-2 touch:mt-3 font-mono text-center">Share your own special memory</p>
+                        <p className="responsive-text-sm text-white/80 mt-2 font-mono text-center">Share your own special memory</p>
                     </div>
 
                     {/* Custom textarea when selected */}
                     {answers[stepData.id] === stepData.customOption!.title && (
-                        <div className="mt-6 touch:mt-8">
-                            <label htmlFor="custom-answer" className="block responsive-text-sm font-medium text-white/80 mb-3 touch:mb-4 font-mono text-center">
+                        <div className="mt-6">
+                            <label htmlFor="custom-answer" className="block responsive-text-sm font-medium text-white/80 mb-3 font-mono text-center">
                                 {stepData.customOption!.title}:
                             </label>
                             <textarea
                                 id="custom-answer"
                                 rows={4}
-                                className={`w-full bg-white/10 border-white/20 border-2 touch:border-4 rounded-lg touch:rounded-xl touch-padding responsive-text text-white block transition ${theme.textAreaFocus} font-mono text-center touch-target ${profanityWarning ? 'border-red-500' : ''}`}
+                                className={`w-full bg-white/10 border-white/20 border-2 rounded-lg touch-padding responsive-text text-white block transition ${theme.textAreaFocus} font-mono text-center touch-target ${profanityWarning ? 'border-red-500' : ''}`}
                                 value={customAnswers[stepData.id] || ''}
                                 onChange={handleTextChange}
                                 placeholder={stepData.customOption!.placeholder}
@@ -122,7 +122,7 @@ const QuestionScreen: React.FC<QuestionScreenProps> = ({
                                 }}
                             />
                             {profanityWarning && (
-                                <p className="text-red-400 responsive-text-sm mt-3 touch:mt-4 font-mono text-center">
+                                <p className="text-red-400 responsive-text-sm mt-3 font-mono text-center">
                                     Please use appropriate language. Food-related terms like "black coffee" or "white chocolate" are allowed.
                                 </p>
                             )}

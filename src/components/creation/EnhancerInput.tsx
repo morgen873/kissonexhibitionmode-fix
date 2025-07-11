@@ -33,7 +33,7 @@ const EnhancerInput: React.FC<EnhancerInputProps> = ({
         <div className="touch-spacing">
             <textarea
                 rows={1}
-                className={`w-full bg-white/10 border-2 touch:border-4 rounded-lg touch:rounded-xl touch-padding responsive-text text-white block transition focus:ring-white focus:border-white font-mono text-center resize-none touch-target ${
+                className={`w-full bg-white/10 border-2 rounded-lg touch-padding responsive-text text-white block transition focus:ring-white focus:border-white font-mono text-center resize-none touch-target ${
                     profanityWarning ? 'border-red-500' : 'border-white/20'
                 }`}
                 value={value}
@@ -41,7 +41,7 @@ const EnhancerInput: React.FC<EnhancerInputProps> = ({
                 placeholder={placeholder}
             />
             {profanityWarning && (
-                <p className="text-red-400 responsive-text-sm mt-3 touch:mt-4 font-mono text-center">
+                <p className="text-red-400 responsive-text-sm mt-3 font-mono text-center">
                     Please use appropriate language. Food-related terms like "black pepper" or "white sauce" are allowed.
                 </p>
             )}

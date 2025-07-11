@@ -56,18 +56,18 @@ const CreationContainer: React.FC<CreationContainerProps> = ({
 
       <div className="relative z-10 min-h-screen flex flex-col">
         {/* Progress Bar at top */}
-        <div className="w-full touch-container pt-4 sm:pt-8 touch:pt-12">
-          <div className="w-full max-w-6xl touch:max-w-none mx-auto">
+        <div className="w-full touch-container pt-4 sm:pt-8">
+          <div className="w-full max-w-6xl mx-auto">
             <ProgressBar progress={progress} theme={theme} />
           </div>
         </div>
 
         {/* Main Content Card - Centered */}
-        <div className="flex-1 flex items-center justify-center touch-container py-4 sm:py-6 touch:py-8">
-          <Card className={`w-full max-w-6xl touch:max-w-none ${currentTheme.colors.surface} ${theme.cardShadow} ${currentTheme.effects.borderRadius} transition-all duration-500 backdrop-blur-2xl border-2 touch:border-4 ${currentTheme.colors.border} shadow-2xl`}>
+        <div className="flex-1 flex items-center justify-center touch-container py-4 sm:py-6">
+          <Card className={`w-full max-w-6xl ${currentTheme.colors.surface} ${theme.cardShadow} ${currentTheme.effects.borderRadius} transition-all duration-500 backdrop-blur-2xl border-2 ${currentTheme.colors.border} shadow-2xl touch-card`}>
             <CardHeader className="touch-padding py-0 px-0">
               {showTitle && (
-                <CardTitle className={`responsive-heading-lg touch:text-5xl text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent drop-shadow-lg min-h-[60px] sm:min-h-[80px] touch:min-h-[120px] flex items-center justify-center ${currentTheme.fonts.primary} font-bold`}>
+                <CardTitle className={`responsive-heading-lg text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent drop-shadow-lg min-h-[60px] sm:min-h-[80px] flex items-center justify-center ${currentTheme.fonts.primary} font-bold touch-title`}>
                   {title}
                 </CardTitle>
               )}
