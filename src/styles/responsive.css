@@ -3,7 +3,16 @@
 
 /* Container utilities */
 .responsive-container {
-  @apply w-full max-w-7xl mx-auto px-3 sm:px-4 lg:px-8;
+  @apply w-full max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 touch:px-12;
+}
+
+/* Touch-optimized containers */
+.touch-container {
+  @apply w-full max-w-none mx-auto px-4 sm:px-6 lg:px-12 touch:px-20;
+}
+
+.touch-container-full {
+  @apply w-full max-w-full mx-auto px-6 sm:px-8 lg:px-16 touch:px-24;
 }
 
 .responsive-container-sm {
@@ -24,40 +33,66 @@
 
 /* Spacing utilities */
 .responsive-padding {
-  @apply p-3 sm:p-4 lg:p-8;
+  @apply p-3 sm:p-4 lg:p-8 touch:p-12;
 }
 
 .responsive-padding-sm {
-  @apply p-2 sm:p-3 lg:p-4;
+  @apply p-2 sm:p-3 lg:p-4 touch:p-6;
 }
 
 .responsive-margin {
-  @apply m-3 sm:m-4 lg:m-8;
+  @apply m-3 sm:m-4 lg:m-8 touch:m-12;
 }
 
 .responsive-gap {
-  @apply gap-3 sm:gap-4 lg:gap-6;
+  @apply gap-3 sm:gap-4 lg:gap-6 touch:gap-8;
+}
+
+/* Touch-specific spacing utilities */
+.touch-padding {
+  @apply p-6 sm:p-8 lg:p-12 touch:p-16;
+}
+
+.touch-gap {
+  @apply gap-6 sm:gap-8 lg:gap-10 touch:gap-12;
+}
+
+.touch-margin {
+  @apply m-4 sm:m-6 lg:m-8 touch:m-12;
 }
 
 /* Typography utilities */
 .responsive-heading-xl {
-  @apply text-2xl sm:text-3xl lg:text-4xl font-bold font-mono;
+  @apply text-2xl sm:text-3xl lg:text-4xl touch:text-6xl font-bold font-mono;
 }
 
 .responsive-heading-lg {
-  @apply text-xl sm:text-2xl lg:text-3xl font-bold font-mono;
+  @apply text-xl sm:text-2xl lg:text-3xl touch:text-5xl font-bold font-mono;
 }
 
 .responsive-heading-md {
-  @apply text-lg sm:text-xl lg:text-2xl font-semibold font-mono;
+  @apply text-lg sm:text-xl lg:text-2xl touch:text-4xl font-semibold font-mono;
 }
 
 .responsive-text {
-  @apply text-sm sm:text-base lg:text-lg;
+  @apply text-sm sm:text-base lg:text-lg touch:text-2xl;
 }
 
 .responsive-text-sm {
-  @apply text-xs sm:text-sm lg:text-base;
+  @apply text-xs sm:text-sm lg:text-base touch:text-lg;
+}
+
+/* Touch-optimized typography */
+.touch-heading {
+  @apply text-3xl sm:text-4xl lg:text-5xl touch:text-7xl font-bold font-mono;
+}
+
+.touch-text {
+  @apply text-lg sm:text-xl lg:text-2xl touch:text-3xl;
+}
+
+.touch-text-sm {
+  @apply text-base sm:text-lg lg:text-xl touch:text-2xl;
 }
 
 /* Card utilities */
@@ -84,10 +119,53 @@
 
 /* Button utilities */
 .responsive-button {
-  @apply px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base rounded-lg transition-all duration-200;
+  @apply px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base rounded-lg transition-all duration-200 touch:px-12 touch:py-6 touch:text-2xl;
+}
+
+/* Touch-optimized buttons */
+.touch-button {
+  @apply px-8 py-4 sm:px-10 sm:py-5 lg:px-12 lg:py-6 touch:px-16 touch:py-8 text-lg sm:text-xl lg:text-2xl touch:text-3xl rounded-xl transition-all duration-200 min-h-[44px] sm:min-h-[48px] touch:min-h-[64px];
+}
+
+.touch-button-lg {
+  @apply px-12 py-6 sm:px-16 sm:py-8 lg:px-20 lg:py-10 touch:px-24 touch:py-12 text-xl sm:text-2xl lg:text-3xl touch:text-4xl rounded-2xl transition-all duration-200 min-h-[56px] sm:min-h-[64px] touch:min-h-[80px];
+}
+
+.touch-icon-button {
+  @apply w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 touch:w-20 touch:h-20 rounded-xl transition-all duration-200;
+}
+
+/* Touch interaction utilities */
+.touch-target {
+  @apply min-h-[44px] min-w-[44px] sm:min-h-[48px] sm:min-w-[48px] touch:min-h-[64px] touch:min-w-[64px];
+}
+
+.touch-spacing {
+  @apply space-y-4 sm:space-y-6 lg:space-y-8 touch:space-y-12;
+}
+
+.touch-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 touch:grid-cols-2 gap-6 lg:gap-8 touch:gap-12;
+}
+
+/* Dead zone utilities */
+.touch-safe-area {
+  @apply mx-4 sm:mx-6 lg:mx-8 touch:mx-16;
+}
+
+.touch-dead-zone-bottom {
+  @apply pb-8 sm:pb-12 lg:pb-16 touch:pb-24;
+}
+
+.touch-dead-zone-edges {
+  @apply px-6 sm:px-8 lg:px-12 touch:px-20;
 }
 
 /* Image utilities */
 .responsive-image {
-  @apply w-full h-auto max-h-48 sm:max-h-64 lg:max-h-80 object-cover rounded-lg;
+  @apply w-full h-auto max-h-48 sm:max-h-64 lg:max-h-80 touch:max-h-96 object-cover rounded-lg;
+}
+
+.touch-image {
+  @apply w-full h-auto max-h-64 sm:max-h-80 lg:max-h-96 touch:max-h-[32rem] object-cover rounded-xl;
 }

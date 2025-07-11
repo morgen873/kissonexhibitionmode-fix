@@ -23,19 +23,24 @@ const RecipeActionButtons: React.FC<RecipeActionButtonsProps> = ({ recipe, onRes
     };
 
     return (
-        <div className="flex flex-col items-center gap-4">
-            <div className="flex flex-wrap justify-center gap-4">
-                <Button onClick={handlePrint} className="bg-gradient-to-r from-black to-gray-800 text-white font-mono">
-                    <Printer className="mr-2 h-4 w-4" /> Print Label
+        <div className="flex flex-col items-center touch-gap touch-dead-zone-bottom">
+            <div className="flex flex-wrap justify-center touch-gap">
+                <Button 
+                    onClick={handlePrint} 
+                    size="touch"
+                    variant="touch"
+                    className="bg-gradient-to-r from-black to-gray-800 text-white font-mono touch-target"
+                >
+                    <Printer className="mr-3 touch:mr-4 h-5 w-5 touch:h-8 touch:w-8" /> Print Label
                 </Button>
             </div>
             <Button 
                 onClick={handleGoHome} 
-                variant="outline" 
-                size="icon"
-                className="bg-transparent hover:bg-white/10 text-white mb-8 border-white"
+                variant="touch-outline" 
+                size="touch-icon"
+                className="bg-transparent hover:bg-white/10 text-white border-white touch-target"
             >
-                <Home />
+                <Home className="h-6 w-6 touch:h-10 touch:w-10" />
             </Button>
         </div>
     );

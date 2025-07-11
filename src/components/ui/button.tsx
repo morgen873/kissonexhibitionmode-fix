@@ -9,21 +9,26 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/95",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 active:bg-destructive/95",
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+          "border border-input bg-background hover:bg-accent hover:text-accent-foreground active:bg-accent/80",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80 active:bg-secondary/70",
+        ghost: "hover:bg-accent hover:text-accent-foreground active:bg-accent/80",
         link: "text-primary underline-offset-4 hover:underline",
+        touch: "bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/95 active:scale-95 touch:text-3xl",
+        "touch-outline": "border-2 border-input bg-background hover:bg-accent hover:text-accent-foreground active:bg-accent/80 active:scale-95 touch:text-3xl touch:border-4",
       },
       size: {
         default: "h-10 px-4 py-2",
         sm: "h-9 rounded-md px-3",
         lg: "h-11 rounded-md px-8",
         icon: "h-10 w-10",
+        touch: "h-12 px-8 py-4 sm:h-14 sm:px-10 sm:py-5 lg:h-16 lg:px-12 lg:py-6 touch:h-20 touch:px-16 touch:py-8 text-lg sm:text-xl lg:text-2xl touch:text-3xl rounded-xl min-h-[44px] sm:min-h-[48px] touch:min-h-[64px]",
+        "touch-lg": "h-16 px-12 py-6 sm:h-18 sm:px-16 sm:py-8 lg:h-20 lg:px-20 lg:py-10 touch:h-24 touch:px-24 touch:py-12 text-xl sm:text-2xl lg:text-3xl touch:text-4xl rounded-2xl min-h-[56px] sm:min-h-[64px] touch:min-h-[80px]",
+        "touch-icon": "h-12 w-12 sm:h-14 sm:w-14 lg:h-16 lg:w-16 touch:h-20 touch:w-20 rounded-xl [&_svg]:size-6 touch:[&_svg]:size-8",
       },
     },
     defaultVariants: {

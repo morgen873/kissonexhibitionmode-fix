@@ -29,11 +29,12 @@ const StandbyLanding: React.FC = () => {
       </div>
       
       {/* Bottom button */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
+      <div className="absolute bottom-8 touch:bottom-16 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
         <Button 
           onClick={handleEnter} 
-          size="lg" 
-          className="bg-transparent hover:bg-transparent text-white font-bold transition-all duration-300 transform hover:scale-105 px-8 py-6 text-xl rounded-full font-sans"
+          size="touch-lg" 
+          variant="touch"
+          className="bg-transparent hover:bg-transparent text-white font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 px-8 py-6 text-xl touch:text-4xl rounded-full font-sans touch-target"
           style={{
             textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(255,255,255,0.3)'
           }}

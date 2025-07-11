@@ -14,9 +14,10 @@ export default {
 		container: {
 			center: true,
 			padding: '2rem',
-			screens: {
-				'2xl': '1400px'
-			}
+		screens: {
+			'2xl': '1400px',
+			'touch': '1920px'  // 32-inch horizontal touchscreen
+		}
 		},
 		extend: {
 			fontFamily: {
