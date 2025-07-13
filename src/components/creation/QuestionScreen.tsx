@@ -2,10 +2,12 @@
 import React, { useState } from 'react';
 import { QuestionStep } from '@/types/creation';
 import { containsProfanity } from '@/utils/profanityFilter';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Button } from '@/components/ui/button';
 
 interface QuestionScreenProps {
     stepData: QuestionStep;
-    answers: { [key: number]: string };
+    answers: { [key: number]: string | string[] };
     handleAnswerSelect: (optionTitle: string) => void;
     customAnswers: { [key: number]: string };
     handleCustomAnswerChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
@@ -32,8 +34,8 @@ const QuestionScreen: React.FC<QuestionScreenProps> = ({
     const handleOptionSelect = (optionTitle: string) => {
         handleAnswerSelect(optionTitle);
         
-        // Auto-advance for non-custom options
-        if (!stepData.customOption || optionTitle !== stepData.customOption.title) {
+        // For single-select questions, auto-advance for non-custom options
+        if (!stepData.multiSelect && (!stepData.customOption || optionTitle !== stepData.customOption.title)) {
             setTimeout(() => {
                 onAutoAdvance?.();
             }, 300); // Small delay for visual feedback
@@ -59,6 +61,16 @@ const QuestionScreen: React.FC<QuestionScreenProps> = ({
         !stepData.customOption || option.title !== stepData.customOption.title
     );
     const hasCustomOption = stepData.customOption;
+    
+    // Helper function to check if an option is selected
+    const isOptionSelected = (optionTitle: string) => {
+        if (stepData.multiSelect) {
+            const currentAnswers = Array.isArray(answers[stepData.id]) ? answers[stepData.id] as string[] : [];
+            return currentAnswers.includes(optionTitle);
+        } else {
+            return answers[stepData.id] === optionTitle;
+        }
+    };
 
     return (
         <>
@@ -69,18 +81,43 @@ const QuestionScreen: React.FC<QuestionScreenProps> = ({
                         key={option.title}
                         onClick={() => handleOptionSelect(option.title)}
                         className={`
-                            touch-padding rounded-lg transition-all duration-300 cursor-pointer font-mono text-center touch-target active:scale-95
-                            ${answers[stepData.id] === option.title
+                            touch-padding rounded-lg transition-all duration-300 cursor-pointer font-mono text-center touch-target active:scale-95 relative
+                            ${isOptionSelected(option.title)
                                 ? `bg-white/20 border-2 ${theme.optionSelectedBorder} scale-105 shadow-lg ${theme.optionSelectedShadow}`
                                 : `bg-white/10 border-2 border-white/20 ${theme.optionHover} hover:scale-102`
                             }
                         `}
                     >
-                        <h4 className="font-bold responsive-text text-white font-mono text-center">{option.title}</h4>
-                        <p className="responsive-text-sm text-white/80 mt-2 font-mono text-center">{option.description}</p>
+                        {stepData.multiSelect && (
+                            <div className="absolute top-3 right-3">
+                                <Checkbox 
+                                    checked={isOptionSelected(option.title)}
+                                    className="bg-white/20 border-white/40 pointer-events-none"
+                                />
+                            </div>
+                        )}
+                        <h4 className="font-bold responsive-text text-white font-mono text-center pr-8">{option.title}</h4>
+                        <p className="responsive-text-sm text-white/80 mt-2 font-mono text-center pr-8">{option.description}</p>
                     </div>
                 ))}
             </div>
+
+            {/* Continue button for multi-select questions */}
+            {stepData.multiSelect && (
+                <div className="w-full mb-6 flex justify-center">
+                    <Button 
+                        onClick={() => onAutoAdvance?.()} 
+                        variant="outline"
+                        className="bg-white/10 border-white/30 text-white hover:bg-white/20 hover:border-white/50 px-8 py-3 text-lg font-mono"
+                        disabled={(() => {
+                            const currentAnswers = Array.isArray(answers[stepData.id]) ? answers[stepData.id] as string[] : [];
+                            return currentAnswers.length === 0;
+                        })()}
+                    >
+                        Continue with Selected Ingredients
+                    </Button>
+                </div>
+            )}
 
             {/* Custom option spanning full width */}
             {hasCustomOption && (
@@ -88,19 +125,27 @@ const QuestionScreen: React.FC<QuestionScreenProps> = ({
                     <div
                         onClick={() => handleOptionSelect(stepData.customOption!.title)}
                         className={`
-                            touch-padding rounded-lg transition-all duration-300 cursor-pointer font-mono text-center w-full touch-target active:scale-95
-                            ${answers[stepData.id] === stepData.customOption!.title
+                            touch-padding rounded-lg transition-all duration-300 cursor-pointer font-mono text-center w-full touch-target active:scale-95 relative
+                            ${isOptionSelected(stepData.customOption!.title)
                                 ? `bg-white/20 border-2 ${theme.optionSelectedBorder} scale-105 shadow-lg ${theme.optionSelectedShadow}`
                                 : `bg-white/10 border-2 border-white/20 ${theme.optionHover} hover:scale-102`
                             }
                         `}
                     >
-                        <h4 className="font-bold responsive-text text-white font-mono text-center">{stepData.customOption!.title}</h4>
-                        <p className="responsive-text-sm text-white/80 mt-2 font-mono text-center">Share your own special memory</p>
+                        {stepData.multiSelect && (
+                            <div className="absolute top-3 right-3">
+                                <Checkbox 
+                                    checked={isOptionSelected(stepData.customOption!.title)}
+                                    className="bg-white/20 border-white/40 pointer-events-none"
+                                />
+                            </div>
+                        )}
+                        <h4 className="font-bold responsive-text text-white font-mono text-center pr-8">{stepData.customOption!.title}</h4>
+                        <p className="responsive-text-sm text-white/80 mt-2 font-mono text-center pr-8">Share your own special memory</p>
                     </div>
 
                     {/* Custom textarea when selected */}
-                    {answers[stepData.id] === stepData.customOption!.title && (
+                    {isOptionSelected(stepData.customOption!.title) && (
                         <div className="mt-6">
                             <label htmlFor="custom-answer" className="block responsive-text-sm font-medium text-white/80 mb-3 font-mono text-center">
                                 {stepData.customOption!.title}:

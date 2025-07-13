@@ -115,6 +115,7 @@ export const steps: Step[] = [
         type: 'question' as const,
         id: 2,
         question: "What emotional ingredients are in your dumpling?",
+        multiSelect: true,
         options: [
             { title: "Warmth", description: "A comforting and gentle feeling." },
             { title: "Nostalgia", description: "A fond remembrance of the past." },

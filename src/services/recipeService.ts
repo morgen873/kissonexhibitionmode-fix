@@ -11,7 +11,7 @@ export interface RecipePayload {
 
 export class RecipeService {
   static processAnswers(
-    answers: { [key: number]: string },
+    answers: { [key: number]: string | string[] },
     customAnswers: { [key: number]: string },
     controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } },
     timelineValue?: string
@@ -27,14 +27,35 @@ export class RecipeService {
       if (step) {
         if (step.type === 'question') {
           const questionStep = step as QuestionStep;
-          if (questionStep.customOption && answer === questionStep.customOption.title) {
-            const customAnswer = customAnswers[Number(stepId)];
-            questionAnswers[stepId] = customAnswer || '';
+          
+          // Handle multi-select questions
+          if (questionStep.multiSelect && Array.isArray(answer)) {
+            // For multi-select, check if custom option is included
+            if (questionStep.customOption && answer.includes(questionStep.customOption.title)) {
+              const customAnswer = customAnswers[Number(stepId)];
+              // Include both selected options and custom answer
+              const nonCustomAnswers = answer.filter(a => a !== questionStep.customOption.title);
+              if (customAnswer) {
+                questionAnswers[stepId] = [...nonCustomAnswers, customAnswer].join(', ');
+              } else {
+                questionAnswers[stepId] = nonCustomAnswers.join(', ');
+              }
+            } else {
+              questionAnswers[stepId] = answer.join(', ');
+            }
           } else {
-            questionAnswers[stepId] = answer;
+            // Handle single-select questions (existing behavior)
+            const singleAnswer = Array.isArray(answer) ? answer[0] : answer;
+            if (questionStep.customOption && singleAnswer === questionStep.customOption.title) {
+              const customAnswer = customAnswers[Number(stepId)];
+              questionAnswers[stepId] = customAnswer || '';
+            } else {
+              questionAnswers[stepId] = singleAnswer || '';
+            }
           }
         } else if (step.type === 'timeline') {
-          timelineAnswers[stepId] = answer;
+          const timelineAnswer = Array.isArray(answer) ? answer[0] : answer;
+          timelineAnswers[stepId] = timelineAnswer || '';
         }
       }
     });

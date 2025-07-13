@@ -8,6 +8,7 @@ export interface QuestionStep {
         title: string;
         placeholder: string;
     };
+    multiSelect?: boolean; // Enable multi-select for certain questions
 }
 
 export interface ExplanationStep {

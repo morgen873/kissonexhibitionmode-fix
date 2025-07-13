@@ -5,7 +5,7 @@ import { steps } from '@/data/creation';
 
 export const useCreationValidation = (
   currentStep: number,
-  answers: { [key: number]: string },
+  answers: { [key: number]: string | string[] },
   customAnswers: { [key: number]: string }
 ) => {
   const isNextDisabledValue = useMemo(() => {

@@ -8,7 +8,7 @@ export const useRecipeSubmission = () => {
   const [isCreatingRecipe, setIsCreatingRecipe] = useState(false);
 
   const handleSubmit = async (
-    answers: { [key: number]: string },
+    answers: { [key: number]: string | string[] },
     customAnswers: { [key: number]: string },
     controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } },
     timelineValue?: string

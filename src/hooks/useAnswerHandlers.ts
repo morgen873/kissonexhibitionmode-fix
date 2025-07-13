@@ -3,10 +3,10 @@ import { steps } from '@/data/creation';
 import { ControlsStep } from '@/types/creation';
 
 interface UseAnswerHandlersProps {
-    answers: { [key: number]: string };
+    answers: { [key: number]: string | string[] };
     customAnswers: { [key: number]: string };
     controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } };
-    setAnswers: (answers: { [key: number]: string }) => void;
+    setAnswers: (answers: { [key: number]: string | string[] }) => void;
     setCustomAnswers: (customAnswers: { [key: number]: string }) => void;
     setControlValues: (controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } } | ((prev: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } }) => { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } })) => void;
     currentStep: number;
@@ -24,7 +24,23 @@ export const useAnswerHandlers = ({
     const handleAnswerSelect = (optionTitle: string) => {
         const step = steps[currentStep];
         if (step.type === 'question' || step.type === 'timeline') {
-            setAnswers({ ...answers, [step.id]: optionTitle });
+            if (step.type === 'question' && step.multiSelect) {
+                // Handle multi-select for question steps
+                const currentAnswers = Array.isArray(answers[step.id]) ? answers[step.id] as string[] : [];
+                const isSelected = currentAnswers.includes(optionTitle);
+                
+                if (isSelected) {
+                    // Remove the option if already selected
+                    const newAnswers = currentAnswers.filter(answer => answer !== optionTitle);
+                    setAnswers({ ...answers, [step.id]: newAnswers });
+                } else {
+                    // Add the option to the array
+                    setAnswers({ ...answers, [step.id]: [...currentAnswers, optionTitle] });
+                }
+            } else {
+                // Handle single-select (existing behavior)
+                setAnswers({ ...answers, [step.id]: optionTitle });
+            }
         }
     };
 

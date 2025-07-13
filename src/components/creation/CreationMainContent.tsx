@@ -9,7 +9,7 @@ import { containsProfanity } from '@/utils/profanityFilter';
 
 interface CreationMainContentProps {
     stepData: any;
-    answers: { [key: number]: string };
+    answers: { [key: number]: string | string[] };
     customAnswers: { [key: number]: string };
     controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } };
     theme: {
@@ -73,7 +73,10 @@ const CreationMainContent: React.FC<CreationMainContentProps> = ({
         return (
             <TimelineScreen 
                 stepData={stepData as TimelineStep} 
-                selectedValue={answers[stepData.id] || ''} 
+                selectedValue={(() => {
+                    const answer = answers[stepData.id];
+                    return Array.isArray(answer) ? answer[0] || '' : answer || '';
+                })()}
                 onSelect={onAnswerSelect} 
                 onAutoAdvance={onAutoAdvance}
                 theme={theme} 
