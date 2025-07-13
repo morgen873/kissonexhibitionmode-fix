@@ -112,8 +112,8 @@ const GifTransition: React.FC<GifTransitionProps> = ({
         <div className="absolute inset-0 flex items-center justify-center bg-black/50">
           <div className="text-center space-y-4">
             <div className="w-16 h-16 border-4 border-green-400 border-t-transparent rounded-full animate-spin mx-auto"></div>
-            <p className="text-green-400 font-mono">
-              {isLoading ? 'Loading transition...' : 'Creating your recipe...'}
+            <p className="text-green-400 font-mono text-center max-w-md">
+              {isLoading ? 'Loading transition...' : 'Kisson is creating your recipe. be patient, it will take a while, but remember- memories last forever!'}
             </p>
           </div>
         </div>
