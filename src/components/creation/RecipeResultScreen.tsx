@@ -3,6 +3,7 @@ import React from 'react';
 import { RecipeResult } from '@/types/creation';
 import RecipePrintTemplate from './RecipePrintTemplate';
 import RecipeImageDisplay from './RecipeImageDisplay';
+import RecipeVideoDisplay from './RecipeVideoDisplay';
 import RecipeLabelPreview from './RecipeLabelPreview';
 import RecipeActionButtons from './RecipeActionButtons';
 
@@ -22,6 +23,12 @@ const RecipeResultScreen: React.FC<RecipeResultScreenProps> = ({ recipe, onReset
 
             <div className="flex flex-col lg:flex-row gap-6 w-full justify-center items-center">
                 <RecipeImageDisplay recipe={recipe} />
+                {recipe.videoUrl && (
+                    <RecipeVideoDisplay 
+                        videoUrl={recipe.videoUrl} 
+                        recipeName={recipe.name}
+                    />
+                )}
                 <RecipeLabelPreview recipe={recipe} />
             </div>
 

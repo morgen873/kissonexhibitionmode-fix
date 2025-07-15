@@ -1,4 +1,3 @@
-
 export interface QuestionStep {
     type: 'question';
     id: number;
@@ -61,5 +60,6 @@ export type Step = QuestionStep | ExplanationStep | ControlsStep | TimelineStep;
 export interface RecipeResult {
     name: string;
     imageUrl: string;
+    videoUrl?: string;
     qrData: string;
 }
