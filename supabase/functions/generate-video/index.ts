@@ -86,8 +86,41 @@ serve(async (req) => {
     let videoUrl = '';
     
     if (videoResult.videoURL) {
-      videoUrl = videoResult.videoURL;
-      console.log('✅ Video generated successfully:', videoUrl);
+      const externalVideoUrl = videoResult.videoURL;
+      console.log('✅ Video generated successfully, downloading and storing:', externalVideoUrl);
+      
+      // Download the video from Runware
+      const videoResponse = await fetch(externalVideoUrl);
+      if (!videoResponse.ok) {
+        throw new Error(`Failed to download video: ${videoResponse.status}`);
+      }
+      
+      const videoBlob = await videoResponse.blob();
+      const videoArrayBuffer = await videoBlob.arrayBuffer();
+      const videoFileName = `recipe-${recipeId}-${Date.now()}.mp4`;
+      
+      // Upload to Supabase storage
+      console.log('📤 Uploading video to storage bucket...');
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('videos')
+        .upload(videoFileName, videoArrayBuffer, {
+          contentType: 'video/mp4',
+          upsert: false
+        });
+      
+      if (uploadError) {
+        console.error('❌ Failed to upload video to storage:', uploadError);
+        throw new Error(`Storage upload failed: ${uploadError.message}`);
+      }
+      
+      // Get public URL for the uploaded video
+      const { data: urlData } = supabase.storage
+        .from('videos')
+        .getPublicUrl(videoFileName);
+      
+      videoUrl = urlData.publicUrl;
+      console.log('✅ Video uploaded to storage:', videoUrl);
+      
     } else if (videoResult.taskUUID) {
       // Video is being processed, we'll need to poll for status
       console.log('⏳ Video is being processed, UUID:', videoResult.taskUUID);
