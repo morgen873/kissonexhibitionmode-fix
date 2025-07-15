@@ -51,14 +51,15 @@ serve(async (req) => {
       {
         taskType: "videoInference",
         taskUUID: crypto.randomUUID(),
-        inputImage: imageUrl,
-        model: "runware:100@1",
-        motionBucket: 127,
-        conditioningAugmentation: 0.02,
-        seed: Math.floor(Math.random() * 1000000),
-        fps: 6,
-        videoLength: 25,
-        upscale: false
+        frameImages: [imageUrl],
+        model: "klingai:5@3",
+        positivePrompt: `Animate this food image: ${recipeTitle}. Gentle, appetizing motion, professional food photography style.`,
+        duration: 5,
+        width: 1024,
+        height: 1024,
+        outputFormat: "MP4",
+        outputQuality: 95,
+        numberResults: 1
       }
     ];
     
