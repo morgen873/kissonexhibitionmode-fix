@@ -156,8 +156,37 @@ serve(async (req) => {
           const statusResult = statusData.data?.find((item: any) => item.taskUUID === videoResult.taskUUID);
           
           if (statusResult?.videoURL) {
-            videoUrl = statusResult.videoURL;
-            console.log('✅ Video completed after', attempts + 1, 'attempts:', videoUrl);
+            const externalVideoUrl = statusResult.videoURL;
+            console.log('✅ Video completed after', attempts + 1, 'attempts, downloading:', externalVideoUrl);
+            
+            // Download and upload to storage bucket
+            try {
+              const videoResponse = await fetch(externalVideoUrl);
+              if (videoResponse.ok) {
+                const videoBlob = await videoResponse.blob();
+                const videoArrayBuffer = await videoBlob.arrayBuffer();
+                const videoFileName = `recipe-${recipeId}-${Date.now()}.mp4`;
+                
+                const { data: uploadData, error: uploadError } = await supabase.storage
+                  .from('videos')
+                  .upload(videoFileName, videoArrayBuffer, {
+                    contentType: 'video/mp4',
+                    upsert: false
+                  });
+                
+                if (!uploadError) {
+                  const { data: urlData } = supabase.storage
+                    .from('videos')
+                    .getPublicUrl(videoFileName);
+                  
+                  videoUrl = urlData.publicUrl;
+                  console.log('✅ Video uploaded to storage:', videoUrl);
+                }
+              }
+            } catch (uploadError) {
+              console.error('⚠️ Failed to download/upload video:', uploadError);
+              videoUrl = externalVideoUrl; // Fallback to external URL
+            }
             break;
           }
         }
