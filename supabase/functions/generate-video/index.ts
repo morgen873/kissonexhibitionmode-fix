@@ -53,9 +53,10 @@ serve(async (req) => {
           apiKey: runwareApiKey
         },
         {
-          taskType: "imageToVideo",
+          taskType: "videoInference",
           taskUUID: crypto.randomUUID(),
           inputImage: imageUrl,
+          model: "runware:100@1",
           motionBucket: 127,
           conditioningAugmentation: 0.02,
           seed: Math.floor(Math.random() * 1000000),
@@ -76,7 +77,7 @@ serve(async (req) => {
     console.log('🎬 Runware response:', videoData);
 
     // Extract video data from response
-    const videoResult = videoData.data?.find((item: any) => item.taskType === 'imageToVideo');
+    const videoResult = videoData.data?.find((item: any) => item.taskType === 'videoInference');
     
     if (!videoResult) {
       console.error('❌ No video result in response:', videoData);
@@ -144,7 +145,7 @@ serve(async (req) => {
               apiKey: runwareApiKey
             },
             {
-              taskType: "imageToVideo",
+              taskType: "videoInference",
               taskUUID: videoResult.taskUUID,
               retrieve: true
             }
