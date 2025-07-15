@@ -40,31 +40,37 @@ serve(async (req) => {
     console.log('🎬 Starting video generation for recipe:', recipeId);
     console.log('📸 Image URL:', imageUrl);
 
-    // Generate video using Runware API
+    // Generate video using Runware API - simplified first
+    console.log('🎬 Sending request to Runware API...');
+    
+    const requestPayload = [
+      {
+        taskType: "authentication",
+        apiKey: runwareApiKey
+      },
+      {
+        taskType: "videoInference",
+        taskUUID: crypto.randomUUID(),
+        inputImage: imageUrl,
+        model: "runware:100@1",
+        motionBucket: 127,
+        conditioningAugmentation: 0.02,
+        seed: Math.floor(Math.random() * 1000000),
+        fps: 6,
+        videoLength: 25,
+        upscale: false
+      }
+    ];
+    
+    console.log('📤 Request payload:', JSON.stringify(requestPayload, null, 2));
+    
     const videoResponse = await fetch('https://api.runware.ai/v1', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${runwareApiKey}`
       },
-      body: JSON.stringify([
-        {
-          taskType: "authentication",
-          apiKey: runwareApiKey
-        },
-        {
-          taskType: "videoInference",
-          taskUUID: crypto.randomUUID(),
-          inputImage: imageUrl,
-          model: "runware:100@1",
-          motionBucket: 127,
-          conditioningAugmentation: 0.02,
-          seed: Math.floor(Math.random() * 1000000),
-          fps: 6,
-          videoLength: 25,
-          upscale: false
-        }
-      ])
+      body: JSON.stringify(requestPayload)
     });
 
     if (!videoResponse.ok) {
