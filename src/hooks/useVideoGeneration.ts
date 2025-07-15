@@ -18,6 +18,8 @@ export const useVideoGeneration = () => {
 
     try {
       console.log('🎬 Starting video generation for recipe:', recipeId);
+      console.log('📸 Image URL:', imageUrl);
+      console.log('📝 Recipe Title:', recipeTitle);
       
       const { data, error } = await supabase.functions.invoke('generate-video', {
         body: {
@@ -27,9 +29,11 @@ export const useVideoGeneration = () => {
         }
       });
 
+      console.log('📡 Supabase function response:', { data, error });
+
       if (error) {
         console.error('❌ Video generation error:', error);
-        setVideoError('Failed to generate video');
+        setVideoError('Failed to generate video: ' + error.message);
         return null;
       }
 
@@ -37,13 +41,14 @@ export const useVideoGeneration = () => {
         console.log('✅ Video generated successfully:', data.videoUrl);
         return data.videoUrl;
       } else {
-        console.log('⏳ Video generation started but not completed');
+        console.log('⏳ Video generation started but not completed:', data);
+        setVideoError(data?.message || 'Video generation failed');
         return null;
       }
 
     } catch (error) {
       console.error('❌ Video generation error:', error);
-      setVideoError('Failed to generate video');
+      setVideoError('Failed to generate video: ' + error.message);
       return null;
     } finally {
       setIsGeneratingVideo(false);
