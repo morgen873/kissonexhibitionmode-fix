@@ -30,8 +30,6 @@ ONE DUMPLING ONLY - no multiple dumplings, no duplicates, just one single dumpli
 
 Ingredients visible in composition: ${ingredientsText}
 
-CRITICAL BACKGROUND REQUIREMENT: Pure solid black background (#000000) with NO textures, NO gradients, NO surfaces, NO tables, NO plates - completely flat matte black void.
-
 CRITICAL DUMPLING WRAPPER REQUIREMENTS:
 - Dumpling wrapper MUST be completely closed and sealed
 - NO visible filling or internal ingredients whatsoever
@@ -43,22 +41,22 @@ CRITICAL DUMPLING WRAPPER REQUIREMENTS:
 Futuristic culinary style:
 - Hyper-realistic food photography of exactly one perfectly sealed dumpling with futuristic presentation
 - Advanced molecular gastronomy techniques visible in the dumpling's appearance
-- Subtle holographic or iridescent effects on the dumpling wrapper ONLY
-- The dumpling appears to float against the pure black void
-- Studio lighting with subtle neon accent lighting (blue/purple tones)
+- Vibrant, colorful holographic or iridescent effects on the dumpling wrapper
+- Colorful futuristic backdrop with neon lighting and sci-fi ambiance
+- Studio lighting with vibrant neon accent lighting (blue/purple/pink tones)
 - Close-up centered composition focusing on the single intact dumpling
 - Emphasis on high-tech food preparation aesthetics while maintaining authentic food appearance
 - The dumpling should look real and edible, just prepared with futuristic techniques
 - Only one dumpling visible in the entire image
-- ABSOLUTELY NO background elements - pure black void only
+- Rich, colorful background that complements the futuristic theme
 
 Technical specifications:
 - High resolution, professional food photography quality
 - No text, logos, or graphic elements
 - No utensils, plates, surfaces, or any objects beyond the single dumpling
-- Pure solid black background (#000000) - no variations, no textures
+- Vibrant, colorful background that enhances the futuristic aesthetic
 - Commercial food photography style with futuristic elements
-- IMPORTANT: Show only one single completely sealed dumpling floating against pure black void`;
+- IMPORTANT: Show only one single completely sealed dumpling with vibrant, colorful presentation`;
 
   console.log("Generated FUTURISTIC prompt for authentic future food presentation");
   return prompt;
@@ -83,8 +81,6 @@ ONE DUMPLING ONLY - no multiple dumplings, no duplicates, just one single dumpli
 
 Ingredients visible in composition: ${ingredientsText}
 
-CRITICAL BACKGROUND REQUIREMENT: Pure solid black background (#000000) with NO textures, NO gradients, NO surfaces, NO tables, NO plates - completely flat matte black void.
-
 CRITICAL DUMPLING WRAPPER REQUIREMENTS:
 - Dumpling wrapper MUST be completely closed and sealed
 - NO visible filling or internal ingredients whatsoever
@@ -97,20 +93,20 @@ Historical culinary style:
 - Hyper-realistic food photography of exactly one perfectly sealed dumpling with traditional historical preparation
 - Traditional handcrafted appearance with slightly rustic texture showing artisanal preparation
 - Authentic historical cooking methods visible in surface texture (steamed, boiled, or pan-fried finish)
-- The dumpling appears to float against the pure black void
-- Warm, natural lighting reminiscent of traditional cooking environments
+- Rich, warm, earthy background that complements the historical theme
+- Warm, natural lighting reminiscent of traditional cooking environments with golden tones
 - Close-up centered composition focusing on the single intact dumpling
 - Emphasis on traditional food preparation techniques and authentic historical appearance
 - Only one dumpling visible in the entire image
-- ABSOLUTELY NO background elements - pure black void only
+- Colorful, traditional backdrop that enhances the historical authenticity
 
 Technical specifications:
 - High resolution, professional food photography quality
 - No text, logos, or graphic elements
 - No utensils, plates, surfaces, or any objects beyond the single dumpling
-- Pure solid black background (#000000) - no variations, no textures
+- Warm, colorful background that complements the historical theme
 - Commercial food photography style with historical authenticity
-- IMPORTANT: Show only one single completely sealed dumpling floating against pure black void`;
+- IMPORTANT: Show only one single completely sealed dumpling with warm, colorful presentation`;
 
   console.log("Generated HISTORICAL prompt for authentic traditional food presentation");
   return prompt;
@@ -135,8 +131,6 @@ ONE DUMPLING ONLY - no multiple dumplings, no duplicates, just one single dumpli
 
 Ingredients visible in composition: ${ingredientsText}
 
-CRITICAL BACKGROUND REQUIREMENT: Pure solid black background (#000000) with NO textures, NO gradients, NO surfaces, NO tables, NO plates - completely flat matte black void.
-
 CRITICAL DUMPLING WRAPPER REQUIREMENTS:
 - Dumpling wrapper MUST be completely closed and sealed
 - NO visible filling or internal ingredients whatsoever
@@ -148,21 +142,21 @@ CRITICAL DUMPLING WRAPPER REQUIREMENTS:
 Contemporary culinary style:
 - Hyper-realistic food photography of exactly one perfectly sealed dumpling with modern culinary presentation
 - Clean, professional preparation with contemporary cooking techniques
-- Modern aesthetic with attention to visual appeal
-- The dumpling appears to float against the pure black void
-- Professional studio lighting with modern food photography standards
+- Modern aesthetic with attention to visual appeal and vibrant colors
+- Beautiful, colorful backdrop that complements the contemporary theme
+- Professional studio lighting with modern food photography standards and vibrant lighting
 - Close-up centered composition focusing on the single intact dumpling
 - Emphasis on current culinary trends and contemporary food presentation
 - Only one dumpling visible in the entire image
-- ABSOLUTELY NO background elements - pure black void only
+- Rich, colorful background that enhances the modern aesthetic
 
 Technical specifications:
 - High resolution, professional food photography quality
 - No text, logos, or graphic elements
 - No utensils, plates, surfaces, or any objects beyond the single dumpling
-- Pure solid black background (#000000) - no variations, no textures
+- Vibrant, colorful background that complements the contemporary theme
 - Commercial food photography style with contemporary aesthetics
-- IMPORTANT: Show only one single completely sealed dumpling floating against pure black void`;
+- IMPORTANT: Show only one single completely sealed dumpling with vibrant, colorful presentation`;
 
   console.log("Generated CONTEMPORARY prompt for authentic modern food presentation");
   return prompt;
