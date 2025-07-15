@@ -36,7 +36,8 @@ const Creation = () => {
     nextStep: nextCreationStep,
     prevStep: prevCreationStep,
     handleSubmit,
-    handleReset: resetForm
+    handleReset: resetForm,
+    getVideoStatus
   } = useCreationForm();
   
   const {
@@ -188,6 +189,7 @@ const Creation = () => {
             handleCreationNext={handleCreationNext}
             handleCreationPrev={handleCreationPrev}
             handleCreationSubmit={handleCreationSubmit}
+            getVideoStatus={getVideoStatus}
           />
         </CreationLayout>
       </GlobalLayout>

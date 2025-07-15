@@ -47,7 +47,8 @@ export const useCreationForm = () => {
     recipeResult,
     isCreatingRecipe,
     handleSubmit: submitRecipe,
-    resetRecipe
+    resetRecipe,
+    getVideoStatus
   } = useRecipeSubmission();
 
   const handleSubmit = async (timelineValue?: string) => {
@@ -79,5 +80,6 @@ export const useCreationForm = () => {
     prevStep,
     handleSubmit,
     handleReset,
+    getVideoStatus,
   };
 };
