@@ -99,23 +99,23 @@ serve(async (req) => {
       const videoArrayBuffer = await videoBlob.arrayBuffer();
       const videoFileName = `recipe-${recipeId}-${Date.now()}.mp4`;
       
-      // Upload to Supabase storage
-      console.log('📤 Uploading video to storage bucket...');
+      // Upload to Supabase storage - kisson-video bucket
+      console.log('📤 Uploading video to kisson-video storage bucket...');
       const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('videos')
+        .from('kisson-video')
         .upload(videoFileName, videoArrayBuffer, {
           contentType: 'video/mp4',
           upsert: false
         });
       
       if (uploadError) {
-        console.error('❌ Failed to upload video to storage:', uploadError);
+        console.error('❌ Failed to upload video to kisson-video storage:', uploadError);
         throw new Error(`Storage upload failed: ${uploadError.message}`);
       }
       
       // Get public URL for the uploaded video
       const { data: urlData } = supabase.storage
-        .from('videos')
+        .from('kisson-video')
         .getPublicUrl(videoFileName);
       
       videoUrl = urlData.publicUrl;
@@ -168,7 +168,7 @@ serve(async (req) => {
                 const videoFileName = `recipe-${recipeId}-${Date.now()}.mp4`;
                 
                 const { data: uploadData, error: uploadError } = await supabase.storage
-                  .from('videos')
+                  .from('kisson-video')
                   .upload(videoFileName, videoArrayBuffer, {
                     contentType: 'video/mp4',
                     upsert: false
@@ -176,7 +176,7 @@ serve(async (req) => {
                 
                 if (!uploadError) {
                   const { data: urlData } = supabase.storage
-                    .from('videos')
+                    .from('kisson-video')
                     .getPublicUrl(videoFileName);
                   
                   videoUrl = urlData.publicUrl;
