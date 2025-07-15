@@ -16,7 +16,6 @@ interface CreationContentProps extends CreationContentHandlers, CreationContentS
   creationStep: number;
   creationStepData: any;
   theme: any;
-  getVideoStatus?: (recipeId: string) => 'generating' | 'completed' | 'failed' | null;
 }
 
 const CreationContent: React.FC<CreationContentProps> = ({
@@ -42,8 +41,7 @@ const CreationContent: React.FC<CreationContentProps> = ({
   prevCreationStep,
   nextCreationStep,
   handleSubmit,
-  handleReset,
-  getVideoStatus
+  handleReset
 }) => {
   if (isCreatingRecipe) {
     return (
@@ -57,8 +55,7 @@ const CreationContent: React.FC<CreationContentProps> = ({
   }
 
   if (recipeResult) {
-    const videoStatus = getVideoStatus ? getVideoStatus(recipeResult.id) : null;
-    return <RecipeResultScreen recipe={recipeResult} onReset={handleReset} videoStatus={videoStatus} />;
+    return <RecipeResultScreen recipe={recipeResult} onReset={handleReset} />;
   }
 
   // Check if current step should hide navigation (question or timeline steps)
