@@ -30,7 +30,7 @@ SDXL optimized futuristic culinary style:
 - hyper-realistic food photography, exactly one perfectly sealed dumpling, futuristic presentation
 - advanced molecular gastronomy techniques, dumpling wrapper completely closed and sealed
 - vibrant holographic iridescent effects, neon accent lighting, blue purple pink tones
-- solid black background, studio lighting, cinematic composition
+- pure solid matte black background, no textures, no patterns, no gradients, completely black void background, studio lighting, cinematic composition
 - dumpling wrapper 100% opaque and solid, no visible filling, no transparent effects
 - no openings tears gaps, completely sealed package appearance
 - high-tech food preparation aesthetics, authentic edible appearance
@@ -40,7 +40,7 @@ SDXL optimized futuristic culinary style:
 - gourmet presentation, futuristic culinary innovation, sci-fi food styling
 - vibrant colorful presentation, luminous effects, technological aesthetics
 
-Technical specifications: single dumpling only, black background, sealed wrapper, futuristic lighting, commercial quality, centered composition, hyper-realistic, no duplicates`;
+Technical specifications: single dumpling only, pure solid matte black background, no textures, no patterns, no gradients, completely black void background, sealed wrapper, futuristic lighting, commercial quality, centered composition, hyper-realistic, no duplicates, no extras, no distractions`;
 
   console.log("Generated FUTURISTIC prompt optimized for SDXL");
   return prompt;
@@ -65,7 +65,7 @@ SDXL optimized historical culinary style:
 - hyper-realistic food photography, exactly one perfectly sealed dumpling, traditional historical preparation
 - traditional handcrafted appearance, slightly rustic texture, artisanal preparation
 - authentic historical cooking methods, surface texture steamed boiled pan-fried finish
-- solid black background, warm natural lighting, golden tones
+- pure solid matte black background, no textures, no patterns, no gradients, completely black void background, warm natural lighting, golden tones
 - dumpling wrapper completely closed and sealed, 100% opaque and solid
 - no visible filling, no transparent translucent effects, no openings tears gaps
 - completely sealed package appearance, traditional food preparation techniques
@@ -75,7 +75,7 @@ SDXL optimized historical culinary style:
 - authentic historical appearance, traditional cooking environments
 - warm colorful presentation, artisanal craftsmanship, heritage cooking methods
 
-Technical specifications: single dumpling only, black background, sealed wrapper, historical authenticity, commercial quality, centered composition, hyper-realistic, no duplicates`;
+Technical specifications: single dumpling only, pure solid matte black background, no textures, no patterns, no gradients, completely black void background, sealed wrapper, historical authenticity, commercial quality, centered composition, hyper-realistic, no duplicates, no extras, no distractions`;
 
   console.log("Generated HISTORICAL prompt optimized for SDXL");
   return prompt;
@@ -100,7 +100,7 @@ SDXL optimized contemporary culinary style:
 - hyper-realistic food photography, exactly one perfectly sealed dumpling, modern culinary presentation
 - clean professional preparation, contemporary cooking techniques
 - modern aesthetic, attention to visual appeal, vibrant colors
-- solid black background, professional studio lighting, modern food photography standards
+- pure solid matte black background, no textures, no patterns, no gradients, completely black void background, professional studio lighting, modern food photography standards
 - dumpling wrapper completely closed and sealed, 100% opaque and solid
 - no visible filling, no transparent translucent effects, no openings tears gaps
 - completely sealed package appearance, current culinary trends
@@ -110,7 +110,7 @@ SDXL optimized contemporary culinary style:
 - contemporary food presentation, modern cooking aesthetics
 - vibrant colorful presentation, clean minimalist styling, current trends
 
-Technical specifications: single dumpling only, black background, sealed wrapper, contemporary aesthetics, commercial quality, centered composition, hyper-realistic, no duplicates`;
+Technical specifications: single dumpling only, pure solid matte black background, no textures, no patterns, no gradients, completely black void background, sealed wrapper, contemporary aesthetics, commercial quality, centered composition, hyper-realistic, no duplicates, no extras, no distractions`;
 
   console.log("Generated CONTEMPORARY prompt optimized for SDXL");
   return prompt;

@@ -188,7 +188,7 @@ function optimizePromptForSDXL(prompt: string, imageContext: ImageContext): stri
   const effects = "speculative design, hyper-realistic, highly detailed texture, perfect composition";
   
   // 5. Composition rules (change framing and layout)
-  const composition = "single dumpling centered, shallow depth of field, black background";
+  const composition = "single dumpling centered, shallow depth of field, pure solid matte black background, no textures, no patterns, no gradients, completely black void background";
   
   // 6. Food-specific requirements (dumpling appearance rules)
   const foodRequirements = "mostly sealed wrapper, optional visible filling, opaque dumpling skin";
@@ -212,7 +212,7 @@ function optimizePromptForSD35Large(prompt: string, imageContext: ImageContext):
   // SD 3.5 Large works well with natural language prompts
   const ingredientsText = ingredientsList.length > 0 ? ingredientsList.slice(0, 5).join(', ') : 'traditional ingredients';
   
-  const sd35Prompt = `A single ${dumplingShape}-shaped dumpling with ${flavor} flavor profile, photographed in ${timelineTheme.toLowerCase()} style. Made with ${ingredientsText}. Professional food photography with studio lighting against a black background. The dumpling wrapper is completely sealed and opaque, showing no internal filling. Hyper-realistic, appetizing presentation with shallow depth of field. Commercial photography quality, perfectly centered composition.`;
+  const sd35Prompt = `A single ${dumplingShape}-shaped dumpling with ${flavor} flavor profile, photographed in ${timelineTheme.toLowerCase()} style. Made with ${ingredientsText}. Professional food photography with studio lighting against a pure solid matte black background - no textures, no patterns, no gradients, completely black void background. The dumpling wrapper is completely sealed and opaque, showing no internal filling. Hyper-realistic, appetizing presentation with shallow depth of field. Commercial photography quality, perfectly centered composition. Solid black background only, no extras, no distractions.`;
   
   console.log("🔄 SD 3.5 LARGE OPTIMIZED PROMPT:");
   console.log("- Length:", sd35Prompt.length);
