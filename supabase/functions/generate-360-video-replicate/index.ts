@@ -41,17 +41,20 @@ async function generateVideoInBackground(imageUrl: string, recipeId: string, rec
     const prompt = generate360Prompt(recipeTitle);
     console.log('📝 Using prompt:', prompt);
 
-    // Generate video using Luma Ray (Image-to-Video)
-    console.log('🎥 Generating video with Luma Ray...');
+    // Generate video using Stable Video Diffusion (better image preservation)
+    console.log('🎥 Generating video with Stable Video Diffusion...');
     const output = await replicate.run(
-      "luma/ray",
+      "stability-ai/stable-video-diffusion:3f0457e4619daac51203dedb1a4c808e57bc_2_4_4",
       {
         input: {
-          prompt: prompt,
-          image: imageUrl,
-          duration: 5,
-          aspect_ratio: "1:1",
-          motion_intensity: 0.7
+          input_image: imageUrl,
+          frames_per_second: 6,
+          motion_bucket_id: 127,
+          cond_aug: 0.02,
+          decoding_t: 14,
+          video_length: "14_frames_with_svd",
+          sizing_strategy: "maintain_aspect_ratio",
+          augmentation_level: 0
         }
       }
     );
