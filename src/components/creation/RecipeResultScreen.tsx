@@ -6,7 +6,7 @@ import RecipeImageDisplay from './RecipeImageDisplay';
 import RecipeLabelPreview from './RecipeLabelPreview';
 import RecipeActionButtons from './RecipeActionButtons';
 import CSS360RotationButton from './CSS360RotationButton';
-import CSS360ImageDisplay from './CSS360ImageDisplay';
+import Enhanced360ImageDisplay from './Enhanced360ImageDisplay';
 
 interface RecipeResultScreenProps {
     recipe: RecipeResult;
@@ -29,10 +29,13 @@ const RecipeResultScreen: React.FC<RecipeResultScreenProps> = ({ recipe, recipeI
                 <RecipePrintTemplate recipe={recipe} />
             </div>
 
-            <div className="flex flex-col lg:flex-row gap-6 w-full justify-center items-center">
+            <div className="flex flex-col lg:flex-row gap-6 w-full justify-center items-start">
                 <RecipeImageDisplay recipe={recipe} />
                 {show360View ? (
-                    <CSS360ImageDisplay imageUrl={recipe.imageUrl} recipeTitle={recipe.name} />
+                    <div className="flex flex-col lg:flex-row gap-6 items-start">
+                        <Enhanced360ImageDisplay imageUrl={recipe.imageUrl} recipeTitle={recipe.name} />
+                        <RecipeLabelPreview recipe={recipe} />
+                    </div>
                 ) : (
                     <RecipeLabelPreview recipe={recipe} />
                 )}

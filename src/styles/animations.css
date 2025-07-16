@@ -112,7 +112,12 @@
 
 .rotate-360-hover:hover {
   animation-play-state: paused;
-  transform: scale(1.05);
+  transform: scale(1.05) rotate(var(--rotation, 0deg));
+  cursor: grab;
+}
+
+.rotate-360-hover:active {
+  cursor: grabbing;
 }
   100% {
     transform: translateY(100vh);
