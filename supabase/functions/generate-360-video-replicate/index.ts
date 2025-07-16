@@ -45,19 +45,16 @@ async function generateVideoInBackground(imageUrl: string, recipeId: string, rec
     const prompt = generate360Prompt(recipeTitle, imagePrompt);
     console.log('📝 Using prompt:', prompt);
 
-    // Generate video using Stable Video Diffusion (updated model)
-    console.log('🎥 Generating video with Stable Video Diffusion...');
+    // Generate video using a different model - LumaLabs Dream Machine
+    console.log('🎥 Generating video with LumaLabs Dream Machine...');
     const output = await replicate.run(
-      "stability-ai/stable-video-diffusion:76b875d4e92c0808f47697debc0395c40f6f9797e7bb5e6ae06c9a8f9e0ff8a6",
+      "lumalabs/dream-machine:74d216ee9240c065bc292e5a82e6d6fa5c5eb464a83dbac3a4a8156e48d2c1cc",
       {
         input: {
+          prompt: prompt,
           image: imageUrl,
-          frames_per_second: 6,
-          motion_bucket_id: 127,
-          cond_aug: 0.02,
-          decoding_t: 14,
-          video_length: "14_frames_with_svd",
-          sizing_strategy: "maintain_aspect_ratio"
+          loop: true,
+          aspect_ratio: "1:1"
         }
       }
     );
