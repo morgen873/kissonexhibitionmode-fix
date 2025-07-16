@@ -21,15 +21,21 @@ const VideoGenerationButton: React.FC<VideoGenerationButtonProps> = ({
 
   const handleGenerateVideo = async () => {
     try {
+      console.log('🎬 VideoGenerationButton: Starting video generation process');
       // Extract image prompt from recipe data if available
       const imagePrompt = recipe.imagePrompt;
+      console.log('🎬 VideoGenerationButton: About to call generateVideo');
       const videoUrl = await generateVideo(recipe.imageUrl, recipeId, recipe.name, imagePrompt);
+      console.log('🎬 VideoGenerationButton: generateVideo returned:', videoUrl);
       if (videoUrl) {
         // Open video in new tab instead of inline display
+        console.log('🎬 VideoGenerationButton: Opening video in new tab:', videoUrl);
         window.open(videoUrl, '_blank', 'noopener,noreferrer');
         if (onVideoGenerated) {
           onVideoGenerated(videoUrl);
         }
+      } else {
+        console.log('❌ VideoGenerationButton: No video URL returned');
       }
     } catch (error) {
       // Error is already handled in the hook

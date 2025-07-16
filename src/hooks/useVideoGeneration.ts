@@ -47,7 +47,7 @@ export const useVideoGeneration = () => {
     }
   };
 
-  const startPolling = (recipeId: string, onVideoReady: (videoUrl: string) => void) => {
+  const startPolling = (recipeId: string, onVideoReady: (videoUrl: string) => void, onError: (error: string) => void) => {
     if (isPolling) return;
     
     console.log('🔄 Starting video polling for recipe:', recipeId);
@@ -62,17 +62,19 @@ export const useVideoGeneration = () => {
         setIsGeneratingVideo(false);
         setIsPolling(false);
         clearInterval(pollInterval);
+        onError('Video generation failed');
         return;
       }
       
       if (videoUrl && !videoUrl.startsWith('ERROR:')) {
         console.log('✅ Video is ready:', videoUrl);
+        console.log('🚀 About to call onVideoReady with:', videoUrl);
         setVideoUrl(videoUrl);
         setIsGeneratingVideo(false);
         setIsPolling(false);
-        onVideoReady(videoUrl);
         clearInterval(pollInterval);
         toast.success('360° video is ready!');
+        onVideoReady(videoUrl);
       } else {
         console.log('⏳ Video not ready yet, continuing to poll...');
       }
@@ -83,7 +85,7 @@ export const useVideoGeneration = () => {
       clearInterval(pollInterval);
       setIsGeneratingVideo(false);
       setIsPolling(false);
-      toast.error('Video generation timed out. Please try again.');
+      onError('Video generation timed out. Please try again.');
     }, 600000); // 10 minutes
   };
 
@@ -120,14 +122,17 @@ export const useVideoGeneration = () => {
       
       // Start polling for the video
       return new Promise<string>((resolve, reject) => {
-        startPolling(recipeId, (videoUrl) => {
-          resolve(videoUrl);
-        });
-        
-        // Reject if polling times out (handled in startPolling)
-        setTimeout(() => {
-          reject(new Error('Video generation timed out'));
-        }, 600000);
+        console.log('🎯 Setting up Promise with resolve/reject callbacks');
+        startPolling(recipeId, 
+          (videoUrl) => {
+            console.log('🎉 Promise resolve called with videoUrl:', videoUrl);
+            resolve(videoUrl);
+          },
+          (error) => {
+            console.log('❌ Promise reject called with error:', error);
+            reject(new Error(error));
+          }
+        );
       });
 
     } catch (error) {
