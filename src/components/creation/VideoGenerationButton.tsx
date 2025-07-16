@@ -15,7 +15,9 @@ const VideoGenerationButton: React.FC<VideoGenerationButtonProps> = ({
   recipeId, 
   onVideoGenerated 
 }) => {
-  const { generateVideo, isGeneratingVideo } = useVideoGeneration();
+  const { generateVideo, isGeneratingVideo, isPolling } = useVideoGeneration();
+
+  const isProcessing = isGeneratingVideo || isPolling;
 
   const handleGenerateVideo = async () => {
     try {
@@ -29,16 +31,22 @@ const VideoGenerationButton: React.FC<VideoGenerationButtonProps> = ({
     }
   };
 
+  const getButtonText = () => {
+    if (isGeneratingVideo) return 'Starting Generation...';
+    if (isPolling) return 'Generating 360° Video...';
+    return 'Generate 360° Video';
+  };
+
   return (
     <Button 
       onClick={handleGenerateVideo}
-      disabled={isGeneratingVideo || recipe.imageUrl === '/placeholder.svg'}
+      disabled={isProcessing || recipe.imageUrl === '/placeholder.svg'}
       className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0"
     >
-      {isGeneratingVideo ? (
+      {isProcessing ? (
         <>
           <Loader2 className="w-4 h-4 animate-spin" />
-          Generating 360° Video...
+          {getButtonText()}
         </>
       ) : (
         <>

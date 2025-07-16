@@ -14,6 +14,55 @@ interface VideoGenerationResponse {
 export const useVideoGeneration = () => {
   const [isGeneratingVideo, setIsGeneratingVideo] = useState(false);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
+  const [isPolling, setIsPolling] = useState(false);
+
+  const checkVideoStatus = async (recipeId: string): Promise<string | null> => {
+    try {
+      const { data, error } = await supabase
+        .from('recipes')
+        .select('video_url')
+        .eq('id', recipeId)
+        .single();
+
+      if (error) {
+        console.error('Error checking video status:', error);
+        return null;
+      }
+
+      return data?.video_url || null;
+    } catch (error) {
+      console.error('Error checking video status:', error);
+      return null;
+    }
+  };
+
+  const startPolling = (recipeId: string, onVideoReady: (videoUrl: string) => void) => {
+    if (isPolling) return;
+    
+    setIsPolling(true);
+    
+    const pollInterval = setInterval(async () => {
+      const videoUrl = await checkVideoStatus(recipeId);
+      
+      if (videoUrl) {
+        console.log('✅ Video is ready:', videoUrl);
+        setVideoUrl(videoUrl);
+        setIsGeneratingVideo(false);
+        setIsPolling(false);
+        onVideoReady(videoUrl);
+        clearInterval(pollInterval);
+        toast.success('360° video is ready!');
+      }
+    }, 5000); // Check every 5 seconds
+
+    // Stop polling after 10 minutes (video generation timeout)
+    setTimeout(() => {
+      clearInterval(pollInterval);
+      setIsGeneratingVideo(false);
+      setIsPolling(false);
+      toast.error('Video generation timed out. Please try again.');
+    }, 600000); // 10 minutes
+  };
 
   const generateVideo = async (imageUrl: string, recipeId: string, recipeTitle: string) => {
     setIsGeneratingVideo(true);
@@ -42,31 +91,41 @@ export const useVideoGeneration = () => {
         throw new Error(response.error || 'Video generation failed');
       }
 
-      console.log('✅ Video generated successfully:', response.videoUrl);
-      setVideoUrl(response.videoUrl || null);
+      console.log('✅ Video generation started in background');
+      toast.success('Video generation started! This may take a few minutes...');
       
-      toast.success('360° video generated successfully!');
-      
-      return response.videoUrl;
+      // Start polling for the video
+      return new Promise<string>((resolve, reject) => {
+        startPolling(recipeId, (videoUrl) => {
+          resolve(videoUrl);
+        });
+        
+        // Reject if polling times out (handled in startPolling)
+        setTimeout(() => {
+          reject(new Error('Video generation timed out'));
+        }, 600000);
+      });
 
     } catch (error) {
       console.error('❌ Error generating video:', error);
       toast.error(error instanceof Error ? error.message : 'Failed to generate video');
-      throw error;
-    } finally {
       setIsGeneratingVideo(false);
+      setIsPolling(false);
+      throw error;
     }
   };
 
   const resetVideo = () => {
     setVideoUrl(null);
     setIsGeneratingVideo(false);
+    setIsPolling(false);
   };
 
   return {
     generateVideo,
     isGeneratingVideo,
     videoUrl,
-    resetVideo
+    resetVideo,
+    isPolling
   };
 };

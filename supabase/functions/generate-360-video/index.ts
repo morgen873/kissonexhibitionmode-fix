@@ -80,56 +80,48 @@ serve(async (req) => {
 
     const { imageUrl, recipeId, recipeTitle }: GenerateVideoRequest = await req.json();
 
-    console.log('=== 🎬 360° VIDEO GENERATION STARTED ===');
+    console.log('=== 🎬 360° VIDEO GENERATION STARTED (BACKGROUND) ===');
     console.log('Recipe ID:', recipeId);
     console.log('Image URL:', imageUrl);
     console.log('Recipe Title:', recipeTitle);
 
-    // Step 1: Test API connectivity first
-    console.log('🔐 Testing Runware API connectivity...');
-    const testResponse = await fetch('https://api.runware.ai/v1', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify([
-        {
-          taskType: 'authentication',
-          apiKey: runwareApiKey
-        }
-      ])
-    });
-
-    console.log('📊 Auth response status:', testResponse.status);
-    console.log('📊 Auth response headers:', Object.fromEntries(testResponse.headers.entries()));
-
-    if (!testResponse.ok) {
-      const errorText = await testResponse.text();
-      console.error('❌ Runware API error response:', errorText);
-      throw new Error(`Runware authentication failed: ${testResponse.status} ${testResponse.statusText} - ${errorText}`);
-    }
-
-    const authData = await testResponse.json();
-    console.log('✅ Runware authenticated successfully');
-    console.log('📊 Auth data:', authData);
-
-    // Step 2: Generate 360° video using multiple model fallbacks
-    console.log('🎥 Starting 360° rotating video generation with model fallbacks...');
-    
-    let videoResult = null;
-    let modelUsed = null;
-    let lastError = null;
-
-    // Try each model in order until one succeeds
-    for (const modelConfig of VIDEO_MODELS) {
+    // Define the background video generation task
+    async function generateVideoInBackground() {
       try {
-        console.log(`🔄 Attempting video generation with ${modelConfig.name} (${modelConfig.model})`);
-        console.log(`📋 Model description: ${modelConfig.description}`);
+        console.log('🔄 Starting background video generation...');
         
+        // Test API connectivity first
+        console.log('🔐 Testing Runware API connectivity...');
+        const testResponse = await fetch('https://api.runware.ai/v1', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify([
+            {
+              taskType: 'authentication',
+              apiKey: runwareApiKey
+            }
+          ])
+        });
+
+        console.log('📊 Auth response status:', testResponse.status);
+
+        if (!testResponse.ok) {
+          const errorText = await testResponse.text();
+          console.error('❌ Runware API error response:', errorText);
+          throw new Error(`Runware authentication failed: ${testResponse.status} ${testResponse.statusText} - ${errorText}`);
+        }
+
+        const authData = await testResponse.json();
+        console.log('✅ Runware authenticated successfully');
+
+        // Generate video with simple approach first
+        console.log('🎥 Generating 360° rotating video...');
         const videoTaskUUID = crypto.randomUUID();
         const optimizedPrompt = generate360Prompt(recipeTitle);
         
-        console.log(`📝 Using optimized prompt: ${optimizedPrompt}`);
+        console.log(`📝 Using prompt: ${optimizedPrompt}`);
         
         const videoResponse = await fetch('https://api.runware.ai/v1', {
           method: 'POST',
@@ -146,10 +138,10 @@ serve(async (req) => {
               taskUUID: videoTaskUUID,
               frameImages: [imageUrl],
               positivePrompt: optimizedPrompt,
-              model: modelConfig.model,
-              duration: modelConfig.duration,
-              width: modelConfig.width,
-              height: modelConfig.height,
+              model: 'klingai:5@3', // Use a known working model
+              duration: 4,
+              width: 512,
+              height: 512,
               outputFormat: 'MP4',
               outputQuality: 95,
               numberResults: 1
@@ -157,116 +149,102 @@ serve(async (req) => {
           ])
         });
 
-        console.log(`📊 ${modelConfig.name} response status:`, videoResponse.status);
-        console.log(`📊 ${modelConfig.name} response headers:`, Object.fromEntries(videoResponse.headers.entries()));
-        
+        console.log('📊 Video response status:', videoResponse.status);
+
         if (!videoResponse.ok) {
           const errorText = await videoResponse.text();
-          console.error(`❌ ${modelConfig.name} failed: ${videoResponse.status} - ${errorText}`);
-          lastError = new Error(`${modelConfig.name} failed: ${errorText}`);
-          continue; // Try next model
+          console.error('❌ Video generation failed:', errorText);
+          throw new Error(`Video generation failed: ${errorText}`);
         }
 
         const videoData = await videoResponse.json();
-        console.log(`📊 ${modelConfig.name} response:`, JSON.stringify(videoData, null, 2));
+        console.log('📊 Video generation response:', JSON.stringify(videoData, null, 2));
 
-        // Find the video result
-        const currentVideoResult = videoData.data?.find((item: any) => item.taskType === 'videoInference');
+        const videoResult = videoData.data?.find((item: any) => item.taskType === 'videoInference');
         
-        if (currentVideoResult && currentVideoResult.videoURL) {
-          console.log(`✅ SUCCESS with ${modelConfig.name}! Video URL:`, currentVideoResult.videoURL);
-          videoResult = currentVideoResult;
-          modelUsed = modelConfig;
-          break; // Success! Exit the loop
-        } else {
-          console.warn(`⚠️ ${modelConfig.name} returned no video URL. Trying next model...`);
-          lastError = new Error(`${modelConfig.name} returned no video URL`);
+        if (!videoResult || !videoResult.videoURL) {
+          console.error('❌ No video result found');
+          throw new Error('No video URL returned from Runware');
         }
+
+        console.log('✅ Video generated successfully:', videoResult.videoURL);
+
+        // Download and upload video to Supabase storage
+        console.log('📥 Downloading video from Runware...');
+        const videoDownloadResponse = await fetch(videoResult.videoURL);
         
+        if (!videoDownloadResponse.ok) {
+          throw new Error('Failed to download generated video');
+        }
+
+        const videoBlob = await videoDownloadResponse.arrayBuffer();
+        console.log('📊 Video blob size:', videoBlob.byteLength, 'bytes');
+
+        // Upload to Supabase storage
+        const videoFileName = `${recipeId}_360_rotation.mp4`;
+        const videoPath = `public/${videoFileName}`;
+
+        console.log('☁️ Uploading video to Supabase storage...');
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('kisson-video')
+          .upload(videoPath, videoBlob, {
+            contentType: 'video/mp4',
+            upsert: true
+          });
+
+        if (uploadError) {
+          console.error('❌ Upload error:', uploadError);
+          throw new Error(`Failed to upload video: ${uploadError.message}`);
+        }
+
+        console.log('✅ Video uploaded successfully:', uploadData.path);
+
+        // Generate public URL
+        const { data: urlData } = supabase.storage
+          .from('kisson-video')
+          .getPublicUrl(videoPath);
+
+        const finalVideoUrl = urlData.publicUrl;
+        console.log('🔗 Public video URL:', finalVideoUrl);
+
+        // Update recipe with video URL
+        console.log('💾 Updating recipe with video URL...');
+        const { error: updateError } = await supabase
+          .from('recipes')
+          .update({ video_url: finalVideoUrl })
+          .eq('id', recipeId);
+
+        if (updateError) {
+          console.error('❌ Recipe update error:', updateError);
+        } else {
+          console.log('✅ Recipe updated with video URL');
+        }
+
+        console.log('=== 🎉 BACKGROUND VIDEO GENERATION COMPLETE ===');
+
       } catch (error) {
-        console.error(`❌ Error with ${modelConfig.name}:`, error);
-        console.error(`❌ Full error details:`, error.message, error.stack);
-        lastError = error;
-        continue; // Try next model
+        console.error('❌ Background video generation failed:', error);
+        console.error('❌ Full error details:', error.message, error.stack);
       }
     }
 
-    // If all models failed
-    if (!videoResult || !videoResult.videoURL) {
-      console.error('❌ All video models failed. Last error:', lastError);
-      console.error('❌ Full error details:', lastError?.message, lastError?.stack);
-      throw new Error(`All video generation models failed. Last error: ${lastError?.message || 'Unknown error'}`);
-    }
+    // Start the background task without waiting for it
+    EdgeRuntime.waitUntil(generateVideoInBackground());
 
-    console.log(`🎉 Video generated successfully with ${modelUsed?.name}:`, videoResult.videoURL);
-
-    // Step 3: Download and upload video to Supabase storage
-    console.log('📥 Downloading video from Runware...');
-    const videoDownloadResponse = await fetch(videoResult.videoURL);
-    
-    if (!videoDownloadResponse.ok) {
-      throw new Error('Failed to download generated video');
-    }
-
-    const videoBlob = await videoDownloadResponse.arrayBuffer();
-    console.log('📊 Video blob size:', videoBlob.byteLength, 'bytes');
-
-    // Step 4: Upload to Supabase storage
-    const videoFileName = `${recipeId}_360_rotation.mp4`;
-    const videoPath = `public/${videoFileName}`;
-
-    console.log('☁️ Uploading video to Supabase storage...');
-    const { data: uploadData, error: uploadError } = await supabase.storage
-      .from('kisson-video')
-      .upload(videoPath, videoBlob, {
-        contentType: 'video/mp4',
-        upsert: true
-      });
-
-    if (uploadError) {
-      console.error('❌ Upload error:', uploadError);
-      throw new Error(`Failed to upload video: ${uploadError.message}`);
-    }
-
-    console.log('✅ Video uploaded successfully:', uploadData.path);
-
-    // Step 5: Generate public URL
-    const { data: urlData } = supabase.storage
-      .from('kisson-video')
-      .getPublicUrl(videoPath);
-
-    const finalVideoUrl = urlData.publicUrl;
-    console.log('🔗 Public video URL:', finalVideoUrl);
-
-    // Step 6: Update recipe with video URL
-    console.log('💾 Updating recipe with video URL...');
-    const { error: updateError } = await supabase
-      .from('recipes')
-      .update({ video_url: finalVideoUrl })
-      .eq('id', recipeId);
-
-    if (updateError) {
-      console.error('❌ Recipe update error:', updateError);
-      // Don't throw here, video is still generated successfully
-    } else {
-      console.log('✅ Recipe updated with video URL');
-    }
-
-    console.log('=== 🎉 360° VIDEO GENERATION COMPLETE ===');
-
+    // Return immediate response
+    console.log('📤 Returning immediate response - video generation in progress...');
     return new Response(JSON.stringify({
       success: true,
-      videoUrl: finalVideoUrl,
+      message: 'Video generation started in background. Please check back in a few minutes.',
       recipeId,
-      cost: videoResult.cost || 0,
-      modelUsed: modelUsed?.name || 'unknown',
-      message: `360° video generated successfully using ${modelUsed?.name || 'unknown'} model`
+      status: 'processing'
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
   } catch (error) {
     console.error('❌ Error in generate-360-video function:', error);
+    console.error('❌ Full error details:', error.message, error.stack);
     return new Response(JSON.stringify({ 
       error: error.message,
       success: false 
