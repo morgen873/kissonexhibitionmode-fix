@@ -17,9 +17,9 @@ interface GenerateVideoRequest {
 // Generate 360-degree video prompt based on original image prompt
 function generate360Prompt(recipeTitle: string, imagePrompt?: string): string {
   if (imagePrompt) {
-    return `create 360 degrees orbital camera movement of a ${imagePrompt}`;
+    return `create 360 degrees orbital camera movement around a dumpling. The dumpling must maintain its exact original shape and appearance throughout the entire video. Only the camera moves in a smooth circular orbit - the dumpling remains completely unchanged and stationary. No morphing, no transformation, no shape changes.`;
   }
-  return `create 360 degrees orbital camera movement of a dumpling from ${recipeTitle}`;
+  return `create 360 degrees orbital camera movement around a dumpling. The dumpling must maintain its exact original shape and appearance throughout the entire video. Only the camera moves in a smooth circular orbit - the dumpling remains completely unchanged and stationary. No morphing, no transformation, no shape changes.`;
 }
 
 async function generateVideoInBackground(imageUrl: string, recipeId: string, recipeTitle: string, imagePrompt?: string) {
