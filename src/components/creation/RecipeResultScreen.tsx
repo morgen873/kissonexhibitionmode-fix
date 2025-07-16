@@ -36,11 +36,38 @@ const RecipeResultScreen: React.FC<RecipeResultScreenProps> = ({ recipe, recipeI
 
             <div className="w-full flex flex-col items-center gap-4">
                 {recipe.imageUrl !== '/placeholder.svg' && (
-                    <VideoGenerationButton 
-                        recipe={recipe}
-                        recipeId={recipeId}
-                        onVideoGenerated={handleVideoGenerated} 
-                    />
+                    <div className="flex flex-col items-center gap-2">
+                        {!videoUrl ? (
+                            <VideoGenerationButton 
+                                recipe={recipe}
+                                recipeId={recipeId}
+                                onVideoGenerated={handleVideoGenerated} 
+                            />
+                        ) : (
+                            <button
+                                onClick={() => {
+                                    const popup = window.open('', '_blank', 'width=800,height=600,resizable=yes,scrollbars=yes');
+                                    if (popup) {
+                                        popup.document.write(`
+                                            <html>
+                                                <head><title>360° Recipe Video</title></head>
+                                                <body style="margin:0;padding:20px;background:#000;display:flex;justify-content:center;align-items:center;height:100vh;">
+                                                    <video controls autoplay style="max-width:100%;max-height:100%;">
+                                                        <source src="${videoUrl}" type="video/mp4">
+                                                        Your browser does not support the video tag.
+                                                    </video>
+                                                </body>
+                                            </html>
+                                        `);
+                                        popup.document.close();
+                                    }
+                                }}
+                                className="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-3 rounded-lg font-medium transition-colors"
+                            >
+                                🎬 Play 360° Video
+                            </button>
+                        )}
+                    </div>
                 )}
                 <RecipeActionButtons recipe={recipe} onReset={onReset} />
             </div>
