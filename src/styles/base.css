@@ -3,89 +3,117 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Secular+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap');
 
-/* Epicure-inspired elegant design system with warm colors and typography */
+/* Syd Mead & Luigi Colani inspired futuristic design system */
 
 @layer base {
   :root {
-    --background: 45 100% 97%;
-    --foreground: 25 95% 15%;
+    /* Deep space blacks and electric blues base */
+    --background: 220 30% 8%;
+    --foreground: 195 100% 85%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 25 95% 15%;
+    /* Holographic surfaces */
+    --card: 220 25% 12%;
+    --card-foreground: 195 90% 90%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 25 95% 15%;
+    --popover: 220 25% 10%;
+    --popover-foreground: 195 90% 90%;
 
-    --primary: 45 90% 25%;
-    --primary-foreground: 45 100% 97%;
+    /* Electric cyan primary */
+    --primary: 195 100% 60%;
+    --primary-foreground: 220 30% 8%;
 
-    --secondary: 45 30% 90%;
-    --secondary-foreground: 25 95% 15%;
+    /* Warm amber secondary */
+    --secondary: 35 90% 65%;
+    --secondary-foreground: 220 30% 8%;
 
-    --muted: 45 30% 90%;
-    --muted-foreground: 25 50% 40%;
+    /* Holographic accents */
+    --muted: 220 20% 18%;
+    --muted-foreground: 195 50% 70%;
 
-    --accent: 10 80% 60%;
-    --accent-foreground: 0 0% 100%;
+    /* Organic flow accent */
+    --accent: 280 85% 70%;
+    --accent-foreground: 220 30% 8%;
 
-    --destructive: 0 70% 50%;
+    /* Warning states */
+    --destructive: 0 85% 65%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 45 30% 85%;
-    --input: 45 30% 85%;
-    --ring: 45 90% 50%;
+    /* Interface elements */
+    --border: 195 30% 25%;
+    --input: 220 25% 15%;
+    --ring: 195 100% 60%;
 
-    --radius: 1rem;
+    /* Organic radius system */
+    --radius: 1.5rem;
 
-    --sidebar-background: 45 100% 98%;
-    --sidebar-foreground: 25 95% 15%;
-    --sidebar-primary: 45 90% 25%;
-    --sidebar-primary-foreground: 45 100% 97%;
-    --sidebar-accent: 45 30% 95%;
-    --sidebar-accent-foreground: 25 95% 15%;
-    --sidebar-border: 45 30% 85%;
-    --sidebar-ring: 45 90% 50%;
+    /* Sidebar holographic theme */
+    --sidebar-background: 220 25% 10%;
+    --sidebar-foreground: 195 90% 90%;
+    --sidebar-primary: 195 100% 60%;
+    --sidebar-primary-foreground: 220 30% 8%;
+    --sidebar-accent: 220 20% 18%;
+    --sidebar-accent-foreground: 195 90% 90%;
+    --sidebar-border: 195 30% 25%;
+    --sidebar-ring: 195 100% 60%;
+
+    /* Custom futuristic variables */
+    --holographic-primary: 195 100% 60%;
+    --holographic-secondary: 280 85% 70%;
+    --organic-amber: 35 90% 65%;
+    --deep-space: 220 30% 8%;
+    --electric-glow: 195 100% 80%;
+    
+    /* Gradient definitions */
+    --gradient-holographic: linear-gradient(135deg, hsl(195 100% 60% / 0.8), hsl(280 85% 70% / 0.6));
+    --gradient-organic: linear-gradient(180deg, hsl(35 90% 65% / 0.2), hsl(280 85% 70% / 0.1));
+    --gradient-space: linear-gradient(180deg, hsl(220 30% 8%), hsl(220 25% 12%));
+    
+    /* Glow effects */
+    --glow-cyan: 0 0 20px hsl(195 100% 60% / 0.5);
+    --glow-purple: 0 0 30px hsl(280 85% 70% / 0.4);
+    --glow-amber: 0 0 25px hsl(35 90% 65% / 0.3);
   }
 
   .dark {
-    --background: 25 95% 5%;
-    --foreground: 45 100% 95%;
+    /* Enhanced dark mode for deep space feel */
+    --background: 220 35% 6%;
+    --foreground: 195 100% 90%;
 
-    --card: 25 95% 8%;
-    --card-foreground: 45 100% 95%;
+    --card: 220 30% 10%;
+    --card-foreground: 195 95% 95%;
 
-    --popover: 25 95% 8%;
-    --popover-foreground: 45 100% 95%;
+    --popover: 220 30% 8%;
+    --popover-foreground: 195 95% 95%;
 
-    --primary: 45 100% 80%;
-    --primary-foreground: 25 95% 10%;
+    --primary: 195 100% 70%;
+    --primary-foreground: 220 35% 6%;
 
-    --secondary: 25 50% 15%;
-    --secondary-foreground: 45 100% 95%;
+    --secondary: 35 95% 70%;
+    --secondary-foreground: 220 35% 6%;
 
-    --muted: 25 50% 15%;
-    --muted-foreground: 45 50% 70%;
+    --muted: 220 25% 15%;
+    --muted-foreground: 195 60% 75%;
 
-    --accent: 10 80% 65%;
-    --accent-foreground: 25 95% 10%;
+    --accent: 280 90% 75%;
+    --accent-foreground: 220 35% 6%;
 
-    --destructive: 0 70% 60%;
+    --destructive: 0 90% 70%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 25 50% 20%;
-    --input: 25 50% 20%;
-    --ring: 45 100% 70%;
+    --border: 195 40% 20%;
+    --input: 220 30% 12%;
+    --ring: 195 100% 70%;
     
-    --sidebar-background: 25 95% 8%;
-    --sidebar-foreground: 45 100% 90%;
-    --sidebar-primary: 45 100% 80%;
-    --sidebar-primary-foreground: 25 95% 10%;
-    --sidebar-accent: 25 50% 15%;
-    --sidebar-accent-foreground: 45 100% 90%;
-    --sidebar-border: 25 50% 20%;
-    --sidebar-ring: 45 100% 70%;
+    --sidebar-background: 220 30% 8%;
+    --sidebar-foreground: 195 95% 95%;
+    --sidebar-primary: 195 100% 70%;
+    --sidebar-primary-foreground: 220 35% 6%;
+    --sidebar-accent: 220 25% 15%;
+    --sidebar-accent-foreground: 195 95% 95%;
+    --sidebar-border: 195 40% 20%;
+    --sidebar-ring: 195 100% 70%;
   }
 }
 
@@ -96,19 +124,83 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Secular One', 'system-ui', sans-serif;
+    font-family: 'Inter', 'system-ui', sans-serif;
+    background: var(--gradient-space);
+    min-height: 100vh;
   }
 }
 
 /* Custom font classes */
-.font-serif {
-  font-family: 'Secular One', 'system-ui', sans-serif;
+.font-geometric {
+  font-family: 'Orbitron', 'monospace';
+}
+
+.font-organic {
+  font-family: 'Inter', 'system-ui', sans-serif;
 }
 
 .font-sans {
-  font-family: 'Secular One', 'system-ui', sans-serif;
+  font-family: 'Inter', 'system-ui', sans-serif;
 }
 
 .font-mono {
-  font-family: 'Secular One', 'system-ui', sans-serif;
+  font-family: 'Orbitron', 'monospace';
+}
+
+/* Futuristic utility classes */
+@layer components {
+  .holographic-surface {
+    background: var(--gradient-holographic);
+    backdrop-filter: blur(10px);
+    border: 1px solid hsl(var(--border));
+    box-shadow: var(--glow-cyan);
+  }
+  
+  .organic-container {
+    border-radius: 2rem;
+    background: var(--gradient-organic);
+    backdrop-filter: blur(8px);
+  }
+  
+  .geometric-panel {
+    background: hsl(var(--card));
+    border: 2px solid hsl(var(--primary) / 0.3);
+    box-shadow: inset 0 1px 0 hsl(var(--primary) / 0.1);
+  }
+  
+  .electric-glow {
+    box-shadow: var(--glow-cyan);
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .electric-glow:hover {
+    box-shadow: 0 0 30px hsl(var(--primary) / 0.6);
+  }
+  
+  .flow-transition {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .biomorphic-button {
+    border-radius: 2rem;
+    background: var(--gradient-holographic);
+    border: none;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .biomorphic-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, hsl(var(--accent) / 0.3), transparent);
+    transition: left 0.5s ease;
+  }
+  
+  .biomorphic-button:hover::before {
+    left: 100%;
+  }
 }

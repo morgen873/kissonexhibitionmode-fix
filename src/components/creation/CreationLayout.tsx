@@ -2,6 +2,7 @@
 import React from 'react';
 import CreationContainer from '@/components/creation/CreationContainer';
 import { AnimatedContainer } from '@/components/ui/EnhancedAnimations';
+import FuturisticBackground from '@/components/ui/FuturisticBackground';
 
 interface CreationLayoutProps {
   progress: number;
@@ -34,7 +35,7 @@ const CreationLayout: React.FC<CreationLayoutProps> = ({
   const footerProps = hasStartedCreation ? { variant: "slide" as const, delay: 200 } : {};
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden">
+    <FuturisticBackground variant="creation" className="overflow-x-hidden">
       <OuterWrapper {...outerProps}>
         <CreationContainer 
           progress={progress} 
@@ -49,17 +50,19 @@ const CreationLayout: React.FC<CreationLayoutProps> = ({
         </CreationContainer>
       </OuterWrapper>
 
-      {/* Enhanced Footer with better text visibility */}
+      {/* Enhanced futuristic footer */}
       {!hasStartedCreation && (
         <FooterWrapper {...footerProps}>
-          <footer className="relative z-10 bg-black/95 backdrop-blur-xl border-t border-green-400/30 text-green-100 mt-4 sm:mt-8 w-full text-center sm:py-8 shadow-xl shadow-green-400/10 transition-all duration-300 py-0 my-0">
-            <p className="text-base sm:text-lg font-sans px-4 font-semibold">
-              A DESIGN PROJECT BY <span className="text-green-400 font-bold mx-1 drop-shadow-lg hover:text-green-300 transition-colors duration-300">OREN/LUPE</span>
-            </p>
+          <footer className="relative z-10 geometric-panel backdrop-blur-xl border-t-2 border-primary/30 text-foreground mt-4 sm:mt-8 w-full text-center sm:py-8 electric-glow transition-all duration-300 py-0 my-0">
+            <div className="holographic-surface p-4 rounded-organic mx-4">
+              <p className="text-base sm:text-lg font-geometric px-4 font-bold tracking-wider">
+                A DESIGN PROJECT BY <span className="text-primary font-bold mx-1 drop-shadow-lg hover:text-accent transition-colors duration-300 animate-holographic-pulse">OREN/LUPE</span>
+              </p>
+            </div>
           </footer>
         </FooterWrapper>
       )}
-    </div>
+    </FuturisticBackground>
   );
 };
 
