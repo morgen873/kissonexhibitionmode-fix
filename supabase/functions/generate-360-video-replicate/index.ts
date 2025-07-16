@@ -45,19 +45,16 @@ async function generateVideoInBackground(imageUrl: string, recipeId: string, rec
     const prompt = generate360Prompt(recipeTitle, imagePrompt);
     console.log('📝 Using prompt:', prompt);
 
-    // Generate video using a working model - Stable Video Diffusion by christophy
-    console.log('🎥 Generating video with Stable Video Diffusion...');
+    // Generate video using pixverse model
+    console.log('🎥 Generating video with Pixverse...');
     const output = await replicate.run(
-      "christophy/stable-video-diffusion",
+      "pixverse/pixverse-v4.5",
       {
         input: {
-          input_image: imageUrl,
-          video_length: "14_frames_with_svd",
-          sizing_strategy: "maintain_aspect_ratio",
-          frames_per_second: 6,
-          motion_bucket_id: 127,
-          cond_aug: 0.02,
-          decoding_t: 14
+          image: imageUrl,
+          prompt: prompt,
+          aspect_ratio: "1:1",
+          motion_strength: 0.8
         }
       }
     );
