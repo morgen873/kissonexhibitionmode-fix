@@ -31,18 +31,11 @@ const RecipeResultScreen: React.FC<RecipeResultScreenProps> = ({ recipe, recipeI
 
             <div className="flex flex-col lg:flex-row gap-6 w-full justify-center items-start">
                 <RecipeImageDisplay recipe={recipe} />
-                {videoUrl ? (
-                    <div className="flex flex-col lg:flex-row gap-6 items-start">
-                        <VideoDisplay videoUrl={videoUrl} recipeTitle={recipe.name} />
-                        <RecipeLabelPreview recipe={recipe} />
-                    </div>
-                ) : (
-                    <RecipeLabelPreview recipe={recipe} />
-                )}
+                <RecipeLabelPreview recipe={recipe} />
             </div>
 
             <div className="w-full flex flex-col items-center gap-4">
-                {!videoUrl && recipe.imageUrl !== '/placeholder.svg' && (
+                {recipe.imageUrl !== '/placeholder.svg' && (
                     <VideoGenerationButton 
                         recipe={recipe}
                         recipeId={recipeId}

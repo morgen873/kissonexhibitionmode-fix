@@ -24,8 +24,12 @@ const VideoGenerationButton: React.FC<VideoGenerationButtonProps> = ({
       // Extract image prompt from recipe data if available
       const imagePrompt = recipe.imagePrompt;
       const videoUrl = await generateVideo(recipe.imageUrl, recipeId, recipe.name, imagePrompt);
-      if (videoUrl && onVideoGenerated) {
-        onVideoGenerated(videoUrl);
+      if (videoUrl) {
+        // Open video in new tab instead of inline display
+        window.open(videoUrl, '_blank', 'noopener,noreferrer');
+        if (onVideoGenerated) {
+          onVideoGenerated(videoUrl);
+        }
       }
     } catch (error) {
       // Error is already handled in the hook
