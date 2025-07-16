@@ -42,19 +42,19 @@ Futuristic culinary style:
 - Hyper-realistic food photography of exactly one perfectly sealed dumpling with futuristic presentation
 - Advanced molecular gastronomy techniques visible in the dumpling's appearance
 - Vibrant, colorful holographic or iridescent effects on the dumpling wrapper
-- Colorful futuristic backdrop with neon lighting and sci-fi ambiance
+- Solid black background, no distractions, dumpling is the sole focus
 - Studio lighting with vibrant neon accent lighting (blue/purple/pink tones)
 - Close-up centered composition focusing on the single intact dumpling
 - Emphasis on high-tech food preparation aesthetics while maintaining authentic food appearance
 - The dumpling should look real and edible, just prepared with futuristic techniques
 - Only one dumpling visible in the entire image
-- Rich, colorful background that complements the futuristic theme
+- Solid black background, no distractions, dumpling is the sole focus
 
 Technical specifications:
 - High resolution, professional food photography quality
 - No text, logos, or graphic elements
 - No utensils, plates, surfaces, or any objects beyond the single dumpling
-- Vibrant, colorful background that enhances the futuristic aesthetic
+- Solid black background, no distractions, dumpling is the sole focus
 - Commercial food photography style with futuristic elements
 - IMPORTANT: Show only one single completely sealed dumpling with vibrant, colorful presentation`;
 
@@ -93,18 +93,18 @@ Historical culinary style:
 - Hyper-realistic food photography of exactly one perfectly sealed dumpling with traditional historical preparation
 - Traditional handcrafted appearance with slightly rustic texture showing artisanal preparation
 - Authentic historical cooking methods visible in surface texture (steamed, boiled, or pan-fried finish)
-- Rich, warm, earthy background that complements the historical theme
+- Solid black background, no distractions, dumpling is the sole focus
 - Warm, natural lighting reminiscent of traditional cooking environments with golden tones
 - Close-up centered composition focusing on the single intact dumpling
 - Emphasis on traditional food preparation techniques and authentic historical appearance
 - Only one dumpling visible in the entire image
-- Colorful, traditional backdrop that enhances the historical authenticity
+- Solid black background, no distractions, dumpling is the sole focus
 
 Technical specifications:
 - High resolution, professional food photography quality
 - No text, logos, or graphic elements
 - No utensils, plates, surfaces, or any objects beyond the single dumpling
-- Warm, colorful background that complements the historical theme
+- Solid black background, no distractions, dumpling is the sole focus
 - Commercial food photography style with historical authenticity
 - IMPORTANT: Show only one single completely sealed dumpling with warm, colorful presentation`;
 
@@ -143,18 +143,18 @@ Contemporary culinary style:
 - Hyper-realistic food photography of exactly one perfectly sealed dumpling with modern culinary presentation
 - Clean, professional preparation with contemporary cooking techniques
 - Modern aesthetic with attention to visual appeal and vibrant colors
-- Beautiful, colorful backdrop that complements the contemporary theme
+- Solid black background, no distractions, dumpling is the sole focus
 - Professional studio lighting with modern food photography standards and vibrant lighting
 - Close-up centered composition focusing on the single intact dumpling
 - Emphasis on current culinary trends and contemporary food presentation
 - Only one dumpling visible in the entire image
-- Rich, colorful background that enhances the modern aesthetic
+- Solid black background, no distractions, dumpling is the sole focus
 
 Technical specifications:
 - High resolution, professional food photography quality
 - No text, logos, or graphic elements
 - No utensils, plates, surfaces, or any objects beyond the single dumpling
-- Vibrant, colorful background that complements the contemporary theme
+- Solid black background, no distractions, dumpling is the sole focus
 - Commercial food photography style with contemporary aesthetics
 - IMPORTANT: Show only one single completely sealed dumpling with vibrant, colorful presentation`;
 

@@ -56,7 +56,7 @@ const VIDEO_MODELS = [
 
 // Optimized prompts for 360° product display
 function generate360Prompt(recipeTitle: string): string {
-  return `Professional 360-degree product showcase of ${recipeTitle}. Smooth orbital camera movement rotating completely around the food item in a perfect circle. Show all sides: front, right side, back, left side, and back to front. Clean studio lighting, white background, steady rotation at constant speed. No camera shake, no zooming, only smooth circular orbit motion. Product remains centered and stationary while camera circles around it. Commercial food photography style, high-end product display.`;
+  return `Professional 360-degree product showcase of ${recipeTitle} on a solid black background. Smooth orbital camera movement rotating completely around the food item in a perfect circle. Show all sides: front, right side, back, left side, and back to front. Clean studio lighting, solid black background, steady rotation at constant speed. No camera shake, no zooming, only smooth circular orbit motion. Product remains centered and stationary while camera circles around it. Commercial food photography style, high-end product display with solid black background, no distractions, dumpling is the sole focus.`;
 }
 
 serve(async (req) => {
