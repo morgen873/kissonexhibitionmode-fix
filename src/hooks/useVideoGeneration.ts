@@ -18,6 +18,8 @@ export const useVideoGeneration = () => {
 
   const checkVideoStatus = async (recipeId: string): Promise<string | null> => {
     try {
+      console.log('🔍 Checking video status for recipe:', recipeId);
+      
       const { data, error } = await supabase
         .from('recipes')
         .select('video_url')
@@ -25,13 +27,22 @@ export const useVideoGeneration = () => {
         .single();
 
       if (error) {
-        console.error('Error checking video status:', error);
+        console.error('❌ Error checking video status:', error);
         return null;
+      }
+
+      console.log('📊 Video status check result:', data);
+      
+      // Check if video_url starts with ERROR: to handle error cases
+      if (data?.video_url && data.video_url.startsWith('ERROR:')) {
+        console.error('❌ Video generation failed:', data.video_url);
+        toast.error('Video generation failed: ' + data.video_url.replace('ERROR: ', ''));
+        return 'ERROR';
       }
 
       return data?.video_url || null;
     } catch (error) {
-      console.error('Error checking video status:', error);
+      console.error('❌ Error checking video status:', error);
       return null;
     }
   };
@@ -39,12 +50,22 @@ export const useVideoGeneration = () => {
   const startPolling = (recipeId: string, onVideoReady: (videoUrl: string) => void) => {
     if (isPolling) return;
     
+    console.log('🔄 Starting video polling for recipe:', recipeId);
     setIsPolling(true);
     
     const pollInterval = setInterval(async () => {
+      console.log('📡 Polling for video status...');
       const videoUrl = await checkVideoStatus(recipeId);
       
-      if (videoUrl) {
+      if (videoUrl === 'ERROR') {
+        // Error case - stop polling
+        setIsGeneratingVideo(false);
+        setIsPolling(false);
+        clearInterval(pollInterval);
+        return;
+      }
+      
+      if (videoUrl && !videoUrl.startsWith('ERROR:')) {
         console.log('✅ Video is ready:', videoUrl);
         setVideoUrl(videoUrl);
         setIsGeneratingVideo(false);
@@ -52,6 +73,8 @@ export const useVideoGeneration = () => {
         onVideoReady(videoUrl);
         clearInterval(pollInterval);
         toast.success('360° video is ready!');
+      } else {
+        console.log('⏳ Video not ready yet, continuing to poll...');
       }
     }, 5000); // Check every 5 seconds
 

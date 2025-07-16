@@ -87,8 +87,14 @@ serve(async (req) => {
 
     // Define the background video generation task
     async function generateVideoInBackground() {
+      let localSupabase;
       try {
+        // Create a fresh Supabase client inside the background task
+        localSupabase = createClient(supabaseUrl, supabaseServiceKey);
         console.log('🔄 Starting background video generation...');
+        console.log('🔧 Background task - Recipe ID:', recipeId);
+        console.log('🔧 Background task - Image URL:', imageUrl);
+        console.log('🔧 Background task - Recipe Title:', recipeTitle);
         
         // Test API connectivity first
         console.log('🔐 Testing Runware API connectivity...');
@@ -185,7 +191,7 @@ serve(async (req) => {
         const videoPath = `public/${videoFileName}`;
 
         console.log('☁️ Uploading video to Supabase storage...');
-        const { data: uploadData, error: uploadError } = await supabase.storage
+        const { data: uploadData, error: uploadError } = await localSupabase.storage
           .from('kisson-video')
           .upload(videoPath, videoBlob, {
             contentType: 'video/mp4',
@@ -200,7 +206,7 @@ serve(async (req) => {
         console.log('✅ Video uploaded successfully:', uploadData.path);
 
         // Generate public URL
-        const { data: urlData } = supabase.storage
+        const { data: urlData } = localSupabase.storage
           .from('kisson-video')
           .getPublicUrl(videoPath);
 
@@ -209,22 +215,41 @@ serve(async (req) => {
 
         // Update recipe with video URL
         console.log('💾 Updating recipe with video URL...');
-        const { error: updateError } = await supabase
+        console.log('💾 Recipe ID to update:', recipeId);
+        console.log('💾 Video URL to save:', finalVideoUrl);
+        
+        const { data: updateData, error: updateError } = await localSupabase
           .from('recipes')
           .update({ video_url: finalVideoUrl })
           .eq('id', recipeId);
 
         if (updateError) {
           console.error('❌ Recipe update error:', updateError);
+          console.error('❌ Update error details:', JSON.stringify(updateError, null, 2));
         } else {
           console.log('✅ Recipe updated with video URL');
+          console.log('✅ Update result:', updateData);
         }
 
         console.log('=== 🎉 BACKGROUND VIDEO GENERATION COMPLETE ===');
 
       } catch (error) {
         console.error('❌ Background video generation failed:', error);
-        console.error('❌ Full error details:', error.message, error.stack);
+        console.error('❌ Full error details:', error.message);
+        console.error('❌ Error stack:', error.stack);
+        
+        // Try to update the recipe with an error status
+        if (localSupabase && recipeId) {
+          try {
+            await localSupabase
+              .from('recipes')
+              .update({ video_url: 'ERROR: ' + error.message })
+              .eq('id', recipeId);
+            console.log('📝 Updated recipe with error status');
+          } catch (updateError) {
+            console.error('❌ Failed to update recipe with error:', updateError);
+          }
+        }
       }
     }
 
