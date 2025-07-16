@@ -145,7 +145,7 @@ serve(async (req) => {
               frameImages: [imageUrl],
               positivePrompt: optimizedPrompt,
               model: 'klingai:5@3', // Use a known working model
-              duration: 4,
+              duration: 5, // Changed from 4 to 5 (minimum allowed)
               width: 512,
               height: 512,
               outputFormat: 'MP4',
