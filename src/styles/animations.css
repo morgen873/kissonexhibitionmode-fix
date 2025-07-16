@@ -98,7 +98,22 @@
   }
   90% {
     opacity: 1;
-  }
+}
+
+/* 360° Rotation Animation */
+@keyframes rotate360 {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.rotate-360 {
+  animation: rotate360 4s linear infinite;
+}
+
+.rotate-360-hover:hover {
+  animation-play-state: paused;
+  transform: scale(1.05);
+}
   100% {
     transform: translateY(100vh);
     opacity: 0;
