@@ -52,7 +52,7 @@ const RecipeResultScreen: React.FC<RecipeResultScreenProps> = ({ recipe, recipeI
                                             <html>
                                                 <head><title>360° Recipe Video</title></head>
                                                 <body style="margin:0;padding:20px;background:#000;display:flex;justify-content:center;align-items:center;height:100vh;">
-                                                    <video controls autoplay style="max-width:100%;max-height:100%;">
+                                                     <video controls autoplay loop muted style="max-width:100%;max-height:100%;">
                                                         <source src="${videoUrl}" type="video/mp4">
                                                         Your browser does not support the video tag.
                                                     </video>
