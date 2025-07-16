@@ -25,10 +25,10 @@ function generate360Prompt(recipeTitle: string, imagePrompt?: string): string {
 async function generateVideoInBackground(imageUrl: string, recipeId: string, recipeTitle: string, imagePrompt?: string) {
   const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
   const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-  const replicateApiKey = Deno.env.get('replicate');
+  const replicateApiKey = Deno.env.get('REPLICATE_API_TOKEN');
 
   if (!replicateApiKey) {
-    throw new Error('Replicate API key not found');
+    throw new Error('Replicate API token not found');
   }
 
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
@@ -45,24 +45,24 @@ async function generateVideoInBackground(imageUrl: string, recipeId: string, rec
     const prompt = generate360Prompt(recipeTitle, imagePrompt);
     console.log('📝 Using prompt:', prompt);
 
-    // Generate video using a different model - LumaLabs Dream Machine
-    console.log('🎥 Generating video with LumaLabs Dream Machine...');
+    // Generate video using a proven working model - Stable Video Diffusion
+    console.log('🎥 Generating video with Stable Video Diffusion...');
     const output = await replicate.run(
-      "lumalabs/dream-machine:74d216ee9240c065bc292e5a82e6d6fa5c5eb464a83dbac3a4a8156e48d2c1cc",
+      "stability-ai/stable-video-diffusion:3f0457e4619daac51203dedb1a4c808e57bc2ab4c6",
       {
         input: {
-          prompt: prompt,
           image: imageUrl,
-          loop: true,
-          aspect_ratio: "1:1"
+          motion_bucket_id: 127,
+          fps: 6,
+          cond_aug: 0.02
         }
       }
     );
 
-    console.log('✅ Luma Ray video generation response:', output);
+    console.log('✅ Video generation response:', output);
 
     if (!output) {
-      throw new Error('No video generated from Luma Ray');
+      throw new Error('No video generated from Stable Video Diffusion');
     }
 
     const videoUrl = output;
@@ -145,7 +145,7 @@ serve(async (req) => {
 
   try {
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
-    const replicateApiKey = Deno.env.get('replicate');
+    const replicateApiKey = Deno.env.get('REPLICATE_API_TOKEN');
 
     if (!supabaseUrl || !replicateApiKey) {
       throw new Error('Missing required environment variables');
