@@ -45,16 +45,19 @@ async function generateVideoInBackground(imageUrl: string, recipeId: string, rec
     const prompt = generate360Prompt(recipeTitle, imagePrompt);
     console.log('📝 Using prompt:', prompt);
 
-    // Generate video using a proven working model - Stable Video Diffusion
+    // Generate video using a working model - Stable Video Diffusion by christophy
     console.log('🎥 Generating video with Stable Video Diffusion...');
     const output = await replicate.run(
-      "stability-ai/stable-video-diffusion:3f0457e4619daac51203dedb1a4c808e57bc2ab4c6",
+      "christophy/stable-video-diffusion",
       {
         input: {
-          image: imageUrl,
+          input_image: imageUrl,
+          video_length: "14_frames_with_svd",
+          sizing_strategy: "maintain_aspect_ratio",
+          frames_per_second: 6,
           motion_bucket_id: 127,
-          fps: 6,
-          cond_aug: 0.02
+          cond_aug: 0.02,
+          decoding_t: 14
         }
       }
     );
