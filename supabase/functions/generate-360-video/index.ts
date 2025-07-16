@@ -33,10 +33,13 @@ serve(async (req) => {
   }
 
   try {
-    const runwareApiKey = Deno.env.get('RUNWARE_API_KEY');
+    const runwareApiKey = Deno.env.get('kisson-runware') || Deno.env.get('RUNWARE_API_KEY');
     if (!runwareApiKey) {
+      console.error('❌ RUNWARE_API_KEY environment variable not found');
       throw new Error('RUNWARE_API_KEY not configured');
     }
+
+    console.log('🔑 Using Runware API key:', runwareApiKey.substring(0, 8) + '...');
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -49,9 +52,9 @@ serve(async (req) => {
     console.log('Image URL:', imageUrl);
     console.log('Recipe Title:', recipeTitle);
 
-    // Step 1: Authenticate with Runware
-    console.log('🔐 Authenticating with Runware...');
-    const authResponse = await fetch('https://api.runware.ai/v1', {
+    // Step 1: Test API connectivity first
+    console.log('🔐 Testing Runware API connectivity...');
+    const testResponse = await fetch('https://api.runware.ai/v1', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -64,12 +67,18 @@ serve(async (req) => {
       ])
     });
 
-    if (!authResponse.ok) {
-      throw new Error(`Runware authentication failed: ${authResponse.statusText}`);
+    console.log('📊 Auth response status:', testResponse.status);
+    console.log('📊 Auth response headers:', Object.fromEntries(testResponse.headers.entries()));
+
+    if (!testResponse.ok) {
+      const errorText = await testResponse.text();
+      console.error('❌ Runware API error response:', errorText);
+      throw new Error(`Runware authentication failed: ${testResponse.status} ${testResponse.statusText} - ${errorText}`);
     }
 
-    const authData = await authResponse.json();
-    console.log('✅ Runware authenticated');
+    const authData = await testResponse.json();
+    console.log('✅ Runware authenticated successfully');
+    console.log('📊 Auth data:', authData);
 
     // Step 2: Generate 360° video using image-to-video
     console.log('🎥 Generating 360° rotating video...');
