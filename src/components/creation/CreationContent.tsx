@@ -21,6 +21,7 @@ interface CreationContentProps extends CreationContentHandlers, CreationContentS
 const CreationContent: React.FC<CreationContentProps> = ({
   isCreatingRecipe,
   recipeResult,
+  recipeId,
   hasStartedCreation,
   currentIntroStep,
   creationStep,
@@ -55,7 +56,7 @@ const CreationContent: React.FC<CreationContentProps> = ({
   }
 
   if (recipeResult) {
-    return <RecipeResultScreen recipe={recipeResult} onReset={handleReset} />;
+    return <RecipeResultScreen recipe={recipeResult} recipeId={recipeId || ''} onReset={handleReset} />;
   }
 
   // Check if current step should hide navigation (question or timeline steps)

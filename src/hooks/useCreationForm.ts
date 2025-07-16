@@ -45,6 +45,7 @@ export const useCreationForm = () => {
 
   const {
     recipeResult,
+    recipeId,
     isCreatingRecipe,
     handleSubmit: submitRecipe,
     resetRecipe
@@ -67,6 +68,7 @@ export const useCreationForm = () => {
     customAnswers,
     controlValues,
     recipeResult,
+    recipeId,
     isCreatingRecipe,
     isNextDisabled,
     handleAnswerSelect,

@@ -5,6 +5,7 @@ import { RecipeService } from '@/services/recipeService';
 
 export const useRecipeSubmission = () => {
   const [recipeResult, setRecipeResult] = useState<RecipeResult | null>(null);
+  const [recipeId, setRecipeId] = useState<string | null>(null);
   const [isCreatingRecipe, setIsCreatingRecipe] = useState(false);
 
   const handleSubmit = async (
@@ -23,6 +24,7 @@ export const useRecipeSubmission = () => {
       console.log("=== ✅ RECIPE GENERATION COMPLETE ===");
       console.log("📋 Recipe received:", newRecipe);
 
+      setRecipeId(newRecipe.id);
       setRecipeResult({
         name: newRecipe.title,
         imageUrl: newRecipe.image_url || "/placeholder.svg",
@@ -38,11 +40,13 @@ export const useRecipeSubmission = () => {
 
   const resetRecipe = () => {
     setRecipeResult(null);
+    setRecipeId(null);
     setIsCreatingRecipe(false);
   };
 
   return {
     recipeResult,
+    recipeId,
     isCreatingRecipe,
     handleSubmit,
     resetRecipe

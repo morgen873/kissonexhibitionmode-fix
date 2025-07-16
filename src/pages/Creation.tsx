@@ -25,6 +25,7 @@ const Creation = () => {
     customAnswers,
     controlValues,
     recipeResult,
+    recipeId,
     isCreatingRecipe,
     isNextDisabled,
     handleAnswerSelect,
@@ -162,6 +163,7 @@ const Creation = () => {
           <CreationContent
             isCreatingRecipe={isCreatingRecipe}
             recipeResult={recipeResult}
+            recipeId={recipeId}
             hasStartedCreation={hasStartedCreation}
             currentIntroStep={currentIntroStep}
             creationStep={creationStep}

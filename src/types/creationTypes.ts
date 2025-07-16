@@ -13,6 +13,7 @@ export interface CreationContentState {
   customAnswers: { [key: number]: string };
   controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } };
   recipeResult: any;
+  recipeId: string | null;
   isCreatingRecipe: boolean;
   isNextDisabled: boolean;
 }
