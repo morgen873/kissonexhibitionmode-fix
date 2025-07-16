@@ -24,41 +24,25 @@ export function buildFuturisticPrompt(params: PromptParams): string {
   
   const ingredientsText = ingredientsList.length > 0 ? ingredientsList.join(', ') : 'futuristic dumpling ingredients';
   
-  const prompt = `Professional food photography of a single ${dumplingShape}-shaped dumpling with ${flavor} flavor profile, representing "${recipeTitle}" from ${timelineTheme}.
+  const prompt = `masterpiece, best quality, ultra detailed, professional food photography, single ${dumplingShape}-shaped dumpling with ${flavor} flavor profile, representing "${recipeTitle}" from ${timelineTheme}, featuring ${ingredientsText}
 
-ONE DUMPLING ONLY - no multiple dumplings, no duplicates, just one single dumpling centered in the frame.
+SDXL optimized futuristic culinary style:
+- hyper-realistic food photography, exactly one perfectly sealed dumpling, futuristic presentation
+- advanced molecular gastronomy techniques, dumpling wrapper completely closed and sealed
+- vibrant holographic iridescent effects, neon accent lighting, blue purple pink tones
+- solid black background, studio lighting, cinematic composition
+- dumpling wrapper 100% opaque and solid, no visible filling, no transparent effects
+- no openings tears gaps, completely sealed package appearance
+- high-tech food preparation aesthetics, authentic edible appearance
+- single dumpling centered composition, commercial photography quality
+- 8k resolution, highly detailed texture, perfect composition, food art
+- no text logos graphics, no utensils plates surfaces
+- gourmet presentation, futuristic culinary innovation, sci-fi food styling
+- vibrant colorful presentation, luminous effects, technological aesthetics
 
-Ingredients visible in composition: ${ingredientsText}
+Technical specifications: single dumpling only, black background, sealed wrapper, futuristic lighting, commercial quality, centered composition, hyper-realistic, no duplicates`;
 
-CRITICAL DUMPLING WRAPPER REQUIREMENTS:
-- Dumpling wrapper MUST be completely closed and sealed
-- NO visible filling or internal ingredients whatsoever
-- Wrapper must be 100% opaque and solid
-- NO transparent, translucent, or see-through effects
-- NO openings, tears, or gaps in the wrapper
-- The dumpling must appear as a completely sealed package
-
-Futuristic culinary style:
-- Hyper-realistic food photography of exactly one perfectly sealed dumpling with futuristic presentation
-- Advanced molecular gastronomy techniques visible in the dumpling's appearance
-- Vibrant, colorful holographic or iridescent effects on the dumpling wrapper
-- Solid black background, no distractions, dumpling is the sole focus
-- Studio lighting with vibrant neon accent lighting (blue/purple/pink tones)
-- Close-up centered composition focusing on the single intact dumpling
-- Emphasis on high-tech food preparation aesthetics while maintaining authentic food appearance
-- The dumpling should look real and edible, just prepared with futuristic techniques
-- Only one dumpling visible in the entire image
-- Solid black background, no distractions, dumpling is the sole focus
-
-Technical specifications:
-- High resolution, professional food photography quality
-- No text, logos, or graphic elements
-- No utensils, plates, surfaces, or any objects beyond the single dumpling
-- Solid black background, no distractions, dumpling is the sole focus
-- Commercial food photography style with futuristic elements
-- IMPORTANT: Show only one single completely sealed dumpling with vibrant, colorful presentation`;
-
-  console.log("Generated FUTURISTIC prompt for authentic future food presentation");
+  console.log("Generated FUTURISTIC prompt optimized for SDXL");
   return prompt;
 }
 
@@ -75,40 +59,25 @@ export function buildHistoricalPrompt(params: PromptParams): string {
   
   const ingredientsText = ingredientsList.length > 0 ? ingredientsList.join(', ') : 'traditional historical ingredients';
   
-  const prompt = `Professional food photography of a single ${dumplingShape}-shaped dumpling with ${flavor} flavor profile, representing "${recipeTitle}" from ${timelineTheme}.
+  const prompt = `masterpiece, best quality, ultra detailed, professional food photography, single ${dumplingShape}-shaped dumpling with ${flavor} flavor profile, representing "${recipeTitle}" from ${timelineTheme}, featuring ${ingredientsText}
 
-ONE DUMPLING ONLY - no multiple dumplings, no duplicates, just one single dumpling centered in the frame.
+SDXL optimized historical culinary style:
+- hyper-realistic food photography, exactly one perfectly sealed dumpling, traditional historical preparation
+- traditional handcrafted appearance, slightly rustic texture, artisanal preparation
+- authentic historical cooking methods, surface texture steamed boiled pan-fried finish
+- solid black background, warm natural lighting, golden tones
+- dumpling wrapper completely closed and sealed, 100% opaque and solid
+- no visible filling, no transparent translucent effects, no openings tears gaps
+- completely sealed package appearance, traditional food preparation techniques
+- single dumpling centered composition, close-up focused, commercial photography quality
+- 8k resolution, highly detailed texture, perfect composition, food art
+- no text logos graphics, no utensils plates surfaces
+- authentic historical appearance, traditional cooking environments
+- warm colorful presentation, artisanal craftsmanship, heritage cooking methods
 
-Ingredients visible in composition: ${ingredientsText}
+Technical specifications: single dumpling only, black background, sealed wrapper, historical authenticity, commercial quality, centered composition, hyper-realistic, no duplicates`;
 
-CRITICAL DUMPLING WRAPPER REQUIREMENTS:
-- Dumpling wrapper MUST be completely closed and sealed
-- NO visible filling or internal ingredients whatsoever
-- Wrapper must be 100% opaque and solid
-- NO transparent, translucent, or see-through effects
-- NO openings, tears, or gaps in the wrapper
-- The dumpling must appear as a completely sealed package
-
-Historical culinary style:
-- Hyper-realistic food photography of exactly one perfectly sealed dumpling with traditional historical preparation
-- Traditional handcrafted appearance with slightly rustic texture showing artisanal preparation
-- Authentic historical cooking methods visible in surface texture (steamed, boiled, or pan-fried finish)
-- Solid black background, no distractions, dumpling is the sole focus
-- Warm, natural lighting reminiscent of traditional cooking environments with golden tones
-- Close-up centered composition focusing on the single intact dumpling
-- Emphasis on traditional food preparation techniques and authentic historical appearance
-- Only one dumpling visible in the entire image
-- Solid black background, no distractions, dumpling is the sole focus
-
-Technical specifications:
-- High resolution, professional food photography quality
-- No text, logos, or graphic elements
-- No utensils, plates, surfaces, or any objects beyond the single dumpling
-- Solid black background, no distractions, dumpling is the sole focus
-- Commercial food photography style with historical authenticity
-- IMPORTANT: Show only one single completely sealed dumpling with warm, colorful presentation`;
-
-  console.log("Generated HISTORICAL prompt for authentic traditional food presentation");
+  console.log("Generated HISTORICAL prompt optimized for SDXL");
   return prompt;
 }
 
@@ -125,39 +94,24 @@ export function buildContemporaryPrompt(params: PromptParams): string {
   
   const ingredientsText = ingredientsList.length > 0 ? ingredientsList.join(', ') : 'contemporary dumpling ingredients';
   
-  const prompt = `Professional food photography of a single ${dumplingShape}-shaped dumpling with ${flavor} flavor profile, representing "${recipeTitle}" from ${timelineTheme}.
+  const prompt = `masterpiece, best quality, ultra detailed, professional food photography, single ${dumplingShape}-shaped dumpling with ${flavor} flavor profile, representing "${recipeTitle}" from ${timelineTheme}, featuring ${ingredientsText}
 
-ONE DUMPLING ONLY - no multiple dumplings, no duplicates, just one single dumpling centered in the frame.
+SDXL optimized contemporary culinary style:
+- hyper-realistic food photography, exactly one perfectly sealed dumpling, modern culinary presentation
+- clean professional preparation, contemporary cooking techniques
+- modern aesthetic, attention to visual appeal, vibrant colors
+- solid black background, professional studio lighting, modern food photography standards
+- dumpling wrapper completely closed and sealed, 100% opaque and solid
+- no visible filling, no transparent translucent effects, no openings tears gaps
+- completely sealed package appearance, current culinary trends
+- single dumpling centered composition, close-up focused, commercial photography quality
+- 8k resolution, highly detailed texture, perfect composition, food art
+- no text logos graphics, no utensils plates surfaces
+- contemporary food presentation, modern cooking aesthetics
+- vibrant colorful presentation, clean minimalist styling, current trends
 
-Ingredients visible in composition: ${ingredientsText}
+Technical specifications: single dumpling only, black background, sealed wrapper, contemporary aesthetics, commercial quality, centered composition, hyper-realistic, no duplicates`;
 
-CRITICAL DUMPLING WRAPPER REQUIREMENTS:
-- Dumpling wrapper MUST be completely closed and sealed
-- NO visible filling or internal ingredients whatsoever
-- Wrapper must be 100% opaque and solid
-- NO transparent, translucent, or see-through effects
-- NO openings, tears, or gaps in the wrapper
-- The dumpling must appear as a completely sealed package
-
-Contemporary culinary style:
-- Hyper-realistic food photography of exactly one perfectly sealed dumpling with modern culinary presentation
-- Clean, professional preparation with contemporary cooking techniques
-- Modern aesthetic with attention to visual appeal and vibrant colors
-- Solid black background, no distractions, dumpling is the sole focus
-- Professional studio lighting with modern food photography standards and vibrant lighting
-- Close-up centered composition focusing on the single intact dumpling
-- Emphasis on current culinary trends and contemporary food presentation
-- Only one dumpling visible in the entire image
-- Solid black background, no distractions, dumpling is the sole focus
-
-Technical specifications:
-- High resolution, professional food photography quality
-- No text, logos, or graphic elements
-- No utensils, plates, surfaces, or any objects beyond the single dumpling
-- Solid black background, no distractions, dumpling is the sole focus
-- Commercial food photography style with contemporary aesthetics
-- IMPORTANT: Show only one single completely sealed dumpling with vibrant, colorful presentation`;
-
-  console.log("Generated CONTEMPORARY prompt for authentic modern food presentation");
+  console.log("Generated CONTEMPORARY prompt optimized for SDXL");
   return prompt;
 }

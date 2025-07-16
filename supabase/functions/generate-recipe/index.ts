@@ -2,7 +2,7 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { corsHeaders } from '../_shared/cors.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-import OpenAI from 'https://esm.sh/openai@4.24.1'
+import OpenAI from 'https://esm.sh/openai@4.24.1'  // Still needed for recipe generation
 import { generateRecipeWithOpenAI } from './utils/recipeGenerator.ts'
 import { generateAndUploadRecipeImage } from './utils/imageGenerator.ts'
 import { insertRecipe, updateRecipeImageUrl } from './utils/databaseOperations.ts'
@@ -82,6 +82,12 @@ serve(async (req) => {
 
     const openai = new OpenAI({ apiKey: openAIKey });
     
+    // Check for Replicate API token for image generation
+    const replicateToken = Deno.env.get('REPLICATE_API_TOKEN');
+    if (!replicateToken) {
+        throw new Error("Missing REPLICATE_API_TOKEN environment variable for image generation.");
+    }
+    
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
@@ -138,7 +144,6 @@ serve(async (req) => {
       payload,      // Original user input
       newRecipe,    // COMPLETE saved recipe data from database
       newRecipe.id,
-      openai,
       supabaseAdmin
     );
 

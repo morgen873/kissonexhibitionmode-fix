@@ -1,5 +1,4 @@
 
-import OpenAI from 'https://esm.sh/openai@4.24.1'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { generateImagePrompt } from './imagePromptGenerator.ts'
 import { uploadImageToSupabase } from './imageUploader.ts'
@@ -25,11 +24,10 @@ export async function generateAndUploadRecipeImage(
   payload: RecipePayload,
   savedRecipe: SavedRecipe,
   recipeId: string,
-  openai: OpenAI,
   supabaseAdmin: ReturnType<typeof createClient>
 ): Promise<string> {
   try {
-    console.log("=== 🚀 IMAGE GENERATION WITH FALLBACK STRATEGY ===");
+    console.log("=== 🚀 IMAGE GENERATION WITH REPLICATE STABILITY AI ===");
     
     // Step 1: Build image context from payload and saved recipe
     const imageContext = buildImageContext(payload, savedRecipe);
@@ -52,11 +50,10 @@ export async function generateAndUploadRecipeImage(
       // Don't fail the whole process if this fails
     }
     
-    // Step 3: Generate image with fallback strategy
+    // Step 3: Generate image with Replicate Stability AI fallback strategy
     const { imageData, usedModel } = await generateImageWithFallback(
       imagePrompt,
-      imageContext,
-      openai
+      imageContext
     );
     
     console.log(`✅ IMAGE GENERATED USING: ${usedModel.toUpperCase()}`);
