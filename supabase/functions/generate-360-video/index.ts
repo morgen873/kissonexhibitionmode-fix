@@ -145,9 +145,9 @@ serve(async (req) => {
               frameImages: [imageUrl],
               positivePrompt: optimizedPrompt,
               model: 'klingai:5@3', // Use a known working model
-              duration: 5, // Changed from 4 to 5 (minimum allowed)
-              width: 512,
-              height: 512,
+              duration: 5, // 5 seconds (minimum allowed)
+              width: 1080, // Changed to supported dimension
+              height: 1080, // Square format perfect for 360° product display
               outputFormat: 'MP4',
               numberResults: 1
             }
