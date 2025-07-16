@@ -176,7 +176,7 @@ function optimizePromptForSDXL(prompt: string, imageContext: ImageContext): stri
   // CUSTOMIZABLE PROMPT COMPONENTS - MODIFY THESE TO CHANGE ALL SDXL PROMPTS:
   
   // 1. Quality and style terms (affects overall image quality)
-  const qualityTerms = "masterpiece, best quality, ultra detailed, 8k resolution";
+  const qualityTerms = "artistic masterpiece, best quality, ultra detailed, 8k resolution";
   
   // 2. Photography style (change this to modify the look)
   const photoStyle = "professional food photography, commercial photography quality";
@@ -185,13 +185,13 @@ function optimizePromptForSDXL(prompt: string, imageContext: ImageContext): stri
   const lighting = "studio lighting, cinematic lighting, soft natural lighting";
   
   // 4. Visual effects and textures (customize visual appearance)
-  const effects = "hyper-realistic, highly detailed texture, perfect composition";
+  const effects = "speculative design, hyper-realistic, highly detailed texture, perfect composition";
   
   // 5. Composition rules (change framing and layout)
   const composition = "single dumpling centered, shallow depth of field, black background";
   
   // 6. Food-specific requirements (dumpling appearance rules)
-  const foodRequirements = "completely sealed wrapper, no visible filling, opaque dumpling skin";
+  const foodRequirements = "mostly sealed wrapper, optional visible filling, opaque dumpling skin";
   
   // 7. Presentation style (final presentation look)
   const presentation = "appetizing presentation, food art, gourmet presentation";
