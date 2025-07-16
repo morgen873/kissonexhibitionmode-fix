@@ -173,7 +173,31 @@ function optimizePromptForSDXL(prompt: string, imageContext: ImageContext): stri
   // SDXL works better with more descriptive, detailed prompts
   const ingredientsText = ingredientsList.length > 0 ? ingredientsList.slice(0, 6).join(', ') : 'traditional ingredients';
   
-  const sdxlPrompt = `masterpiece, best quality, ultra detailed, professional food photography, ${dumplingShape}-shaped dumpling with ${flavor} flavor, ${timelineTheme.toLowerCase()} culinary style, featuring ${ingredientsText}, studio lighting, black background, hyper-realistic, appetizing presentation, shallow depth of field, commercial photography quality, 8k resolution, highly detailed texture, perfect composition, single dumpling centered, completely sealed wrapper, no visible filling, opaque dumpling skin, cinematic lighting, food art, gourmet presentation`;
+  // CUSTOMIZABLE PROMPT COMPONENTS - MODIFY THESE TO CHANGE ALL SDXL PROMPTS:
+  
+  // 1. Quality and style terms (affects overall image quality)
+  const qualityTerms = "masterpiece, best quality, ultra detailed, 8k resolution";
+  
+  // 2. Photography style (change this to modify the look)
+  const photoStyle = "professional food photography, commercial photography quality";
+  
+  // 3. Lighting setup (modify for different lighting effects)
+  const lighting = "studio lighting, cinematic lighting, soft natural lighting";
+  
+  // 4. Visual effects and textures (customize visual appearance)
+  const effects = "hyper-realistic, highly detailed texture, perfect composition";
+  
+  // 5. Composition rules (change framing and layout)
+  const composition = "single dumpling centered, shallow depth of field, black background";
+  
+  // 6. Food-specific requirements (dumpling appearance rules)
+  const foodRequirements = "completely sealed wrapper, no visible filling, opaque dumpling skin";
+  
+  // 7. Presentation style (final presentation look)
+  const presentation = "appetizing presentation, food art, gourmet presentation";
+  
+  // BUILD THE FINAL PROMPT (you can rearrange these components)
+  const sdxlPrompt = `${qualityTerms}, ${photoStyle}, ${dumplingShape}-shaped dumpling with ${flavor} flavor, ${timelineTheme.toLowerCase()} culinary style, featuring ${ingredientsText}, ${lighting}, ${effects}, ${composition}, ${foodRequirements}, ${presentation}`;
   
   console.log("🔄 SDXL OPTIMIZED PROMPT:");
   console.log("- Length:", sdxlPrompt.length);
