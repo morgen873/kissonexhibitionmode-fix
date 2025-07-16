@@ -5,8 +5,8 @@ import RecipePrintTemplate from './RecipePrintTemplate';
 import RecipeImageDisplay from './RecipeImageDisplay';
 import RecipeLabelPreview from './RecipeLabelPreview';
 import RecipeActionButtons from './RecipeActionButtons';
-import CSS360RotationButton from './CSS360RotationButton';
-import Enhanced360ImageDisplay from './Enhanced360ImageDisplay';
+import VideoGenerationButton from './VideoGenerationButton';
+import VideoDisplay from './VideoDisplay';
 
 interface RecipeResultScreenProps {
     recipe: RecipeResult;
@@ -15,10 +15,10 @@ interface RecipeResultScreenProps {
 }
 
 const RecipeResultScreen: React.FC<RecipeResultScreenProps> = ({ recipe, recipeId, onReset }) => {
-    const [show360View, setShow360View] = useState(false);
+    const [videoUrl, setVideoUrl] = useState<string | null>(null);
 
-    const handle360Activated = () => {
-        setShow360View(true);
+    const handleVideoGenerated = (generatedVideoUrl: string) => {
+        setVideoUrl(generatedVideoUrl);
     };
 
     return (
@@ -31,9 +31,9 @@ const RecipeResultScreen: React.FC<RecipeResultScreenProps> = ({ recipe, recipeI
 
             <div className="flex flex-col lg:flex-row gap-6 w-full justify-center items-start">
                 <RecipeImageDisplay recipe={recipe} />
-                {show360View ? (
+                {videoUrl ? (
                     <div className="flex flex-col lg:flex-row gap-6 items-start">
-                        <Enhanced360ImageDisplay imageUrl={recipe.imageUrl} recipeTitle={recipe.name} />
+                        <VideoDisplay videoUrl={videoUrl} recipeTitle={recipe.name} />
                         <RecipeLabelPreview recipe={recipe} />
                     </div>
                 ) : (
@@ -42,11 +42,11 @@ const RecipeResultScreen: React.FC<RecipeResultScreenProps> = ({ recipe, recipeI
             </div>
 
             <div className="w-full flex flex-col items-center gap-4">
-                {!show360View && recipe.imageUrl !== '/placeholder.svg' && (
-                    <CSS360RotationButton 
-                        imageUrl={recipe.imageUrl}
-                        recipeName={recipe.name}
-                        onActivate={handle360Activated} 
+                {!videoUrl && recipe.imageUrl !== '/placeholder.svg' && (
+                    <VideoGenerationButton 
+                        recipe={recipe}
+                        recipeId={recipeId}
+                        onVideoGenerated={handleVideoGenerated} 
                     />
                 )}
                 <RecipeActionButtons recipe={recipe} onReset={onReset} />

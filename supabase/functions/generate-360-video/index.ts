@@ -26,6 +26,39 @@ interface RunwareVideoResponse {
   cost: number;
 }
 
+// Video generation models optimized for 360° product display
+const VIDEO_MODELS = [
+  {
+    name: 'hailuo-02',
+    model: 'hailuo:02@1',
+    description: 'Hailuo 02 - Best for cinematic camera movement and 360° orbiting',
+    duration: 5,
+    width: 1024,
+    height: 1024
+  },
+  {
+    name: 'kling-2.1',
+    model: 'kling:21@1', 
+    description: 'Kling 2.1 Master - Excellent camera control and motion',
+    duration: 4,
+    width: 1024,
+    height: 1024
+  },
+  {
+    name: 'vidu-q1',
+    model: 'vidu:q1@1',
+    description: 'Vidu Q1 - Great for product display videos',
+    duration: 4,
+    width: 1024,
+    height: 1024
+  }
+];
+
+// Optimized prompts for 360° product display
+function generate360Prompt(recipeTitle: string): string {
+  return `Professional 360-degree product showcase of ${recipeTitle}. Smooth orbital camera movement rotating completely around the food item in a perfect circle. Show all sides: front, right side, back, left side, and back to front. Clean studio lighting, white background, steady rotation at constant speed. No camera shake, no zooming, only smooth circular orbit motion. Product remains centered and stationary while camera circles around it. Commercial food photography style, high-end product display.`;
+}
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -80,57 +113,95 @@ serve(async (req) => {
     console.log('✅ Runware authenticated successfully');
     console.log('📊 Auth data:', authData);
 
-    // Step 2: Generate 360° video using video inference with image constraint
-    console.log('🎥 Generating 360° rotating video...');
-    const videoTaskUUID = crypto.randomUUID();
+    // Step 2: Generate 360° video using multiple model fallbacks
+    console.log('🎥 Starting 360° rotating video generation with model fallbacks...');
     
-    const videoResponse = await fetch('https://api.runware.ai/v1', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify([
-        {
-          taskType: 'authentication',
-          apiKey: runwareApiKey
-        },
-        {
-          taskType: 'videoInference',
-          taskUUID: videoTaskUUID,
-          frameImages: [imageUrl], // Use frame images instead of imageInitialization
-          positivePrompt: 'Slowly rotate the dumpling 360 degrees in a smooth circular motion, showing all sides. Professional food photography rotation on a clean background.',
-          model: 'klingai:5@3', // Use the correct model for video generation
-          duration: 4, // 4 seconds for smooth 360° rotation
-          width: 512,
-          height: 512,
-          outputFormat: 'MP4',
-          outputQuality: 95,
-          numberResults: 1
+    let videoResult = null;
+    let modelUsed = null;
+    let lastError = null;
+
+    // Try each model in order until one succeeds
+    for (const modelConfig of VIDEO_MODELS) {
+      try {
+        console.log(`🔄 Attempting video generation with ${modelConfig.name} (${modelConfig.model})`);
+        console.log(`📋 Model description: ${modelConfig.description}`);
+        
+        const videoTaskUUID = crypto.randomUUID();
+        const optimizedPrompt = generate360Prompt(recipeTitle);
+        
+        console.log(`📝 Using optimized prompt: ${optimizedPrompt}`);
+        
+        const videoResponse = await fetch('https://api.runware.ai/v1', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify([
+            {
+              taskType: 'authentication',
+              apiKey: runwareApiKey
+            },
+            {
+              taskType: 'videoInference',
+              taskUUID: videoTaskUUID,
+              frameImages: [imageUrl],
+              positivePrompt: optimizedPrompt,
+              model: modelConfig.model,
+              duration: modelConfig.duration,
+              width: modelConfig.width,
+              height: modelConfig.height,
+              outputFormat: 'MP4',
+              outputQuality: 95,
+              numberResults: 1,
+              // Additional parameters for better 360° rotation
+              cfgScale: 7,
+              seed: Math.floor(Math.random() * 1000000),
+              // Camera movement hints
+              cameraMovement: 'orbital',
+              motionStrength: 0.8
+            }
+          ])
+        });
+
+        console.log(`📊 ${modelConfig.name} response status:`, videoResponse.status);
+        
+        if (!videoResponse.ok) {
+          const errorText = await videoResponse.text();
+          console.warn(`⚠️ ${modelConfig.name} failed: ${videoResponse.status} - ${errorText}`);
+          lastError = new Error(`${modelConfig.name} failed: ${errorText}`);
+          continue; // Try next model
         }
-      ])
-    });
 
-    console.log('📊 Video response status:', videoResponse.status);
-    console.log('📊 Video response headers:', Object.fromEntries(videoResponse.headers.entries()));
+        const videoData = await videoResponse.json();
+        console.log(`📊 ${modelConfig.name} response:`, JSON.stringify(videoData, null, 2));
 
-    if (!videoResponse.ok) {
-      const errorText = await videoResponse.text();
-      console.error('❌ Runware video API error response:', errorText);
-      throw new Error(`Video generation failed: ${videoResponse.status} ${videoResponse.statusText} - ${errorText}`);
+        // Find the video result
+        const currentVideoResult = videoData.data?.find((item: any) => item.taskType === 'videoInference');
+        
+        if (currentVideoResult && currentVideoResult.videoURL) {
+          console.log(`✅ SUCCESS with ${modelConfig.name}! Video URL:`, currentVideoResult.videoURL);
+          videoResult = currentVideoResult;
+          modelUsed = modelConfig;
+          break; // Success! Exit the loop
+        } else {
+          console.warn(`⚠️ ${modelConfig.name} returned no video URL. Trying next model...`);
+          lastError = new Error(`${modelConfig.name} returned no video URL`);
+        }
+        
+      } catch (error) {
+        console.warn(`⚠️ Error with ${modelConfig.name}:`, error);
+        lastError = error;
+        continue; // Try next model
+      }
     }
 
-    const videoData = await videoResponse.json();
-    console.log('📊 Video generation response:', JSON.stringify(videoData, null, 2));
-
-    // Find the video result
-    const videoResult = videoData.data?.find((item: any) => item.taskType === 'videoInference');
-    
+    // If all models failed
     if (!videoResult || !videoResult.videoURL) {
-      console.error('❌ No video result found. Full response:', JSON.stringify(videoData, null, 2));
-      throw new Error('No video URL returned from Runware');
+      console.error('❌ All video models failed. Last error:', lastError);
+      throw new Error(`All video generation models failed. Last error: ${lastError?.message || 'Unknown error'}`);
     }
 
-    console.log('✅ Video generated successfully:', videoResult.videoURL);
+    console.log(`🎉 Video generated successfully with ${modelUsed?.name}:`, videoResult.videoURL);
 
     // Step 3: Download and upload video to Supabase storage
     console.log('📥 Downloading video from Runware...');
@@ -191,7 +262,8 @@ serve(async (req) => {
       videoUrl: finalVideoUrl,
       recipeId,
       cost: videoResult.cost || 0,
-      message: '360° video generated successfully'
+      modelUsed: modelUsed?.name || 'unknown',
+      message: `360° video generated successfully using ${modelUsed?.name || 'unknown'} model`
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
