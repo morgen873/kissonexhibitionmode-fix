@@ -28,9 +28,30 @@ const VideoGenerationButton: React.FC<VideoGenerationButtonProps> = ({
       const videoUrl = await generateVideo(recipe.imageUrl, recipeId, recipe.name, imagePrompt);
       console.log('🎬 VideoGenerationButton: generateVideo returned:', videoUrl);
       if (videoUrl) {
-        // Open video in new tab instead of inline display
-        console.log('🎬 VideoGenerationButton: Opening video in new tab:', videoUrl);
-        window.open(videoUrl, '_blank', 'noopener,noreferrer');
+        // Open video in a pop-up window with video player
+        console.log('🎬 VideoGenerationButton: Opening video in pop-up window:', videoUrl);
+        const popup = window.open('', '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+        if (popup) {
+          popup.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <title>360° Recipe Video</title>
+              <style>
+                body { margin: 0; padding: 20px; background: #000; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+                video { max-width: 100%; max-height: 100%; border-radius: 8px; }
+              </style>
+            </head>
+            <body>
+              <video controls autoplay loop>
+                <source src="${videoUrl}" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </body>
+            </html>
+          `);
+          popup.document.close();
+        }
         if (onVideoGenerated) {
           onVideoGenerated(videoUrl);
         }

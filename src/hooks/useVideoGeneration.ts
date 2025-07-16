@@ -24,7 +24,7 @@ export const useVideoGeneration = () => {
         .from('recipes')
         .select('video_url')
         .eq('id', recipeId)
-        .single();
+        .maybeSingle();
 
       if (error) {
         console.error('❌ Error checking video status:', error);
@@ -33,14 +33,21 @@ export const useVideoGeneration = () => {
 
       console.log('📊 Video status check result:', data);
       
-      // Check if video_url starts with ERROR: to handle error cases
-      if (data?.video_url && data.video_url.startsWith('ERROR:')) {
+      // Check if video_url starts with ERROR to handle error cases
+      if (data?.video_url && data.video_url.startsWith('ERROR')) {
         console.error('❌ Video generation failed:', data.video_url);
         toast.error('Video generation failed: ' + data.video_url.replace('ERROR: ', ''));
         return 'ERROR';
       }
 
-      return data?.video_url || null;
+      // Return the video URL if it exists and is a valid URL
+      if (data?.video_url && data.video_url.startsWith('http')) {
+        console.log('✅ Found valid video URL:', data.video_url);
+        return data.video_url;
+      }
+
+      console.log('⏳ No video URL found yet');
+      return null;
     } catch (error) {
       console.error('❌ Error checking video status:', error);
       return null;
