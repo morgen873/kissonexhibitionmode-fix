@@ -80,7 +80,7 @@ serve(async (req) => {
     console.log('✅ Runware authenticated successfully');
     console.log('📊 Auth data:', authData);
 
-    // Step 2: Generate 360° video using image-to-video
+    // Step 2: Generate 360° video using video inference with image constraint
     console.log('🎥 Generating 360° rotating video...');
     const videoTaskUUID = crypto.randomUUID();
     
@@ -95,16 +95,17 @@ serve(async (req) => {
           apiKey: runwareApiKey
         },
         {
-          taskType: 'imageToVideo',
+          taskType: 'videoInference',
           taskUUID: videoTaskUUID,
-          imageInitialization: imageUrl,
-          motionBucket: 150, // Higher motion for rotation
-          conditioningAugmentation: 0.02,
-          motionPrompt: 'Slowly rotate the dumpling 360 degrees in a smooth circular motion, showing all sides. Professional food photography rotation on a clean background.',
-          seed: Math.floor(Math.random() * 1000000),
-          outputFormat: 'mp4',
-          frameRate: 24,
-          duration: 4 // 4 seconds for smooth 360° rotation
+          frameImages: [imageUrl], // Use frame images instead of imageInitialization
+          positivePrompt: 'Slowly rotate the dumpling 360 degrees in a smooth circular motion, showing all sides. Professional food photography rotation on a clean background.',
+          model: 'klingai:5@3', // Use the correct model for video generation
+          duration: 4, // 4 seconds for smooth 360° rotation
+          width: 512,
+          height: 512,
+          outputFormat: 'MP4',
+          outputQuality: 95,
+          numberResults: 1
         }
       ])
     });
@@ -117,9 +118,10 @@ serve(async (req) => {
     console.log('📊 Video generation response:', videoData);
 
     // Find the video result
-    const videoResult = videoData.data?.find((item: any) => item.taskType === 'imageToVideo');
+    const videoResult = videoData.data?.find((item: any) => item.taskType === 'videoInference');
     
     if (!videoResult || !videoResult.videoURL) {
+      console.error('❌ No video result found. Full response:', JSON.stringify(videoData, null, 2));
       throw new Error('No video URL returned from Runware');
     }
 
