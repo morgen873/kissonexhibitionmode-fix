@@ -95,7 +95,7 @@ export const useVideoGeneration = () => {
       console.log('Image URL:', imageUrl);
       console.log('Recipe ID:', recipeId);
 
-      const { data, error } = await supabase.functions.invoke('generate-360-video', {
+      const { data, error } = await supabase.functions.invoke('generate-360-video-replicate', {
         body: {
           imageUrl,
           recipeId,
