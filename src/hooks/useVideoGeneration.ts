@@ -73,7 +73,7 @@ export const useVideoGeneration = () => {
         return;
       }
       
-      if (videoUrl && !videoUrl.startsWith('ERROR:')) {
+      if (videoUrl && videoUrl !== 'ERROR') {
         console.log('✅ Video is ready:', videoUrl);
         console.log('🚀 About to call onVideoReady with:', videoUrl);
         setVideoUrl(videoUrl);
@@ -81,7 +81,9 @@ export const useVideoGeneration = () => {
         setIsPolling(false);
         clearInterval(pollInterval);
         toast.success('360° video is ready!');
+        console.log('🎯 Calling onVideoReady callback...');
         onVideoReady(videoUrl);
+        console.log('✅ onVideoReady callback executed');
       } else {
         console.log('⏳ Video not ready yet, continuing to poll...');
       }
