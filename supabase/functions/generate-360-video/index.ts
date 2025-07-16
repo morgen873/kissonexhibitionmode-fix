@@ -29,25 +29,25 @@ interface RunwareVideoResponse {
 // Video generation models optimized for 360° product display
 const VIDEO_MODELS = [
   {
-    name: 'hailuo-02',
-    model: 'hailuo:02@1',
-    description: 'Hailuo 02 - Best for cinematic camera movement and 360° orbiting',
-    duration: 5,
-    width: 1024,
-    height: 1024
-  },
-  {
     name: 'kling-2.1',
-    model: 'kling:21@1', 
+    model: 'kling:21@1',
     description: 'Kling 2.1 Master - Excellent camera control and motion',
     duration: 4,
     width: 1024,
     height: 1024
   },
   {
-    name: 'vidu-q1',
-    model: 'vidu:q1@1',
-    description: 'Vidu Q1 - Great for product display videos',
+    name: 'kling-2.0',
+    model: 'kling:20@1', 
+    description: 'Kling 2.0 - Cinematic output and realism',
+    duration: 4,
+    width: 1024,
+    height: 1024
+  },
+  {
+    name: 'kling-1.6',
+    model: 'kling:16@1',
+    description: 'Kling 1.6 - HD model with camera controls',
     duration: 4,
     width: 1024,
     height: 1024
@@ -152,22 +152,17 @@ serve(async (req) => {
               height: modelConfig.height,
               outputFormat: 'MP4',
               outputQuality: 95,
-              numberResults: 1,
-              // Additional parameters for better 360° rotation
-              cfgScale: 7,
-              seed: Math.floor(Math.random() * 1000000),
-              // Camera movement hints
-              cameraMovement: 'orbital',
-              motionStrength: 0.8
+              numberResults: 1
             }
           ])
         });
 
         console.log(`📊 ${modelConfig.name} response status:`, videoResponse.status);
+        console.log(`📊 ${modelConfig.name} response headers:`, Object.fromEntries(videoResponse.headers.entries()));
         
         if (!videoResponse.ok) {
           const errorText = await videoResponse.text();
-          console.warn(`⚠️ ${modelConfig.name} failed: ${videoResponse.status} - ${errorText}`);
+          console.error(`❌ ${modelConfig.name} failed: ${videoResponse.status} - ${errorText}`);
           lastError = new Error(`${modelConfig.name} failed: ${errorText}`);
           continue; // Try next model
         }
@@ -189,7 +184,8 @@ serve(async (req) => {
         }
         
       } catch (error) {
-        console.warn(`⚠️ Error with ${modelConfig.name}:`, error);
+        console.error(`❌ Error with ${modelConfig.name}:`, error);
+        console.error(`❌ Full error details:`, error.message, error.stack);
         lastError = error;
         continue; // Try next model
       }
@@ -198,6 +194,7 @@ serve(async (req) => {
     // If all models failed
     if (!videoResult || !videoResult.videoURL) {
       console.error('❌ All video models failed. Last error:', lastError);
+      console.error('❌ Full error details:', lastError?.message, lastError?.stack);
       throw new Error(`All video generation models failed. Last error: ${lastError?.message || 'Unknown error'}`);
     }
 
