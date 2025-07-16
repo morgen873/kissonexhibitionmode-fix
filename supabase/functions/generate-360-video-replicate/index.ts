@@ -15,7 +15,7 @@ interface GenerateVideoRequest {
 
 // Generate 360-degree product video prompt
 function generate360Prompt(recipeTitle: string): string {
-  return `Professional 360-degree product showcase of ${recipeTitle}. Smooth orbital camera movement rotating completely around the food item in a perfect circle. Show all sides: front, right side, back, left side, and back to front. Clean studio lighting, white background, steady rotation at constant speed. No camera shake, no zooming, only smooth circular orbit motion. Product remains centered and stationary while camera circles around it. Commercial food photography style, high-end product display.`;
+  return `a 360 orbital camera view of the dumpling, loop 5 second video`;
 }
 
 async function generateVideoInBackground(imageUrl: string, recipeId: string, recipeTitle: string) {
