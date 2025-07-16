@@ -149,7 +149,6 @@ serve(async (req) => {
               width: 512,
               height: 512,
               outputFormat: 'MP4',
-              outputQuality: 95,
               numberResults: 1
             }
           ])
