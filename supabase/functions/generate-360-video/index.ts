@@ -110,12 +110,17 @@ serve(async (req) => {
       ])
     });
 
+    console.log('📊 Video response status:', videoResponse.status);
+    console.log('📊 Video response headers:', Object.fromEntries(videoResponse.headers.entries()));
+
     if (!videoResponse.ok) {
-      throw new Error(`Video generation failed: ${videoResponse.statusText}`);
+      const errorText = await videoResponse.text();
+      console.error('❌ Runware video API error response:', errorText);
+      throw new Error(`Video generation failed: ${videoResponse.status} ${videoResponse.statusText} - ${errorText}`);
     }
 
     const videoData = await videoResponse.json();
-    console.log('📊 Video generation response:', videoData);
+    console.log('📊 Video generation response:', JSON.stringify(videoData, null, 2));
 
     // Find the video result
     const videoResult = videoData.data?.find((item: any) => item.taskType === 'videoInference');
