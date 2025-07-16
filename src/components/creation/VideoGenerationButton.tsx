@@ -21,7 +21,9 @@ const VideoGenerationButton: React.FC<VideoGenerationButtonProps> = ({
 
   const handleGenerateVideo = async () => {
     try {
-      const videoUrl = await generateVideo(recipe.imageUrl, recipeId, recipe.name);
+      // Extract image prompt from recipe data if available
+      const imagePrompt = recipe.imagePrompt;
+      const videoUrl = await generateVideo(recipe.imageUrl, recipeId, recipe.name, imagePrompt);
       if (videoUrl && onVideoGenerated) {
         onVideoGenerated(videoUrl);
       }

@@ -87,7 +87,7 @@ export const useVideoGeneration = () => {
     }, 600000); // 10 minutes
   };
 
-  const generateVideo = async (imageUrl: string, recipeId: string, recipeTitle: string) => {
+  const generateVideo = async (imageUrl: string, recipeId: string, recipeTitle: string, imagePrompt?: string) => {
     setIsGeneratingVideo(true);
     
     try {
@@ -99,7 +99,8 @@ export const useVideoGeneration = () => {
         body: {
           imageUrl,
           recipeId,
-          recipeTitle
+          recipeTitle,
+          imagePrompt
         }
       });
 

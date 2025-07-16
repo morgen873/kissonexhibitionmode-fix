@@ -78,3 +78,43 @@ export async function updateRecipeImageUrl(
 
   console.log("✅ Recipe successfully updated with final image URL");
 }
+
+export async function updateRecipeWithImagePrompt(
+  supabaseAdmin: ReturnType<typeof createClient>,
+  recipeId: string,
+  imagePrompt: string
+) {
+  console.log("=== UPDATING RECIPE WITH IMAGE PROMPT ===");
+  console.log("Recipe ID:", recipeId);
+  console.log("Image prompt length:", imagePrompt.length);
+  
+  // First get current recipe_data
+  const { data: currentRecipe, error: fetchError } = await supabaseAdmin
+    .from('recipes')
+    .select('recipe_data')
+    .eq('id', recipeId)
+    .single();
+
+  if (fetchError) {
+    console.error('Error fetching current recipe data:', fetchError);
+    throw fetchError;
+  }
+
+  // Update recipe_data with image prompt
+  const updatedRecipeData = {
+    ...currentRecipe.recipe_data,
+    imagePrompt: imagePrompt
+  };
+
+  const { error: updateError } = await supabaseAdmin
+    .from('recipes')
+    .update({ recipe_data: updatedRecipeData })
+    .eq('id', recipeId);
+
+  if (updateError) {
+    console.error('Error updating recipe with image prompt:', updateError);
+    throw updateError;
+  }
+
+  console.log("✅ Recipe successfully updated with image prompt");
+}

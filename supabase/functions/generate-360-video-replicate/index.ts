@@ -11,14 +11,18 @@ interface GenerateVideoRequest {
   imageUrl: string;
   recipeId: string;
   recipeTitle: string;
+  imagePrompt?: string;
 }
 
-// Generate 360-degree product video prompt
-function generate360Prompt(recipeTitle: string): string {
-  return `a 360 orbital camera view of the dumpling, loop 5 second video`;
+// Generate 360-degree video prompt based on original image prompt
+function generate360Prompt(recipeTitle: string, imagePrompt?: string): string {
+  if (imagePrompt) {
+    return `create 360 degrees orbital camera movement of a ${imagePrompt}`;
+  }
+  return `create 360 degrees orbital camera movement of a dumpling from ${recipeTitle}`;
 }
 
-async function generateVideoInBackground(imageUrl: string, recipeId: string, recipeTitle: string) {
+async function generateVideoInBackground(imageUrl: string, recipeId: string, recipeTitle: string, imagePrompt?: string) {
   const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
   const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
   const replicateApiKey = Deno.env.get('replicate');
@@ -38,13 +42,13 @@ async function generateVideoInBackground(imageUrl: string, recipeId: string, rec
       auth: replicateApiKey,
     });
 
-    const prompt = generate360Prompt(recipeTitle);
+    const prompt = generate360Prompt(recipeTitle, imagePrompt);
     console.log('📝 Using prompt:', prompt);
 
-    // Generate video using Stable Video Diffusion (better image preservation)
+    // Generate video using Stable Video Diffusion
     console.log('🎥 Generating video with Stable Video Diffusion...');
     const output = await replicate.run(
-      "stability-ai/stable-video-diffusion:3f0457e4619daac51203dedb1a4c808e57bc_2_4_4",
+      "stability-ai/stable-video-diffusion:3f0457e4619daac51203dedb1a4c808e57bc2ab4c6",
       {
         input: {
           input_image: imageUrl,
@@ -153,7 +157,7 @@ serve(async (req) => {
 
     console.log('=== 🎬 360° VIDEO GENERATION STARTED (REPLICATE) ===');
     
-    const { imageUrl, recipeId, recipeTitle }: GenerateVideoRequest = await req.json();
+    const { imageUrl, recipeId, recipeTitle, imagePrompt }: GenerateVideoRequest = await req.json();
     
     console.log('Recipe ID:', recipeId);
     console.log('Image URL:', imageUrl);
@@ -161,7 +165,7 @@ serve(async (req) => {
 
     // Start background video generation
     console.log('🔄 Starting background video generation...');
-    EdgeRuntime.waitUntil(generateVideoInBackground(imageUrl, recipeId, recipeTitle));
+    EdgeRuntime.waitUntil(generateVideoInBackground(imageUrl, recipeId, recipeTitle, imagePrompt));
 
     // Return immediate response
     console.log('📤 Returning immediate response - video generation in progress...');

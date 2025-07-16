@@ -62,4 +62,5 @@ export interface RecipeResult {
     name: string;
     imageUrl: string;
     qrData: string;
+    imagePrompt?: string;
 }

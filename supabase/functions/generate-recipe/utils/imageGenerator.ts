@@ -42,6 +42,16 @@ export async function generateAndUploadRecipeImage(
     console.log("- Prompt length:", imagePrompt.length);
     console.log("- First 200 chars:", imagePrompt.substring(0, 200));
     
+    // Step 2.5: Save the image prompt to the database for video generation
+    try {
+      const { updateRecipeWithImagePrompt } = await import('./databaseOperations.ts');
+      await updateRecipeWithImagePrompt(supabaseAdmin, recipeId, imagePrompt);
+      console.log("✅ Image prompt saved to database for video generation");
+    } catch (error) {
+      console.error("❌ Failed to save image prompt:", error);
+      // Don't fail the whole process if this fails
+    }
+    
     // Step 3: Generate image with fallback strategy
     const { imageData, usedModel } = await generateImageWithFallback(
       imagePrompt,

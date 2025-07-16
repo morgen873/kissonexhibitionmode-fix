@@ -25,10 +25,19 @@ export const useRecipeSubmission = () => {
       console.log("📋 Recipe received:", newRecipe);
 
       setRecipeId(newRecipe.id);
+      
+      // Extract image prompt from recipe_data if available
+      let imagePrompt: string | undefined;
+      if (newRecipe.recipe_data && typeof newRecipe.recipe_data === 'object') {
+        const recipeData = newRecipe.recipe_data as any;
+        imagePrompt = recipeData.imagePrompt;
+      }
+      
       setRecipeResult({
         name: newRecipe.title,
         imageUrl: newRecipe.image_url || "/placeholder.svg",
-        qrData: recipeUrl
+        qrData: recipeUrl,
+        imagePrompt
       });
 
     } catch (error) {
