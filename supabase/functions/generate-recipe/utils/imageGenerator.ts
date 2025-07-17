@@ -33,6 +33,10 @@ export async function generateAndUploadRecipeImage(
   try {
     console.log("=== 🚀 IMAGE GENERATION WITH REPLICATE STABILITY AI ===");
     
+    // IMMEDIATE SIMPLE TEST - RETURN A KNOWN ERROR MESSAGE FOR DEBUGGING
+    console.log("🔥 TESTING - FORCE RETURNING TEST MESSAGE");
+    return 'TEST_ERROR_MESSAGE_FROM_IMAGE_GENERATOR';
+    
     // Step 0: IMMEDIATELY TEST REPLICATE TOKEN
     const replicateToken = Deno.env.get('REPLICATE_API_TOKEN');
     console.log("🔑 IMMEDIATE REPLICATE TOKEN TEST:");
