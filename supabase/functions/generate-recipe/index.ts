@@ -82,10 +82,10 @@ serve(async (req) => {
 
     const openai = new OpenAI({ apiKey: openAIKey });
     
-    // Check for Replicate API token for image generation
-    const replicateToken = Deno.env.get('REPLICATE_API_TOKEN');
+    // Check for Replicate API token for image generation (using KissOn token)
+    const replicateToken = Deno.env.get('KissOn');
     if (!replicateToken) {
-        throw new Error("Missing REPLICATE_API_TOKEN environment variable for image generation.");
+        throw new Error("Missing KissOn environment variable for image generation.");
     }
     
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
