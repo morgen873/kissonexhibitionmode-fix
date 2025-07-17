@@ -26,8 +26,49 @@ export async function generateAndUploadRecipeImage(
   recipeId: string,
   supabaseAdmin: ReturnType<typeof createClient>
 ): Promise<string> {
+  console.log("🔥🔥🔥 IMAGE GENERATOR FUNCTION CALLED - THIS IS THE VERY FIRST LINE");
+  console.log("🔥 Recipe ID received:", recipeId);
+  console.log("🔥 Payload received:", JSON.stringify(payload, null, 2));
+  console.log("🔥 Saved recipe title:", savedRecipe?.title);
   try {
     console.log("=== 🚀 IMAGE GENERATION WITH REPLICATE STABILITY AI ===");
+    
+    // Step 0: IMMEDIATELY TEST REPLICATE TOKEN
+    const replicateToken = Deno.env.get('KissOn');
+    console.log("🔑 IMMEDIATE REPLICATE TOKEN TEST:");
+    console.log("- Token exists:", !!replicateToken);
+    console.log("- Token length:", replicateToken ? replicateToken.length : 0);
+    
+    if (!replicateToken) {
+      console.error("❌ CRITICAL: NO REPLICATE TOKEN - ABORTING IMAGE GENERATION");
+      return '/placeholder.svg';
+    }
+    
+    // Test basic Replicate API connectivity
+    console.log("🌐 TESTING REPLICATE API CONNECTIVITY...");
+    try {
+      const testResponse = await fetch('https://api.replicate.com/v1/predictions', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Token ${replicateToken}`,
+        }
+      });
+      console.log("🔗 REPLICATE API TEST:");
+      console.log("- Status:", testResponse.status);
+      console.log("- Status Text:", testResponse.statusText);
+      
+      if (!testResponse.ok) {
+        const errorText = await testResponse.text();
+        console.error("❌ REPLICATE API AUTHENTICATION FAILED:");
+        console.error("- Error:", errorText);
+        return '/placeholder.svg';
+      }
+      console.log("✅ REPLICATE API ACCESSIBLE - TOKEN IS VALID");
+    } catch (connectError) {
+      console.error("❌ REPLICATE API CONNECTION FAILED:");
+      console.error("- Error:", connectError.message);
+      return '/placeholder.svg';
+    }
     
     // Step 1: Build image context from payload and saved recipe
     const imageContext = buildImageContext(payload, savedRecipe);
@@ -51,6 +92,7 @@ export async function generateAndUploadRecipeImage(
     }
     
     // Step 3: Generate image with Replicate Stability AI fallback strategy
+    console.log("🎯 STARTING REPLICATE IMAGE GENERATION...");
     const { imageData, usedModel } = await generateImageWithFallback(
       imagePrompt,
       imageContext
@@ -70,21 +112,20 @@ export async function generateAndUploadRecipeImage(
     
   } catch (error) {
     console.error("❌ CRITICAL IMAGE GENERATION ERROR:", error);
-    console.error("Error name:", error.name);
-    console.error("Error message:", error.message);
-    console.error("Error stack:", error.stack);
+    console.error("Error details:", {
+      name: error.name,
+      message: error.message,
+      stack: error.stack
+    });
     
-    // Log more details about the error
-    if (error.cause) {
-      console.error("Error cause:", error.cause);
-    }
-    
-    // Re-throw specific errors to help with debugging
+    // More detailed error logging
     if (error.message.includes('REPLICATE_API_TOKEN')) {
-      throw error;
+      console.error("🔑 TOKEN ISSUE: Check if REPLICATE_API_TOKEN is set in Supabase secrets");
+    }
+    if (error.message.includes('fetch')) {
+      console.error("🌐 NETWORK ISSUE: Check if Replicate API is accessible");
     }
     
-    console.log("🔄 FALLING BACK TO PLACEHOLDER due to error:", error.message);
     return '/placeholder.svg';
   }
 }
