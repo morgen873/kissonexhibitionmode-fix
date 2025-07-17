@@ -66,7 +66,7 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
   console.log("- Model:", model);
   console.log("- Prompt length:", prompt.length);
   
-  // Create prediction
+  // Create prediction with simplified parameters
   const createResponse = await fetch('https://api.replicate.com/v1/predictions', {
     method: 'POST',
     headers: {
@@ -80,19 +80,17 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
         width: 1024,
         height: 1024,
         num_outputs: 1,
-        scheduler: 'K_EULER',
-        num_inference_steps: 50,
         guidance_scale: 7.5,
-        prompt_strength: 0.8,
-        refine: 'expert_ensemble_refiner',
-        high_noise_frac: 0.8,
-        apply_watermark: false
+        num_inference_steps: 30,
+        scheduler: "K_EULER"
       }
     })
   });
 
   if (!createResponse.ok) {
-    throw new Error(`Failed to create prediction: ${createResponse.status}`);
+    const errorText = await createResponse.text();
+    console.error("❌ Replicate API Error:", errorText);
+    throw new Error(`Failed to create prediction: ${createResponse.status} - ${errorText}`);
   }
 
   const prediction: ReplicateResponse = await createResponse.json();
@@ -149,22 +147,29 @@ async function generateWithStableDiffusion35Large(
   imageContext: ImageContext,
   originalPrompt: string
 ): Promise<ImageGenerationResult> {
-  const sd35Prompt = optimizePromptForSD35Large(originalPrompt, imageContext);
-  console.log("🎨 STABLE DIFFUSION 3.5 LARGE FALLBACK PROMPT:");
-  console.log("- Length:", sd35Prompt.length);
-  console.log("- Content:", sd35Prompt);
+  console.log("🔄 SD 3.5 LARGE OPTIMIZED PROMPT:");
   
-  const imageData = await generateWithReplicate(
-    sd35Prompt,
-    'bytedance/sdxl-lightning-4step:5f24084160c9089501c1b3545d9be3c27883ae2239b6f412990e82d4a6210f8f'
-  );
-  
-  console.log("✅ STABLE DIFFUSION 3.5 LARGE FALLBACK SUCCESS");
-  
-  return {
-    imageData,
-    usedModel: 'stable-diffusion-3.5-large'
-  };
+  try {
+    const sd35Prompt = optimizePromptForSD35Large(originalPrompt, imageContext);
+    console.log("🎨 STABLE DIFFUSION 3.5 LARGE FALLBACK PROMPT:");
+    console.log("- Length:", sd35Prompt.length);
+    console.log("- Content:", sd35Prompt);
+    
+    const imageData = await generateWithReplicate(
+      sd35Prompt,
+      'black-forest-labs/flux-schnell:bf2f2e683dd3738be2657b83b3e0f6a2ad2df6e4b228bb2b7c5e8e1e8b6c7d9c'
+    );
+    
+    console.log("✅ STABLE DIFFUSION 3.5 LARGE FALLBACK SUCCESS");
+    
+    return {
+      imageData,
+      usedModel: 'stable-diffusion-3.5-large'
+    };
+  } catch (fallbackError) {
+    console.error("❌ BOTH MODELS FAILED:", fallbackError.message);
+    throw new Error(`All image generation models failed: ${fallbackError.message}`);
+  }
 }
 
 function optimizePromptForSDXL(prompt: string, imageContext: ImageContext): string {
