@@ -31,29 +31,57 @@ export async function generateImageWithFallback(
   imageContext: ImageContext,
   openai?: any // Keep for backward compatibility but not used
 ): Promise<ImageGenerationResult> {
-  console.log("📥 ATTEMPTING SDXL GENERATION...");
+  console.log("📥 ATTEMPTING MULTI-MODEL GENERATION WITH ENHANCED FALLBACKS...");
   
-  // Step 1: Try SDXL first
-  try {
-    const sdxlPrompt = optimizePromptForSDXL(imagePrompt, imageContext);
-    const imageData = await generateWithReplicate(
-      sdxlPrompt,
-      'stability-ai/sdxl:7762fd07cf82c948538e41f63f77d685e02b063e37e496e96eefd46c929f9bdc'
-    );
-    
-    console.log("✅ SDXL SUCCESS");
-    return {
-      imageData,
-      usedModel: 'sdxl'
-    };
-    
-  } catch (sdxlError) {
-    console.log("⚠️ SDXL FAILED, TRYING STABLE DIFFUSION 3.5 LARGE FALLBACK...");
-    console.log("SDXL Error:", sdxlError.message);
-    
-    // Step 2: Fallback to Stable Diffusion 3.5 Large
-    return await generateWithStableDiffusion35Large(imageContext, imagePrompt);
+  // Enhanced fallback strategy with more reliable models
+  const models = [
+    {
+      name: 'flux-schnell',
+      id: 'black-forest-labs/flux-schnell',
+      optimize: (prompt: string) => optimizePromptForFlux(prompt, imageContext)
+    },
+    {
+      name: 'sdxl-lightning',
+      id: 'bytedance/sdxl-lightning-4step:5f24084160c9089501c1b3545d9be3c27883ae2239b6f412990e82d4a6210f8f',
+      optimize: (prompt: string) => optimizePromptForSDXL(prompt, imageContext)
+    },
+    {
+      name: 'stable-diffusion-xl',
+      id: 'stability-ai/stable-diffusion-xl-base-1.0',
+      optimize: (prompt: string) => optimizePromptForSDXL(prompt, imageContext)
+    }
+  ];
+
+  let lastError: Error | null = null;
+  
+  for (const [index, model] of models.entries()) {
+    try {
+      console.log(`🎨 ATTEMPTING ${model.name.toUpperCase()} (${index + 1}/${models.length})...`);
+      
+      const optimizedPrompt = model.optimize(imagePrompt);
+      const imageData = await generateWithReplicate(optimizedPrompt, model.id);
+      
+      console.log(`✅ SUCCESS WITH ${model.name.toUpperCase()}`);
+      return {
+        imageData,
+        usedModel: model.name as 'sdxl' | 'stable-diffusion-3.5-large'
+      };
+      
+    } catch (error) {
+      console.log(`❌ ${model.name.toUpperCase()} FAILED:`, error.message);
+      lastError = error;
+      
+      // Continue to next model unless this is the last one
+      if (index < models.length - 1) {
+        console.log(`⏭️ TRYING NEXT MODEL...`);
+        continue;
+      }
+    }
   }
+  
+  // If all models failed, throw the last error
+  console.error("❌ ALL IMAGE GENERATION MODELS FAILED");
+  throw lastError || new Error("All image generation models failed");
 }
 
 async function generateWithReplicate(prompt: string, model: string): Promise<string> {
@@ -65,42 +93,40 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
   console.log("🎨 REPLICATE CONFIG:");
   console.log("- Model:", model);
   console.log("- Prompt length:", prompt.length);
+  console.log("- First 100 chars:", prompt.substring(0, 100));
   
-  // Create prediction
+  // Determine if this is a model name or version ID
+  const isModelName = !model.includes(':');
+  const requestBody = isModelName ? {
+    model: model,
+    input: getInputForModel(model, prompt)
+  } : {
+    version: model,
+    input: getInputForModel(model, prompt)
+  };
+  
+  // Create prediction with model-specific configuration
   const createResponse = await fetch('https://api.replicate.com/v1/predictions', {
     method: 'POST',
     headers: {
       'Authorization': `Token ${replicateToken}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      version: model,
-      input: {
-        prompt: prompt,
-        width: 1024,
-        height: 1024,
-        num_outputs: 1,
-        scheduler: 'K_EULER',
-        num_inference_steps: 50,
-        guidance_scale: 7.5,
-        prompt_strength: 0.8,
-        refine: 'expert_ensemble_refiner',
-        high_noise_frac: 0.8,
-        apply_watermark: false
-      }
-    })
+    body: JSON.stringify(requestBody)
   });
 
   if (!createResponse.ok) {
-    throw new Error(`Failed to create prediction: ${createResponse.status}`);
+    const errorText = await createResponse.text();
+    console.error("❌ Create prediction error:", errorText);
+    throw new Error(`Failed to create prediction: ${createResponse.status} - ${errorText}`);
   }
 
   const prediction: ReplicateResponse = await createResponse.json();
   console.log("🔄 PREDICTION CREATED:", prediction.id);
 
-  // Poll for completion
+  // Reduced polling time for edge function compatibility
   let attempts = 0;
-  const maxAttempts = 60; // 5 minutes max
+  const maxAttempts = 36; // 3 minutes max (more reasonable for edge functions)
   
   while (attempts < maxAttempts) {
     await new Promise(resolve => setTimeout(resolve, 5000)); // Wait 5 seconds
@@ -123,26 +149,72 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
         throw new Error('No output URL in successful prediction');
       }
       
+      console.log("🖼️ Generated image URL:", status.output[0]);
+      
       // Download image and convert to base64
       const imageResponse = await fetch(status.output[0]);
       if (!imageResponse.ok) {
-        throw new Error('Failed to download generated image');
+        throw new Error(`Failed to download generated image: ${imageResponse.status}`);
       }
       
       const arrayBuffer = await imageResponse.arrayBuffer();
       const imageData = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
       
+      console.log("✅ Image downloaded and converted to base64, size:", imageData.length);
       return imageData;
     }
     
     if (status.status === 'failed') {
-      throw new Error(`Prediction failed: ${status.error || 'Unknown error'}`);
+      const errorMsg = status.error || 'Unknown error';
+      console.error("❌ Prediction failed with error:", errorMsg);
+      throw new Error(`Prediction failed: ${errorMsg}`);
     }
     
     attempts++;
   }
   
-  throw new Error('Image generation timed out');
+  throw new Error(`Image generation timed out after ${maxAttempts * 5} seconds`);
+}
+
+function getInputForModel(model: string, prompt: string): any {
+  // Flux Schnell configuration
+  if (model.includes('flux-schnell')) {
+    return {
+      prompt: prompt,
+      go_fast: true,
+      megapixels: "1",
+      num_outputs: 1,
+      aspect_ratio: "1:1",
+      output_format: "png",
+      output_quality: 80,
+      num_inference_steps: 4
+    };
+  }
+  
+  // SDXL Lightning configuration
+  if (model.includes('sdxl-lightning')) {
+    return {
+      prompt: prompt,
+      width: 1024,
+      height: 1024,
+      num_outputs: 1,
+      num_inference_steps: 4,
+      guidance_scale: 1.2,
+      scheduler: "K_EULER"
+    };
+  }
+  
+  // Default SDXL configuration
+  return {
+    prompt: prompt,
+    width: 1024,
+    height: 1024,
+    num_outputs: 1,
+    scheduler: 'K_EULER',
+    num_inference_steps: 30,
+    guidance_scale: 7.5,
+    apply_watermark: false
+  };
 }
 
 async function generateWithStableDiffusion35Large(
@@ -165,6 +237,21 @@ async function generateWithStableDiffusion35Large(
     imageData,
     usedModel: 'stable-diffusion-3.5-large'
   };
+}
+
+function optimizePromptForFlux(prompt: string, imageContext: ImageContext): string {
+  const { timelineTheme, dumplingShape, flavor, ingredientsList } = imageContext;
+  
+  // Flux works better with simpler, more direct prompts
+  const ingredientsText = ingredientsList.length > 0 ? ingredientsList.slice(0, 3).join(', ') : 'traditional ingredients';
+  
+  const fluxPrompt = `A single ${dumplingShape}-shaped dumpling with ${flavor} flavor, ${timelineTheme.toLowerCase()} style, made with ${ingredientsText}. Professional food photography, studio lighting, black background, highly detailed, appetizing presentation, commercial quality, centered composition.`;
+  
+  console.log("🔄 FLUX OPTIMIZED PROMPT:");
+  console.log("- Length:", fluxPrompt.length);
+  console.log("- Content:", fluxPrompt);
+  
+  return fluxPrompt;
 }
 
 function optimizePromptForSDXL(prompt: string, imageContext: ImageContext): string {

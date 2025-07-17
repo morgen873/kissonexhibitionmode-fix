@@ -73,7 +73,18 @@ export async function generateAndUploadRecipeImage(
     console.error("Error details:", {
       name: error.name,
       message: error.message,
-      stack: error.stack
+      stack: error.stack,
+      recipeId: recipeId,
+      recipeTitle: savedRecipe.title
+    });
+    
+    // Log structured error for monitoring
+    console.error("IMAGE_GENERATION_FAILURE", {
+      recipeId,
+      recipeTitle: savedRecipe.title,
+      errorType: error.name,
+      errorMessage: error.message,
+      timestamp: new Date().toISOString()
     });
     
     return '/placeholder.svg';
