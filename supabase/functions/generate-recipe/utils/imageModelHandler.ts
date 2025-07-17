@@ -210,22 +210,22 @@ function optimizePromptForSDXL(prompt: string, imageContext: ImageContext): stri
   // WILD ARTISTIC PROMPT COMPONENTS - ENHANCED FOR SPECULATIVE CREATIVITY:
   
   // 1. Quality and style terms (affects overall image quality)
-  const qualityTerms = "wildly artistic masterpiece, speculative design excellence, ultra surreal, 12k hyperdetailed resolution, consciousness-expanding visuals";
+  const qualityTerms = "wildly artistic masterpiece, speculative design excellence, ultra surreal, 4k resolution";
   
   // 2. Photography style (change this to modify the look)
-  const photoStyle = "experimental food artistry, avant-garde culinary photography, reality-transcending presentation";
+  const photoStyle = "experimental food artistry, avant-garde culinary photography";
   
   // 3. Lighting setup (modify for different lighting effects)
-  const lighting = "impossible lighting effects, dimensional illumination, reality-bending luminosity, dream-state lighting";
+  const lighting = "experimental lighting effects, dimensional illumination, luminosity";
   
   // 4. Visual effects and textures (customize visual appearance)
-  const effects = "mind-bending textures, reality-warping composition, psychedelic visual distortions, impossible material science";
+  const effects = "interesting textures, reality-warping compositions";
   
   // 5. Composition rules (change framing and layout)
-  const composition = "single dumpling levitating, anti-gravity presentation, pure artistic void background, consciousness-expanding centered composition";
+  const composition = "single dumpling levitating, anti-gravity presentation, pure artistic matt black void background";
   
   // 6. Food-specific requirements (dumpling appearance rules)
-  const foodRequirements = "metamorphic wrapper properties, energy field emanations, reality-transcending dumpling physics";
+  const foodRequirements = "metamorphic wrapper properties, energy field emanations";
   
   // 7. Presentation style (final presentation look)
   const presentation = "transcendent artistic presentation, gallery-worthy food art, paradigm-shifting culinary aesthetics";
