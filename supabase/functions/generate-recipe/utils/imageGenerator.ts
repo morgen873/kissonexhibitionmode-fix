@@ -34,7 +34,7 @@ export async function generateAndUploadRecipeImage(
     console.log("=== 🚀 IMAGE GENERATION WITH REPLICATE STABILITY AI ===");
     
     // Step 0: IMMEDIATELY TEST REPLICATE TOKEN
-    const replicateToken = Deno.env.get('KissOn');
+    const replicateToken = Deno.env.get('REPLICATE_API_TOKEN');
     console.log("🔑 IMMEDIATE REPLICATE TOKEN TEST:");
     console.log("- Token exists:", !!replicateToken);
     console.log("- Token length:", replicateToken ? replicateToken.length : 0);
