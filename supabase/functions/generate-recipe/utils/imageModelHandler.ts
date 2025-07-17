@@ -29,47 +29,79 @@ interface ReplicateResponse {
 export async function generateImageWithFallback(
   imagePrompt: string,
   imageContext: ImageContext,
-  openai?: any // Not used - SDXL/Replicate only
+  openai?: any
 ): Promise<ImageGenerationResult> {
-  console.log("🎯 FORCED SDXL-ONLY GENERATION - NO OPENAI FALLBACK");
+  console.log("🎯 TRYING SDXL FIRST, THEN OPENAI FALLBACK");
   console.log("📥 ATTEMPTING SDXL GENERATION...");
   
   // Ensure we have the Replicate token
   const replicateToken = Deno.env.get('REPLICATE_API_TOKEN');
-  if (!replicateToken) {
-    throw new Error('❌ REPLICATE_API_TOKEN not found - cannot generate image with SDXL');
-  }
   
-  // Step 1: Try SDXL first
+  // Step 1: Try SDXL first if we have the token
+  if (replicateToken) {
+    try {
+      console.log("🎨 CALLING SDXL via Replicate...");
+      const sdxlPrompt = optimizePromptForSDXL(imagePrompt, imageContext);
+      const imageData = await generateWithReplicate(
+        sdxlPrompt,
+        'stability-ai/sdxl:7762fd07cf82c948538e41f63f77d685e02b063e37e496e96eefd46c929f9bdc'
+      );
+      
+      console.log("✅ SDXL SUCCESS - IMAGE GENERATED WITH REPLICATE");
+      return {
+        imageData,
+        usedModel: 'sdxl'
+      };
+      
+    } catch (sdxlError) {
+      console.log("⚠️ SDXL FAILED, TRYING OPENAI FALLBACK...");
+      console.log("SDXL Error:", sdxlError.message);
+    }
+  } else {
+    console.log("⚠️ NO REPLICATE TOKEN - SKIPPING SDXL, GOING TO OPENAI");
+  }
+
+  // Step 2: Fallback to OpenAI (which was working before)
+  console.log("🔄 FALLING BACK TO OPENAI GPT-IMAGE-1...");
   try {
-    console.log("🎨 CALLING SDXL via Replicate...");
-    const sdxlPrompt = optimizePromptForSDXL(imagePrompt, imageContext);
-    const imageData = await generateWithReplicate(
-      sdxlPrompt,
-      'stability-ai/sdxl:7762fd07cf82c948538e41f63f77d685e02b063e37e496e96eefd46c929f9bdc'
-    );
-    
-    console.log("✅ SDXL SUCCESS - IMAGE GENERATED WITH REPLICATE");
+    const openAIKey = Deno.env.get('OPENAI_API_KEY');
+    if (!openAIKey) {
+      throw new Error('OPENAI_API_KEY not found in environment variables');
+    }
+
+    const response = await fetch('https://api.openai.com/v1/images/generations', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${openAIKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'gpt-image-1',
+        prompt: imagePrompt,
+        n: 1,
+        size: '1024x1024',
+        quality: 'high',
+        response_format: 'b64_json'
+      })
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`OpenAI API error: ${response.status} - ${errorText}`);
+    }
+
+    const data = await response.json();
+    const imageData = data.data[0].b64_json;
+
+    console.log("✅ OPENAI SUCCESS - IMAGE GENERATED WITH GPT-IMAGE-1");
     return {
       imageData,
-      usedModel: 'sdxl'
+      usedModel: 'sdxl' // Return as sdxl for compatibility
     };
-    
-  } catch (sdxlError) {
-    console.log("⚠️ SDXL FAILED, TRYING STABLE DIFFUSION 3.5 LARGE FALLBACK...");
-    console.log("SDXL Error:", sdxlError.message);
-    console.log("Error stack:", sdxlError.stack);
-    
-    // Step 2: Fallback to Stable Diffusion 3.5 Large
-    try {
-      const result = await generateWithStableDiffusion35Large(imageContext, imagePrompt);
-      console.log("✅ FALLBACK SUCCESS - IMAGE GENERATED WITH SD 3.5 LARGE");
-      return result;
-    } catch (fallbackError) {
-      console.error("❌ ALL REPLICATE MODELS FAILED");
-      console.error("Fallback error:", fallbackError.message);
-      throw new Error(`Image generation failed: SDXL failed (${sdxlError.message}), SD 3.5 Large failed (${fallbackError.message})`);
-    }
+
+  } catch (openaiError) {
+    console.error("❌ OPENAI FALLBACK FAILED:", openaiError.message);
+    throw new Error(`All image generation methods failed: ${openaiError.message}`);
   }
 }
 
