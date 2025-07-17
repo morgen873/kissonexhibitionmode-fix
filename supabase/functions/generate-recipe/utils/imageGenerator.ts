@@ -29,6 +29,18 @@ export async function generateAndUploadRecipeImage(
   try {
     console.log("=== 🚀 IMAGE GENERATION WITH REPLICATE STABILITY AI ===");
     
+    // Step 0: Check Replicate token immediately
+    const replicateToken = Deno.env.get('REPLICATE_API_TOKEN');
+    console.log("🔑 REPLICATE TOKEN CHECK:");
+    console.log("- Token exists:", !!replicateToken);
+    console.log("- Token length:", replicateToken ? replicateToken.length : 0);
+    console.log("- Token starts with:", replicateToken ? replicateToken.substring(0, 8) + "..." : "N/A");
+    
+    if (!replicateToken) {
+      console.error("❌ CRITICAL: REPLICATE_API_TOKEN not found in environment");
+      throw new Error("REPLICATE_API_TOKEN is missing - cannot generate images");
+    }
+    
     // Step 1: Build image context from payload and saved recipe
     const imageContext = buildImageContext(payload, savedRecipe);
     
@@ -51,6 +63,7 @@ export async function generateAndUploadRecipeImage(
     }
     
     // Step 3: Generate image with Replicate Stability AI fallback strategy
+    console.log("🎯 STARTING REPLICATE IMAGE GENERATION...");
     const { imageData, usedModel } = await generateImageWithFallback(
       imagePrompt,
       imageContext
@@ -75,6 +88,14 @@ export async function generateAndUploadRecipeImage(
       message: error.message,
       stack: error.stack
     });
+    
+    // More detailed error logging
+    if (error.message.includes('REPLICATE_API_TOKEN')) {
+      console.error("🔑 TOKEN ISSUE: Check if REPLICATE_API_TOKEN is set in Supabase secrets");
+    }
+    if (error.message.includes('fetch')) {
+      console.error("🌐 NETWORK ISSUE: Check if Replicate API is accessible");
+    }
     
     return '/placeholder.svg';
   }
