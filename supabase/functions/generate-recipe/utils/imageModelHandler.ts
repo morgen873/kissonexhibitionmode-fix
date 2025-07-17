@@ -80,17 +80,16 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
         width: 1024,
         height: 1024,
         num_outputs: 1,
-        scheduler: 'DPMSolverMultistep', // CRAZY TEST: Experimental scheduler for maximum creativity
-        num_inference_steps: 150, // CRAZY TEST: Maximum possible steps for absolute detail
-        guidance_scale: 3.0, // CRAZY TEST: Ultra-low guidance for maximum creative freedom
-        prompt_strength: 0.99, // CRAZY TEST: Maximum prompt strength for extreme interpretation
+        scheduler: 'DPMSolverMultistep', // CRAZY TEST: Experimental scheduler for enhanced creativity
+        num_inference_steps: 80, // CRAZY TEST: Optimal steps for creative detail without over-processing
+        guidance_scale: 5.5, // CRAZY TEST: Sweet spot for creative freedom while maintaining prompt adherence
+        prompt_strength: 0.95, // CRAZY TEST: High prompt strength for dramatic artistic interpretation
         refine: 'expert_ensemble_refiner',
-        high_noise_frac: 0.99, // CRAZY TEST: Maximum noise for wildest variation
+        high_noise_frac: 0.85, // CRAZY TEST: High noise for creative variation without chaos
         apply_watermark: false,
-        // CRAZY TEST: Additional experimental parameters
-        negative_prompt: "boring, conventional, realistic, normal, mundane, typical",
-        lora_scale: 0.9, // Enhanced LoRA for maximum artistic deviation
-        refine_steps: 50 // Maximum refiner steps for extreme detail
+        // CRAZY TEST: Enhanced creative parameters
+        negative_prompt: "boring, plain, ordinary, conventional, realistic photography, mundane, simple, normal dumpling, basic food photography",
+        lora_scale: 0.8 // Enhanced LoRA for artistic deviation
       }
     })
   });
