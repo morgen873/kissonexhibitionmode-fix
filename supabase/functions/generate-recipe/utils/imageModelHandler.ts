@@ -10,7 +10,7 @@ interface ImageContext {
 
 interface ImageGenerationResult {
   imageData: string;
-  usedModel: 'sdxl' | 'stable-diffusion-3.5-large';
+  usedModel: 'flux' | 'sdxl' | 'stable-diffusion';
 }
 
 interface ReplicateResponse {
@@ -31,8 +31,8 @@ export async function generateImageWithFallback(
   imageContext: ImageContext,
   openai?: any // Not used - Replicate only
 ): Promise<ImageGenerationResult> {
-  console.log("🎯 REPLICATE-ONLY IMAGE GENERATION");
-  console.log("📥 ATTEMPTING SDXL GENERATION...");
+  console.log("🎯 FIXED IMAGE GENERATION - USING WORKING MODELS");
+  console.log("📥 ATTEMPTING FLUX GENERATION (PRIMARY)...");
   
   // Ensure we have the Replicate token (using KissOn token)
   const replicateToken = Deno.env.get('KissOn');
@@ -40,55 +40,60 @@ export async function generateImageWithFallback(
     throw new Error('❌ KissOn token not found - cannot generate image');
   }
   
-  // Step 1: Try SDXL first
+  // Step 1: Try FLUX first (fast and reliable)
   try {
-    console.log("🎨 CALLING SDXL via Replicate...");
-    const sdxlPrompt = optimizePromptForSDXL(imagePrompt, imageContext);
-    const imageData = await generateWithReplicate(
-      sdxlPrompt,
-      'lucataco/sdxl-lightning-4step:727e49a643e999d602a896c774a0658ffb7725a5a4a9dea6c7e8b3b4b0d7b6b1'
-    );
+    console.log("🚀 CALLING FLUX via Replicate...");
+    const fluxPrompt = optimizePromptForFlux(imagePrompt, imageContext);
+    const imageData = await generateWithFlux(fluxPrompt, replicateToken);
     
-    console.log("✅ SDXL SUCCESS - IMAGE GENERATED WITH REPLICATE");
+    console.log("✅ FLUX SUCCESS - IMAGE GENERATED");
     return {
       imageData,
-      usedModel: 'sdxl'
+      usedModel: 'flux'
     };
     
-  } catch (sdxlError) {
-    console.log("⚠️ SDXL FAILED, TRYING STABLE DIFFUSION 3.5 LARGE FALLBACK...");
-    console.log("SDXL Error:", sdxlError.message);
+  } catch (fluxError) {
+    console.log("⚠️ FLUX FAILED, TRYING SDXL FALLBACK...");
+    console.log("FLUX Error:", fluxError.message);
     
-    // Step 2: Fallback to Stable Diffusion 3.5 Large (also via Replicate)
+    // Step 2: Fallback to SDXL Base (stable version)
     try {
-      const result = await generateWithStableDiffusion35Large(imageContext, imagePrompt);
-      console.log("✅ FALLBACK SUCCESS - IMAGE GENERATED WITH SD 3.5 LARGE VIA REPLICATE");
-      return result;
-    } catch (fallbackError) {
-      console.error("❌ ALL REPLICATE MODELS FAILED");
-      console.error("SDXL error:", sdxlError.message);
-      console.error("SD 3.5 Large error:", fallbackError.message);
-      throw new Error(`All Replicate models failed: SDXL (${sdxlError.message}), SD 3.5 Large (${fallbackError.message})`);
+      console.log("🎨 CALLING SDXL BASE via Replicate...");
+      const sdxlPrompt = optimizePromptForSDXL(imagePrompt, imageContext);
+      const imageData = await generateWithSDXL(sdxlPrompt, replicateToken);
+      
+      console.log("✅ SDXL FALLBACK SUCCESS");
+      return {
+        imageData,
+        usedModel: 'sdxl'
+      };
+      
+    } catch (sdxlError) {
+      console.log("⚠️ SDXL FAILED, TRYING STABLE DIFFUSION FALLBACK...");
+      console.log("SDXL Error:", sdxlError.message);
+      
+      // Step 3: Final fallback to basic Stable Diffusion
+      try {
+        const result = await generateWithStableDiffusion(imageContext, imagePrompt, replicateToken);
+        console.log("✅ STABLE DIFFUSION FINAL FALLBACK SUCCESS");
+        return result;
+      } catch (finalError) {
+        console.error("❌ ALL REPLICATE MODELS FAILED");
+        console.error("FLUX error:", fluxError.message);
+        console.error("SDXL error:", sdxlError.message);
+        console.error("Stable Diffusion error:", finalError.message);
+        throw new Error(`All models failed: FLUX (${fluxError.message}), SDXL (${sdxlError.message}), SD (${finalError.message})`);
+      }
     }
   }
 }
 
-async function generateWithReplicate(prompt: string, model: string): Promise<string> {
-  const replicateToken = Deno.env.get('KissOn');
-  if (!replicateToken) {
-    throw new Error('KissOn token not found in environment variables');
-  }
-
-  console.log("🎨 REPLICATE CONFIG:");
-  console.log("- Model:", model);
+// FLUX Model - Primary choice (fast and reliable)
+async function generateWithFlux(prompt: string, replicateToken: string): Promise<string> {
+  console.log("🚀 FLUX GENERATION:");
   console.log("- Prompt length:", prompt.length);
-  console.log("- API Token length:", replicateToken.length);
-  console.log("- API Token prefix:", replicateToken.substring(0, 10) + "...");
-  
-  // Test Replicate API connectivity first
-  console.log("🌐 TESTING REPLICATE API CONNECTIVITY...");
-  
-  // Create prediction
+  console.log("- Model: FLUX Schnell");
+
   const createResponse = await fetch('https://api.replicate.com/v1/predictions', {
     method: 'POST',
     headers: {
@@ -96,49 +101,113 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      version: model,
+      version: 'black-forest-labs/flux-schnell:bf2f66fd46b9a44bdb3e3c5f41a7d0cff9b9ae2afff8ff7e00eb2b5e71ecbeb3',
+      input: {
+        prompt: prompt,
+        go_fast: true,
+        megapixels: "1",
+        num_outputs: 1,
+        aspect_ratio: "1:1",
+        output_format: "webp",
+        output_quality: 80,
+        num_inference_steps: 4
+      }
+    })
+  });
+
+  if (!createResponse.ok) {
+    const errorText = await createResponse.text();
+    console.error("❌ FLUX API ERROR:", createResponse.status, errorText);
+    throw new Error(`FLUX failed: ${createResponse.status} - ${errorText}`);
+  }
+
+  return await pollPrediction(await createResponse.json(), replicateToken);
+}
+
+// SDXL Model - First fallback
+async function generateWithSDXL(prompt: string, replicateToken: string): Promise<string> {
+  console.log("🎨 SDXL GENERATION:");
+  console.log("- Prompt length:", prompt.length);
+  console.log("- Model: SDXL Base 1.0");
+
+  const createResponse = await fetch('https://api.replicate.com/v1/predictions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Token ${replicateToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      version: 'stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b',
       input: {
         prompt: prompt,
         width: 1024,
         height: 1024,
         num_outputs: 1,
-        scheduler: 'K_EULER',
-        num_inference_steps: 10, // Reduced to comply with API limits
-        guidance_scale: 7.0, // Slightly reduced for better compatibility
-        prompt_strength: 0.85, // Reduced for better stability
-        refine: 'expert_ensemble_refiner',
-        high_noise_frac: 0.8, // Reduced for better stability
+        guidance_scale: 7.5,
+        num_inference_steps: 50,
         apply_watermark: false
       }
     })
   });
 
-  console.log("📡 REPLICATE API RESPONSE:");
-  console.log("- Status:", createResponse.status);
-  console.log("- Status Text:", createResponse.statusText);
-  console.log("- Headers:", Object.fromEntries(createResponse.headers.entries()));
+  if (!createResponse.ok) {
+    const errorText = await createResponse.text();
+    console.error("❌ SDXL API ERROR:", createResponse.status, errorText);
+    throw new Error(`SDXL failed: ${createResponse.status} - ${errorText}`);
+  }
+
+  return await pollPrediction(await createResponse.json(), replicateToken);
+}
+
+// Stable Diffusion - Final fallback
+async function generateWithStableDiffusion(
+  imageContext: ImageContext,
+  originalPrompt: string,
+  replicateToken: string
+): Promise<ImageGenerationResult> {
+  console.log("🔄 STABLE DIFFUSION FALLBACK:");
+  
+  const sdPrompt = optimizePromptForStableDiffusion(originalPrompt, imageContext);
+  console.log("- Prompt length:", sdPrompt.length);
+  console.log("- Model: Stable Diffusion v1.5");
+
+  const createResponse = await fetch('https://api.replicate.com/v1/predictions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Token ${replicateToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      version: 'stability-ai/stable-diffusion:ac732df83cea7fff18b8472768c88ad041fa750ff7682a21affe81863cbe77e4',
+      input: {
+        prompt: sdPrompt,
+        width: 768,
+        height: 768,
+        num_outputs: 1,
+        guidance_scale: 7.5,
+        num_inference_steps: 50
+      }
+    })
+  });
 
   if (!createResponse.ok) {
     const errorText = await createResponse.text();
-    console.error("❌ REPLICATE API ERROR:");
-    console.error("- Status:", createResponse.status);
-    console.error("- Error Body:", errorText);
-    
-    // Check for specific API limit violations
-    if (errorText.includes('num_inference_steps')) {
-      console.error("⚠️ API LIMIT VIOLATION: num_inference_steps parameter exceeds allowed limits");
-    }
-    if (errorText.includes('422')) {
-      console.error("⚠️ PARAMETER VALIDATION ERROR: One or more parameters are invalid");
-    }
-    
-    throw new Error(`Failed to create prediction: ${createResponse.status} - ${errorText}`);
+    console.error("❌ STABLE DIFFUSION API ERROR:", createResponse.status, errorText);
+    throw new Error(`Stable Diffusion failed: ${createResponse.status} - ${errorText}`);
   }
 
-  const prediction: ReplicateResponse = await createResponse.json();
+  const imageData = await pollPrediction(await createResponse.json(), replicateToken);
+  
+  return {
+    imageData,
+    usedModel: 'stable-diffusion'
+  };
+}
+
+// Shared polling function for all models
+async function pollPrediction(prediction: ReplicateResponse, replicateToken: string): Promise<string> {
   console.log("🔄 PREDICTION CREATED:", prediction.id);
 
-  // Poll for completion
   let attempts = 0;
   const maxAttempts = 60; // 5 minutes max
   
@@ -185,28 +254,6 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
   throw new Error('Image generation timed out');
 }
 
-async function generateWithStableDiffusion35Large(
-  imageContext: ImageContext,
-  originalPrompt: string
-): Promise<ImageGenerationResult> {
-  const sd35Prompt = optimizePromptForSD35Large(originalPrompt, imageContext);
-  console.log("🎨 STABLE DIFFUSION 3.5 LARGE FALLBACK PROMPT:");
-  console.log("- Length:", sd35Prompt.length);
-  console.log("- Content:", sd35Prompt);
-  
-  const imageData = await generateWithReplicate(
-    sd35Prompt,
-    'stability-ai/stable-diffusion-3-5-large:45a663bfc7127b47c30da1a98f19a37b4525b8ff60b717f11b42d95550c3a7f8'
-  );
-  
-  console.log("✅ STABLE DIFFUSION 3.5 LARGE FALLBACK SUCCESS");
-  
-  return {
-    imageData,
-    usedModel: 'stable-diffusion-3.5-large'
-  };
-}
-
 function optimizePromptForSDXL(prompt: string, imageContext: ImageContext): string {
   const { timelineTheme, dumplingShape, flavor, ingredientsList, recipeTitle } = imageContext;
   
@@ -246,17 +293,32 @@ function optimizePromptForSDXL(prompt: string, imageContext: ImageContext): stri
   return sdxlPrompt;
 }
 
-function optimizePromptForSD35Large(prompt: string, imageContext: ImageContext): string {
+function optimizePromptForFlux(prompt: string, imageContext: ImageContext): string {
   const { timelineTheme, dumplingShape, flavor, ingredientsList, recipeTitle } = imageContext;
   
-  // SD 3.5 Large works well with natural language prompts
-  const ingredientsText = ingredientsList.length > 0 ? ingredientsList.slice(0, 5).join(', ') : 'traditional ingredients';
+  // FLUX works well with clean, direct prompts
+  const ingredientsText = ingredientsList.length > 0 ? ingredientsList.slice(0, 4).join(', ') : 'traditional ingredients';
   
-  const sd35Prompt = `A single ${dumplingShape}-shaped dumpling with ${flavor} flavor profile, photographed in ${timelineTheme.toLowerCase()} style. Made with ${ingredientsText}. Professional food photography with studio lighting against a pure solid matte black background - no textures, no patterns, no gradients, completely black void background. The dumpling wrapper is completely sealed and opaque, showing no internal filling. Hyper-realistic, appetizing presentation with shallow depth of field. Commercial photography quality, perfectly centered composition. Solid black background only, no extras, no distractions.`;
+  const fluxPrompt = `Professional food photography of a single ${dumplingShape}-shaped dumpling with ${flavor} flavor, ${timelineTheme.toLowerCase()} culinary style, made with ${ingredientsText}. Studio lighting, clean background, appetizing presentation, high quality, detailed texture, centered composition.`;
   
-  console.log("🔄 SD 3.5 LARGE OPTIMIZED PROMPT:");
-  console.log("- Length:", sd35Prompt.length);
-  console.log("- Content:", sd35Prompt);
+  console.log("🚀 FLUX OPTIMIZED PROMPT:");
+  console.log("- Length:", fluxPrompt.length);
+  console.log("- Content:", fluxPrompt);
   
-  return sd35Prompt;
+  return fluxPrompt;
+}
+
+function optimizePromptForStableDiffusion(prompt: string, imageContext: ImageContext): string {
+  const { timelineTheme, dumplingShape, flavor, ingredientsList, recipeTitle } = imageContext;
+  
+  // Stable Diffusion v1.5 works well with simpler prompts
+  const ingredientsText = ingredientsList.length > 0 ? ingredientsList.slice(0, 3).join(', ') : 'traditional ingredients';
+  
+  const sdPrompt = `A ${dumplingShape} dumpling, ${flavor} flavor, made with ${ingredientsText}, ${timelineTheme.toLowerCase()} style, food photography, professional lighting, clean background`;
+  
+  console.log("🔄 STABLE DIFFUSION OPTIMIZED PROMPT:");
+  console.log("- Length:", sdPrompt.length);
+  console.log("- Content:", sdPrompt);
+  
+  return sdPrompt;
 }
