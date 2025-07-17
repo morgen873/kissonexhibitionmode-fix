@@ -38,7 +38,7 @@ export async function generateImageWithFallback(
     const sdxlPrompt = optimizePromptForSDXL(imagePrompt, imageContext);
     const imageData = await generateWithReplicate(
       sdxlPrompt,
-      'stability-ai/sdxl:7762fd07cf82c948538e41f63f77d685e02b063e37e496e96eefd46c929f9bdc'
+      'stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b'
     );
     
     console.log("✅ SDXL SUCCESS");
@@ -66,25 +66,46 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
   console.log("- Model:", model);
   console.log("- Prompt length:", prompt.length);
   
-  // Create prediction with simplified parameters
+  // Different parameters for different models
+  let inputParams: any = { prompt: prompt };
+  
+  if (model.includes('sdxl')) {
+    // SDXL parameters
+    inputParams = {
+      prompt: prompt,
+      width: 1024,
+      height: 1024,
+      num_outputs: 1,
+      guidance_scale: 7.5,
+      num_inference_steps: 30,
+      scheduler: "K_EULER"
+    };
+  } else if (model.includes('flux')) {
+    // FLUX parameters
+    inputParams = {
+      prompt: prompt,
+      go_fast: true,
+      megapixels: "1",
+      num_outputs: 1,
+      aspect_ratio: "1:1",
+      output_format: "webp",
+      output_quality: 80,
+      num_inference_steps: 4
+    };
+  }
+
+  // Create prediction with model-specific parameters
+  const requestBody = model.includes(':') 
+    ? { version: model, input: inputParams }
+    : { model: model, input: inputParams };
+    
   const createResponse = await fetch('https://api.replicate.com/v1/predictions', {
     method: 'POST',
     headers: {
       'Authorization': `Token ${replicateToken}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      version: model,
-      input: {
-        prompt: prompt,
-        width: 1024,
-        height: 1024,
-        num_outputs: 1,
-        guidance_scale: 7.5,
-        num_inference_steps: 30,
-        scheduler: "K_EULER"
-      }
-    })
+    body: JSON.stringify(requestBody)
   });
 
   if (!createResponse.ok) {
@@ -157,7 +178,7 @@ async function generateWithStableDiffusion35Large(
     
     const imageData = await generateWithReplicate(
       sd35Prompt,
-      'black-forest-labs/flux-schnell:bf2f2e683dd3738be2657b83b3e0f6a2ad2df6e4b228bb2b7c5e8e1e8b6c7d9c'
+      'black-forest-labs/flux-schnell'
     );
     
     console.log("✅ STABLE DIFFUSION 3.5 LARGE FALLBACK SUCCESS");
