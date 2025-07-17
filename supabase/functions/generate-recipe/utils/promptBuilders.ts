@@ -31,7 +31,7 @@ Modern futuristic presentation:
 - Clean, minimalist arrangement
 - Pure matte black background
 - Centered composition
-- High-quality food photography standards
+- High-quality food photography standards`;
 
   console.log("Generated professional futuristic prompt optimized for SDXL");
   return prompt;
@@ -57,7 +57,7 @@ Historical culinary presentation:
 - Authentic traditional arrangement
 - Pure matte black background
 - Centered composition
-- Classic food styling techniques
+- Classic food styling techniques`;
 
   console.log("Generated professional historical prompt optimized for SDXL");
   return prompt;
@@ -83,7 +83,7 @@ Modern culinary presentation:
 - Contemporary plating
 - Pure matte black background
 - Centered composition
-- Professional food styling
+- Professional food styling`;
 
   console.log("Generated professional contemporary prompt optimized for SDXL");
   return prompt;
