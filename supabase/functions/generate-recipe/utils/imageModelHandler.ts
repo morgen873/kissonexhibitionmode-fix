@@ -158,7 +158,13 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
       }
       
       const arrayBuffer = await imageResponse.arrayBuffer();
-      const imageData = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+      // Fix for stack overflow: convert ArrayBuffer to base64 safely
+      const uint8Array = new Uint8Array(arrayBuffer);
+      let binaryString = '';
+      for (let i = 0; i < uint8Array.length; i++) {
+        binaryString += String.fromCharCode(uint8Array[i]);
+      }
+      const imageData = btoa(binaryString);
       
       return imageData;
     }
