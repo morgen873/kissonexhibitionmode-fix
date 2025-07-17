@@ -80,13 +80,17 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
         width: 1024,
         height: 1024,
         num_outputs: 1,
-        scheduler: 'K_EULER',
-        num_inference_steps: 100, // Maximum steps for ultra-detailed artistic generation
-        guidance_scale: 8.0, // Lowered for maximum creative freedom while maintaining subject focus
-        prompt_strength: 0.98, // Near-maximum for dramatic artistic interpretation
+        scheduler: 'DPMSolverMultistep', // CRAZY TEST: Experimental scheduler for maximum creativity
+        num_inference_steps: 150, // CRAZY TEST: Maximum possible steps for absolute detail
+        guidance_scale: 3.0, // CRAZY TEST: Ultra-low guidance for maximum creative freedom
+        prompt_strength: 0.99, // CRAZY TEST: Maximum prompt strength for extreme interpretation
         refine: 'expert_ensemble_refiner',
-        high_noise_frac: 0.95, // Maximum creative variation
-        apply_watermark: false
+        high_noise_frac: 0.99, // CRAZY TEST: Maximum noise for wildest variation
+        apply_watermark: false,
+        // CRAZY TEST: Additional experimental parameters
+        negative_prompt: "boring, conventional, realistic, normal, mundane, typical",
+        lora_scale: 0.9, // Enhanced LoRA for maximum artistic deviation
+        refine_steps: 50 // Maximum refiner steps for extreme detail
       }
     })
   });
@@ -173,31 +177,31 @@ function optimizePromptForSDXL(prompt: string, imageContext: ImageContext): stri
   // SDXL works better with more descriptive, detailed prompts
   const ingredientsText = ingredientsList.length > 0 ? ingredientsList.slice(0, 6).join(', ') : 'traditional ingredients';
   
-  // WILD ARTISTIC PROMPT COMPONENTS - ENHANCED FOR SPECULATIVE CREATIVITY:
+  // CRAZY TOLERANCE TEST - MAXIMUM CREATIVE CHAOS COMPONENTS:
   
-  // 1. Quality and style terms (affects overall image quality)
-  const qualityTerms = "wildly artistic masterpiece, speculative design excellence, ultra surreal, 12k hyperdetailed resolution, consciousness-expanding visuals";
+  // 1. INSANE Quality and style terms (pure artistic madness)
+  const qualityTerms = "ULTIMATE CREATIVE CHAOS, reality-shattering masterpiece, consciousness-exploding design, interdimensional 32k resolution, mind-melting surreal excellence, paradigm-destroying visuals, cosmic art revelation";
   
-  // 2. Photography style (change this to modify the look)
-  const photoStyle = "experimental food artistry, avant-garde culinary photography, reality-transcending presentation";
+  // 2. WILD Photography style (maximum experimental deviation)
+  const photoStyle = "impossibility food artistry, reality-breaking culinary photography, universe-transcending presentation, dream-logic food staging, anti-physics culinary cinematography";
   
-  // 3. Lighting setup (modify for different lighting effects)
-  const lighting = "impossible lighting effects, dimensional illumination, reality-bending luminosity, dream-state lighting";
+  // 3. EXTREME Lighting setup (reality-defying illumination)
+  const lighting = "cosmic impossibility lighting, multidimensional illumination cascades, reality-warping luminosity storms, consciousness-expanding light phenomena, quantum photon explosions";
   
-  // 4. Visual effects and textures (customize visual appearance)
-  const effects = "mind-bending textures, reality-warping composition, psychedelic visual distortions, impossible material science";
+  // 4. CHAOS Visual effects and textures (maximum visual anarchy)
+  const effects = "reality-shattering textures, universe-bending composition chaos, interdimensional visual storms, impossible quantum material science, consciousness-melting visual distortions";
   
-  // 5. Composition rules (change framing and layout)
-  const composition = "single dumpling levitating, anti-gravity presentation, pure artistic void background, consciousness-expanding centered composition";
+  // 5. INSANE Composition rules (anti-gravity art laws)
+  const composition = "impossible dumpling levitation in cosmic void, anti-universe presentation, pure artistic chaos background, consciousness-exploding centered composition defying all physics";
   
-  // 6. Food-specific requirements (dumpling appearance rules)
-  const foodRequirements = "metamorphic wrapper properties, energy field emanations, reality-transcending dumpling physics";
+  // 6. EXTREME Food-specific requirements (dumpling cosmic deity status)
+  const foodRequirements = "metamorphic cosmic dumpling deity, universal energy field emanations, reality-transcending dumpling consciousness, interdimensional wrapper physics, food-as-universe-center";
   
-  // 7. Presentation style (final presentation look)
-  const presentation = "transcendent artistic presentation, gallery-worthy food art, paradigm-shifting culinary aesthetics";
+  // 7. MAXIMUM Presentation style (ultimate artistic chaos)
+  const presentation = "cosmic artistic revelation, universe-worthy food deity art, reality-paradigm-destroying culinary aesthetics, consciousness-expanding food transcendence";
   
-  // BUILD THE FINAL PROMPT (you can rearrange these components)
-  const sdxlPrompt = `${qualityTerms}, ${photoStyle}, ${dumplingShape}-shaped dumpling with ${flavor} flavor, ${timelineTheme.toLowerCase()} culinary style, featuring ${ingredientsText}, ${lighting}, ${effects}, ${composition}, ${foodRequirements}, ${presentation}`;
+  // BUILD THE ULTIMATE CRAZY PROMPT (maximum chaos configuration)
+  const sdxlPrompt = `CRAZY TOLERANCE TEST ACTIVATED: ${qualityTerms}, ${photoStyle}, SACRED ${dumplingShape}-shaped dumpling deity with ${flavor} cosmic essence, ${timelineTheme.toLowerCase()} universe-transcending culinary consciousness, featuring ${ingredientsText} as cosmic ingredients, ${lighting}, ${effects}, ${composition}, ${foodRequirements}, ${presentation}, ABSOLUTE CREATIVE ANARCHY, no artistic limitations, pure speculative food consciousness, reality-breaking dumpling art`;
   
   console.log("🔄 SDXL OPTIMIZED PROMPT:");
   console.log("- Length:", sdxlPrompt.length);
