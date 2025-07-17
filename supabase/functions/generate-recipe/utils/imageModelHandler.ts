@@ -34,10 +34,10 @@ export async function generateImageWithFallback(
   console.log("🎯 REPLICATE-ONLY IMAGE GENERATION");
   console.log("📥 ATTEMPTING SDXL GENERATION...");
   
-  // Ensure we have the Replicate token
-  const replicateToken = Deno.env.get('REPLICATE_API_TOKEN');
+  // Ensure we have the Replicate token (using KissOn token)
+  const replicateToken = Deno.env.get('KissOn');
   if (!replicateToken) {
-    throw new Error('❌ REPLICATE_API_TOKEN not found - cannot generate image');
+    throw new Error('❌ KissOn token not found - cannot generate image');
   }
   
   // Step 1: Try SDXL first
@@ -46,7 +46,7 @@ export async function generateImageWithFallback(
     const sdxlPrompt = optimizePromptForSDXL(imagePrompt, imageContext);
     const imageData = await generateWithReplicate(
       sdxlPrompt,
-      'stability-ai/sdxl:7762fd07cf82c948538e41f63f77d685e02b063e37e496e96eefd46c929f9bdc'
+      'lucataco/sdxl-lightning-4step:727e49a643e999d602a896c774a0658ffb7725a5a4a9dea6c7e8b3b4b0d7b6b1'
     );
     
     console.log("✅ SDXL SUCCESS - IMAGE GENERATED WITH REPLICATE");
@@ -74,9 +74,9 @@ export async function generateImageWithFallback(
 }
 
 async function generateWithReplicate(prompt: string, model: string): Promise<string> {
-  const replicateToken = Deno.env.get('REPLICATE_API_TOKEN');
+  const replicateToken = Deno.env.get('KissOn');
   if (!replicateToken) {
-    throw new Error('REPLICATE_API_TOKEN not found in environment variables');
+    throw new Error('KissOn token not found in environment variables');
   }
 
   console.log("🎨 REPLICATE CONFIG:");
@@ -103,11 +103,11 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
         height: 1024,
         num_outputs: 1,
         scheduler: 'K_EULER',
-        num_inference_steps: 100, // Maximum steps for ultra-detailed artistic generation
-        guidance_scale: 8.0, // Lowered for maximum creative freedom while maintaining subject focus
-        prompt_strength: 0.98, // Near-maximum for dramatic artistic interpretation
+        num_inference_steps: 10, // Reduced to comply with API limits
+        guidance_scale: 7.0, // Slightly reduced for better compatibility
+        prompt_strength: 0.85, // Reduced for better stability
         refine: 'expert_ensemble_refiner',
-        high_noise_frac: 0.95, // Maximum creative variation
+        high_noise_frac: 0.8, // Reduced for better stability
         apply_watermark: false
       }
     })
@@ -123,6 +123,15 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
     console.error("❌ REPLICATE API ERROR:");
     console.error("- Status:", createResponse.status);
     console.error("- Error Body:", errorText);
+    
+    // Check for specific API limit violations
+    if (errorText.includes('num_inference_steps')) {
+      console.error("⚠️ API LIMIT VIOLATION: num_inference_steps parameter exceeds allowed limits");
+    }
+    if (errorText.includes('422')) {
+      console.error("⚠️ PARAMETER VALIDATION ERROR: One or more parameters are invalid");
+    }
+    
     throw new Error(`Failed to create prediction: ${createResponse.status} - ${errorText}`);
   }
 
@@ -187,7 +196,7 @@ async function generateWithStableDiffusion35Large(
   
   const imageData = await generateWithReplicate(
     sd35Prompt,
-    'bytedance/sdxl-lightning-4step:5f24084160c9089501c1b3545d9be3c27883ae2239b6f412990e82d4a6210f8f'
+    'stability-ai/stable-diffusion-3-5-large:45a663bfc7127b47c30da1a98f19a37b4525b8ff60b717f11b42d95550c3a7f8'
   );
   
   console.log("✅ STABLE DIFFUSION 3.5 LARGE FALLBACK SUCCESS");
