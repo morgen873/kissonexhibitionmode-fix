@@ -81,11 +81,11 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
         height: 1024,
         num_outputs: 1,
         scheduler: 'K_EULER',
-        num_inference_steps: 50,
-        guidance_scale: 7.5,
-        prompt_strength: 0.8,
+        num_inference_steps: 80, // Increased for more detail and artistic refinement
+        guidance_scale: 12.0, // Increased for stronger creative interpretation
+        prompt_strength: 0.95, // Increased for more dramatic artistic effect
         refine: 'expert_ensemble_refiner',
-        high_noise_frac: 0.8,
+        high_noise_frac: 0.9, // Increased for more creative variation
         apply_watermark: false
       }
     })
@@ -173,28 +173,28 @@ function optimizePromptForSDXL(prompt: string, imageContext: ImageContext): stri
   // SDXL works better with more descriptive, detailed prompts
   const ingredientsText = ingredientsList.length > 0 ? ingredientsList.slice(0, 6).join(', ') : 'traditional ingredients';
   
-  // CUSTOMIZABLE PROMPT COMPONENTS - MODIFY THESE TO CHANGE ALL SDXL PROMPTS:
+  // WILD ARTISTIC PROMPT COMPONENTS - ENHANCED FOR SPECULATIVE CREATIVITY:
   
   // 1. Quality and style terms (affects overall image quality)
-  const qualityTerms = "artistic masterpiece, best quality, ultra detailed, 8k resolution";
+  const qualityTerms = "wildly artistic masterpiece, speculative design excellence, ultra surreal, 12k hyperdetailed resolution, consciousness-expanding visuals";
   
   // 2. Photography style (change this to modify the look)
-  const photoStyle = "professional food photography, commercial photography quality";
+  const photoStyle = "experimental food artistry, avant-garde culinary photography, reality-transcending presentation";
   
   // 3. Lighting setup (modify for different lighting effects)
-  const lighting = "studio lighting, cinematic lighting, soft natural lighting";
+  const lighting = "impossible lighting effects, dimensional illumination, reality-bending luminosity, dream-state lighting";
   
   // 4. Visual effects and textures (customize visual appearance)
-  const effects = "speculative design, hyper-realistic, highly detailed texture, perfect composition";
+  const effects = "mind-bending textures, reality-warping composition, psychedelic visual distortions, impossible material science";
   
   // 5. Composition rules (change framing and layout)
-  const composition = "single dumpling centered, shallow depth of field, pure solid matte black background, no textures, no patterns, no gradients, completely black void background";
+  const composition = "single dumpling levitating, anti-gravity presentation, pure artistic void background, consciousness-expanding centered composition";
   
   // 6. Food-specific requirements (dumpling appearance rules)
-  const foodRequirements = "mostly sealed wrapper, optional visible filling, opaque dumpling skin";
+  const foodRequirements = "metamorphic wrapper properties, energy field emanations, reality-transcending dumpling physics";
   
   // 7. Presentation style (final presentation look)
-  const presentation = "appetizing presentation, food art, gourmet presentation";
+  const presentation = "transcendent artistic presentation, gallery-worthy food art, paradigm-shifting culinary aesthetics";
   
   // BUILD THE FINAL PROMPT (you can rearrange these components)
   const sdxlPrompt = `${qualityTerms}, ${photoStyle}, ${dumplingShape}-shaped dumpling with ${flavor} flavor, ${timelineTheme.toLowerCase()} culinary style, featuring ${ingredientsText}, ${lighting}, ${effects}, ${composition}, ${foodRequirements}, ${presentation}`;
