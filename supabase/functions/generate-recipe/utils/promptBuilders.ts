@@ -24,23 +24,24 @@ export function buildFuturisticPrompt(params: PromptParams): string {
   
   const ingredientsText = ingredientsList.length > 0 ? ingredientsList.join(', ') : 'quantum nano-ingredients';
   
-  const prompt = `speculative masterpiece, wildly artistic, ultra surreal, experimental food art, single ${dumplingShape}-shaped dumpling with ${flavor} flavor, otherworldly "${recipeTitle}" from ${timelineTheme}, featuring ${ingredientsText}
+  const prompt = `ULTIMATE ARTISTIC FREEDOM: speculative masterpiece, wildly experimental, ultra surreal, consciousness-expanding food art, the central dumpling (${dumplingShape}-shaped, ${flavor} essence) as the sacred focal point of cosmic "${recipeTitle}" from ${timelineTheme}, featuring ${ingredientsText}
 
-WILD FUTURISTIC SPECULATIVE STYLE:
-- impossible geometries, crystalline structures, liquid metal surfaces, bioengineered textures
-- quantum molecular gastronomy, reality-bending culinary physics, time-distortion effects
-- prismatic rainbow holographic effects, plasma energy auroras, interdimensional lighting
-- pure void black background, anti-gravity floating presentation, levitating composition
-- metamorphic dumpling wrapper, shape-shifting properties, living bio-material surface
-- energy field emanations, particle stream effects, electromagnetic visual distortions
-- alien biotechnology aesthetics, xenobiology food design, impossible material science
-- transcendent artistic composition, dream-logic presentation, consciousness-expanding visuals
-- 12k hyperdetailed resolution, mind-bending textures, reality-warping composition
-- no conventional physics, pure imagination unleashed, speculative evolution
-- psychedelic color explosions, fractal pattern integrations, dimensional portal effects
-- liquid light substances, impossible flavor visualizations, synesthetic experience
+MAXIMUM CREATIVE LIBERATION STYLE:
+- DUMPLING AS COSMIC EPICENTER: reality-bending dumpling physics, quantum wrapper properties, dimensional food architecture
+- impossible geometries morphing around the central dumpling, crystalline structures emanating from the sacred food form
+- quantum molecular gastronomy, reality-transcending culinary physics, time-space distortion effects radiating from the dumpling
+- prismatic rainbow holographic explosions, plasma energy auroras, interdimensional lighting phenomena surrounding the central subject
+- pure void black background, anti-gravity floating presentation, the dumpling levitating as the universe's center
+- metamorphic dumpling wrapper, shape-shifting properties, living bio-material surface with consciousness
+- energy field emanations from the dumpling, particle stream effects, electromagnetic visual distortions as cosmic emanations
+- alien biotechnology aesthetics, xenobiology food design, impossible material science manifesting through the dumpling
+- transcendent artistic composition, dream-logic presentation, consciousness-expanding visuals with dumpling as the divine focal point
+- 16k hyperdetailed resolution, mind-bending textures, reality-warping composition centering the sacred dumpling
+- no conventional physics, pure imagination unleashed, speculative evolution with dumpling as the evolutionary apex
+- psychedelic color explosions radiating from dumpling, fractal pattern integrations, dimensional portal effects
+- liquid light substances flowing from dumpling, impossible flavor visualizations, synesthetic experience as cosmic food art
 
-SPECULATIVE PARAMETERS: reality-transcending dumpling, pure artistic void background, anti-physics composition, consciousness-expanding presentation, impossible-geometry centered, dream-state hyper-realism, no limits, pure creative speculation, dimensional-breaking visuals`;
+ABSOLUTE CREATIVE PARAMETERS: reality-transcending dumpling as universe center, pure artistic void background, anti-physics composition, consciousness-expanding presentation with sacred dumpling focus, impossible-geometry centered on the food form, dream-state hyper-realism, NO creative limits, pure artistic speculation with dumpling reverence, dimensional-breaking visuals worshipping the central dumpling subject`;
 
   console.log("Generated WILD FUTURISTIC SPECULATIVE prompt optimized for SDXL");
   return prompt;
@@ -59,23 +60,24 @@ export function buildHistoricalPrompt(params: PromptParams): string {
   
   const ingredientsText = ingredientsList.length > 0 ? ingredientsList.join(', ') : 'mythical ancient ingredients';
   
-  const prompt = `speculative historical masterpiece, wildly artistic, ritualistic food art, single ${dumplingShape}-shaped dumpling with ${flavor} flavor, mystical "${recipeTitle}" from ${timelineTheme}, featuring ${ingredientsText}
+  const prompt = `ULTIMATE HISTORICAL ARTISTIC LIBERATION: speculative historical masterpiece, wildly experimental, ritualistic food art, the sacred dumpling (${dumplingShape}-shaped, ${flavor} essence) as the divine center of mystical "${recipeTitle}" from ${timelineTheme}, featuring ${ingredientsText}
 
-WILD HISTORICAL SPECULATIVE STYLE:
-- ancient alchemical transmutation, primordial cooking magic, elemental fire ceremonies
-- mythological culinary practices, shamanic food rituals, supernatural cooking methods
-- ethereal golden flame auras, sacred geometry patterns, cosmic energy infusions
-- pure mystical void background, levitating through ancient magic, spiritual elevation
-- enchanted dumpling wrapper, blessed by forgotten gods, rune-inscribed surfaces
-- elemental steam essence, magical vapor trails, ancestral spirit manifestations
-- prehistoric biotechnology, lost civilization techniques, forbidden culinary knowledge
-- transcendent ceremonial presentation, temple-worthy artistry, divine inspiration
-- 12k visionary resolution, sacred textures, reality-transcending composition
-- no historical limitations, pure imagination of the past, speculative archaeology
-- primal color explosions, tribal pattern integrations, portal-to-ancestors effects
-- liquid starlight substances, impossible ancient flavors, time-traveler experience
+MAXIMUM ANCIENT CREATIVE FREEDOM:
+- DUMPLING AS SACRED RELIC: ancient alchemical transmutation centered on the holy dumpling, primordial cooking magic radiating from the food deity
+- mythological culinary practices worshipping the dumpling, shamanic food rituals with the dumpling as spiritual focal point
+- ethereal golden flame auras emanating from the sacred dumpling, cosmic energy infusions channeled through the food form
+- pure mystical void background, dumpling levitating through ancient magic as the universe's spiritual center
+- enchanted dumpling wrapper blessed by forgotten gods, rune-inscribed surfaces holding cosmic power
+- elemental steam essence flowing from the divine dumpling, magical vapor trails, ancestral spirit manifestations
+- prehistoric biotechnology manifesting through the dumpling, lost civilization techniques, forbidden culinary knowledge as cosmic food
+- transcendent ceremonial presentation with dumpling as temple deity, divine inspiration radiating from the food form
+- 16k visionary resolution, sacred textures, reality-transcending composition centering the mystical dumpling
+- no historical limitations, pure imagination of the past, speculative archaeology with dumpling as ancient artifact
+- primal color explosions emanating from dumpling, tribal pattern integrations, portal-to-ancestors effects through the food
+- liquid starlight substances flowing from the sacred dumpling, impossible ancient flavors, time-traveler experience
+- dumpling as the cosmic axis of ancient worlds, reality-bending food physics, divine culinary consciousness
 
-SPECULATIVE PARAMETERS: reality-bending historical dumpling, pure mystical void background, magic-physics composition, consciousness-expanding ancient presentation, impossible-timeline centered, dream-state historical realism, no conventional limits, pure creative historical speculation`;
+ABSOLUTE HISTORICAL PARAMETERS: reality-bending historical dumpling as cosmic center, pure mystical void background, magic-physics composition with sacred dumpling focus, consciousness-expanding ancient presentation worshipping the food deity, impossible-timeline centered on the dumpling artifact, dream-state historical realism, NO creative boundaries, pure artistic historical speculation with dumpling reverence`;
 
   console.log("Generated WILD HISTORICAL SPECULATIVE prompt optimized for SDXL");
   return prompt;
@@ -94,23 +96,24 @@ export function buildContemporaryPrompt(params: PromptParams): string {
   
   const ingredientsText = ingredientsList.length > 0 ? ingredientsList.join(', ') : 'avant-garde artisanal ingredients';
   
-  const prompt = `speculative contemporary masterpiece, wildly artistic, avant-garde food art, single ${dumplingShape}-shaped dumpling with ${flavor} flavor, revolutionary "${recipeTitle}" from ${timelineTheme}, featuring ${ingredientsText}
+  const prompt = `ULTIMATE CONTEMPORARY ARTISTIC FREEDOM: speculative contemporary masterpiece, wildly experimental, avant-garde food art, the central dumpling (${dumplingShape}-shaped, ${flavor} essence) as the technological focal point of revolutionary "${recipeTitle}" from ${timelineTheme}, featuring ${ingredientsText}
 
-WILD CONTEMPORARY SPECULATIVE STYLE:
-- experimental culinary art, deconstructed reality, post-modern food philosophy
-- digital-organic fusion cooking, AI-assisted gastronomy, biotech enhancement
-- electric neon auras, cyberpunk aesthetic merging, urban energy pulsations
-- pure artistic void background, gravity-defying modern presentation, floating dynamics
-- transformative dumpling wrapper, smart-material surfaces, responsive bio-fabrics
-- digital steam effects, LED-infused vapor, contemporary energy manifestations
-- cutting-edge biotechnology, designer molecular structures, lab-grown aesthetics
-- transcendent modern artistry, gallery-worthy presentation, consciousness-expanding design
-- 12k ultra-modern resolution, revolutionary textures, paradigm-shifting composition
-- no conventional limits, pure contemporary imagination, speculative present-day
-- electric color explosions, digital pattern integrations, augmented-reality effects
-- liquid LED substances, impossible modern flavors, tech-enhanced experience
+MAXIMUM MODERN CREATIVE LIBERATION:
+- DUMPLING AS TECH NEXUS: experimental culinary art centered on the dumpling as digital deity, deconstructed reality radiating from food form
+- digital-organic fusion cooking with dumpling as the bio-tech interface, AI-assisted gastronomy channeled through the food consciousness
+- electric neon auras emanating from the central dumpling, cyberpunk aesthetic merging, urban energy pulsations from the food core
+- pure artistic void background, dumpling gravity-defying as the universe's modern center, floating dynamics around the sacred food
+- transformative dumpling wrapper with smart-material surfaces, responsive bio-fabrics as living technology
+- digital steam effects flowing from the tech-dumpling, LED-infused vapor, contemporary energy manifestations as food-tech fusion
+- cutting-edge biotechnology manifesting through the dumpling, designer molecular structures, lab-grown aesthetics as cosmic food
+- transcendent modern artistry with dumpling as gallery centerpiece, consciousness-expanding design radiating from food form
+- 16k ultra-modern resolution, revolutionary textures, paradigm-shifting composition centering the tech-dumpling
+- no conventional limits, pure contemporary imagination, speculative present-day with dumpling as digital prophet
+- electric color explosions emanating from dumpling, digital pattern integrations, augmented-reality effects through the food
+- liquid LED substances flowing from the cyber-dumpling, impossible modern flavors, tech-enhanced experience
+- dumpling as the nexus of digital consciousness, reality-pushing food physics, modern culinary transcendence
 
-SPECULATIVE PARAMETERS: reality-pushing contemporary dumpling, pure artistic void background, tech-enhanced composition, consciousness-expanding modern presentation, impossible-timeline centered, dream-state contemporary realism, no design limits, pure creative modern speculation`;
+ABSOLUTE CONTEMPORARY PARAMETERS: reality-pushing contemporary dumpling as tech universe center, pure artistic void background, tech-enhanced composition with sacred dumpling focus, consciousness-expanding modern presentation worshipping the food technology, impossible-timeline centered on the dumpling interface, dream-state contemporary realism, NO creative boundaries, pure artistic modern speculation with dumpling as digital deity`;
 
   console.log("Generated WILD CONTEMPORARY SPECULATIVE prompt optimized for SDXL");
   return prompt;

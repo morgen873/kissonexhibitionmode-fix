@@ -81,11 +81,11 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
         height: 1024,
         num_outputs: 1,
         scheduler: 'K_EULER',
-        num_inference_steps: 80, // Increased for more detail and artistic refinement
-        guidance_scale: 12.0, // Increased for stronger creative interpretation
-        prompt_strength: 0.95, // Increased for more dramatic artistic effect
+        num_inference_steps: 100, // Maximum steps for ultra-detailed artistic generation
+        guidance_scale: 8.0, // Lowered for maximum creative freedom while maintaining subject focus
+        prompt_strength: 0.98, // Near-maximum for dramatic artistic interpretation
         refine: 'expert_ensemble_refiner',
-        high_noise_frac: 0.9, // Increased for more creative variation
+        high_noise_frac: 0.95, // Maximum creative variation
         apply_watermark: false
       }
     })
