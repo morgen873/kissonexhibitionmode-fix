@@ -82,10 +82,10 @@ serve(async (req) => {
 
     const openai = new OpenAI({ apiKey: openAIKey });
     
-    // Check for Replicate API token for image generation (using KissOn token)
-    const replicateToken = Deno.env.get('KissOn');
+    // Check for Replicate API token for image generation
+    const replicateToken = Deno.env.get('REPLICATE_API_TOKEN');
     if (!replicateToken) {
-        throw new Error("Missing KissOn environment variable for image generation.");
+        throw new Error("Missing REPLICATE_API_TOKEN environment variable for image generation.");
     }
     
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
@@ -140,16 +140,12 @@ serve(async (req) => {
     console.log("- SAVED recipe data from database (title, ingredients)");
     console.log("- Recipe ID:", newRecipe.id);
     
-    console.log("🔥 ABOUT TO CALL generateAndUploadRecipeImage - THIS SHOULD APPEAR IN LOGS");
-    
     const imageUrl = await generateAndUploadRecipeImage(
       payload,      // Original user input
       newRecipe,    // COMPLETE saved recipe data from database
       newRecipe.id,
       supabaseAdmin
     );
-    
-    console.log("🔥 generateAndUploadRecipeImage COMPLETED - RESULT:", imageUrl);
 
     // STEP 6: Update recipe with final image URL only if we got a real image
     if (imageUrl !== '/placeholder.svg') {
