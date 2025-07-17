@@ -170,40 +170,23 @@ async function generateWithStableDiffusion35Large(
 }
 
 function optimizePromptForSDXL(prompt: string, imageContext: ImageContext): string {
-  // Use the artistic prompt from promptBuilders.ts as the base
-  // Add only technical optimizations for SDXL without overriding the artistic content
+  // Return the pure artistic prompt without ANY technical photography terms
+  // The artistic prompts already contain all necessary technical specifications
   
-  // SDXL technical optimizations
-  const technicalTerms = "ultra high resolution, masterpiece quality, professional food photography, studio lighting, shallow depth of field";
-  const backgroundTechnical = "clean minimalist background, perfect centered composition";
-  
-  // Combine the artistic prompt with technical enhancements
-  const optimizedPrompt = `${prompt}, ${technicalTerms}, ${backgroundTechnical}`;
-  
-  console.log("🔄 SDXL OPTIMIZED PROMPT (Using Artistic Base):");
-  console.log("- Original artistic prompt length:", prompt.length);
-  console.log("- Final optimized length:", optimizedPrompt.length);
+  console.log("🔄 SDXL PURE ARTISTIC PROMPT (NO BORING TECH TERMS):");
+  console.log("- Pure artistic prompt length:", prompt.length);
   console.log("- Artistic content:", prompt);
-  console.log("- Final optimized:", optimizedPrompt);
   
-  return optimizedPrompt;
+  return prompt;
 }
 
 function optimizePromptForSD35Large(prompt: string, imageContext: ImageContext): string {
-  // Use the artistic prompt from promptBuilders.ts as the base
-  // SD 3.5 Large works well with natural language descriptions
+  // Return the pure artistic prompt without ANY technical photography terms
+  // The artistic prompts already contain all necessary technical specifications
   
-  // Add minimal technical terms for SD 3.5 Large
-  const technicalTerms = "professional food photography, studio lighting, centered composition";
-  
-  // Combine the artistic prompt with minimal technical enhancements
-  const optimizedPrompt = `${prompt}, ${technicalTerms}`;
-  
-  console.log("🔄 SD 3.5 LARGE OPTIMIZED PROMPT (Using Artistic Base):");
-  console.log("- Original artistic prompt length:", prompt.length);
-  console.log("- Final optimized length:", optimizedPrompt.length);
+  console.log("🔄 SD 3.5 LARGE PURE ARTISTIC PROMPT (NO BORING TECH TERMS):");
+  console.log("- Pure artistic prompt length:", prompt.length);
   console.log("- Artistic content:", prompt);
-  console.log("- Final optimized:", optimizedPrompt);
   
-  return optimizedPrompt;
+  return prompt;
 }
