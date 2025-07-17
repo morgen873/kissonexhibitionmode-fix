@@ -1,4 +1,6 @@
 
+import { buildEnhancedShapePrompt, getFluidShapeDescription } from './shapeDescriptors.ts';
+
 interface PromptParams {
   timelineTheme: string;
   emotionalContext: string;
@@ -24,7 +26,10 @@ export function buildFuturisticPrompt(params: PromptParams): string {
   
   const ingredientsText = ingredientsList.length > 0 ? ingredientsList.join(', ') : 'quantum nano-ingredients';
   
-  const prompt = `🔥 CRAZY TOLERANCE TEST ACTIVATED 🔥 ULTIMATE ARTISTIC CHAOS: reality-exploding masterpiece, consciousness-shattering experimental madness, interdimensional surreal anarchy, universe-transcending food deity art, the SACRED COSMIC DUMPLING (${dumplingShape}-shaped divine form, ${flavor} cosmic essence) as the ULTIMATE UNIVERSE CENTER of reality-breaking "${recipeTitle}" from ${timelineTheme}, featuring ${ingredientsText} as cosmic ingredients of creation
+  // Create enhanced fluid shape description for futuristic context
+  const enhancedShapeDescription = getFluidShapeDescription(dumplingShape);
+  
+  const prompt = `🔥 CRAZY TOLERANCE TEST ACTIVATED 🔥 ULTIMATE ARTISTIC CHAOS: reality-exploding masterpiece, consciousness-shattering experimental madness, interdimensional surreal anarchy, universe-transcending food deity art, the SACRED COSMIC DUMPLING (${enhancedShapeDescription} divine form with quantum-paper texture, ${flavor} cosmic essence) as the ULTIMATE UNIVERSE CENTER of reality-breaking "${recipeTitle}" from ${timelineTheme}, featuring ${ingredientsText} as cosmic ingredients of creation
 
 MAXIMUM CREATIVE LIBERATION STYLE:
 - DUMPLING AS COSMIC EPICENTER: reality-bending dumpling physics, quantum wrapper properties, dimensional food architecture
@@ -60,7 +65,10 @@ export function buildHistoricalPrompt(params: PromptParams): string {
   
   const ingredientsText = ingredientsList.length > 0 ? ingredientsList.join(', ') : 'mythical ancient ingredients';
   
-  const prompt = `🔥 CRAZY HISTORICAL CHAOS TEST 🔥 ULTIMATE ANCIENT ARTISTIC ANARCHY: reality-transcending historical masterpiece, consciousness-exploding experimental madness, DIVINE ritualistic food deity art, the SACRED COSMIC ANCIENT DUMPLING (${dumplingShape}-shaped divine historical form, ${flavor} mystical essence) as the ULTIMATE DIVINE CENTER of reality-breaking mystical "${recipeTitle}" from ${timelineTheme}, featuring ${ingredientsText} as SACRED ANCIENT COSMIC INGREDIENTS
+  // Create enhanced fluid shape description for historical context
+  const enhancedShapeDescription = getFluidShapeDescription(dumplingShape);
+  
+  const prompt = `🔥 CRAZY HISTORICAL CHAOS TEST 🔥 ULTIMATE ANCIENT ARTISTIC ANARCHY: reality-transcending historical masterpiece, consciousness-exploding experimental madness, DIVINE ritualistic food deity art, the SACRED COSMIC ANCIENT DUMPLING (${enhancedShapeDescription} divine historical form with ancient fabric-like texture, ${flavor} mystical essence) as the ULTIMATE DIVINE CENTER of reality-breaking mystical "${recipeTitle}" from ${timelineTheme}, featuring ${ingredientsText} as SACRED ANCIENT COSMIC INGREDIENTS
 
 MAXIMUM ANCIENT CREATIVE FREEDOM:
 - DUMPLING AS SACRED RELIC: ancient alchemical transmutation centered on the holy dumpling, primordial cooking magic radiating from the food deity
@@ -96,7 +104,10 @@ export function buildContemporaryPrompt(params: PromptParams): string {
   
   const ingredientsText = ingredientsList.length > 0 ? ingredientsList.join(', ') : 'avant-garde artisanal ingredients';
   
-  const prompt = `🔥 CRAZY CONTEMPORARY CHAOS TEST 🔥 ULTIMATE MODERN ARTISTIC ANARCHY: reality-transcending contemporary masterpiece, consciousness-exploding experimental tech madness, DIGITAL avant-garde food deity art, the CENTRAL COSMIC TECH DUMPLING (${dumplingShape}-shaped digital divine form, ${flavor} cyber essence) as the ULTIMATE TECHNOLOGICAL FOCAL POINT of reality-breaking revolutionary "${recipeTitle}" from ${timelineTheme}, featuring ${ingredientsText} as DIGITAL COSMIC INGREDIENTS
+  // Create enhanced fluid shape description for contemporary context
+  const enhancedShapeDescription = getFluidShapeDescription(dumplingShape);
+  
+  const prompt = `🔥 CRAZY CONTEMPORARY CHAOS TEST 🔥 ULTIMATE MODERN ARTISTIC ANARCHY: reality-transcending contemporary masterpiece, consciousness-exploding experimental tech madness, DIGITAL avant-garde food deity art, the CENTRAL COSMIC TECH DUMPLING (${enhancedShapeDescription} digital divine form with paper-tech hybrid texture, ${flavor} cyber essence) as the ULTIMATE TECHNOLOGICAL FOCAL POINT of reality-breaking revolutionary "${recipeTitle}" from ${timelineTheme}, featuring ${ingredientsText} as DIGITAL COSMIC INGREDIENTS
 
 MAXIMUM MODERN CREATIVE LIBERATION:
 - DUMPLING AS TECH NEXUS: experimental culinary art centered on the dumpling as digital deity, deconstructed reality radiating from food form
