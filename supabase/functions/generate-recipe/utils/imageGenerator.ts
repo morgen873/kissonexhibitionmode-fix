@@ -29,16 +29,41 @@ export async function generateAndUploadRecipeImage(
   try {
     console.log("=== 🚀 IMAGE GENERATION WITH REPLICATE STABILITY AI ===");
     
-    // Step 0: Check Replicate token immediately
+    // Step 0: IMMEDIATELY TEST REPLICATE TOKEN
     const replicateToken = Deno.env.get('REPLICATE_API_TOKEN');
-    console.log("🔑 REPLICATE TOKEN CHECK:");
+    console.log("🔑 IMMEDIATE REPLICATE TOKEN TEST:");
     console.log("- Token exists:", !!replicateToken);
     console.log("- Token length:", replicateToken ? replicateToken.length : 0);
-    console.log("- Token starts with:", replicateToken ? replicateToken.substring(0, 8) + "..." : "N/A");
     
     if (!replicateToken) {
-      console.error("❌ CRITICAL: REPLICATE_API_TOKEN not found in environment");
-      throw new Error("REPLICATE_API_TOKEN is missing - cannot generate images");
+      console.error("❌ CRITICAL: NO REPLICATE TOKEN - ABORTING IMAGE GENERATION");
+      return '/placeholder.svg';
+    }
+    
+    // Test basic Replicate API connectivity
+    console.log("🌐 TESTING REPLICATE API CONNECTIVITY...");
+    try {
+      const testResponse = await fetch('https://api.replicate.com/v1/predictions', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Token ${replicateToken}`,
+        }
+      });
+      console.log("🔗 REPLICATE API TEST:");
+      console.log("- Status:", testResponse.status);
+      console.log("- Status Text:", testResponse.statusText);
+      
+      if (!testResponse.ok) {
+        const errorText = await testResponse.text();
+        console.error("❌ REPLICATE API AUTHENTICATION FAILED:");
+        console.error("- Error:", errorText);
+        return '/placeholder.svg';
+      }
+      console.log("✅ REPLICATE API ACCESSIBLE - TOKEN IS VALID");
+    } catch (connectError) {
+      console.error("❌ REPLICATE API CONNECTION FAILED:");
+      console.error("- Error:", connectError.message);
+      return '/placeholder.svg';
     }
     
     // Step 1: Build image context from payload and saved recipe
