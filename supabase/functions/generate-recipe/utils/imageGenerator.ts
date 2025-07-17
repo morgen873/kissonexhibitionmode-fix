@@ -26,6 +26,10 @@ export async function generateAndUploadRecipeImage(
   recipeId: string,
   supabaseAdmin: ReturnType<typeof createClient>
 ): Promise<string> {
+  console.log("🔥🔥🔥 IMAGE GENERATOR FUNCTION CALLED - THIS IS THE VERY FIRST LINE");
+  console.log("🔥 Recipe ID received:", recipeId);
+  console.log("🔥 Payload received:", JSON.stringify(payload, null, 2));
+  console.log("🔥 Saved recipe title:", savedRecipe?.title);
   try {
     console.log("=== 🚀 IMAGE GENERATION WITH REPLICATE STABILITY AI ===");
     

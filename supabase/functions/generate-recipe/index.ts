@@ -140,12 +140,16 @@ serve(async (req) => {
     console.log("- SAVED recipe data from database (title, ingredients)");
     console.log("- Recipe ID:", newRecipe.id);
     
+    console.log("🔥 ABOUT TO CALL generateAndUploadRecipeImage - THIS SHOULD APPEAR IN LOGS");
+    
     const imageUrl = await generateAndUploadRecipeImage(
       payload,      // Original user input
       newRecipe,    // COMPLETE saved recipe data from database
       newRecipe.id,
       supabaseAdmin
     );
+    
+    console.log("🔥 generateAndUploadRecipeImage COMPLETED - RESULT:", imageUrl);
 
     // STEP 6: Update recipe with final image URL only if we got a real image
     if (imageUrl !== '/placeholder.svg') {
