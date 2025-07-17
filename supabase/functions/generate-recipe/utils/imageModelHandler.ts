@@ -38,7 +38,7 @@ export async function generateImageWithFallback(
     const sdxlPrompt = optimizePromptForSDXL(imagePrompt, imageContext);
     const imageData = await generateWithReplicate(
       sdxlPrompt,
-      'stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b'
+      'black-forest-labs/flux-schnell'
     );
     
     console.log("✅ SDXL SUCCESS");
@@ -110,7 +110,10 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
 
   if (!createResponse.ok) {
     const errorText = await createResponse.text();
-    console.error("❌ Replicate API Error:", errorText);
+    console.error("❌ Replicate API Error Response:", errorText);
+    console.error("❌ Status:", createResponse.status);
+    console.error("❌ Headers:", Object.fromEntries(createResponse.headers.entries()));
+    console.error("❌ Request body was:", JSON.stringify(requestBody, null, 2));
     throw new Error(`Failed to create prediction: ${createResponse.status} - ${errorText}`);
   }
 

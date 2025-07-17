@@ -70,12 +70,21 @@ export async function generateAndUploadRecipeImage(
     
   } catch (error) {
     console.error("❌ CRITICAL IMAGE GENERATION ERROR:", error);
-    console.error("Error details:", {
-      name: error.name,
-      message: error.message,
-      stack: error.stack
-    });
+    console.error("Error name:", error.name);
+    console.error("Error message:", error.message);
+    console.error("Error stack:", error.stack);
     
+    // Log more details about the error
+    if (error.cause) {
+      console.error("Error cause:", error.cause);
+    }
+    
+    // Re-throw specific errors to help with debugging
+    if (error.message.includes('REPLICATE_API_TOKEN')) {
+      throw error;
+    }
+    
+    console.log("🔄 FALLING BACK TO PLACEHOLDER due to error:", error.message);
     return '/placeholder.svg';
   }
 }
