@@ -13,6 +13,7 @@ import CreationContent from '@/components/creation/CreationContent';
 import GifTransition from '@/components/creation/GifTransition';
 import VideoTransition from '@/components/creation/VideoTransition';
 import { ErrorRecoveryPanel } from '@/components/creation/ErrorRecoveryPanel';
+import { ImageDebugPanel } from '@/components/creation/ImageDebugPanel';
 import { detectTransitionFileType, isVideoFile } from '@/utils/fileTypeDetector';
 
 interface OutletContextType {
@@ -237,6 +238,12 @@ const Creation = () => {
             handleCreationSubmit={handleCreationSubmit}
           />
         </CreationLayout>
+        
+        {/* Image Debug Panel */}
+        <ImageDebugPanel
+          recipeResult={recipeResult}
+          recipeId={recipeId}
+        />
       </GlobalLayout>
     </>
   );
