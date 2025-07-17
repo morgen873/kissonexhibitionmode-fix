@@ -207,31 +207,31 @@ function optimizePromptForSDXL(prompt: string, imageContext: ImageContext): stri
   // SDXL works better with more descriptive, detailed prompts
   const ingredientsText = ingredientsList.length > 0 ? ingredientsList.slice(0, 6).join(', ') : 'traditional ingredients';
   
-  // WILD ARTISTIC PROMPT COMPONENTS - ENHANCED FOR SPECULATIVE CREATIVITY:
+  // PROFESSIONAL FOOD PHOTOGRAPHY PROMPT COMPONENTS:
   
   // 1. Quality and style terms (affects overall image quality)
-  const qualityTerms = "wildly artistic masterpiece, speculative design excellence, ultra surreal, 4k resolution";
+  const qualityTerms = "professional food photography, high-quality culinary image, 4k resolution";
   
-  // 2. Photography style (change this to modify the look)
-  const photoStyle = "experimental food artistry, avant-garde culinary photography";
+  // 2. Photography style (clean professional look)
+  const photoStyle = "restaurant-quality food styling, clean modern presentation";
   
-  // 3. Lighting setup (modify for different lighting effects)
-  const lighting = "experimental lighting effects, dimensional illumination, luminosity";
+  // 3. Lighting setup (professional food photography lighting)
+  const lighting = "professional studio lighting, well-lit, appetizing";
   
-  // 4. Visual effects and textures (customize visual appearance)
-  const effects = "interesting textures, reality-warping compositions";
+  // 4. Visual effects and textures (clean textures)
+  const effects = "clean textures, sharp focus, professional composition";
   
-  // 5. Composition rules (change framing and layout)
-  const composition = "single dumpling levitating, anti-gravity presentation, pure artistic matt black void background";
+  // 5. Composition rules (single dumpling focus with black background)
+  const composition = "single dumpling as focal point, centered composition, pure solid matte black background";
   
-  // 6. Food-specific requirements (dumpling appearance rules)
-  const foodRequirements = "metamorphic wrapper properties, energy field emanations";
+  // 6. Food-specific requirements (realistic dumpling appearance)
+  const foodRequirements = "realistic dumpling wrapper, traditional dumpling appearance";
   
-  // 7. Presentation style (final presentation look)
-  const presentation = "transcendent artistic presentation, gallery-worthy food art, paradigm-shifting culinary aesthetics";
+  // 7. Presentation style (clean professional presentation)
+  const presentation = "clean professional presentation, restaurant-style plating, commercial food photography";
   
-  // BUILD THE FINAL PROMPT (you can rearrange these components)
-  const sdxlPrompt = `${qualityTerms}, ${photoStyle}, ${dumplingShape}-shaped dumpling with ${flavor} flavor, ${timelineTheme.toLowerCase()} culinary style, featuring ${ingredientsText}, ${lighting}, ${effects}, ${composition}, ${foodRequirements}, ${presentation}`;
+  // BUILD THE FINAL PROMPT (professional food photography approach)
+  const sdxlPrompt = `${qualityTerms}, ${photoStyle}, single ${dumplingShape}-shaped dumpling with ${flavor} flavor, ${timelineTheme.toLowerCase()} culinary style, featuring ${ingredientsText}, ${lighting}, ${effects}, ${composition}, ${foodRequirements}, ${presentation}`;
   
   console.log("🔄 SDXL OPTIMIZED PROMPT:");
   console.log("- Length:", sdxlPrompt.length);
