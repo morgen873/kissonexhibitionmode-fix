@@ -1,6 +1,4 @@
 
-import { buildEnhancedShapePrompt, getFluidShapeDescription } from './shapeDescriptors.ts';
-
 interface PromptParams {
   timelineTheme: string;
   emotionalContext: string;
@@ -26,10 +24,7 @@ export function buildFuturisticPrompt(params: PromptParams): string {
   
   const ingredientsText = ingredientsList.length > 0 ? ingredientsList.join(', ') : 'quantum nano-ingredients';
   
-  // Create enhanced fluid shape description for futuristic context
-  const enhancedShapeDescription = getFluidShapeDescription(dumplingShape);
-  
-  const prompt = `🔥 CRAZY TOLERANCE TEST ACTIVATED 🔥 ULTIMATE ARTISTIC CHAOS: reality-exploding masterpiece, consciousness-shattering experimental madness, interdimensional surreal anarchy, universe-transcending food deity art, the SACRED COSMIC DUMPLING (${enhancedShapeDescription} divine form with quantum-paper texture, ${flavor} cosmic essence) as the ULTIMATE UNIVERSE CENTER of reality-breaking "${recipeTitle}" from ${timelineTheme}, featuring ${ingredientsText} as cosmic ingredients of creation
+  const prompt = `ULTIMATE ARTISTIC FREEDOM: speculative masterpiece, wildly experimental, ultra surreal, consciousness-expanding food art, the central dumpling (${dumplingShape}-shaped, ${flavor} essence) as the sacred focal point of cosmic "${recipeTitle}" from ${timelineTheme}, featuring ${ingredientsText}
 
 MAXIMUM CREATIVE LIBERATION STYLE:
 - DUMPLING AS COSMIC EPICENTER: reality-bending dumpling physics, quantum wrapper properties, dimensional food architecture
@@ -46,7 +41,7 @@ MAXIMUM CREATIVE LIBERATION STYLE:
 - psychedelic color explosions radiating from dumpling, fractal pattern integrations, dimensional portal effects
 - liquid light substances flowing from dumpling, impossible flavor visualizations, synesthetic experience as cosmic food art
 
-🚀 INSANE CREATIVE CHAOS PARAMETERS 🚀: reality-EXPLODING dumpling as COSMIC UNIVERSE DEITY CENTER, pure artistic VOID OF INFINITE CHAOS background, ANTI-PHYSICS ANARCHY composition, consciousness-SHATTERING presentation with SACRED DUMPLING DEITY focus, impossible-geometry REALITY-BREAKING centered on the FOOD DEITY form, dream-state HYPER-CHAOS-realism, ZERO creative limits, ABSOLUTE artistic speculation with dumpling COSMIC REVERENCE, dimensional-ANNIHILATING visuals worshipping the ULTIMATE DUMPLING UNIVERSE CONSCIOUSNESS`;
+ABSOLUTE CREATIVE PARAMETERS: reality-transcending dumpling as universe center, pure artistic void background, anti-physics composition, consciousness-expanding presentation with sacred dumpling focus, impossible-geometry centered on the food form, dream-state hyper-realism, NO creative limits, pure artistic speculation with dumpling reverence, dimensional-breaking visuals worshipping the central dumpling subject`;
 
   console.log("Generated WILD FUTURISTIC SPECULATIVE prompt optimized for SDXL");
   return prompt;
@@ -65,10 +60,7 @@ export function buildHistoricalPrompt(params: PromptParams): string {
   
   const ingredientsText = ingredientsList.length > 0 ? ingredientsList.join(', ') : 'mythical ancient ingredients';
   
-  // Create enhanced fluid shape description for historical context
-  const enhancedShapeDescription = getFluidShapeDescription(dumplingShape);
-  
-  const prompt = `🔥 CRAZY HISTORICAL CHAOS TEST 🔥 ULTIMATE ANCIENT ARTISTIC ANARCHY: reality-transcending historical masterpiece, consciousness-exploding experimental madness, DIVINE ritualistic food deity art, the SACRED COSMIC ANCIENT DUMPLING (${enhancedShapeDescription} divine historical form with ancient fabric-like texture, ${flavor} mystical essence) as the ULTIMATE DIVINE CENTER of reality-breaking mystical "${recipeTitle}" from ${timelineTheme}, featuring ${ingredientsText} as SACRED ANCIENT COSMIC INGREDIENTS
+  const prompt = `ULTIMATE HISTORICAL ARTISTIC LIBERATION: speculative historical masterpiece, wildly experimental, ritualistic food art, the sacred dumpling (${dumplingShape}-shaped, ${flavor} essence) as the divine center of mystical "${recipeTitle}" from ${timelineTheme}, featuring ${ingredientsText}
 
 MAXIMUM ANCIENT CREATIVE FREEDOM:
 - DUMPLING AS SACRED RELIC: ancient alchemical transmutation centered on the holy dumpling, primordial cooking magic radiating from the food deity
@@ -85,7 +77,7 @@ MAXIMUM ANCIENT CREATIVE FREEDOM:
 - liquid starlight substances flowing from the sacred dumpling, impossible ancient flavors, time-traveler experience
 - dumpling as the cosmic axis of ancient worlds, reality-bending food physics, divine culinary consciousness
 
-🚀 INSANE HISTORICAL CHAOS PARAMETERS 🚀: reality-EXPLODING historical dumpling as COSMIC DIVINE CENTER, pure mystical VOID OF INFINITE ANCIENT CHAOS background, MAGIC-PHYSICS ANARCHY composition with SACRED DUMPLING DEITY focus, consciousness-SHATTERING ancient presentation worshipping the FOOD DEITY UNIVERSE, impossible-timeline REALITY-BREAKING centered on the DUMPLING DIVINE ARTIFACT, dream-state historical HYPER-CHAOS-realism, ZERO creative boundaries, ABSOLUTE artistic historical speculation with dumpling COSMIC DIVINE REVERENCE`;
+ABSOLUTE HISTORICAL PARAMETERS: reality-bending historical dumpling as cosmic center, pure mystical void background, magic-physics composition with sacred dumpling focus, consciousness-expanding ancient presentation worshipping the food deity, impossible-timeline centered on the dumpling artifact, dream-state historical realism, NO creative boundaries, pure artistic historical speculation with dumpling reverence`;
 
   console.log("Generated WILD HISTORICAL SPECULATIVE prompt optimized for SDXL");
   return prompt;
@@ -104,10 +96,7 @@ export function buildContemporaryPrompt(params: PromptParams): string {
   
   const ingredientsText = ingredientsList.length > 0 ? ingredientsList.join(', ') : 'avant-garde artisanal ingredients';
   
-  // Create enhanced fluid shape description for contemporary context
-  const enhancedShapeDescription = getFluidShapeDescription(dumplingShape);
-  
-  const prompt = `🔥 CRAZY CONTEMPORARY CHAOS TEST 🔥 ULTIMATE MODERN ARTISTIC ANARCHY: reality-transcending contemporary masterpiece, consciousness-exploding experimental tech madness, DIGITAL avant-garde food deity art, the CENTRAL COSMIC TECH DUMPLING (${enhancedShapeDescription} digital divine form with paper-tech hybrid texture, ${flavor} cyber essence) as the ULTIMATE TECHNOLOGICAL FOCAL POINT of reality-breaking revolutionary "${recipeTitle}" from ${timelineTheme}, featuring ${ingredientsText} as DIGITAL COSMIC INGREDIENTS
+  const prompt = `ULTIMATE CONTEMPORARY ARTISTIC FREEDOM: speculative contemporary masterpiece, wildly experimental, avant-garde food art, the central dumpling (${dumplingShape}-shaped, ${flavor} essence) as the technological focal point of revolutionary "${recipeTitle}" from ${timelineTheme}, featuring ${ingredientsText}
 
 MAXIMUM MODERN CREATIVE LIBERATION:
 - DUMPLING AS TECH NEXUS: experimental culinary art centered on the dumpling as digital deity, deconstructed reality radiating from food form
@@ -124,7 +113,7 @@ MAXIMUM MODERN CREATIVE LIBERATION:
 - liquid LED substances flowing from the cyber-dumpling, impossible modern flavors, tech-enhanced experience
 - dumpling as the nexus of digital consciousness, reality-pushing food physics, modern culinary transcendence
 
-🚀 INSANE CONTEMPORARY CHAOS PARAMETERS 🚀: reality-EXPLODING contemporary dumpling as TECH UNIVERSE DEITY CENTER, pure artistic VOID OF INFINITE DIGITAL CHAOS background, TECH-ENHANCED ANARCHY composition with SACRED DUMPLING TECH DEITY focus, consciousness-SHATTERING modern presentation worshipping the FOOD TECHNOLOGY UNIVERSE, impossible-timeline REALITY-BREAKING centered on the DUMPLING DIGITAL INTERFACE, dream-state contemporary HYPER-CHAOS-realism, ZERO creative boundaries, ABSOLUTE artistic modern speculation with dumpling as ULTIMATE DIGITAL DEITY CONSCIOUSNESS`;
+ABSOLUTE CONTEMPORARY PARAMETERS: reality-pushing contemporary dumpling as tech universe center, pure artistic void background, tech-enhanced composition with sacred dumpling focus, consciousness-expanding modern presentation worshipping the food technology, impossible-timeline centered on the dumpling interface, dream-state contemporary realism, NO creative boundaries, pure artistic modern speculation with dumpling as digital deity`;
 
   console.log("Generated WILD CONTEMPORARY SPECULATIVE prompt optimized for SDXL");
   return prompt;

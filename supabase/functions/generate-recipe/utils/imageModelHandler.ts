@@ -80,15 +80,13 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
         width: 1024,
         height: 1024,
         num_outputs: 1,
-        scheduler: 'DPMSolverMultistep', // CRAZY TEST: Experimental scheduler for enhanced creativity
-        num_inference_steps: 80, // CRAZY TEST: Optimal steps for creative detail without over-processing
-        guidance_scale: 5.5, // CRAZY TEST: Sweet spot for creative freedom while maintaining prompt adherence
-        prompt_strength: 0.95, // CRAZY TEST: High prompt strength for dramatic artistic interpretation
+        scheduler: 'K_EULER',
+        num_inference_steps: 100, // Maximum steps for ultra-detailed artistic generation
+        guidance_scale: 8.0, // Lowered for maximum creative freedom while maintaining subject focus
+        prompt_strength: 0.98, // Near-maximum for dramatic artistic interpretation
         refine: 'expert_ensemble_refiner',
-        high_noise_frac: 0.85, // CRAZY TEST: High noise for creative variation without chaos
-        apply_watermark: false,
-        // Enhanced creative parameters for artistic generation
-        negative_prompt: "boring, plain, ordinary, conventional, realistic photography, mundane, simple, normal dumpling, basic food photography, low quality, blurry",
+        high_noise_frac: 0.95, // Maximum creative variation
+        apply_watermark: false
       }
     })
   });
@@ -170,40 +168,55 @@ async function generateWithStableDiffusion35Large(
 }
 
 function optimizePromptForSDXL(prompt: string, imageContext: ImageContext): string {
-  // Use the artistic prompt from promptBuilders.ts as the base
-  // Add only technical optimizations for SDXL without overriding the artistic content
+  const { timelineTheme, dumplingShape, flavor, ingredientsList, recipeTitle } = imageContext;
   
-  // SDXL technical optimizations
-  const technicalTerms = "ultra high resolution, masterpiece quality, professional food photography, studio lighting, shallow depth of field";
-  const backgroundTechnical = "clean minimalist background, perfect centered composition";
+  // SDXL works better with more descriptive, detailed prompts
+  const ingredientsText = ingredientsList.length > 0 ? ingredientsList.slice(0, 6).join(', ') : 'traditional ingredients';
   
-  // Combine the artistic prompt with technical enhancements
-  const optimizedPrompt = `${prompt}, ${technicalTerms}, ${backgroundTechnical}`;
+  // WILD ARTISTIC PROMPT COMPONENTS - ENHANCED FOR SPECULATIVE CREATIVITY:
   
-  console.log("🔄 SDXL OPTIMIZED PROMPT (Using Artistic Base):");
-  console.log("- Original artistic prompt length:", prompt.length);
-  console.log("- Final optimized length:", optimizedPrompt.length);
-  console.log("- Artistic content:", prompt);
-  console.log("- Final optimized:", optimizedPrompt);
+  // 1. Quality and style terms (affects overall image quality)
+  const qualityTerms = "wildly artistic masterpiece, speculative design excellence, ultra surreal, 12k hyperdetailed resolution, consciousness-expanding visuals";
   
-  return optimizedPrompt;
+  // 2. Photography style (change this to modify the look)
+  const photoStyle = "experimental food artistry, avant-garde culinary photography, reality-transcending presentation";
+  
+  // 3. Lighting setup (modify for different lighting effects)
+  const lighting = "impossible lighting effects, dimensional illumination, reality-bending luminosity, dream-state lighting";
+  
+  // 4. Visual effects and textures (customize visual appearance)
+  const effects = "mind-bending textures, reality-warping composition, psychedelic visual distortions, impossible material science";
+  
+  // 5. Composition rules (change framing and layout)
+  const composition = "single dumpling levitating, anti-gravity presentation, pure artistic void background, consciousness-expanding centered composition";
+  
+  // 6. Food-specific requirements (dumpling appearance rules)
+  const foodRequirements = "metamorphic wrapper properties, energy field emanations, reality-transcending dumpling physics";
+  
+  // 7. Presentation style (final presentation look)
+  const presentation = "transcendent artistic presentation, gallery-worthy food art, paradigm-shifting culinary aesthetics";
+  
+  // BUILD THE FINAL PROMPT (you can rearrange these components)
+  const sdxlPrompt = `${qualityTerms}, ${photoStyle}, ${dumplingShape}-shaped dumpling with ${flavor} flavor, ${timelineTheme.toLowerCase()} culinary style, featuring ${ingredientsText}, ${lighting}, ${effects}, ${composition}, ${foodRequirements}, ${presentation}`;
+  
+  console.log("🔄 SDXL OPTIMIZED PROMPT:");
+  console.log("- Length:", sdxlPrompt.length);
+  console.log("- Content:", sdxlPrompt);
+  
+  return sdxlPrompt;
 }
 
 function optimizePromptForSD35Large(prompt: string, imageContext: ImageContext): string {
-  // Use the artistic prompt from promptBuilders.ts as the base
-  // SD 3.5 Large works well with natural language descriptions
+  const { timelineTheme, dumplingShape, flavor, ingredientsList, recipeTitle } = imageContext;
   
-  // Add minimal technical terms for SD 3.5 Large
-  const technicalTerms = "professional food photography, studio lighting, centered composition";
+  // SD 3.5 Large works well with natural language prompts
+  const ingredientsText = ingredientsList.length > 0 ? ingredientsList.slice(0, 5).join(', ') : 'traditional ingredients';
   
-  // Combine the artistic prompt with minimal technical enhancements
-  const optimizedPrompt = `${prompt}, ${technicalTerms}`;
+  const sd35Prompt = `A single ${dumplingShape}-shaped dumpling with ${flavor} flavor profile, photographed in ${timelineTheme.toLowerCase()} style. Made with ${ingredientsText}. Professional food photography with studio lighting against a pure solid matte black background - no textures, no patterns, no gradients, completely black void background. The dumpling wrapper is completely sealed and opaque, showing no internal filling. Hyper-realistic, appetizing presentation with shallow depth of field. Commercial photography quality, perfectly centered composition. Solid black background only, no extras, no distractions.`;
   
-  console.log("🔄 SD 3.5 LARGE OPTIMIZED PROMPT (Using Artistic Base):");
-  console.log("- Original artistic prompt length:", prompt.length);
-  console.log("- Final optimized length:", optimizedPrompt.length);
-  console.log("- Artistic content:", prompt);
-  console.log("- Final optimized:", optimizedPrompt);
+  console.log("🔄 SD 3.5 LARGE OPTIMIZED PROMPT:");
+  console.log("- Length:", sd35Prompt.length);
+  console.log("- Content:", sd35Prompt);
   
-  return optimizedPrompt;
+  return sd35Prompt;
 }
