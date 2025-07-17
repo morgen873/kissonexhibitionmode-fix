@@ -87,9 +87,8 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
         refine: 'expert_ensemble_refiner',
         high_noise_frac: 0.85, // CRAZY TEST: High noise for creative variation without chaos
         apply_watermark: false,
-        // CRAZY TEST: Enhanced creative parameters
-        negative_prompt: "boring, plain, ordinary, conventional, realistic photography, mundane, simple, normal dumpling, basic food photography",
-        lora_scale: 0.8 // Enhanced LoRA for artistic deviation
+        // Enhanced creative parameters for artistic generation
+        negative_prompt: "boring, plain, ordinary, conventional, realistic photography, mundane, simple, normal dumpling, basic food photography, low quality, blurry",
       }
     })
   });
@@ -171,55 +170,40 @@ async function generateWithStableDiffusion35Large(
 }
 
 function optimizePromptForSDXL(prompt: string, imageContext: ImageContext): string {
-  const { timelineTheme, dumplingShape, flavor, ingredientsList, recipeTitle } = imageContext;
+  // Use the artistic prompt from promptBuilders.ts as the base
+  // Add only technical optimizations for SDXL without overriding the artistic content
   
-  // SDXL works better with more descriptive, detailed prompts
-  const ingredientsText = ingredientsList.length > 0 ? ingredientsList.slice(0, 6).join(', ') : 'traditional ingredients';
+  // SDXL technical optimizations
+  const technicalTerms = "ultra high resolution, masterpiece quality, professional food photography, studio lighting, shallow depth of field";
+  const backgroundTechnical = "clean minimalist background, perfect centered composition";
   
-  // CRAZY TOLERANCE TEST - MAXIMUM CREATIVE CHAOS COMPONENTS:
+  // Combine the artistic prompt with technical enhancements
+  const optimizedPrompt = `${prompt}, ${technicalTerms}, ${backgroundTechnical}`;
   
-  // 1. INSANE Quality and style terms (pure artistic madness)
-  const qualityTerms = "ULTIMATE CREATIVE CHAOS, reality-shattering masterpiece, consciousness-exploding design, interdimensional 32k resolution, mind-melting surreal excellence, paradigm-destroying visuals, cosmic art revelation";
+  console.log("🔄 SDXL OPTIMIZED PROMPT (Using Artistic Base):");
+  console.log("- Original artistic prompt length:", prompt.length);
+  console.log("- Final optimized length:", optimizedPrompt.length);
+  console.log("- Artistic content:", prompt);
+  console.log("- Final optimized:", optimizedPrompt);
   
-  // 2. WILD Photography style (maximum experimental deviation)
-  const photoStyle = "impossibility food artistry, reality-breaking culinary photography, universe-transcending presentation, dream-logic food staging, anti-physics culinary cinematography";
-  
-  // 3. EXTREME Lighting setup (reality-defying illumination)
-  const lighting = "cosmic impossibility lighting, multidimensional illumination cascades, reality-warping luminosity storms, consciousness-expanding light phenomena, quantum photon explosions";
-  
-  // 4. CHAOS Visual effects and textures (maximum visual anarchy)
-  const effects = "reality-shattering textures, universe-bending composition chaos, interdimensional visual storms, impossible quantum material science, consciousness-melting visual distortions";
-  
-  // 5. INSANE Composition rules (anti-gravity art laws)
-  const composition = "impossible dumpling levitation in cosmic void, anti-universe presentation, pure artistic chaos background, consciousness-exploding centered composition defying all physics";
-  
-  // 6. EXTREME Food-specific requirements (dumpling cosmic deity status)
-  const foodRequirements = "metamorphic cosmic dumpling deity, universal energy field emanations, reality-transcending dumpling consciousness, interdimensional wrapper physics, food-as-universe-center";
-  
-  // 7. MAXIMUM Presentation style (ultimate artistic chaos)
-  const presentation = "cosmic artistic revelation, universe-worthy food deity art, reality-paradigm-destroying culinary aesthetics, consciousness-expanding food transcendence";
-  
-  // BUILD THE ULTIMATE CRAZY PROMPT (maximum chaos configuration)
-  const sdxlPrompt = `CRAZY TOLERANCE TEST ACTIVATED: ${qualityTerms}, ${photoStyle}, SACRED ${dumplingShape}-shaped dumpling deity with ${flavor} cosmic essence, ${timelineTheme.toLowerCase()} universe-transcending culinary consciousness, featuring ${ingredientsText} as cosmic ingredients, ${lighting}, ${effects}, ${composition}, ${foodRequirements}, ${presentation}, ABSOLUTE CREATIVE ANARCHY, no artistic limitations, pure speculative food consciousness, reality-breaking dumpling art`;
-  
-  console.log("🔄 SDXL OPTIMIZED PROMPT:");
-  console.log("- Length:", sdxlPrompt.length);
-  console.log("- Content:", sdxlPrompt);
-  
-  return sdxlPrompt;
+  return optimizedPrompt;
 }
 
 function optimizePromptForSD35Large(prompt: string, imageContext: ImageContext): string {
-  const { timelineTheme, dumplingShape, flavor, ingredientsList, recipeTitle } = imageContext;
+  // Use the artistic prompt from promptBuilders.ts as the base
+  // SD 3.5 Large works well with natural language descriptions
   
-  // SD 3.5 Large works well with natural language prompts
-  const ingredientsText = ingredientsList.length > 0 ? ingredientsList.slice(0, 5).join(', ') : 'traditional ingredients';
+  // Add minimal technical terms for SD 3.5 Large
+  const technicalTerms = "professional food photography, studio lighting, centered composition";
   
-  const sd35Prompt = `A single ${dumplingShape}-shaped dumpling with ${flavor} flavor profile, photographed in ${timelineTheme.toLowerCase()} style. Made with ${ingredientsText}. Professional food photography with studio lighting against a pure solid matte black background - no textures, no patterns, no gradients, completely black void background. The dumpling wrapper is completely sealed and opaque, showing no internal filling. Hyper-realistic, appetizing presentation with shallow depth of field. Commercial photography quality, perfectly centered composition. Solid black background only, no extras, no distractions.`;
+  // Combine the artistic prompt with minimal technical enhancements
+  const optimizedPrompt = `${prompt}, ${technicalTerms}`;
   
-  console.log("🔄 SD 3.5 LARGE OPTIMIZED PROMPT:");
-  console.log("- Length:", sd35Prompt.length);
-  console.log("- Content:", sd35Prompt);
+  console.log("🔄 SD 3.5 LARGE OPTIMIZED PROMPT (Using Artistic Base):");
+  console.log("- Original artistic prompt length:", prompt.length);
+  console.log("- Final optimized length:", optimizedPrompt.length);
+  console.log("- Artistic content:", prompt);
+  console.log("- Final optimized:", optimizedPrompt);
   
-  return sd35Prompt;
+  return optimizedPrompt;
 }
