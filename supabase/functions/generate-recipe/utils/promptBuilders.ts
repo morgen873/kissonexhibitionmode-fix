@@ -33,8 +33,6 @@ Modern futuristic presentation:
 - Centered composition
 - High-quality food photography standards
 
-Professional food photography, single dumpling focus, pure solid matte black background, well-lit, appetizing, restaurant-quality presentation, centered dumpling, no extras, clean composition`;
-
   console.log("Generated professional futuristic prompt optimized for SDXL");
   return prompt;
 }
@@ -61,8 +59,6 @@ Historical culinary presentation:
 - Centered composition
 - Classic food styling techniques
 
-Professional food photography, single dumpling focus, pure solid matte black background, well-lit, appetizing, authentic historical cooking style, centered dumpling, no extras, clean composition`;
-
   console.log("Generated professional historical prompt optimized for SDXL");
   return prompt;
 }
@@ -88,8 +84,6 @@ Modern culinary presentation:
 - Pure matte black background
 - Centered composition
 - Professional food styling
-
-Professional food photography, single dumpling focus, pure solid matte black background, well-lit, appetizing, modern restaurant-style presentation, centered dumpling, no extras, clean composition`;
 
   console.log("Generated professional contemporary prompt optimized for SDXL");
   return prompt;
