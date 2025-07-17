@@ -82,6 +82,11 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
   console.log("🎨 REPLICATE CONFIG:");
   console.log("- Model:", model);
   console.log("- Prompt length:", prompt.length);
+  console.log("- API Token length:", replicateToken.length);
+  console.log("- API Token prefix:", replicateToken.substring(0, 10) + "...");
+  
+  // Test Replicate API connectivity first
+  console.log("🌐 TESTING REPLICATE API CONNECTIVITY...");
   
   // Create prediction
   const createResponse = await fetch('https://api.replicate.com/v1/predictions', {
@@ -108,8 +113,17 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
     })
   });
 
+  console.log("📡 REPLICATE API RESPONSE:");
+  console.log("- Status:", createResponse.status);
+  console.log("- Status Text:", createResponse.statusText);
+  console.log("- Headers:", Object.fromEntries(createResponse.headers.entries()));
+
   if (!createResponse.ok) {
-    throw new Error(`Failed to create prediction: ${createResponse.status}`);
+    const errorText = await createResponse.text();
+    console.error("❌ REPLICATE API ERROR:");
+    console.error("- Status:", createResponse.status);
+    console.error("- Error Body:", errorText);
+    throw new Error(`Failed to create prediction: ${createResponse.status} - ${errorText}`);
   }
 
   const prediction: ReplicateResponse = await createResponse.json();
