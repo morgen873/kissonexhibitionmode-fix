@@ -33,7 +33,7 @@ export async function generateImageWithFallback(
 ): Promise<ImageGenerationResult> {
   console.log("📥 ATTEMPTING MULTI-MODEL GENERATION WITH ENHANCED FALLBACKS...");
   
-  // Enhanced fallback strategy with more reliable models
+  // Enhanced fallback strategy with verified working models
   const models = [
     {
       name: 'flux-schnell',
@@ -47,7 +47,7 @@ export async function generateImageWithFallback(
     },
     {
       name: 'stable-diffusion-xl',
-      id: 'stability-ai/stable-diffusion-xl-base-1.0',
+      id: 'stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b',
       optimize: (prompt: string) => optimizePromptForSDXL(prompt, imageContext)
     }
   ];
@@ -57,8 +57,11 @@ export async function generateImageWithFallback(
   for (const [index, model] of models.entries()) {
     try {
       console.log(`🎨 ATTEMPTING ${model.name.toUpperCase()} (${index + 1}/${models.length})...`);
+      console.log(`📡 Using model: ${model.id}`);
       
       const optimizedPrompt = model.optimize(imagePrompt);
+      console.log(`🔤 Optimized prompt length: ${optimizedPrompt.length}`);
+      
       const imageData = await generateWithReplicate(optimizedPrompt, model.id);
       
       console.log(`✅ SUCCESS WITH ${model.name.toUpperCase()}`);
@@ -68,7 +71,8 @@ export async function generateImageWithFallback(
       };
       
     } catch (error) {
-      console.log(`❌ ${model.name.toUpperCase()} FAILED:`, error.message);
+      console.error(`❌ ${model.name.toUpperCase()} FAILED:`, error.message);
+      console.error(`📋 Error details:`, error);
       lastError = error;
       
       // Continue to next model unless this is the last one
@@ -81,6 +85,7 @@ export async function generateImageWithFallback(
   
   // If all models failed, throw the last error
   console.error("❌ ALL IMAGE GENERATION MODELS FAILED");
+  console.error("🔍 Last error details:", lastError);
   throw lastError || new Error("All image generation models failed");
 }
 
@@ -105,7 +110,7 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
     input: getInputForModel(model, prompt)
   };
   
-  // Create prediction with model-specific configuration
+  // Enhanced API call with better error handling
   const createResponse = await fetch('https://api.replicate.com/v1/predictions', {
     method: 'POST',
     headers: {
@@ -118,6 +123,7 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
   if (!createResponse.ok) {
     const errorText = await createResponse.text();
     console.error("❌ Create prediction error:", errorText);
+    console.error("📋 Request body was:", JSON.stringify(requestBody, null, 2));
     throw new Error(`Failed to create prediction: ${createResponse.status} - ${errorText}`);
   }
 
