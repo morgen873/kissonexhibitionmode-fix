@@ -29,19 +29,27 @@ interface ReplicateResponse {
 export async function generateImageWithFallback(
   imagePrompt: string,
   imageContext: ImageContext,
-  openai?: any // Keep for backward compatibility but not used
+  openai?: any // Not used - SDXL/Replicate only
 ): Promise<ImageGenerationResult> {
+  console.log("🎯 FORCED SDXL-ONLY GENERATION - NO OPENAI FALLBACK");
   console.log("📥 ATTEMPTING SDXL GENERATION...");
+  
+  // Ensure we have the Replicate token
+  const replicateToken = Deno.env.get('REPLICATE_API_TOKEN');
+  if (!replicateToken) {
+    throw new Error('❌ REPLICATE_API_TOKEN not found - cannot generate image with SDXL');
+  }
   
   // Step 1: Try SDXL first
   try {
+    console.log("🎨 CALLING SDXL via Replicate...");
     const sdxlPrompt = optimizePromptForSDXL(imagePrompt, imageContext);
     const imageData = await generateWithReplicate(
       sdxlPrompt,
       'stability-ai/sdxl:7762fd07cf82c948538e41f63f77d685e02b063e37e496e96eefd46c929f9bdc'
     );
     
-    console.log("✅ SDXL SUCCESS");
+    console.log("✅ SDXL SUCCESS - IMAGE GENERATED WITH REPLICATE");
     return {
       imageData,
       usedModel: 'sdxl'
@@ -50,9 +58,18 @@ export async function generateImageWithFallback(
   } catch (sdxlError) {
     console.log("⚠️ SDXL FAILED, TRYING STABLE DIFFUSION 3.5 LARGE FALLBACK...");
     console.log("SDXL Error:", sdxlError.message);
+    console.log("Error stack:", sdxlError.stack);
     
     // Step 2: Fallback to Stable Diffusion 3.5 Large
-    return await generateWithStableDiffusion35Large(imageContext, imagePrompt);
+    try {
+      const result = await generateWithStableDiffusion35Large(imageContext, imagePrompt);
+      console.log("✅ FALLBACK SUCCESS - IMAGE GENERATED WITH SD 3.5 LARGE");
+      return result;
+    } catch (fallbackError) {
+      console.error("❌ ALL REPLICATE MODELS FAILED");
+      console.error("Fallback error:", fallbackError.message);
+      throw new Error(`Image generation failed: SDXL failed (${sdxlError.message}), SD 3.5 Large failed (${fallbackError.message})`);
+    }
   }
 }
 
