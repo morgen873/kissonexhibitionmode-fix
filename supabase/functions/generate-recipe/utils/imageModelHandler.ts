@@ -29,27 +29,19 @@ interface ReplicateResponse {
 export async function generateImageWithFallback(
   imagePrompt: string,
   imageContext: ImageContext,
-  openai?: any // Not used - Replicate only
+  openai?: any // Keep for backward compatibility but not used
 ): Promise<ImageGenerationResult> {
-  console.log("🎯 REPLICATE-ONLY IMAGE GENERATION");
   console.log("📥 ATTEMPTING SDXL GENERATION...");
-  
-  // Ensure we have the Replicate token
-  const replicateToken = Deno.env.get('REPLICATE_API_TOKEN');
-  if (!replicateToken) {
-    throw new Error('❌ REPLICATE_API_TOKEN not found - cannot generate image');
-  }
   
   // Step 1: Try SDXL first
   try {
-    console.log("🎨 CALLING SDXL via Replicate...");
     const sdxlPrompt = optimizePromptForSDXL(imagePrompt, imageContext);
     const imageData = await generateWithReplicate(
       sdxlPrompt,
       'stability-ai/sdxl:7762fd07cf82c948538e41f63f77d685e02b063e37e496e96eefd46c929f9bdc'
     );
     
-    console.log("✅ SDXL SUCCESS - IMAGE GENERATED WITH REPLICATE");
+    console.log("✅ SDXL SUCCESS");
     return {
       imageData,
       usedModel: 'sdxl'
@@ -59,17 +51,8 @@ export async function generateImageWithFallback(
     console.log("⚠️ SDXL FAILED, TRYING STABLE DIFFUSION 3.5 LARGE FALLBACK...");
     console.log("SDXL Error:", sdxlError.message);
     
-    // Step 2: Fallback to Stable Diffusion 3.5 Large (also via Replicate)
-    try {
-      const result = await generateWithStableDiffusion35Large(imageContext, imagePrompt);
-      console.log("✅ FALLBACK SUCCESS - IMAGE GENERATED WITH SD 3.5 LARGE VIA REPLICATE");
-      return result;
-    } catch (fallbackError) {
-      console.error("❌ ALL REPLICATE MODELS FAILED");
-      console.error("SDXL error:", sdxlError.message);
-      console.error("SD 3.5 Large error:", fallbackError.message);
-      throw new Error(`All Replicate models failed: SDXL (${sdxlError.message}), SD 3.5 Large (${fallbackError.message})`);
-    }
+    // Step 2: Fallback to Stable Diffusion 3.5 Large
+    return await generateWithStableDiffusion35Large(imageContext, imagePrompt);
   }
 }
 
@@ -82,11 +65,6 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
   console.log("🎨 REPLICATE CONFIG:");
   console.log("- Model:", model);
   console.log("- Prompt length:", prompt.length);
-  console.log("- API Token length:", replicateToken.length);
-  console.log("- API Token prefix:", replicateToken.substring(0, 10) + "...");
-  
-  // Test Replicate API connectivity first
-  console.log("🌐 TESTING REPLICATE API CONNECTIVITY...");
   
   // Create prediction
   const createResponse = await fetch('https://api.replicate.com/v1/predictions', {
@@ -103,24 +81,18 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
         height: 1024,
         num_outputs: 1,
         scheduler: 'K_EULER',
-        num_inference_steps: 4, // Maximum allowed for this model
+        num_inference_steps: 50,
         guidance_scale: 7.5,
+        prompt_strength: 0.8,
+        refine: 'expert_ensemble_refiner',
+        high_noise_frac: 0.8,
         apply_watermark: false
       }
     })
   });
 
-  console.log("📡 REPLICATE API RESPONSE:");
-  console.log("- Status:", createResponse.status);
-  console.log("- Status Text:", createResponse.statusText);
-  console.log("- Headers:", Object.fromEntries(createResponse.headers.entries()));
-
   if (!createResponse.ok) {
-    const errorText = await createResponse.text();
-    console.error("❌ REPLICATE API ERROR:");
-    console.error("- Status:", createResponse.status);
-    console.error("- Error Body:", errorText);
-    throw new Error(`Failed to create prediction: ${createResponse.status} - ${errorText}`);
+    throw new Error(`Failed to create prediction: ${createResponse.status}`);
   }
 
   const prediction: ReplicateResponse = await createResponse.json();
@@ -158,13 +130,7 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
       }
       
       const arrayBuffer = await imageResponse.arrayBuffer();
-      // Fix for stack overflow: convert ArrayBuffer to base64 safely
-      const uint8Array = new Uint8Array(arrayBuffer);
-      let binaryString = '';
-      for (let i = 0; i < uint8Array.length; i++) {
-        binaryString += String.fromCharCode(uint8Array[i]);
-      }
-      const imageData = btoa(binaryString);
+      const imageData = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
       
       return imageData;
     }
@@ -207,31 +173,31 @@ function optimizePromptForSDXL(prompt: string, imageContext: ImageContext): stri
   // SDXL works better with more descriptive, detailed prompts
   const ingredientsText = ingredientsList.length > 0 ? ingredientsList.slice(0, 6).join(', ') : 'traditional ingredients';
   
-  // PROFESSIONAL FOOD PHOTOGRAPHY PROMPT COMPONENTS:
+  // CUSTOMIZABLE PROMPT COMPONENTS - MODIFY THESE TO CHANGE ALL SDXL PROMPTS:
   
   // 1. Quality and style terms (affects overall image quality)
-  const qualityTerms = "professional food photography, high-quality culinary image, 4k resolution";
+  const qualityTerms = "artistic masterpiece, best quality, ultra detailed, 8k resolution";
   
-  // 2. Photography style (clean professional look)
-  const photoStyle = "restaurant-quality food styling, clean modern presentation";
+  // 2. Photography style (change this to modify the look)
+  const photoStyle = "professional food photography, commercial photography quality";
   
-  // 3. Lighting setup (professional food photography lighting)
-  const lighting = "professional studio lighting, well-lit, appetizing";
+  // 3. Lighting setup (modify for different lighting effects)
+  const lighting = "studio lighting, cinematic lighting, soft natural lighting";
   
-  // 4. Visual effects and textures (clean textures)
-  const effects = "clean textures, sharp focus, professional composition";
+  // 4. Visual effects and textures (customize visual appearance)
+  const effects = "speculative design, hyper-realistic, highly detailed texture, perfect composition";
   
-  // 5. Composition rules (single dumpling focus with black background)
-  const composition = "single dumpling as focal point, centered composition, pure solid matte black background";
+  // 5. Composition rules (change framing and layout)
+  const composition = "single dumpling centered, shallow depth of field, pure solid matte black background, no textures, no patterns, no gradients, completely black void background";
   
-  // 6. Food-specific requirements (realistic dumpling appearance)
-  const foodRequirements = "realistic dumpling wrapper, traditional dumpling appearance";
+  // 6. Food-specific requirements (dumpling appearance rules)
+  const foodRequirements = "mostly sealed wrapper, optional visible filling, opaque dumpling skin";
   
-  // 7. Presentation style (clean professional presentation)
-  const presentation = "clean professional presentation, restaurant-style plating, commercial food photography";
+  // 7. Presentation style (final presentation look)
+  const presentation = "appetizing presentation, food art, gourmet presentation";
   
-  // BUILD THE FINAL PROMPT (professional food photography approach)
-  const sdxlPrompt = `${qualityTerms}, ${photoStyle}, single ${dumplingShape}-shaped dumpling with ${flavor} flavor, ${timelineTheme.toLowerCase()} culinary style, featuring ${ingredientsText}, ${lighting}, ${effects}, ${composition}, ${foodRequirements}, ${presentation}`;
+  // BUILD THE FINAL PROMPT (you can rearrange these components)
+  const sdxlPrompt = `${qualityTerms}, ${photoStyle}, ${dumplingShape}-shaped dumpling with ${flavor} flavor, ${timelineTheme.toLowerCase()} culinary style, featuring ${ingredientsText}, ${lighting}, ${effects}, ${composition}, ${foodRequirements}, ${presentation}`;
   
   console.log("🔄 SDXL OPTIMIZED PROMPT:");
   console.log("- Length:", sdxlPrompt.length);

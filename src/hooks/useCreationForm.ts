@@ -4,11 +4,8 @@ import { useCreationState } from './creation/useCreationState';
 import { useCreationHandlers } from './creation/useCreationHandlers';
 import { useCreationValidation } from './creation/useCreationValidation';
 import { useRecipeSubmission } from './useRecipeSubmission';
-import { useErrorRecovery } from './useErrorRecovery';
 
 export const useCreationForm = () => {
-  const { handleError, retry, clearError } = useErrorRecovery();
-  
   const {
     currentStep,
     currentStepData,
@@ -24,9 +21,7 @@ export const useCreationForm = () => {
     setAnswers,
     setCustomAnswers,
     setControlValues,
-    resetState,
-    resetStateWithRecovery,
-    clearBrowserState
+    resetState
   } = useCreationState();
 
   const {
@@ -57,35 +52,13 @@ export const useCreationForm = () => {
   } = useRecipeSubmission();
 
   const handleSubmit = async (timelineValue?: string) => {
-    try {
-      clearError(); // Clear any previous errors
-      await submitRecipe(answers, customAnswers, controlValues, timelineValue);
-    } catch (error) {
-      handleError(error as Error, 'Recipe submission');
-    }
+    await submitRecipe(answers, customAnswers, controlValues, timelineValue);
   };
 
   const handleReset = () => {
-    try {
-      resetStep();
-      resetState();
-      resetRecipe();
-      clearError();
-    } catch (error) {
-      handleError(error as Error, 'Reset operation');
-    }
-  };
-
-  // Enhanced reset with recovery
-  const handleResetWithRecovery = () => {
-    try {
-      resetStep();
-      resetStateWithRecovery();
-      resetRecipe();
-      clearError();
-    } catch (error) {
-      handleError(error as Error, 'Recovery reset');
-    }
+    resetStep();
+    resetState();
+    resetRecipe();
   };
 
   return {
@@ -108,10 +81,5 @@ export const useCreationForm = () => {
     prevStep,
     handleSubmit,
     handleReset,
-    handleResetWithRecovery,
-    clearBrowserState,
-    // Error recovery functions
-    retry,
-    clearError
   };
 };

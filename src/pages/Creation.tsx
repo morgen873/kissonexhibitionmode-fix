@@ -4,7 +4,6 @@ import { useOutletContext } from "react-router-dom";
 import { useCreationForm } from '@/hooks/useCreationForm';
 import { useCreationNavigation } from '@/hooks/useCreationNavigation';
 import { useCreationProgress } from '@/hooks/useCreationProgress';
-import { useErrorRecovery } from '@/hooks/useErrorRecovery';
 import { stepThemes } from '@/data/creation';
 import { getCreationTitle, shouldShowTitle } from '@/components/creation/CreationTitleHandler';
 import GlobalLayout from '@/components/layout/GlobalLayout';
@@ -12,8 +11,6 @@ import CreationLayout from '@/components/creation/CreationLayout';
 import CreationContent from '@/components/creation/CreationContent';
 import GifTransition from '@/components/creation/GifTransition';
 import VideoTransition from '@/components/creation/VideoTransition';
-import { ErrorRecoveryPanel } from '@/components/creation/ErrorRecoveryPanel';
-import { ImageDebugPanel } from '@/components/creation/ImageDebugPanel';
 import { detectTransitionFileType, isVideoFile } from '@/utils/fileTypeDetector';
 
 interface OutletContextType {
@@ -21,8 +18,6 @@ interface OutletContextType {
 }
 
 const Creation = () => {
-  const { error, isRecovering, retryCount, retry, forceRefresh } = useErrorRecovery();
-  
   const {
     currentStep: creationStep,
     currentStepData: creationStepData,
@@ -42,10 +37,7 @@ const Creation = () => {
     nextStep: nextCreationStep,
     prevStep: prevCreationStep,
     handleSubmit,
-    handleReset: resetForm,
-    handleResetWithRecovery,
-    clearBrowserState,
-    clearError
+    handleReset: resetForm
   } = useCreationForm();
   
   const {
@@ -109,31 +101,6 @@ const Creation = () => {
     resetNavigation(); // Reset navigation to hero page
   };
 
-  // Enhanced reset with recovery
-  const handleResetWithRecoveryAndNav = () => {
-    handleResetWithRecovery(); // Reset with recovery
-    resetNavigation(); // Reset navigation to hero page
-  };
-
-  // Add keyboard shortcut for debug panel (Ctrl+Shift+D)
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.shiftKey && e.key === 'D') {
-        e.preventDefault();
-        console.log('🔧 Debug Tools Available:');
-        console.log('- window.creationDebug: State debugging functions');
-        console.log('- Call window.creationDebug.clearBrowserState() to clear all data');
-        console.log('- Call window.creationDebug.recoverState() to recover from backup');
-        if ((window as any).creationDebug) {
-          console.log('Current state:', (window as any).creationDebug.currentState);
-        }
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
-
   const title = getCreationTitle({
     hasStartedCreation,
     currentIntroStep,
@@ -158,19 +125,6 @@ const Creation = () => {
 
   return (
     <>
-      {/* Error Recovery Panel */}
-      <ErrorRecoveryPanel
-        isVisible={!!error && retryCount > 2} // Show after multiple failures
-        error={error}
-        retryCount={retryCount}
-        isRecovering={isRecovering}
-        onRetry={retry}
-        onClearState={clearBrowserState}
-        onResetWithRecovery={handleResetWithRecoveryAndNav}
-        onForceRefresh={forceRefresh}
-        onClose={clearError}
-      />
-
       {/* Transition Overlay - Dynamic based on file type */}
       {isTransitioning && transitionGifUrl && (
         <>
@@ -238,12 +192,6 @@ const Creation = () => {
             handleCreationSubmit={handleCreationSubmit}
           />
         </CreationLayout>
-        
-        {/* Image Debug Panel */}
-        <ImageDebugPanel
-          recipeResult={recipeResult}
-          recipeId={recipeId}
-        />
       </GlobalLayout>
     </>
   );

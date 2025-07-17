@@ -82,14 +82,9 @@ serve(async (req) => {
 
     const openai = new OpenAI({ apiKey: openAIKey });
     
-    // Check for Replicate API token for image generation (FIXED: use correct variable name)
+    // Check for Replicate API token for image generation
     const replicateToken = Deno.env.get('REPLICATE_API_TOKEN');
-    console.log("🔑 REPLICATE TOKEN CHECK:");
-    console.log("- Token exists:", !!replicateToken);
-    console.log("- Token length:", replicateToken ? replicateToken.length : 0);
-    
     if (!replicateToken) {
-        console.error("❌ REPLICATE_API_TOKEN environment variable not found");
         throw new Error("Missing REPLICATE_API_TOKEN environment variable for image generation.");
     }
     
@@ -145,16 +140,12 @@ serve(async (req) => {
     console.log("- SAVED recipe data from database (title, ingredients)");
     console.log("- Recipe ID:", newRecipe.id);
     
-    console.log("🔥 ABOUT TO CALL generateAndUploadRecipeImage - THIS SHOULD APPEAR IN LOGS");
-    
     const imageUrl = await generateAndUploadRecipeImage(
       payload,      // Original user input
       newRecipe,    // COMPLETE saved recipe data from database
       newRecipe.id,
       supabaseAdmin
     );
-    
-    console.log("🔥 generateAndUploadRecipeImage COMPLETED - RESULT:", imageUrl);
 
     // STEP 6: Update recipe with final image URL only if we got a real image
     if (imageUrl !== '/placeholder.svg') {

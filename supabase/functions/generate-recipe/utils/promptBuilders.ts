@@ -14,7 +14,7 @@ interface PromptParams {
 export function buildFuturisticPrompt(params: PromptParams): string {
   const { timelineTheme, emotionalContext, dumplingShape, flavor, ingredientsList, recipeTitle } = params;
   
-  console.log("=== BUILDING PROFESSIONAL FUTURISTIC PROMPT FROM USER INPUT ===");
+  console.log("=== BUILDING FUTURISTIC PROMPT FROM USER INPUT ===");
   console.log("1. Timeline theme:", timelineTheme);
   console.log("2. Emotional context:", emotionalContext);
   console.log("3. Dumpling shape:", dumplingShape);
@@ -22,25 +22,34 @@ export function buildFuturisticPrompt(params: PromptParams): string {
   console.log("5. Ingredients list:", ingredientsList);
   console.log("6. Recipe title:", recipeTitle);
   
-  const ingredientsText = ingredientsList.length > 0 ? ingredientsList.join(', ') : 'modern ingredients';
+  const ingredientsText = ingredientsList.length > 0 ? ingredientsList.join(', ') : 'futuristic dumpling ingredients';
   
-  const prompt = `Professional food photography of a single ${dumplingShape}-shaped ${flavor} dumpling from "${recipeTitle}" in ${timelineTheme} style, featuring ${ingredientsText}
+  const prompt = `masterpiece, best quality, ultra detailed, professional food photography, single ${dumplingShape}-shaped dumpling with ${flavor} flavor profile, representing "${recipeTitle}" from ${timelineTheme}, featuring ${ingredientsText}
 
-Modern futuristic presentation:
-- Single dumpling as focal point
-- Clean, minimalist arrangement
-- Pure matte black background
-- Centered composition
-- High-quality food photography standards`;
+SDXL optimized futuristic culinary style:
+- hyper-realistic food photography, exactly one perfectly sealed dumpling, futuristic presentation
+- advanced molecular gastronomy techniques, dumpling wrapper completely closed and sealed
+- vibrant holographic iridescent effects, neon accent lighting, blue purple pink tones
+- pure solid matte black background, no textures, no patterns, no gradients, completely black void background, studio lighting, cinematic composition
+- dumpling wrapper 100% opaque and solid, no visible filling, no transparent effects
+- no openings tears gaps, completely sealed package appearance
+- high-tech food preparation aesthetics, authentic edible appearance
+- single dumpling centered composition, commercial photography quality
+- 8k resolution, highly detailed texture, perfect composition, food art
+- no text logos graphics, no utensils plates surfaces
+- gourmet presentation, futuristic culinary innovation, sci-fi food styling
+- vibrant colorful presentation, luminous effects, technological aesthetics
 
-  console.log("Generated professional futuristic prompt optimized for SDXL");
+Technical specifications: single dumpling only, pure solid matte black background, no textures, no patterns, no gradients, completely black void background, sealed wrapper, futuristic lighting, commercial quality, centered composition, hyper-realistic, no duplicates, no extras, no distractions`;
+
+  console.log("Generated FUTURISTIC prompt optimized for SDXL");
   return prompt;
 }
 
 export function buildHistoricalPrompt(params: PromptParams): string {
   const { timelineTheme, emotionalContext, dumplingShape, flavor, ingredientsList, recipeTitle } = params;
   
-  console.log("=== BUILDING PROFESSIONAL HISTORICAL PROMPT FROM USER INPUT ===");
+  console.log("=== BUILDING HISTORICAL PROMPT FROM USER INPUT ===");
   console.log("1. Timeline theme:", timelineTheme);
   console.log("2. Emotional context:", emotionalContext);
   console.log("3. Dumpling shape:", dumplingShape);
@@ -48,25 +57,34 @@ export function buildHistoricalPrompt(params: PromptParams): string {
   console.log("5. Ingredients list:", ingredientsList);
   console.log("6. Recipe title:", recipeTitle);
   
-  const ingredientsText = ingredientsList.length > 0 ? ingredientsList.join(', ') : 'traditional ingredients';
+  const ingredientsText = ingredientsList.length > 0 ? ingredientsList.join(', ') : 'traditional historical ingredients';
   
-  const prompt = `Traditional food photography of a single ${dumplingShape}-shaped ${flavor} dumpling from "${recipeTitle}" in ${timelineTheme} style, featuring ${ingredientsText}
+  const prompt = `masterpiece, best quality, ultra detailed, professional food photography, single ${dumplingShape}-shaped dumpling with ${flavor} flavor profile, representing "${recipeTitle}" from ${timelineTheme}, featuring ${ingredientsText}
 
-Historical culinary presentation:
-- Single dumpling as focal point
-- Authentic traditional arrangement
-- Pure matte black background
-- Centered composition
-- Classic food styling techniques`;
+SDXL optimized historical culinary style:
+- hyper-realistic food photography, exactly one perfectly sealed dumpling, traditional historical preparation
+- traditional handcrafted appearance, slightly rustic texture, artisanal preparation
+- authentic historical cooking methods, surface texture steamed boiled pan-fried finish
+- pure solid matte black background, no textures, no patterns, no gradients, completely black void background, warm natural lighting, golden tones
+- dumpling wrapper completely closed and sealed, 100% opaque and solid
+- no visible filling, no transparent translucent effects, no openings tears gaps
+- completely sealed package appearance, traditional food preparation techniques
+- single dumpling centered composition, close-up focused, commercial photography quality
+- 8k resolution, highly detailed texture, perfect composition, food art
+- no text logos graphics, no utensils plates surfaces
+- authentic historical appearance, traditional cooking environments
+- warm colorful presentation, artisanal craftsmanship, heritage cooking methods
 
-  console.log("Generated professional historical prompt optimized for SDXL");
+Technical specifications: single dumpling only, pure solid matte black background, no textures, no patterns, no gradients, completely black void background, sealed wrapper, historical authenticity, commercial quality, centered composition, hyper-realistic, no duplicates, no extras, no distractions`;
+
+  console.log("Generated HISTORICAL prompt optimized for SDXL");
   return prompt;
 }
 
 export function buildContemporaryPrompt(params: PromptParams): string {
   const { timelineTheme, emotionalContext, dumplingShape, flavor, ingredientsList, recipeTitle } = params;
   
-  console.log("=== BUILDING PROFESSIONAL CONTEMPORARY PROMPT FROM USER INPUT ===");
+  console.log("=== BUILDING CONTEMPORARY PROMPT FROM USER INPUT ===");
   console.log("1. Timeline theme:", timelineTheme);
   console.log("2. Emotional context:", emotionalContext);
   console.log("3. Dumpling shape:", dumplingShape);
@@ -74,17 +92,26 @@ export function buildContemporaryPrompt(params: PromptParams): string {
   console.log("5. Ingredients list:", ingredientsList);
   console.log("6. Recipe title:", recipeTitle);
   
-  const ingredientsText = ingredientsList.length > 0 ? ingredientsList.join(', ') : 'modern artisanal ingredients';
+  const ingredientsText = ingredientsList.length > 0 ? ingredientsList.join(', ') : 'contemporary dumpling ingredients';
   
-  const prompt = `Contemporary food photography of a single ${dumplingShape}-shaped ${flavor} dumpling from "${recipeTitle}" in ${timelineTheme} style, featuring ${ingredientsText}
+  const prompt = `masterpiece, best quality, ultra detailed, professional food photography, single ${dumplingShape}-shaped dumpling with ${flavor} flavor profile, representing "${recipeTitle}" from ${timelineTheme}, featuring ${ingredientsText}
 
-Modern culinary presentation:
-- Single dumpling as focal point
-- Contemporary plating
-- Pure matte black background
-- Centered composition
-- Professional food styling`;
+SDXL optimized contemporary culinary style:
+- hyper-realistic food photography, exactly one perfectly sealed dumpling, modern culinary presentation
+- clean professional preparation, contemporary cooking techniques
+- modern aesthetic, attention to visual appeal, vibrant colors
+- pure solid matte black background, no textures, no patterns, no gradients, completely black void background, professional studio lighting, modern food photography standards
+- dumpling wrapper completely closed and sealed, 100% opaque and solid
+- no visible filling, no transparent translucent effects, no openings tears gaps
+- completely sealed package appearance, current culinary trends
+- single dumpling centered composition, close-up focused, commercial photography quality
+- 8k resolution, highly detailed texture, perfect composition, food art
+- no text logos graphics, no utensils plates surfaces
+- contemporary food presentation, modern cooking aesthetics
+- vibrant colorful presentation, clean minimalist styling, current trends
 
-  console.log("Generated professional contemporary prompt optimized for SDXL");
+Technical specifications: single dumpling only, pure solid matte black background, no textures, no patterns, no gradients, completely black void background, sealed wrapper, contemporary aesthetics, commercial quality, centered composition, hyper-realistic, no duplicates, no extras, no distractions`;
+
+  console.log("Generated CONTEMPORARY prompt optimized for SDXL");
   return prompt;
 }

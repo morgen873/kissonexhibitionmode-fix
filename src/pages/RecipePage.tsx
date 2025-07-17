@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import IngredientsList from '@/components/recipe/IngredientsList';
 import GlobalLayout from '@/components/layout/GlobalLayout';
 import { useTheme } from '@/contexts/ThemeContext';
-
+import { testImageAccess } from '@/utils/imageDebug';
 
 type Recipe = Database['public']['Tables']['recipes']['Row'];
 
@@ -26,6 +26,8 @@ const RecipePage = () => {
                 return;
             }
 
+            console.log("Fetching recipe with ID:", id);
+
             const { data, error } = await supabase
                 .from('recipes')
                 .select('*')
@@ -34,8 +36,16 @@ const RecipePage = () => {
 
             if (error) {
                 setError("Could not fetch recipe. It might not exist or you may not have permission to view it.");
+                console.error("Recipe fetch error:", error);
             } else {
                 setRecipe(data);
+                console.log('Recipe fetched successfully:', data);
+                console.log('Recipe image URL from database:', data?.image_url);
+                
+                // Test image access if we have an image URL
+                if (data?.image_url && data.image_url !== '/placeholder.svg') {
+                    testImageAccess(data.image_url);
+                }
             }
             setLoading(false);
         };
@@ -66,6 +76,10 @@ const RecipePage = () => {
     // Simple image URL logic - use what's in the database or fallback to placeholder
     const imageUrl = recipe.image_url || '/placeholder.svg';
 
+    console.log('Image URL decision:');
+    console.log('- Database image_url:', recipe.image_url);
+    console.log('- Final image URL to use:', imageUrl);
+
     return (
         <GlobalLayout variant="recipe">
             <div className="responsive-padding">
@@ -80,8 +94,14 @@ const RecipePage = () => {
                                     src={imageUrl}
                                     alt={recipe.title} 
                                     className={`responsive-image ${currentTheme.effects.shadow} ${currentTheme.effects.borderRadius}`}
+                                    onLoad={() => {
+                                        console.log('✅ Image loaded successfully:', imageUrl);
+                                    }}
                                     onError={(e) => {
+                                        console.log('❌ Image failed to load:', imageUrl);
+                                        console.log('❌ Error details:', e);
                                         if (e.currentTarget.src !== '/placeholder.svg') {
+                                            console.log('🔄 Falling back to placeholder');
                                             e.currentTarget.src = '/placeholder.svg';
                                         }
                                     }}
