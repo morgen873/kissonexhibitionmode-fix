@@ -27,11 +27,11 @@ export function buildFuturisticPrompt(params: PromptParams): string {
   const prompt = `masterpiece, best quality, ultra detailed, professional food photography, single ${dumplingShape}-shaped dumpling with ${flavor} flavor profile, representing "${recipeTitle}" from ${timelineTheme}, featuring ${ingredientsText}
 
 SDXL optimized futuristic culinary style:
-- hyper-realistic food photography, exactly one perfectly sealed dumpling, futuristic presentation
+- hyper-realistic food photography,speculative design and materials, exactly one perfectly sealed dumpling, futuristic presentation
 - advanced molecular gastronomy techniques, dumpling wrapper completely closed and sealed
-- vibrant holographic iridescent effects, neon accent lighting, blue purple pink tones
+- vibrant holographic iridescent effects, neon accent lighting,
 - pure solid matte black background, no textures, no patterns, no gradients, completely black void background, studio lighting, cinematic composition
-- dumpling wrapper 100% opaque and solid, no visible filling, no transparent effects
+- dumpling wrapper 80% to 100% opaque and solid, possible visible filling, possible transparent effects
 - no openings tears gaps, completely sealed package appearance
 - high-tech food preparation aesthetics, authentic edible appearance
 - single dumpling centered composition, commercial photography quality
