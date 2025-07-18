@@ -9,7 +9,7 @@ interface ImageContext {
 
 interface ImageGenerationResult {
   imageData: string;
-  usedModel: 'sdxl' | 'stable-diffusion-3.5-large';
+  usedModel: 'stable-diffusion-xl' | 'sdxl-lightning';
 }
 
 interface ReplicateResponse {
@@ -61,7 +61,7 @@ export async function generateImageWithFallback(
       console.log(`✅ SUCCESS WITH ${model.name.toUpperCase()}`);
       return {
         imageData,
-        usedModel: model.name as 'sdxl' | 'stable-diffusion-3.5-large'
+        usedModel: model.name as 'stable-diffusion-xl' | 'sdxl-lightning'
       };
       
     } catch (error) {
@@ -266,7 +266,7 @@ async function generateWithStableDiffusion35Large(
   
   return {
     imageData,
-    usedModel: 'stable-diffusion-3.5-large'
+    usedModel: 'sdxl-lightning'
   };
 }
 
