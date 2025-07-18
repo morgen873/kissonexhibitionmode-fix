@@ -1,4 +1,3 @@
-
 interface ImageContext {
   timelineTheme: string;
   emotionalContext: string;
@@ -110,7 +109,7 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
     input: getInputForModel(model, prompt)
   };
   
-  // Enhanced API call with better error handling
+  // Create prediction with enhanced error handling
   const createResponse = await fetch('https://api.replicate.com/v1/predictions', {
     method: 'POST',
     headers: {
@@ -130,56 +129,94 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
   const prediction: ReplicateResponse = await createResponse.json();
   console.log("🔄 PREDICTION CREATED:", prediction.id);
 
-  // Reduced polling time for edge function compatibility
-  let attempts = 0;
-  const maxAttempts = 36; // 3 minutes max (more reasonable for edge functions)
+  // NEW ROBUST POLLING MECHANISM - REPLACES THE PROBLEMATIC ONE
+  const pollResult = await pollPredictionStatus(prediction.id, replicateToken);
   
-  while (attempts < maxAttempts) {
-    await new Promise(resolve => setTimeout(resolve, 5000)); // Wait 5 seconds
+  if (pollResult.status === 'succeeded' && pollResult.output?.[0]) {
+    console.log("🖼️ Generated image URL:", pollResult.output[0]);
     
-    const statusResponse = await fetch(`https://api.replicate.com/v1/predictions/${prediction.id}`, {
-      headers: {
-        'Authorization': `Token ${replicateToken}`,
-      }
-    });
-
-    if (!statusResponse.ok) {
-      throw new Error(`Failed to get prediction status: ${statusResponse.status}`);
-    }
-
-    const status: ReplicateResponse = await statusResponse.json();
-    console.log(`🔄 PREDICTION STATUS (${attempts + 1}/${maxAttempts}):`, status.status);
-
-    if (status.status === 'succeeded') {
-      if (!status.output?.[0]) {
-        throw new Error('No output URL in successful prediction');
-      }
-      
-      console.log("🖼️ Generated image URL:", status.output[0]);
-      
-      // Download image and convert to base64
-      const imageResponse = await fetch(status.output[0]);
-      if (!imageResponse.ok) {
-        throw new Error(`Failed to download generated image: ${imageResponse.status}`);
-      }
-      
-      const arrayBuffer = await imageResponse.arrayBuffer();
-      const imageData = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
-      
-      console.log("✅ Image downloaded and converted to base64, size:", imageData.length);
-      return imageData;
+    // Download and convert to base64
+    const imageResponse = await fetch(pollResult.output[0]);
+    if (!imageResponse.ok) {
+      throw new Error(`Failed to download generated image: ${imageResponse.status}`);
     }
     
-    if (status.status === 'failed') {
-      const errorMsg = status.error || 'Unknown error';
-      console.error("❌ Prediction failed with error:", errorMsg);
-      throw new Error(`Prediction failed: ${errorMsg}`);
-    }
+    const arrayBuffer = await imageResponse.arrayBuffer();
+    const imageData = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
     
-    attempts++;
+    console.log("✅ Image downloaded and converted to base64, size:", imageData.length);
+    return imageData;
   }
   
-  throw new Error(`Image generation timed out after ${maxAttempts * 5} seconds`);
+  if (pollResult.status === 'failed') {
+    const errorMsg = pollResult.error || 'Unknown error';
+    console.error("❌ Prediction failed with error:", errorMsg);
+    throw new Error(`Prediction failed: ${errorMsg}`);
+  }
+  
+  throw new Error('Prediction did not succeed within timeout period');
+}
+
+// NEW ROBUST POLLING FUNCTION - FIXES THE STACK OVERFLOW ISSUE
+async function pollPredictionStatus(predictionId: string, token: string): Promise<ReplicateResponse> {
+  const maxAttempts = 36; // 3 minutes max (more reasonable for edge functions)
+  const pollInterval = 5000; // 5 seconds
+  let attempts = 0;
+  
+  console.log(`🔄 Starting polling for prediction ${predictionId} (max ${maxAttempts} attempts)`);
+  
+  while (attempts < maxAttempts) {
+    try {
+      // Add delay before each poll (except the first one)
+      if (attempts > 0) {
+        await new Promise(resolve => setTimeout(resolve, pollInterval));
+      }
+      
+      const statusResponse = await fetch(`https://api.replicate.com/v1/predictions/${predictionId}`, {
+        headers: {
+          'Authorization': `Token ${token}`,
+        }
+      });
+
+      if (!statusResponse.ok) {
+        throw new Error(`Failed to get prediction status: ${statusResponse.status}`);
+      }
+
+      const status: ReplicateResponse = await statusResponse.json();
+      console.log(`🔄 PREDICTION STATUS (${attempts + 1}/${maxAttempts}):`, status.status);
+
+      // Check for completion states
+      if (status.status === 'succeeded' || status.status === 'failed') {
+        console.log(`✅ Prediction completed with status: ${status.status}`);
+        return status;
+      }
+      
+      // Continue polling for in-progress states
+      if (status.status === 'starting' || status.status === 'processing') {
+        attempts++;
+        console.log(`⏳ Prediction still ${status.status}, continuing to poll...`);
+        continue;
+      }
+      
+      // Handle unexpected status
+      console.warn(`⚠️ Unexpected prediction status: ${status.status}`);
+      attempts++;
+      
+    } catch (error) {
+      console.error(`❌ Error polling prediction status (attempt ${attempts + 1}):`, error);
+      attempts++;
+      
+      // If we've exhausted our attempts, throw the error
+      if (attempts >= maxAttempts) {
+        throw error;
+      }
+      
+      // Otherwise, continue with next attempt after a brief delay
+      await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+  }
+  
+  throw new Error(`Prediction polling timed out after ${maxAttempts} attempts (${maxAttempts * pollInterval / 1000} seconds)`);
 }
 
 function getInputForModel(model: string, prompt: string): any {
