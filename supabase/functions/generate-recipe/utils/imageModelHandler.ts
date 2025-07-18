@@ -32,21 +32,16 @@ export async function generateImageWithFallback(
 ): Promise<ImageGenerationResult> {
   console.log("📥 ATTEMPTING MULTI-MODEL GENERATION WITH ENHANCED FALLBACKS [FIXED]...");
   
-  // Enhanced fallback strategy with verified working models
+  // Enhanced fallback strategy with SDXL as default
   const models = [
     {
-      name: 'flux-schnell',
-      id: 'black-forest-labs/flux-schnell',
-      optimize: (prompt: string) => optimizePromptForFlux(prompt, imageContext)
+      name: 'stable-diffusion-xl',
+      id: 'stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b',
+      optimize: (prompt: string) => optimizePromptForSDXL(prompt, imageContext)
     },
     {
       name: 'sdxl-lightning',
       id: 'bytedance/sdxl-lightning-4step:5f24084160c9089501c1b3545d9be3c27883ae2239b6f412990e82d4a6210f8f',
-      optimize: (prompt: string) => optimizePromptForSDXL(prompt, imageContext)
-    },
-    {
-      name: 'stable-diffusion-xl',
-      id: 'stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b',
       optimize: (prompt: string) => optimizePromptForSDXL(prompt, imageContext)
     }
   ];
