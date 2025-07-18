@@ -352,7 +352,7 @@
 
 @media (min-width: 1920px) {
   .responsive-card-dark {
-    @apply border-4 rounded-3xl shadow-3xl;
+    @apply border-4 rounded-3xl shadow-2xl;
   }
 }
 
