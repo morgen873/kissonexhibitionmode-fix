@@ -663,7 +663,7 @@
 
 @media (min-width: 1920px) {
   .touch-active {
-    @apply active:scale-98;
+    @apply active:scale-95;
   }
 }
 
