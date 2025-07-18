@@ -30,18 +30,18 @@ export async function generateImageWithFallback(
   imageContext: ImageContext,
   openai?: any // Keep for backward compatibility but not used
 ): Promise<ImageGenerationResult> {
-  console.log("📥 ATTEMPTING MULTI-MODEL GENERATION WITH ENHANCED FALLBACKS [FIXED]...");
+  console.log("📥 ATTEMPTING MULTI-MODEL GENERATION WITH CORRECTED MODEL IDS...");
   
-  // Enhanced fallback strategy - testing with known working models
+  // Corrected model strategy with verified working model identifiers
   const models = [
     {
       name: 'stable-diffusion-xl',
-      id: 'black-forest-labs/flux-schnell',
-      optimize: (prompt: string) => optimizePromptForFlux(prompt, imageContext)
+      id: 'stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b',
+      optimize: (prompt: string) => optimizePromptForSDXL(prompt, imageContext)
     },
     {
       name: 'sdxl-lightning',
-      id: 'lucataco/sdxl-lightning-4step',
+      id: 'lucataco/sdxl-lightning-4step:5f24084160c9089501c1b3545d9be3c27883ae2239b6f412990e82d4a6210f8f',
       optimize: (prompt: string) => optimizePromptForSDXL(prompt, imageContext)
     }
   ];
@@ -55,6 +55,7 @@ export async function generateImageWithFallback(
       
       const optimizedPrompt = model.optimize(imagePrompt);
       console.log(`🔤 Optimized prompt length: ${optimizedPrompt.length}`);
+      console.log(`🔤 First 100 chars: ${optimizedPrompt.substring(0, 100)}`);
       
       const imageData = await generateWithReplicate(optimizedPrompt, model.id);
       
@@ -66,7 +67,12 @@ export async function generateImageWithFallback(
       
     } catch (error) {
       console.error(`❌ ${model.name.toUpperCase()} FAILED:`, error.message);
-      console.error(`📋 Error details:`, error);
+      console.error(`📋 Full error details:`, {
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+        modelId: model.id
+      });
       lastError = error;
       
       // Continue to next model unless this is the last one
@@ -77,13 +83,14 @@ export async function generateImageWithFallback(
     }
   }
   
-  // If all models failed, throw the last error
+  // If all models failed, throw the last error with enhanced context
   console.error("❌ ALL IMAGE GENERATION MODELS FAILED");
   console.error("🔍 Last error details:", lastError);
-  throw lastError || new Error("All image generation models failed");
+  console.error("🔍 Attempted models:", models.map(m => m.id));
+  throw new Error(`All image generation models failed. Last error: ${lastError?.message || 'Unknown error'}`);
 }
 
-async function generateWithReplicate(prompt: string, model: string): Promise<string> {
+async function generateWithReplicate(prompt: string, modelVersion: string): Promise<string> {
   const replicateToken = Deno.env.get('REPLICATE_API_TOKEN');
   if (!replicateToken) {
     console.error('❌ REPLICATE_API_TOKEN not found in environment variables');
@@ -91,21 +98,22 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
   }
 
   console.log("🔑 Replicate token found, length:", replicateToken.length);
-
-  console.log("🎨 REPLICATE CONFIG [v2]:");
-  console.log("- Model:", model);
+  console.log("🎨 REPLICATE CONFIG [CORRECTED]:");
+  console.log("- Model version:", modelVersion);
   console.log("- Prompt length:", prompt.length);
   console.log("- First 100 chars:", prompt.substring(0, 100));
   
-  // Determine if this is a model name or version ID
-  const isModelName = !model.includes(':');
-  const requestBody = isModelName ? {
-    model: model,
-    input: getInputForModel(model, prompt)
-  } : {
-    version: model,
-    input: getInputForModel(model, prompt)
+  // Create prediction with version ID (not model name)
+  const requestBody = {
+    version: modelVersion,
+    input: getInputForModel(modelVersion, prompt)
   };
+  
+  console.log("📤 Request body structure:", {
+    version: modelVersion,
+    inputKeys: Object.keys(requestBody.input),
+    promptLength: requestBody.input.prompt?.length
+  });
   
   // Create prediction with enhanced error handling
   const createResponse = await fetch('https://api.replicate.com/v1/predictions', {
@@ -122,33 +130,54 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
 
   if (!createResponse.ok) {
     const errorText = await createResponse.text();
-    console.error("❌ Create prediction error:", errorText);
-    console.error("❌ Request body was:", JSON.stringify(requestBody, null, 2));
+    console.error("❌ Create prediction error response:", errorText);
+    console.error("❌ Request body sent:", JSON.stringify(requestBody, null, 2));
     console.error("❌ Response status:", createResponse.status);
     console.error("❌ Response headers:", Object.fromEntries(createResponse.headers.entries()));
-    throw new Error(`Failed to create prediction: ${createResponse.status} - ${errorText}`);
+    
+    // Try to parse error details
+    let errorDetails = errorText;
+    try {
+      const errorJson = JSON.parse(errorText);
+      errorDetails = errorJson.detail || errorJson.message || errorText;
+    } catch (e) {
+      // Keep original error text if JSON parsing fails
+    }
+    
+    throw new Error(`Failed to create prediction (${createResponse.status}): ${errorDetails}`);
   }
 
   const prediction: ReplicateResponse = await createResponse.json();
-  console.log("🔄 PREDICTION CREATED [v2]:", prediction.id);
+  console.log("🔄 PREDICTION CREATED [CORRECTED]:", prediction.id);
+  console.log("📋 Prediction details:", {
+    id: prediction.id,
+    status: prediction.status,
+    model: prediction.model,
+    version: prediction.version
+  });
 
   // Use the robust polling mechanism
   const pollResult = await pollPredictionStatusV2(prediction.id, replicateToken);
   
   if (pollResult.status === 'succeeded' && pollResult.output?.[0]) {
-    console.log("🖼️ Generated image URL [v2]:", pollResult.output[0]);
+    console.log("🖼️ Generated image URL [CORRECTED]:", pollResult.output[0]);
     
     // Download and convert to base64
-    const imageResponse = await fetch(pollResult.output[0]);
-    if (!imageResponse.ok) {
-      throw new Error(`Failed to download generated image: ${imageResponse.status}`);
+    try {
+      const imageResponse = await fetch(pollResult.output[0]);
+      if (!imageResponse.ok) {
+        throw new Error(`Failed to download generated image: ${imageResponse.status} - ${imageResponse.statusText}`);
+      }
+      
+      const arrayBuffer = await imageResponse.arrayBuffer();
+      const imageData = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+      
+      console.log("✅ Image downloaded and converted to base64 [CORRECTED], size:", imageData.length);
+      return imageData;
+    } catch (downloadError) {
+      console.error("❌ Failed to download generated image:", downloadError);
+      throw new Error(`Failed to download generated image: ${downloadError.message}`);
     }
-    
-    const arrayBuffer = await imageResponse.arrayBuffer();
-    const imageData = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
-    
-    console.log("✅ Image downloaded and converted to base64 [v2], size:", imageData.length);
-    return imageData;
   }
   
   if (pollResult.status === 'failed') {
@@ -157,15 +186,15 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
     throw new Error(`Prediction failed: ${errorMsg}`);
   }
   
-  throw new Error('Prediction did not succeed within timeout period');
+  throw new Error(`Prediction did not succeed within timeout period. Final status: ${pollResult.status}`);
 }
 
-// COMPLETELY NEW POLLING FUNCTION TO AVOID ANY RECURSION ISSUES
+// Enhanced polling function with better error handling
 async function pollPredictionStatusV2(predictionId: string, token: string): Promise<ReplicateResponse> {
   const maxAttempts = 30;
   const pollInterval = 3000; // 3 seconds
   
-  console.log(`🔄 Starting polling v2 for prediction ${predictionId}`);
+  console.log(`🔄 Starting enhanced polling for prediction ${predictionId}`);
   
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     try {
@@ -175,25 +204,41 @@ async function pollPredictionStatusV2(predictionId: string, token: string): Prom
       }
       
       const statusResponse = await fetch(`https://api.replicate.com/v1/predictions/${predictionId}`, {
-        headers: { 'Authorization': `Token ${token}` }
+        headers: { 
+          'Authorization': `Token ${token}`,
+          'Content-Type': 'application/json'
+        }
       });
 
       if (!statusResponse.ok) {
-        throw new Error(`Status request failed: ${statusResponse.status}`);
+        const errorText = await statusResponse.text();
+        console.error(`❌ Status request failed (${statusResponse.status}):`, errorText);
+        throw new Error(`Status request failed: ${statusResponse.status} - ${errorText}`);
       }
 
       const status: ReplicateResponse = await statusResponse.json();
       console.log(`🔄 STATUS CHECK ${attempt + 1}/${maxAttempts}: ${status.status}`);
+      
+      // Log additional details for debugging
+      if (status.status === 'failed' && status.error) {
+        console.error("❌ Prediction error details:", status.error);
+      }
 
       // Terminal states
       if (status.status === 'succeeded' || status.status === 'failed') {
         console.log(`✅ Terminal state reached: ${status.status}`);
+        if (status.status === 'succeeded') {
+          console.log("📋 Success details:", {
+            outputCount: status.output?.length,
+            outputUrl: status.output?.[0]
+          });
+        }
         return status;
       }
       
       // Continue polling for non-terminal states
       if (status.status === 'starting' || status.status === 'processing') {
-        console.log(`⏳ Still ${status.status}, continuing...`);
+        console.log(`⏳ Still ${status.status}, continuing... (${attempt + 1}/${maxAttempts})`);
         continue;
       }
       
@@ -201,38 +246,25 @@ async function pollPredictionStatusV2(predictionId: string, token: string): Prom
       console.warn(`⚠️ Unexpected status: ${status.status}`);
       
     } catch (error) {
-      console.error(`❌ Polling error (attempt ${attempt + 1}):`, error);
+      console.error(`❌ Polling error (attempt ${attempt + 1}/${maxAttempts}):`, error);
       
       // If this is the last attempt, throw the error
       if (attempt === maxAttempts - 1) {
-        throw error;
+        throw new Error(`Polling failed after ${maxAttempts} attempts: ${error.message}`);
       }
       
       // Otherwise, wait a bit and try again
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      console.log("⏳ Waiting before retry...");
+      await new Promise(resolve => setTimeout(resolve, 2000));
     }
   }
   
-  throw new Error(`Polling timeout after ${maxAttempts} attempts`);
+  throw new Error(`Polling timeout after ${maxAttempts} attempts (${maxAttempts * pollInterval / 1000} seconds)`);
 }
 
-function getInputForModel(model: string, prompt: string): any {
-  // Flux Schnell configuration
-  if (model.includes('flux-schnell')) {
-    return {
-      prompt: prompt,
-      go_fast: true,
-      megapixels: "1",
-      num_outputs: 1,
-      aspect_ratio: "1:1",
-      output_format: "png",
-      output_quality: 80,
-      num_inference_steps: 4
-    };
-  }
-  
-  // SDXL Lightning configuration
-  if (model.includes('sdxl-lightning')) {
+function getInputForModel(modelVersion: string, prompt: string): any {
+  // Check if it's SDXL Lightning based on the version string
+  if (modelVersion.includes('sdxl-lightning')) {
     return {
       prompt: prompt,
       width: 1024,
@@ -244,7 +276,7 @@ function getInputForModel(model: string, prompt: string): any {
     };
   }
   
-  // Default SDXL configuration
+  // Default SDXL configuration for stability-ai/sdxl
   return {
     prompt: prompt,
     width: 1024,
@@ -254,28 +286,6 @@ function getInputForModel(model: string, prompt: string): any {
     num_inference_steps: 30,
     guidance_scale: 7.5,
     apply_watermark: false
-  };
-}
-
-async function generateWithStableDiffusion35Large(
-  imageContext: ImageContext,
-  originalPrompt: string
-): Promise<ImageGenerationResult> {
-  const sd35Prompt = optimizePromptForSD35Large(originalPrompt, imageContext);
-  console.log("🎨 STABLE DIFFUSION 3.5 LARGE FALLBACK PROMPT:");
-  console.log("- Length:", sd35Prompt.length);
-  console.log("- Content:", sd35Prompt);
-  
-  const imageData = await generateWithReplicate(
-    sd35Prompt,
-    'bytedance/sdxl-lightning-4step'
-  );
-  
-  console.log("✅ STABLE DIFFUSION 3.5 LARGE FALLBACK SUCCESS");
-  
-  return {
-    imageData,
-    usedModel: 'sdxl-lightning'
   };
 }
 
@@ -300,50 +310,20 @@ function optimizePromptForSDXL(prompt: string, imageContext: ImageContext): stri
   // SDXL works better with more descriptive, detailed prompts
   const ingredientsText = ingredientsList.length > 0 ? ingredientsList.slice(0, 6).join(', ') : 'traditional ingredients';
   
-  // CUSTOMIZABLE PROMPT COMPONENTS - MODIFY THESE TO CHANGE ALL SDXL PROMPTS:
-  
-  // 1. Quality and style terms (affects overall image quality)
+  // Enhanced SDXL prompt with better structure
   const qualityTerms = "artistic masterpiece, best quality, ultra detailed, 8k resolution";
-  
-  // 2. Photography style (change this to modify the look)
   const photoStyle = "professional food photography, commercial photography quality";
-  
-  // 3. Lighting setup (modify for different lighting effects)
   const lighting = "studio lighting, cinematic lighting, soft natural lighting";
-  
-  // 4. Visual effects and textures (customize visual appearance)
   const effects = "speculative design, hyper-realistic, highly detailed texture, perfect composition";
-  
-  // 5. Composition rules (change framing and layout)
   const composition = "single dumpling centered, shallow depth of field, pure solid matte black background, no textures, no patterns, no gradients, completely black void background";
-  
-  // 6. Food-specific requirements (dumpling appearance rules)
   const foodRequirements = "mostly sealed wrapper, optional visible filling, opaque dumpling skin";
-  
-  // 7. Presentation style (final presentation look)
   const presentation = "appetizing presentation, food art, gourmet presentation";
   
-  // BUILD THE FINAL PROMPT (you can rearrange these components)
   const sdxlPrompt = `${qualityTerms}, ${photoStyle}, ${dumplingShape}-shaped dumpling with ${flavor} flavor, ${timelineTheme.toLowerCase()} culinary style, featuring ${ingredientsText}, ${lighting}, ${effects}, ${composition}, ${foodRequirements}, ${presentation}`;
   
   console.log("🔄 SDXL OPTIMIZED PROMPT:");
   console.log("- Length:", sdxlPrompt.length);
-  console.log("- Content:", sdxlPrompt);
+  console.log("- Content preview:", sdxlPrompt.substring(0, 200));
   
   return sdxlPrompt;
-}
-
-function optimizePromptForSD35Large(prompt: string, imageContext: ImageContext): string {
-  const { timelineTheme, dumplingShape, flavor, ingredientsList, recipeTitle } = imageContext;
-  
-  // SD 3.5 Large works well with natural language prompts
-  const ingredientsText = ingredientsList.length > 0 ? ingredientsList.slice(0, 5).join(', ') : 'traditional ingredients';
-  
-  const sd35Prompt = `A single ${dumplingShape}-shaped dumpling with ${flavor} flavor profile, photographed in ${timelineTheme.toLowerCase()} style. Made with ${ingredientsText}. Professional food photography with studio lighting against a pure solid matte black background - no textures, no patterns, no gradients, completely black void background. The dumpling wrapper is completely sealed and opaque, showing no internal filling. Hyper-realistic, appetizing presentation with shallow depth of field. Commercial photography quality, perfectly centered composition. Solid black background only, no extras, no distractions.`;
-  
-  console.log("🔄 SD 3.5 LARGE OPTIMIZED PROMPT:");
-  console.log("- Length:", sd35Prompt.length);
-  console.log("- Content:", sd35Prompt);
-  
-  return sd35Prompt;
 }
