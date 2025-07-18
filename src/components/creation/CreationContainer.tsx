@@ -1,10 +1,8 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ProgressBar from './ProgressBar';
 import NetworkBackground from '@/components/ui/NetworkBackground';
 import { AnimatedEggIcon, AnimatedLeafIcon, AnimatedChefHatIcon, AnimatedCarrotIcon, AnimatedAppleIcon } from '@/components/ui/AnimatedCulinaryIcons';
-import { useTheme } from '@/contexts/ThemeContext';
 
 interface CreationContainerProps {
   progress: number;
@@ -32,22 +30,20 @@ const CreationContainer: React.FC<CreationContainerProps> = ({
   hasStartedCreation,
   children
 }) => {
-  const { currentTheme } = useTheme();
-  
   return (
-    <div className={`min-h-screen w-full bg-gradient-to-br ${theme.bg} ${currentTheme.colors.text} transition-all duration-500 relative overflow-hidden touch-container-32 force-blackwhite`}>
+    <div className={`min-h-screen w-full bg-gradient-to-br ${theme.bg} transition-all duration-500 relative overflow-hidden touch-container-32`}>
       {/* Network Background */}
       <NetworkBackground className="z-0" />
       
-      {/* Floating Animated Icons - All in grayscale */}
+      {/* Floating Animated Icons */}
       <div className="absolute inset-0 z-0 pointer-events-none hidden sm:block">
-        <AnimatedEggIcon className={`absolute top-20 touch:top-32 left-10 touch:left-20 ${currentTheme.colors.text} opacity-30 touch-icon-32`} />
-        <AnimatedLeafIcon className={`absolute top-32 touch:top-48 right-20 touch:right-32 ${currentTheme.colors.text} opacity-40 touch-icon-32`} />
-        <AnimatedChefHatIcon className={`absolute bottom-40 touch:bottom-64 left-20 touch:left-32 ${currentTheme.colors.text} opacity-25 touch-icon-32`} />
-        <AnimatedCarrotIcon className={`absolute top-60 touch:top-80 left-1/3 ${currentTheme.colors.text} opacity-35 touch-icon-32`} />
-        <AnimatedAppleIcon className={`absolute bottom-20 touch:bottom-32 right-10 touch:right-20 ${currentTheme.colors.text} opacity-30 touch-icon-32`} />
-        <AnimatedEggIcon className={`absolute top-1/2 right-1/4 ${currentTheme.colors.text} opacity-20 touch-icon-32`} />
-        <AnimatedLeafIcon className={`absolute bottom-60 touch:bottom-80 left-1/2 ${currentTheme.colors.text} opacity-25 touch-icon-32`} />
+        <AnimatedEggIcon className="absolute top-20 touch:top-32 left-10 touch:left-20 text-foreground opacity-30 touch-icon-32" />
+        <AnimatedLeafIcon className="absolute top-32 touch:top-48 right-20 touch:right-32 text-foreground opacity-40 touch-icon-32" />
+        <AnimatedChefHatIcon className="absolute bottom-40 touch:bottom-64 left-20 touch:left-32 text-foreground opacity-25 touch-icon-32" />
+        <AnimatedCarrotIcon className="absolute top-60 touch:top-80 left-1/3 text-foreground opacity-35 touch-icon-32" />
+        <AnimatedAppleIcon className="absolute bottom-20 touch:bottom-32 right-10 touch:right-20 text-foreground opacity-30 touch-icon-32" />
+        <AnimatedEggIcon className="absolute top-1/2 right-1/4 text-foreground opacity-20 touch-icon-32" />
+        <AnimatedLeafIcon className="absolute bottom-60 touch:bottom-80 left-1/2 text-foreground opacity-25 touch-icon-32" />
       </div>
 
       {/* Gradient overlays for depth */}
@@ -64,10 +60,10 @@ const CreationContainer: React.FC<CreationContainerProps> = ({
 
         {/* Main Content Card - Centered with responsive sizing */}
         <div className="flex-1 flex items-center justify-center touch-container-32 touch-spacing">
-          <Card className={`w-full responsive-container-xl ${currentTheme.colors.surface} ${theme.cardShadow} ${currentTheme.effects.borderRadius} transition-all duration-500 backdrop-blur-2xl border-2 ${currentTheme.colors.border} shadow-2xl touch-card-32`}>
+          <Card className={`w-full responsive-container-xl bg-card ${theme.cardShadow} transition-all duration-500 backdrop-blur-2xl border-2 border-border shadow-2xl touch-card-32`}>
             <CardHeader className="touch-padding py-0 px-0">
               {showTitle && (
-                <CardTitle className={`responsive-heading-lg text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent drop-shadow-lg touch-heading-32 flex items-center justify-center ${currentTheme.fonts.primary} font-bold`}>
+                <CardTitle className={`responsive-heading-lg text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent drop-shadow-lg touch-heading-32 flex items-center justify-center font-bold`}>
                   {title}
                 </CardTitle>
               )}

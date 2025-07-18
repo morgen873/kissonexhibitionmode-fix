@@ -2,11 +2,10 @@
 import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
 import GlobalLayout from "@/components/layout/GlobalLayout";
-import { useTheme } from "@/contexts/ThemeContext";
+
 
 const NotFound = () => {
   const location = useLocation();
-  const { currentTheme } = useTheme();
 
   useEffect(() => {
     console.error(
@@ -18,12 +17,12 @@ const NotFound = () => {
   return (
     <GlobalLayout variant="default">
       <div className="min-h-screen flex items-center justify-center">
-        <div className={`text-center ${currentTheme.spacing.container}`}>
-          <h1 className={`text-6xl font-bold mb-4 ${currentTheme.colors.primary} ${currentTheme.fonts.primary}`}>404</h1>
-          <p className={`text-xl ${currentTheme.colors.textSecondary} ${currentTheme.fonts.secondary} mb-6`}>Oops! Page not found</p>
+        <div className="text-center px-4 sm:px-6 lg:px-8">
+          <h1 className="text-6xl font-bold mb-4 text-primary">404</h1>
+          <p className="text-xl text-muted-foreground mb-6">Oops! Page not found</p>
           <Link 
             to="/creation" 
-            className={`${currentTheme.colors.accent} hover:opacity-70 underline text-lg ${currentTheme.fonts.primary} transition-opacity duration-200`}
+            className="text-accent hover:opacity-70 underline text-lg transition-opacity duration-200"
           >
             Return to Home
           </Link>

@@ -3,9 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Secular+One&display=swap');
-
-/* Pure black and white design system */
+/* Black and white color system */
 
 @layer base {
   :root {
@@ -96,54 +94,5 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Secular One', 'system-ui', sans-serif;
   }
-
-  /* Global black and white filters */
-  img:not(.preserve-color), 
-  video:not(.preserve-color) {
-    filter: grayscale(100%) contrast(1.2);
-  }
-
-  /* Remove all color from the app */
-  .force-blackwhite * {
-    filter: grayscale(100%) contrast(1.1) !important;
-  }
-
-  /* Override any colored backgrounds with black/white equivalents */
-  .bg-green-400, .bg-green-500, .bg-green-600,
-  .bg-emerald-400, .bg-emerald-500, .bg-emerald-600,
-  .text-green-400, .text-green-500, .text-green-600,
-  .text-emerald-400, .text-emerald-500, .text-emerald-600 {
-    @apply bg-white text-black;
-  }
-
-  .bg-black {
-    @apply bg-background;
-  }
-
-  .bg-white {
-    @apply bg-foreground;
-  }
-
-  .text-white {
-    @apply text-foreground;
-  }
-
-  .text-black {
-    @apply text-background;
-  }
-}
-
-/* Custom font classes */
-.font-serif {
-  font-family: 'Secular One', 'system-ui', sans-serif;
-}
-
-.font-sans {
-  font-family: 'Secular One', 'system-ui', sans-serif;
-}
-
-.font-mono {
-  font-family: 'Secular One', 'system-ui', sans-serif;
 }

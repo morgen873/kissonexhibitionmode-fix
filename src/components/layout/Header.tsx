@@ -1,17 +1,15 @@
 
 import { Link } from "react-router-dom";
-import { useTheme } from '@/contexts/ThemeContext';
+
 
 const Header = () => {
-  const { currentTheme } = useTheme();
-  
   return (
-    <header className={`${currentTheme.colors.surface} ${currentTheme.colors.border} border-b ${currentTheme.effects.shadow}`}>
-      <div className={`${currentTheme.spacing.container} py-4`}>
+    <header className="bg-card border-b border-border shadow-sm">
+      <div className="px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center justify-between">
           <Link 
             to="/creation" 
-            className={`${currentTheme.colors.primary} ${currentTheme.fonts.primary} font-bold text-xl hover:opacity-80 transition-opacity`}
+            className="text-primary font-bold text-xl hover:opacity-80 transition-opacity"
           >
             Culinary Memory
           </Link>

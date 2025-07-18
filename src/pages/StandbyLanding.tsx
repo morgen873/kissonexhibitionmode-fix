@@ -2,22 +2,16 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { useNavigate } from 'react-router-dom';
-import { useTheme } from '@/contexts/ThemeContext';
-import ThemeToggle from '@/components/theme/ThemeToggle';
 
 const StandbyLanding: React.FC = () => {
   const navigate = useNavigate();
-  const { currentTheme } = useTheme();
 
   const handleEnter = () => {
     navigate('/creation');
   };
 
   return (
-    <div className={`min-h-screen w-full ${currentTheme.colors.background} flex flex-col relative touch-container-32 force-blackwhite`}>
-      {/* Theme Toggle */}
-      <ThemeToggle />
-      
+    <div className="min-h-screen w-full bg-background flex flex-col relative touch-container-32">
       {/* Full screen video */}
       <div className="flex-1 relative overflow-hidden">
         <video 
@@ -25,8 +19,7 @@ const StandbyLanding: React.FC = () => {
           className="w-full h-full object-cover touch-video" 
           style={{
             objectFit: 'cover',
-            objectPosition: 'center',
-            filter: 'grayscale(100%) contrast(1.2)'
+            objectPosition: 'center'
           }}
           autoPlay
           muted
@@ -41,7 +34,7 @@ const StandbyLanding: React.FC = () => {
           onClick={handleEnter} 
           size="touch-32" 
           variant="touch"
-          className={`bg-primary hover:bg-primary/90 ${currentTheme.colors.text} font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 font-sans touch-target touch-button-32 touch-32-optimized border-2 ${currentTheme.colors.border}`}
+          className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 font-sans touch-target touch-button-32 touch-32-optimized border-2 border-border"
           style={{
             textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
           }}

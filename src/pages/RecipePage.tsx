@@ -6,7 +6,7 @@ import { Loader2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import IngredientsList from '@/components/recipe/IngredientsList';
 import GlobalLayout from '@/components/layout/GlobalLayout';
-import { useTheme } from '@/contexts/ThemeContext';
+
 import { testImageAccess } from '@/utils/imageDebug';
 
 type Recipe = Database['public']['Tables']['recipes']['Row'];
@@ -16,7 +16,7 @@ const RecipePage = () => {
     const [recipe, setRecipe] = useState<Recipe | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const { currentTheme } = useTheme();
+    
 
     useEffect(() => {
         const fetchRecipe = async () => {
@@ -57,7 +57,7 @@ const RecipePage = () => {
         return (
             <GlobalLayout variant="recipe">
                 <div className="flex justify-center items-center h-screen">
-                    <Loader2 className={`h-16 w-16 animate-spin ${currentTheme.colors.primary}`} />
+                    <Loader2 className="h-16 w-16 animate-spin text-primary" />
                 </div>
             </GlobalLayout>
         );
@@ -67,7 +67,7 @@ const RecipePage = () => {
         return (
             <GlobalLayout variant="recipe">
                 <div className="flex justify-center items-center h-screen">
-                    <p className={`responsive-text ${currentTheme.colors.primary}`}>{error || "Recipe not found."}</p>
+                    <p className="responsive-text text-primary">{error || "Recipe not found."}</p>
                 </div>
             </GlobalLayout>
         );
@@ -83,9 +83,9 @@ const RecipePage = () => {
     return (
         <GlobalLayout variant="recipe">
             <div className="responsive-padding">
-                <Card className={`responsive-container-sm ${currentTheme.colors.surface} ${currentTheme.effects.shadow} ${currentTheme.effects.borderRadius}`}>
+                <Card className="responsive-container-sm bg-card shadow-lg rounded-lg">
                     <CardHeader>
-                        <CardTitle className={`responsive-heading-lg text-center ${currentTheme.colors.primary} drop-shadow-lg`}>
+                        <CardTitle className="responsive-heading-lg text-center text-primary drop-shadow-lg">
                             {recipe.title}
                         </CardTitle>
                         <div className="flex justify-center mt-4">
@@ -93,7 +93,7 @@ const RecipePage = () => {
                                 <img 
                                     src={imageUrl}
                                     alt={recipe.title} 
-                                    className={`responsive-image ${currentTheme.effects.shadow} ${currentTheme.effects.borderRadius}`}
+                                    className="responsive-image shadow-lg rounded-lg"
                                     onLoad={() => {
                                         console.log('✅ Image loaded successfully:', imageUrl);
                                     }}
@@ -111,16 +111,16 @@ const RecipePage = () => {
                     </CardHeader>
                     <CardContent className="space-y-6 mt-3">
                         <div>
-                            <h3 className={`responsive-heading-md mb-2 border-b-2 ${currentTheme.colors.border} pb-2 ${currentTheme.colors.primary}`}>Description</h3>
-                            <p className={`${currentTheme.colors.textSecondary} mt-3 responsive-text-sm`}>{recipe.description}</p>
+                            <h3 className="responsive-heading-md mb-2 border-b-2 border-border pb-2 text-primary">Description</h3>
+                            <p className="text-muted-foreground mt-3 responsive-text-sm">{recipe.description}</p>
                         </div>
                          <div>
-                            <h3 className={`responsive-heading-md mb-2 border-b-2 ${currentTheme.colors.border} pb-2 ${currentTheme.colors.primary}`}>Ingredients</h3>
+                            <h3 className="responsive-heading-md mb-2 border-b-2 border-border pb-2 text-primary">Ingredients</h3>
                             <IngredientsList ingredients={recipe.ingredients} />
                         </div>
                         <div>
-                            <h3 className={`responsive-heading-md mb-2 border-b-2 ${currentTheme.colors.border} pb-2 ${currentTheme.colors.primary}`}>Cooking Instructions</h3>
-                            <pre className={`${currentTheme.colors.textSecondary} ${currentTheme.colors.surface} p-3 ${currentTheme.effects.borderRadius} whitespace-pre-wrap font-sans mt-3 responsive-text-sm`}>{recipe.cooking_recipe}</pre>
+                            <h3 className="responsive-heading-md mb-2 border-b-2 border-border pb-2 text-primary">Cooking Instructions</h3>
+                            <pre className="text-muted-foreground bg-card p-3 rounded-lg whitespace-pre-wrap font-sans mt-3 responsive-text-sm">{recipe.cooking_recipe}</pre>
                         </div>
                     </CardContent>
                 </Card>

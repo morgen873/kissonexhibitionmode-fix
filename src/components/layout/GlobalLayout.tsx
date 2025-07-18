@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useTheme } from '@/contexts/ThemeContext';
+
 
 interface GlobalLayoutProps {
   children: React.ReactNode;
@@ -13,11 +13,9 @@ const GlobalLayout: React.FC<GlobalLayoutProps> = ({
   variant = 'default',
   showHeader = true 
 }) => {
-  const { currentTheme } = useTheme();
-
   return (
-    <div className={`min-h-screen ${currentTheme.colors.background} ${currentTheme.colors.text} ${currentTheme.fonts.primary}`}>
-      <div className={`w-full max-w-7xl mx-auto ${currentTheme.spacing.container}`}>
+    <div className="min-h-screen bg-background text-foreground">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {children}
       </div>
     </div>

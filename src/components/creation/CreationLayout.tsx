@@ -2,7 +2,7 @@
 import React from 'react';
 import CreationContainer from '@/components/creation/CreationContainer';
 import { AnimatedContainer } from '@/components/ui/EnhancedAnimations';
-import { useTheme } from '@/contexts/ThemeContext';
+
 
 interface CreationLayoutProps {
   progress: number;
@@ -25,8 +25,6 @@ const CreationLayout: React.FC<CreationLayoutProps> = ({
   hasStartedCreation,
   children
 }) => {
-  const { currentTheme } = useTheme();
-  
   // Conditionally render with or without animations based on creation phase
   const OuterWrapper = hasStartedCreation ? AnimatedContainer : 'div';
   const InnerWrapper = hasStartedCreation ? AnimatedContainer : 'div';
@@ -37,7 +35,7 @@ const CreationLayout: React.FC<CreationLayoutProps> = ({
   const footerProps = hasStartedCreation ? { variant: "slide" as const, delay: 200 } : {};
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden touch-container-32 force-blackwhite">
+    <div className="min-h-screen w-full overflow-x-hidden touch-container-32">
       <OuterWrapper {...outerProps}>
         <CreationContainer 
           progress={progress} 
@@ -55,9 +53,9 @@ const CreationLayout: React.FC<CreationLayoutProps> = ({
       {/* Enhanced Footer with better text visibility and touch optimization */}
       {!hasStartedCreation && (
         <FooterWrapper {...footerProps}>
-          <footer className={`relative z-10 ${currentTheme.colors.surface} backdrop-blur-xl border-t ${currentTheme.colors.border} ${currentTheme.colors.text} responsive-margin w-full text-center touch-padding ${currentTheme.effects.shadow} transition-all duration-300`}>
-            <p className={`responsive-text ${currentTheme.fonts.primary} touch-container-32 font-semibold touch-32-optimized`}>
-              A DESIGN PROJECT BY <span className={`${currentTheme.colors.primary} font-bold mx-1 drop-shadow-lg hover:opacity-80 transition-opacity duration-300`}>OREN/LUPE</span>
+          <footer className="relative z-10 bg-card backdrop-blur-xl border-t border-border text-foreground responsive-margin w-full text-center touch-padding shadow-lg transition-all duration-300">
+            <p className="responsive-text touch-container-32 font-semibold touch-32-optimized">
+              A DESIGN PROJECT BY <span className="text-primary font-bold mx-1 drop-shadow-lg hover:opacity-80 transition-opacity duration-300">OREN/LUPE</span>
             </p>
           </footer>
         </FooterWrapper>
