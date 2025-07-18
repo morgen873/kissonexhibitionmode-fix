@@ -32,16 +32,16 @@ export async function generateImageWithFallback(
 ): Promise<ImageGenerationResult> {
   console.log("📥 ATTEMPTING MULTI-MODEL GENERATION WITH ENHANCED FALLBACKS [FIXED]...");
   
-  // Enhanced fallback strategy with SDXL as default
+  // Enhanced fallback strategy - testing with known working models
   const models = [
     {
       name: 'stable-diffusion-xl',
-      id: 'stability-ai/sdxl',
-      optimize: (prompt: string) => optimizePromptForSDXL(prompt, imageContext)
+      id: 'black-forest-labs/flux-schnell',
+      optimize: (prompt: string) => optimizePromptForFlux(prompt, imageContext)
     },
     {
       name: 'sdxl-lightning',
-      id: 'bytedance/sdxl-lightning-4step',
+      id: 'lucataco/sdxl-lightning-4step',
       optimize: (prompt: string) => optimizePromptForSDXL(prompt, imageContext)
     }
   ];
@@ -117,9 +117,15 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
     body: JSON.stringify(requestBody)
   });
 
+  console.log("🔍 Create prediction response status:", createResponse.status);
+  console.log("🔍 Create prediction response headers:", Object.fromEntries(createResponse.headers.entries()));
+
   if (!createResponse.ok) {
     const errorText = await createResponse.text();
     console.error("❌ Create prediction error:", errorText);
+    console.error("❌ Request body was:", JSON.stringify(requestBody, null, 2));
+    console.error("❌ Response status:", createResponse.status);
+    console.error("❌ Response headers:", Object.fromEntries(createResponse.headers.entries()));
     throw new Error(`Failed to create prediction: ${createResponse.status} - ${errorText}`);
   }
 
