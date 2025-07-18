@@ -1,20 +1,14 @@
-
 import React from 'react';
-
 interface ExplanationScreenProps {
   description: string;
 }
-
 const ExplanationScreen: React.FC<ExplanationScreenProps> = ({
   description
 }) => {
-  return (
-    <div className="text-center opacity-100 transition-opacity duration-300">
-      <p className="text-lg text-white/80 leading-relaxed max-w-prose mx-auto whitespace-pre-line font-bold text-center font-mono">
+  return <div className="text-center opacity-100 transition-opacity duration-300">
+      <p className="text-white/80 leading-relaxed max-w-prose mx-auto whitespace-pre-line text-center font-mono font-normal text-xl">
         {description}
       </p>
-    </div>
-  );
+    </div>;
 };
-
 export default ExplanationScreen;
