@@ -15,7 +15,7 @@ const GlobalLayout: React.FC<GlobalLayoutProps> = ({
 }) => {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-background">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-black">
         {children}
       </div>
     </div>
