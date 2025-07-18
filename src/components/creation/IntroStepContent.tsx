@@ -36,7 +36,7 @@ const IntroStepContent: React.FC<IntroStepContentProps> = ({
                     <Icon className="h-8 w-8 text-white" />
                   </div>}
                 <h3 className="font-black text-white mb-4 drop-shadow-lg font-sans text-3xl">
-                  {(step.title as string[])[0]} <span className="bg-gradient-to-r from-white via-gray-300 to-white bg-clip-text text-transparent mr-2">
+                  {(step.title as string[])[0]} <span className="bg-gradient-to-r from-white via-gray-300 to-white bg-clip-text text-transparent mr-2 mx-[6px]">
                     {(step.title as string[])[1]}
                   </span>
                 </h3>
