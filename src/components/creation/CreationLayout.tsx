@@ -34,7 +34,7 @@ const CreationLayout: React.FC<CreationLayoutProps> = ({
   const footerProps = hasStartedCreation ? { variant: "slide" as const, delay: 200 } : {};
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden">
+    <div className="min-h-screen w-full overflow-x-hidden touch-container-32">
       <OuterWrapper {...outerProps}>
         <CreationContainer 
           progress={progress} 
@@ -49,11 +49,11 @@ const CreationLayout: React.FC<CreationLayoutProps> = ({
         </CreationContainer>
       </OuterWrapper>
 
-      {/* Enhanced Footer with better text visibility */}
+      {/* Enhanced Footer with better text visibility and touch optimization */}
       {!hasStartedCreation && (
         <FooterWrapper {...footerProps}>
-          <footer className="relative z-10 bg-black/95 backdrop-blur-xl border-t border-green-400/30 text-green-100 mt-4 sm:mt-8 w-full text-center sm:py-8 shadow-xl shadow-green-400/10 transition-all duration-300 py-0 my-0">
-            <p className="text-base sm:text-lg font-sans px-4 font-semibold">
+          <footer className="relative z-10 bg-black/95 backdrop-blur-xl border-t border-green-400/30 text-green-100 responsive-margin w-full text-center touch-padding shadow-xl shadow-green-400/10 transition-all duration-300">
+            <p className="responsive-text font-sans touch-container-32 font-semibold touch-32-optimized">
               A DESIGN PROJECT BY <span className="text-green-400 font-bold mx-1 drop-shadow-lg hover:text-green-300 transition-colors duration-300">OREN/LUPE</span>
             </p>
           </footer>

@@ -1,3 +1,4 @@
+
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
@@ -5,30 +6,31 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 touch-focus touch-active",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/95",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/95 touch-hover",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90 active:bg-destructive/95",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 active:bg-destructive/95 touch-hover",
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground active:bg-accent/80",
+          "border border-input bg-background hover:bg-accent hover:text-accent-foreground active:bg-accent/80 touch-hover",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80 active:bg-secondary/70",
-        ghost: "hover:bg-accent hover:text-accent-foreground active:bg-accent/80",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80 active:bg-secondary/70 touch-hover",
+        ghost: "hover:bg-accent hover:text-accent-foreground active:bg-accent/80 touch-hover",
         link: "text-primary underline-offset-4 hover:underline",
-        touch: "bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/95 active:scale-95",
-        "touch-outline": "border-2 border-input bg-background hover:bg-accent hover:text-accent-foreground active:bg-accent/80 active:scale-95",
+        touch: "bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/95 active:scale-95 touch-hover",
+        "touch-outline": "border-2 border-input bg-background hover:bg-accent hover:text-accent-foreground active:bg-accent/80 active:scale-95 touch-hover",
       },
       size: {
         default: "h-10 px-4 py-2",
         sm: "h-9 rounded-md px-3",
         lg: "h-11 rounded-md px-8",
         icon: "h-10 w-10",
-        touch: "h-12 px-8 py-4 sm:h-14 sm:px-10 sm:py-5 lg:h-16 lg:px-12 lg:py-6 text-lg sm:text-xl lg:text-2xl rounded-xl min-h-[44px] sm:min-h-[48px]",
-        "touch-lg": "h-16 px-12 py-6 sm:h-18 sm:px-16 sm:py-8 lg:h-20 lg:px-20 lg:py-10 text-xl sm:text-2xl lg:text-3xl rounded-2xl min-h-[56px] sm:min-h-[64px]",
-        "touch-icon": "h-12 w-12 sm:h-14 sm:w-14 lg:h-16 lg:w-16 rounded-xl [&_svg]:size-6",
+        touch: "touch-button touch-target",
+        "touch-lg": "touch-button-lg touch-target",
+        "touch-icon": "touch-icon-button touch-target [&_svg]:touch-icon-32",
+        "touch-32": "touch-button-32 touch-target",
       },
     },
     defaultVariants: {

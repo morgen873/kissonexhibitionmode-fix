@@ -16,7 +16,8 @@ export default {
 			padding: '2rem',
 		screens: {
 			'2xl': '1400px',
-			'touch': '1920px'  // 32-inch horizontal touchscreen
+			'touch': '1920px',  // 32-inch horizontal touchscreen
+			'touch-xl': '2560px' // Ultra-wide touchscreen support
 		}
 		},
 		extend: {
@@ -111,6 +112,29 @@ export default {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
+			},
+			spacing: {
+				'touch-xs': '0.75rem',    // 12px
+				'touch-sm': '1rem',       // 16px
+				'touch-md': '1.5rem',     // 24px
+				'touch-lg': '2rem',       // 32px
+				'touch-xl': '2.5rem',     // 40px
+				'touch-2xl': '3rem',      // 48px
+				'touch-3xl': '4rem',      // 64px
+				'touch-4xl': '5rem',      // 80px
+				'touch-5xl': '6rem',      // 96px
+			},
+			fontSize: {
+				'touch-xs': ['0.875rem', { lineHeight: '1.25rem' }],   // 14px
+				'touch-sm': ['1rem', { lineHeight: '1.5rem' }],        // 16px
+				'touch-base': ['1.125rem', { lineHeight: '1.75rem' }], // 18px
+				'touch-lg': ['1.25rem', { lineHeight: '1.75rem' }],    // 20px
+				'touch-xl': ['1.5rem', { lineHeight: '2rem' }],        // 24px
+				'touch-2xl': ['1.875rem', { lineHeight: '2.25rem' }],  // 30px
+				'touch-3xl': ['2.25rem', { lineHeight: '2.5rem' }],    // 36px
+				'touch-4xl': ['3rem', { lineHeight: '3rem' }],         // 48px
+				'touch-5xl': ['3.75rem', { lineHeight: '3.75rem' }],   // 60px
+				'touch-6xl': ['4.5rem', { lineHeight: '4.5rem' }],     // 72px
 			},
 			keyframes: {
 				'accordion-down': {
