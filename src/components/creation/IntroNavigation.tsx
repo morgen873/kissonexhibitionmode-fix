@@ -46,11 +46,11 @@ const IntroNavigation: React.FC<IntroNavigationProps> = ({
     return (
         <div className="w-full mt-6">
             {isLastStep ? (
-                <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0">
+                <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-0 relative">
                     <Button 
                         onClick={handlePrevClick} 
                         variant="ghost" 
-                        className="text-white hover:bg-white/10 disabled:opacity-50 font-sans text-sm w-full sm:w-auto order-2 sm:order-1" 
+                        className="text-white hover:bg-white/10 disabled:opacity-50 font-sans text-sm w-full sm:w-auto sm:absolute sm:left-0 order-2 sm:order-1" 
                         disabled={currentStep === 1}
                     >
                         Back
