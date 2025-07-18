@@ -51,10 +51,16 @@ export async function generateAndUploadRecipeImage(
     }
     
     // Step 3: Generate image with Replicate Stability AI fallback strategy
+    console.log("🔄 About to call generateImageWithFallback");
+    console.log("- Image prompt length:", imagePrompt.length);
+    console.log("- Image context:", JSON.stringify(imageContext, null, 2));
+    
     const { imageData, usedModel } = await generateImageWithFallback(
       imagePrompt,
       imageContext
     );
+    
+    console.log("✅ generateImageWithFallback completed successfully");
     
     console.log(`✅ IMAGE GENERATED USING: ${usedModel.toUpperCase()}`);
     console.log("✅ IMAGE DATA EXTRACTED, LENGTH:", imageData.length);

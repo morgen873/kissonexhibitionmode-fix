@@ -36,12 +36,12 @@ export async function generateImageWithFallback(
   const models = [
     {
       name: 'stable-diffusion-xl',
-      id: 'stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b',
+      id: 'stability-ai/sdxl',
       optimize: (prompt: string) => optimizePromptForSDXL(prompt, imageContext)
     },
     {
       name: 'sdxl-lightning',
-      id: 'bytedance/sdxl-lightning-4step:5f24084160c9089501c1b3545d9be3c27883ae2239b6f412990e82d4a6210f8f',
+      id: 'bytedance/sdxl-lightning-4step',
       optimize: (prompt: string) => optimizePromptForSDXL(prompt, imageContext)
     }
   ];
@@ -86,8 +86,11 @@ export async function generateImageWithFallback(
 async function generateWithReplicate(prompt: string, model: string): Promise<string> {
   const replicateToken = Deno.env.get('REPLICATE_API_TOKEN');
   if (!replicateToken) {
+    console.error('❌ REPLICATE_API_TOKEN not found in environment variables');
     throw new Error('REPLICATE_API_TOKEN not found in environment variables');
   }
+
+  console.log("🔑 Replicate token found, length:", replicateToken.length);
 
   console.log("🎨 REPLICATE CONFIG [v2]:");
   console.log("- Model:", model);
@@ -259,7 +262,7 @@ async function generateWithStableDiffusion35Large(
   
   const imageData = await generateWithReplicate(
     sd35Prompt,
-    'bytedance/sdxl-lightning-4step:5f24084160c9089501c1b3545d9be3c27883ae2239b6f412990e82d4a6210f8f'
+    'bytedance/sdxl-lightning-4step'
   );
   
   console.log("✅ STABLE DIFFUSION 3.5 LARGE FALLBACK SUCCESS");
