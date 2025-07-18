@@ -2,6 +2,36 @@
 import { Theme } from '@/types/theme';
 
 export const themes: Record<string, Theme> = {
+  blackwhite: {
+    id: 'blackwhite',
+    name: 'Black & White',
+    description: 'Elegant monochrome design with striking contrast',
+    preview: 'bg-gradient-to-br from-black to-gray-800',
+    colors: {
+      primary: 'text-white',
+      secondary: 'text-gray-300',
+      accent: 'text-gray-100',
+      background: 'bg-gradient-to-br from-black to-gray-900',
+      surface: 'bg-black/80 backdrop-blur-xl border border-white/20',
+      text: 'text-white',
+      textSecondary: 'text-gray-300',
+      border: 'border-white/20',
+    },
+    fonts: {
+      primary: 'font-sans',
+      secondary: 'font-sans',
+    },
+    spacing: {
+      container: 'px-4 sm:px-6 lg:px-8',
+      section: 'py-8 sm:py-12 lg:py-16',
+      card: 'p-6 sm:p-8 lg:p-10',
+    },
+    effects: {
+      blur: 'backdrop-blur-xl',
+      shadow: 'shadow-xl shadow-black/50',
+      borderRadius: 'rounded-2xl',
+    },
+  },
   epicure: {
     id: 'epicure',
     name: 'Epicure',

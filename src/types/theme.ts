@@ -30,4 +30,4 @@ export interface Theme {
   };
 }
 
-export type ThemeId = 'epicure' | 'industrial';
+export type ThemeId = 'blackwhite' | 'epicure' | 'industrial';

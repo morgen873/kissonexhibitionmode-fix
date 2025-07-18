@@ -17,7 +17,7 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const [themeId, setThemeId] = useState<ThemeId>('epicure');
+  const [themeId, setThemeId] = useState<ThemeId>('blackwhite');
 
   const setTheme = (newThemeId: ThemeId) => {
     setThemeId(newThemeId);

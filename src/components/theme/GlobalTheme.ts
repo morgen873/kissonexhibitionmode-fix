@@ -3,8 +3,8 @@ export const globalTheme = {
   // Background variants
   backgrounds: {
     default: 'bg-gradient-to-br from-gray-50 to-gray-100',
-    dark: 'bg-gradient-to-br from-gray-900 to-slate-800',
-    creation: 'bg-gradient-to-br from-black via-gray-900 to-black',
+    dark: 'bg-gradient-to-br from-black to-gray-900',
+    creation: 'bg-gradient-to-br from-black to-gray-900',
   },
   
   // Text colors
@@ -12,16 +12,16 @@ export const globalTheme = {
     primary: 'text-gray-900',
     primaryDark: 'text-white',
     secondary: 'text-gray-600',
-    secondaryDark: 'text-white/80',
+    secondaryDark: 'text-gray-300',
     muted: 'text-gray-500',
-    mutedDark: 'text-white/60',
+    mutedDark: 'text-gray-400',
   },
   
   // Card styles
   cards: {
     default: 'bg-white/90 backdrop-blur-sm border border-gray-200 shadow-lg',
-    dark: 'bg-black/30 backdrop-blur-xl border-2 border-white/20 shadow-2xl',
-    creation: 'bg-black/50 border-2 border-white/20 shadow-2xl',
+    dark: 'bg-black/80 backdrop-blur-xl border border-white/20 shadow-2xl',
+    creation: 'bg-black/80 backdrop-blur-xl border border-white/20 shadow-2xl',
   },
   
   // Responsive spacing
