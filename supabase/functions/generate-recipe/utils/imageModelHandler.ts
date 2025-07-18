@@ -30,7 +30,7 @@ export async function generateImageWithFallback(
   imageContext: ImageContext,
   openai?: any // Keep for backward compatibility but not used
 ): Promise<ImageGenerationResult> {
-  console.log("📥 ATTEMPTING MULTI-MODEL GENERATION WITH ENHANCED FALLBACKS...");
+  console.log("📥 ATTEMPTING MULTI-MODEL GENERATION WITH ENHANCED FALLBACKS [FIXED]...");
   
   // Enhanced fallback strategy with verified working models
   const models = [
