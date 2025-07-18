@@ -94,7 +94,7 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
     throw new Error('REPLICATE_API_TOKEN not found in environment variables');
   }
 
-  console.log("🎨 REPLICATE CONFIG:");
+  console.log("🎨 REPLICATE CONFIG [v2]:");
   console.log("- Model:", model);
   console.log("- Prompt length:", prompt.length);
   console.log("- First 100 chars:", prompt.substring(0, 100));
@@ -122,18 +122,17 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
   if (!createResponse.ok) {
     const errorText = await createResponse.text();
     console.error("❌ Create prediction error:", errorText);
-    console.error("📋 Request body was:", JSON.stringify(requestBody, null, 2));
     throw new Error(`Failed to create prediction: ${createResponse.status} - ${errorText}`);
   }
 
   const prediction: ReplicateResponse = await createResponse.json();
-  console.log("🔄 PREDICTION CREATED:", prediction.id);
+  console.log("🔄 PREDICTION CREATED [v2]:", prediction.id);
 
-  // NEW ROBUST POLLING MECHANISM - REPLACES THE PROBLEMATIC ONE
-  const pollResult = await pollPredictionStatus(prediction.id, replicateToken);
+  // Use the robust polling mechanism
+  const pollResult = await pollPredictionStatusV2(prediction.id, replicateToken);
   
   if (pollResult.status === 'succeeded' && pollResult.output?.[0]) {
-    console.log("🖼️ Generated image URL:", pollResult.output[0]);
+    console.log("🖼️ Generated image URL [v2]:", pollResult.output[0]);
     
     // Download and convert to base64
     const imageResponse = await fetch(pollResult.output[0]);
@@ -144,7 +143,7 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
     const arrayBuffer = await imageResponse.arrayBuffer();
     const imageData = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
     
-    console.log("✅ Image downloaded and converted to base64, size:", imageData.length);
+    console.log("✅ Image downloaded and converted to base64 [v2], size:", imageData.length);
     return imageData;
   }
   
@@ -157,66 +156,60 @@ async function generateWithReplicate(prompt: string, model: string): Promise<str
   throw new Error('Prediction did not succeed within timeout period');
 }
 
-// NEW ROBUST POLLING FUNCTION - FIXES THE STACK OVERFLOW ISSUE
-async function pollPredictionStatus(predictionId: string, token: string): Promise<ReplicateResponse> {
-  const maxAttempts = 36; // 3 minutes max (more reasonable for edge functions)
-  const pollInterval = 5000; // 5 seconds
-  let attempts = 0;
+// COMPLETELY NEW POLLING FUNCTION TO AVOID ANY RECURSION ISSUES
+async function pollPredictionStatusV2(predictionId: string, token: string): Promise<ReplicateResponse> {
+  const maxAttempts = 30;
+  const pollInterval = 3000; // 3 seconds
   
-  console.log(`🔄 Starting polling for prediction ${predictionId} (max ${maxAttempts} attempts)`);
+  console.log(`🔄 Starting polling v2 for prediction ${predictionId}`);
   
-  while (attempts < maxAttempts) {
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
     try {
-      // Add delay before each poll (except the first one)
-      if (attempts > 0) {
+      // Wait before polling (except first attempt)
+      if (attempt > 0) {
         await new Promise(resolve => setTimeout(resolve, pollInterval));
       }
       
       const statusResponse = await fetch(`https://api.replicate.com/v1/predictions/${predictionId}`, {
-        headers: {
-          'Authorization': `Token ${token}`,
-        }
+        headers: { 'Authorization': `Token ${token}` }
       });
 
       if (!statusResponse.ok) {
-        throw new Error(`Failed to get prediction status: ${statusResponse.status}`);
+        throw new Error(`Status request failed: ${statusResponse.status}`);
       }
 
       const status: ReplicateResponse = await statusResponse.json();
-      console.log(`🔄 PREDICTION STATUS (${attempts + 1}/${maxAttempts}):`, status.status);
+      console.log(`🔄 STATUS CHECK ${attempt + 1}/${maxAttempts}: ${status.status}`);
 
-      // Check for completion states
+      // Terminal states
       if (status.status === 'succeeded' || status.status === 'failed') {
-        console.log(`✅ Prediction completed with status: ${status.status}`);
+        console.log(`✅ Terminal state reached: ${status.status}`);
         return status;
       }
       
-      // Continue polling for in-progress states
+      // Continue polling for non-terminal states
       if (status.status === 'starting' || status.status === 'processing') {
-        attempts++;
-        console.log(`⏳ Prediction still ${status.status}, continuing to poll...`);
+        console.log(`⏳ Still ${status.status}, continuing...`);
         continue;
       }
       
-      // Handle unexpected status
-      console.warn(`⚠️ Unexpected prediction status: ${status.status}`);
-      attempts++;
+      // Unexpected status
+      console.warn(`⚠️ Unexpected status: ${status.status}`);
       
     } catch (error) {
-      console.error(`❌ Error polling prediction status (attempt ${attempts + 1}):`, error);
-      attempts++;
+      console.error(`❌ Polling error (attempt ${attempt + 1}):`, error);
       
-      // If we've exhausted our attempts, throw the error
-      if (attempts >= maxAttempts) {
+      // If this is the last attempt, throw the error
+      if (attempt === maxAttempts - 1) {
         throw error;
       }
       
-      // Otherwise, continue with next attempt after a brief delay
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Otherwise, wait a bit and try again
+      await new Promise(resolve => setTimeout(resolve, 1000));
     }
   }
   
-  throw new Error(`Prediction polling timed out after ${maxAttempts} attempts (${maxAttempts * pollInterval / 1000} seconds)`);
+  throw new Error(`Polling timeout after ${maxAttempts} attempts`);
 }
 
 function getInputForModel(model: string, prompt: string): any {
