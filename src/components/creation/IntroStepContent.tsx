@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -18,11 +17,7 @@ const IntroStepContent: React.FC<IntroStepContentProps> = ({
     switch (step.type) {
       case 'hero':
         return <div className="flex flex-col items-center justify-center text-center px-4 py-4 space-y-4 sm:space-y-6 sm:py-0 sm:px-0">
-            <img 
-              src="https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//stove.mp4" 
-              alt="Cooking on stovetop" 
-              className="w-full max-w-4xl h-auto max-h-[60vh] object-cover rounded-lg mb-2" 
-            />
+            <img src="https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//stove.mp4" alt="Cooking on stovetop" className="w-full max-w-4xl h-auto max-h-[60vh] object-cover rounded-lg mb-2" />
             
             <p className="text-base sm:text-lg lg:text-xl text-white font-bold font-sans leading-relaxed max-w-md sm:max-w-lg px-4">
               Our AI transforms your feelings into delicious, one-of-a-kind dumpling recipes.
@@ -40,12 +35,12 @@ const IntroStepContent: React.FC<IntroStepContentProps> = ({
                 {Icon && <div className="w-16 h-16 bg-gradient-to-r from-black via-gray-800 to-black rounded-full flex items-center justify-center mx-auto mb-6">
                     <Icon className="h-8 w-8 text-white" />
                   </div>}
-                <h3 className="font-black text-white mb-4 drop-shadow-lg text-xl font-sans">
+                <h3 className="font-black text-white mb-4 drop-shadow-lg font-sans text-3xl">
                   {(step.title as string[])[0]} <span className="bg-gradient-to-r from-white via-gray-300 to-white bg-clip-text text-transparent">
                     {(step.title as string[])[1]}
                   </span>
                 </h3>
-                <p className="text-white font-bold text-sm font-sans leading-relaxed">
+                <p className="text-white font-sans leading-relaxed font-extralight text-base">
                   {step.description}
                 </p>
               </CardContent>
