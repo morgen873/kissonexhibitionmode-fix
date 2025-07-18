@@ -34,7 +34,7 @@ const StandbyLanding: React.FC = () => {
           onClick={handleEnter} 
           size="touch-32" 
           variant="touch"
-          className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 font-sans touch-target touch-button-32 touch-32-optimized border-2 border-border"
+          className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 font-sans touch-target touch-button-32 touch-32-optimized px-8 py-4"
           style={{
             textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
           }}
