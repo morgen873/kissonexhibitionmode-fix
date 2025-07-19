@@ -26,99 +26,58 @@ export async function generateImageWithEnhancedFallback(
   negativePrompt: string,
   imageContext: ImageContext
 ): Promise<ImageGenerationResult> {
-  console.log("=== ENHANCED IMAGE GENERATION WITH VALIDATION ===");
-  
-  // Temporarily disable strict validation to ensure generation works
-  console.log("⚠️ VALIDATION TEMPORARILY DISABLED FOR DEBUGGING");
+  console.log("=== OPENAI GPT IMAGE-1 GENERATION ===");
   console.log("Prompt preview:", prompt.substring(0, 200));
   
-  // Enhanced model configurations with optimized parameters
-  const models: ModelConfig[] = [
-    {
-      name: 'stable-diffusion-xl',
-      id: 'stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b',
-      maxAttempts: 3, // Increased attempts for primary model
-      getInput: (prompt: string, negativePrompt: string) => ({
-        prompt: prompt,
-        negative_prompt: negativePrompt,
-        width: 1024,
-        height: 1024,
-        num_outputs: 1,
-        scheduler: 'DPMSolverMultistep', // Better scheduler for quality
-        num_inference_steps: 35, // Increased for better quality
-        guidance_scale: 8.5, // Slightly higher for better prompt adherence
-        apply_watermark: false
-      })
-    },
-    {
-      name: 'sdxl-lightning',
-      id: 'lucataco/sdxl-lightning-4step:5f24084160c9089501c1b3545d9be3c27883ae2239b6f412990e82d4a6210f8f',
-      maxAttempts: 2,
-      getInput: (prompt: string, negativePrompt: string) => ({
-        prompt: prompt,
-        negative_prompt: negativePrompt,
-        width: 1024,
-        height: 1024,
-        num_outputs: 1,
-        num_inference_steps: 4,
-        guidance_scale: 2.0, // Increased for better control
-        scheduler: "K_EULER"
-      })
-    },
-    {
-      name: 'flux-schnell', // Third fallback model
-      id: 'black-forest-labs/flux-schnell',
-      maxAttempts: 2,
-      getInput: (prompt: string, negativePrompt: string) => ({
-        prompt: `${prompt}. Avoid: ${negativePrompt}`, // Flux handles negative prompts differently
-        num_outputs: 1,
-        aspect_ratio: "1:1",
-        output_format: "png",
-        output_quality: 90
-      })
-    }
-  ];
-
-  let totalAttempts = 0;
-  
-  for (const model of models) {
-    for (let attempt = 1; attempt <= model.maxAttempts; attempt++) {
-      totalAttempts++;
-      
-      try {
-        console.log(`🎨 ATTEMPT ${totalAttempts}: ${model.name.toUpperCase()} (${attempt}/${model.maxAttempts})`);
-        
-        const imageData = await generateWithReplicateEnhanced(
-          model.id,
-          model.getInput(prompt, negativePrompt)
-        );
-        
-        // Temporarily skip image validation to ensure upload works
-        console.log("⚠️ IMAGE VALIDATION TEMPORARILY DISABLED FOR DEBUGGING");
-        
-        // Return success immediately to test upload process
-        console.log(`✅ SUCCESS WITH ${model.name.toUpperCase()} after ${totalAttempts} attempts`);
-        return {
-          imageData,
-          usedModel: model.name,
-          attempts: totalAttempts
-        };
-        
-      } catch (error) {
-        console.error(`❌ ${model.name.toUpperCase()} attempt ${attempt} failed:`, error.message);
-        
-        if (attempt < model.maxAttempts) {
-          console.log("🔄 Retrying with same model...");
-          await new Promise(resolve => setTimeout(resolve, 2000)); // Wait before retry
-          continue;
-        }
-      }
-    }
-    
-    console.log(`⏭️ Moving to next model after ${model.maxAttempts} attempts with ${model.name}`);
+  const openAIKey = Deno.env.get('OPENAI_API_KEY');
+  if (!openAIKey) {
+    throw new Error('OPENAI_API_KEY not found');
   }
-  
-  throw new Error(`All image generation models failed after ${totalAttempts} total attempts`);
+
+  try {
+    console.log("🎨 Generating with OpenAI GPT Image-1...");
+    
+    const response = await fetch('https://api.openai.com/v1/images/generations', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${openAIKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'gpt-image-1',
+        prompt: prompt,
+        n: 1,
+        size: '1024x1024',
+        quality: 'high',
+        response_format: 'b64_json'
+      })
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`OpenAI API failed (${response.status}): ${errorText}`);
+    }
+
+    const result = await response.json();
+    
+    if (!result.data || !result.data[0] || !result.data[0].b64_json) {
+      throw new Error('No image data returned from OpenAI');
+    }
+
+    const imageData = result.data[0].b64_json;
+    console.log(`✅ SUCCESS WITH OPENAI GPT IMAGE-1`);
+    console.log(`- Image data size: ${imageData.length}`);
+    
+    return {
+      imageData,
+      usedModel: 'openai-gpt-image-1',
+      attempts: 1
+    };
+    
+  } catch (error) {
+    console.error(`❌ OpenAI GPT Image-1 generation failed:`, error.message);
+    throw new Error(`OpenAI image generation failed: ${error.message}`);
+  }
 }
 
 async function generateWithReplicateEnhanced(modelId: string, input: any): Promise<string> {
