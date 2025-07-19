@@ -65,11 +65,34 @@ export async function generateAndUploadRecipeImage(
     
     // Step 3: Generate image with enhanced system using detailed prompt
     console.log("🎨 Starting enhanced image generation with time-period-specific prompt...");
-    const { imageData, usedModel, attempts } = await generateImageWithEnhancedFallback(
-      prompt,
-      "text, writing, letters, words, labels, watermarks, logos, signatures, copyright, blurred, low quality, distorted, deformed, ugly, bad anatomy, extra limbs, missing parts, duplicate, multiple dumplings, plate, bowl, utensils, background elements", // Standard negative prompt
-      imageContext
-    );
+    console.log("🎯 About to call generateImageWithEnhancedFallback...");
+    
+    let imageData: string;
+    let usedModel: string;
+    let attempts: number;
+    
+    try {
+      const result = await generateImageWithEnhancedFallback(
+        prompt,
+        "text, writing, letters, words, labels, watermarks, logos, signatures, copyright, blurred, low quality, distorted, deformed, ugly, bad anatomy, extra limbs, missing parts, duplicate, multiple dumplings, plate, bowl, utensils, background elements", // Standard negative prompt
+        imageContext
+      );
+      
+      imageData = result.imageData;
+      usedModel = result.usedModel;
+      attempts = result.attempts;
+      
+      console.log("✅ generateImageWithEnhancedFallback completed successfully");
+      console.log(`- Model: ${usedModel}`);
+      console.log(`- Attempts: ${attempts}`);
+      console.log(`- Image data length: ${imageData.length}`);
+      
+    } catch (imageError) {
+      console.error("❌ Image generation failed completely:", imageError);
+      console.error("- Error name:", imageError.name);
+      console.error("- Error message:", imageError.message);
+      throw new Error(`Image generation failed: ${imageError.message}`);
+    }
     
     console.log(`✅ Time-period-aware image generated successfully!`);
     console.log(`- Model used: ${usedModel.toUpperCase()}`);
