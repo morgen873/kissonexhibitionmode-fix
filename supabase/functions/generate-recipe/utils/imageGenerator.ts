@@ -1,8 +1,8 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-import { generateImagePrompt } from './imagePromptGenerator.ts'
+import { buildSimplifiedPrompt } from './simplifiedPromptBuilder.ts'
 import { uploadImageToSupabase } from './imageUploader.ts'
-import { generateImageWithFallback } from './imageModelHandler.ts'
+import { generateImageWithEnhancedFallback } from './enhancedImageHandler.ts'
 import { buildImageContext, ImageContext } from './imageContextBuilder.ts'
 
 interface RecipePayload {
@@ -27,65 +27,76 @@ export async function generateAndUploadRecipeImage(
   supabaseAdmin: ReturnType<typeof createClient>
 ): Promise<string> {
   try {
-    console.log("=== 🚀 IMAGE GENERATION WITH REPLICATE STABILITY AI ===");
+    console.log("=== 🚀 ENHANCED IMAGE GENERATION SYSTEM ===");
     
     // Step 1: Build image context from payload and saved recipe
     const imageContext = buildImageContext(payload, savedRecipe);
+    console.log("📊 Image context built:", {
+      shape: imageContext.dumplingShape,
+      flavor: imageContext.flavor,
+      timeline: imageContext.timelineTheme
+    });
     
-    // Step 2: Generate the prompt using our system
-    console.log("📥 CALLING generateImagePrompt...");
-    const imagePrompt = generateImagePrompt(imageContext);
+    // Step 2: Generate simplified prompt with negative prompts
+    console.log("📝 Building simplified prompt...");
+    const { prompt, negativePrompt } = buildSimplifiedPrompt({
+      dumplingShape: imageContext.dumplingShape,
+      flavor: imageContext.flavor,
+      timelineTheme: imageContext.timelineTheme,
+      ingredientsList: imageContext.ingredientsList,
+      recipeTitle: imageContext.recipeTitle
+    });
     
-    console.log("🔍 PROMPT VERIFICATION:");
-    console.log("- Prompt length:", imagePrompt.length);
-    console.log("- First 200 chars:", imagePrompt.substring(0, 200));
+    console.log("✅ Prompts generated:");
+    console.log("- Main prompt length:", prompt.length);
+    console.log("- Negative prompt elements:", negativePrompt.split(', ').length);
+    console.log("- Main prompt preview:", prompt.substring(0, 150));
     
-    // Step 2.5: Save the image prompt to the database for video generation
+    // Step 2.5: Save the simplified prompt to the database
     try {
       const { updateRecipeWithImagePrompt } = await import('./databaseOperations.ts');
-      await updateRecipeWithImagePrompt(supabaseAdmin, recipeId, imagePrompt);
-      console.log("✅ Image prompt saved to database for video generation");
+      await updateRecipeWithImagePrompt(supabaseAdmin, recipeId, prompt);
+      console.log("✅ Simplified prompt saved to database");
     } catch (error) {
-      console.error("❌ Failed to save image prompt:", error);
-      // Don't fail the whole process if this fails
+      console.error("❌ Failed to save prompt:", error);
+      // Don't fail the whole process
     }
     
-    // Step 3: Generate image with Replicate Stability AI fallback strategy
-    console.log("🔄 About to call generateImageWithFallback");
-    console.log("- Image prompt length:", imagePrompt.length);
-    console.log("- Image context:", JSON.stringify(imageContext, null, 2));
-    
-    const { imageData, usedModel } = await generateImageWithFallback(
-      imagePrompt,
+    // Step 3: Generate image with enhanced system
+    console.log("🎨 Starting enhanced image generation...");
+    const { imageData, usedModel, attempts } = await generateImageWithEnhancedFallback(
+      prompt,
+      negativePrompt,
       imageContext
     );
     
-    console.log("✅ generateImageWithFallback completed successfully");
-    
-    console.log(`✅ IMAGE GENERATED USING: ${usedModel.toUpperCase()}`);
-    console.log("✅ IMAGE DATA EXTRACTED, LENGTH:", imageData.length);
+    console.log(`✅ Image generated successfully!`);
+    console.log(`- Model used: ${usedModel.toUpperCase()}`);
+    console.log(`- Total attempts: ${attempts}`);
+    console.log(`- Image data size: ${imageData.length}`);
     
     // Step 4: Upload to Supabase
-    console.log("📤 UPLOADING TO SUPABASE...");
+    console.log("📤 Uploading to Supabase...");
     const imageUrl = await uploadImageToSupabase(imageData, recipeId, supabaseAdmin);
     
-    console.log("📥 UPLOAD RESULT:", imageUrl);
-    console.log(`🎉 COMPLETE: Generated with ${usedModel.toUpperCase()}`);
+    console.log("🎉 ENHANCED GENERATION COMPLETE!");
+    console.log(`- Final URL: ${imageUrl}`);
+    console.log(`- Model: ${usedModel.toUpperCase()}`);
+    console.log(`- Attempts: ${attempts}`);
     
     return imageUrl || '/placeholder.svg';
     
   } catch (error) {
-    console.error("❌ CRITICAL IMAGE GENERATION ERROR:", error);
+    console.error("❌ ENHANCED IMAGE GENERATION FAILED:", error);
     console.error("Error details:", {
       name: error.name,
       message: error.message,
-      stack: error.stack,
       recipeId: recipeId,
       recipeTitle: savedRecipe.title
     });
     
-    // Log structured error for monitoring
-    console.error("IMAGE_GENERATION_FAILURE", {
+    // Log for monitoring
+    console.error("ENHANCED_IMAGE_GENERATION_FAILURE", {
       recipeId,
       recipeTitle: savedRecipe.title,
       errorType: error.name,
