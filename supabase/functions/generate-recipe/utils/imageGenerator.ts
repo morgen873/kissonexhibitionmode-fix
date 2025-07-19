@@ -79,7 +79,18 @@ export async function generateAndUploadRecipeImage(
     
     // Step 4: Upload to Supabase
     console.log("📤 Uploading to Supabase...");
+    console.log("- Image data size:", imageData.length);
+    console.log("- Recipe ID:", recipeId);
+    
     const imageUrl = await uploadImageToSupabase(imageData, recipeId, supabaseAdmin);
+    
+    console.log("📤 Upload result:", imageUrl ? "SUCCESS" : "FAILED");
+    console.log("- Returned URL:", imageUrl);
+    
+    if (!imageUrl) {
+      console.error("❌ Upload failed - imageUrl is null/undefined");
+      return '/placeholder.svg';
+    }
     
     console.log("🎉 TIME-PERIOD-AWARE GENERATION COMPLETE!");
     console.log(`- Final URL: ${imageUrl}`);
@@ -87,7 +98,7 @@ export async function generateAndUploadRecipeImage(
     console.log(`- Timeline: ${imageContext.timelineTheme}`);
     console.log(`- Attempts: ${attempts}`);
     
-    return imageUrl || '/placeholder.svg';
+    return imageUrl;
     
   } catch (error) {
     console.error("❌ TIME-PERIOD-AWARE IMAGE GENERATION FAILED:", error);
