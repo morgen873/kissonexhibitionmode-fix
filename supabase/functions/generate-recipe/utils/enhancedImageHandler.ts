@@ -160,8 +160,8 @@ async function generateWithReplicateEnhanced(modelId: string, input: any): Promi
   const prediction = await createResponse.json();
   console.log("🔄 Prediction created:", prediction.id);
 
-  // Poll for completion
-  const result = await pollPredictionWithTimeout(prediction.id, replicateToken, 90000); // 90 second timeout
+  // Poll for completion with longer timeout for complex prompts
+  const result = await pollPredictionWithTimeout(prediction.id, replicateToken, 120000); // Increased to 120 seconds
   
   if (result.status === 'succeeded' && result.output?.[0]) {
     return await downloadAndConvertImage(result.output[0]);
@@ -224,21 +224,9 @@ function validatePrompt(prompt: string, context: ImageContext): { isValid: boole
   console.log("=== ENHANCED PROMPT VALIDATION ===");
   console.log("Validating prompt:", prompt.substring(0, 100) + "...");
   
-  // Critical elements that MUST be present
+  // Critical elements that MUST be present - relaxed validation
   const criticalChecks = [
     { 
-      test: () => prompt.toLowerCase().includes('single') || prompt.toLowerCase().includes('one'),
-      message: "Missing quantity specification (single/one)"
-    },
-    {
-      test: () => prompt.toLowerCase().includes('black background'),
-      message: "Missing black background specification"
-    },
-    {
-      test: () => prompt.toLowerCase().includes(context.dumplingShape.toLowerCase()),
-      message: `Missing shape specification: ${context.dumplingShape}`
-    },
-    {
       test: () => prompt.toLowerCase().includes('dumpling'),
       message: "Missing 'dumpling' specification"
     }
