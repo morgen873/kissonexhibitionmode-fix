@@ -170,9 +170,20 @@ async function generateWithReplicate(prompt: string, modelVersion: string): Prom
       }
       
       const arrayBuffer = await imageResponse.arrayBuffer();
-      const imageData = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
       
-      console.log("✅ Image downloaded and converted to base64 [CORRECTED], size:", imageData.length);
+      // Use a more efficient base64 conversion to avoid stack overflow
+      const uint8Array = new Uint8Array(arrayBuffer);
+      let binaryString = '';
+      const chunkSize = 8192; // Process in chunks to avoid stack overflow
+      
+      for (let i = 0; i < uint8Array.length; i += chunkSize) {
+        const chunk = uint8Array.subarray(i, i + chunkSize);
+        binaryString += String.fromCharCode.apply(null, Array.from(chunk));
+      }
+      
+      const imageData = btoa(binaryString);
+      
+      console.log("✅ Image downloaded and converted to base64, size:", imageData.length);
       return imageData;
     } catch (downloadError) {
       console.error("❌ Failed to download generated image:", downloadError);
