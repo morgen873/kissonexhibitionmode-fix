@@ -35,21 +35,21 @@ export async function generateImageWithEnhancedFallback(
     throw new Error(`Prompt validation failed: ${validationResult.issues.join(', ')}`);
   }
   
-  // Enhanced model configurations with negative prompt support
+  // Enhanced model configurations with optimized parameters
   const models: ModelConfig[] = [
     {
       name: 'stable-diffusion-xl',
       id: 'stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b',
-      maxAttempts: 2,
+      maxAttempts: 3, // Increased attempts for primary model
       getInput: (prompt: string, negativePrompt: string) => ({
         prompt: prompt,
         negative_prompt: negativePrompt,
         width: 1024,
         height: 1024,
         num_outputs: 1,
-        scheduler: 'K_EULER',
-        num_inference_steps: 30,
-        guidance_scale: 7.5,
+        scheduler: 'DPMSolverMultistep', // Better scheduler for quality
+        num_inference_steps: 35, // Increased for better quality
+        guidance_scale: 8.5, // Slightly higher for better prompt adherence
         apply_watermark: false
       })
     },
@@ -64,8 +64,20 @@ export async function generateImageWithEnhancedFallback(
         height: 1024,
         num_outputs: 1,
         num_inference_steps: 4,
-        guidance_scale: 1.2,
+        guidance_scale: 2.0, // Increased for better control
         scheduler: "K_EULER"
+      })
+    },
+    {
+      name: 'flux-schnell', // Third fallback model
+      id: 'black-forest-labs/flux-schnell',
+      maxAttempts: 2,
+      getInput: (prompt: string, negativePrompt: string) => ({
+        prompt: `${prompt}. Avoid: ${negativePrompt}`, // Flux handles negative prompts differently
+        num_outputs: 1,
+        aspect_ratio: "1:1",
+        output_format: "png",
+        output_quality: 90
       })
     }
   ];
@@ -209,26 +221,85 @@ async function downloadAndConvertImage(imageUrl: string): Promise<string> {
 function validatePrompt(prompt: string, context: ImageContext): { isValid: boolean; issues: string[] } {
   const issues: string[] = [];
   
-  // Check for essential elements
-  if (!prompt.includes('single')) {
-    issues.push("Missing 'single' specification");
+  console.log("=== ENHANCED PROMPT VALIDATION ===");
+  console.log("Validating prompt:", prompt.substring(0, 100) + "...");
+  
+  // Critical elements that MUST be present
+  const criticalChecks = [
+    { 
+      test: () => prompt.toLowerCase().includes('single') || prompt.toLowerCase().includes('one'),
+      message: "Missing quantity specification (single/one)"
+    },
+    {
+      test: () => prompt.toLowerCase().includes('black background'),
+      message: "Missing black background specification"
+    },
+    {
+      test: () => prompt.toLowerCase().includes(context.dumplingShape.toLowerCase()),
+      message: `Missing shape specification: ${context.dumplingShape}`
+    },
+    {
+      test: () => prompt.toLowerCase().includes('dumpling'),
+      message: "Missing 'dumpling' specification"
+    }
+  ];
+  
+  // Quality indicators that should be present
+  const qualityChecks = [
+    {
+      test: () => prompt.toLowerCase().includes('photography') || prompt.toLowerCase().includes('photo'),
+      message: "Missing photography specification for realism"
+    },
+    {
+      test: () => prompt.toLowerCase().includes('centered') || prompt.toLowerCase().includes('center'),
+      message: "Missing composition guidance (centered)"
+    },
+    {
+      test: () => prompt.toLowerCase().includes('lighting') || prompt.toLowerCase().includes('studio'),
+      message: "Missing lighting specification"
+    }
+  ];
+  
+  // Run critical checks
+  criticalChecks.forEach(check => {
+    if (!check.test()) {
+      issues.push(`CRITICAL: ${check.message}`);
+    }
+  });
+  
+  // Run quality checks (warnings, not failures)
+  qualityChecks.forEach(check => {
+    if (!check.test()) {
+      console.log(`⚠️ Quality warning: ${check.message}`);
+      // Don't add to issues - these are just warnings
+    }
+  });
+  
+  // Length validation
+  if (prompt.length < 80) {
+    issues.push("Prompt too short - needs more detail for AI model");
   }
   
-  if (!prompt.includes(context.dumplingShape)) {
-    issues.push(`Missing shape specification: ${context.dumplingShape}`);
+  if (prompt.length > 600) {
+    issues.push("Prompt too long - may overwhelm AI model");
   }
   
-  if (!prompt.includes('black background')) {
-    issues.push("Missing black background specification");
-  }
+  // Negative pattern detection
+  const problematicPatterns = [
+    { pattern: /multiple|several|many|two|three|\d+\s+dumplings/i, message: "Prompt contains multiple dumpling references" },
+    { pattern: /plate|bowl|table/i, message: "Prompt contains unwanted objects (plate/bowl/table)" },
+    { pattern: /hands|people|person/i, message: "Prompt contains human elements" }
+  ];
   
-  // Check prompt length (not too short, not too long)
-  if (prompt.length < 50) {
-    issues.push("Prompt too short - may lack detail");
-  }
+  problematicPatterns.forEach(check => {
+    if (check.pattern.test(prompt)) {
+      issues.push(`CONFLICT: ${check.message}`);
+    }
+  });
   
-  if (prompt.length > 500) {
-    issues.push("Prompt too long - may confuse AI model");
+  console.log(`Validation result: ${issues.length === 0 ? 'PASSED' : 'FAILED'}`);
+  if (issues.length > 0) {
+    console.log("Issues found:", issues);
   }
   
   return {
@@ -238,27 +309,50 @@ function validatePrompt(prompt: string, context: ImageContext): { isValid: boole
 }
 
 async function validateGeneratedImage(imageData: string, context: ImageContext): Promise<{ isValid: boolean; issues: string[] }> {
-  // Basic validation - we can enhance this later with actual image analysis
+  console.log("=== ENHANCED IMAGE VALIDATION ===");
   const issues: string[] = [];
   
-  // Check if image data exists and is reasonable size
+  // Basic data validation
   if (!imageData || imageData.length < 10000) {
-    issues.push("Image data too small or missing");
+    issues.push("Image data too small or missing - likely generation failure");
+    return { isValid: false, issues };
   }
   
-  if (imageData.length > 10000000) { // 10MB limit
-    issues.push("Image data unexpectedly large");
+  if (imageData.length > 15000000) { // 15MB limit (increased from 10MB)
+    issues.push("Image data unexpectedly large - may indicate quality issues");
   }
   
-  // For now, assume valid if basic checks pass
-  // In the future, we could add computer vision to validate:
-  // - Single dumpling count
-  // - Correct shape
-  // - Black background
-  // - Proper composition
+  // Enhanced size analysis for quality assessment
+  const sizeKB = imageData.length / 1024;
+  console.log(`Generated image size: ${sizeKB.toFixed(1)}KB`);
+  
+  // Expected size ranges for different quality levels
+  if (sizeKB < 50) {
+    issues.push("Image suspiciously small - likely low quality or failed generation");
+  } else if (sizeKB > 5000) {
+    console.log("⚠️ Large image size - checking if acceptable...");
+    // Large images are generally okay, just noting
+  }
+  
+  // Basic format validation
+  if (!imageData.startsWith('/9j/') && !imageData.startsWith('iVBORw0KG')) {
+    console.log("⚠️ Unexpected image format - may not be standard JPEG/PNG");
+  }
+  
+  // TODO: Future enhancements could include:
+  // - Computer vision API to count objects in the image
+  // - Color analysis to verify black background
+  // - Shape detection to verify dumpling shape
+  // - Composition analysis to check centering
+  
+  const isValid = issues.length === 0;
+  console.log(`Image validation result: ${isValid ? 'PASSED' : 'FAILED'}`);
+  if (!isValid) {
+    console.log("Validation issues:", issues);
+  }
   
   return {
-    isValid: issues.length === 0,
+    isValid,
     issues
   };
 }
