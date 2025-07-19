@@ -1,6 +1,6 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-import { buildSimplifiedPrompt } from './simplifiedPromptBuilder.ts'
+import { generateImagePrompt } from './imagePromptGenerator.ts'
 import { uploadImageToSupabase } from './imageUploader.ts'
 import { generateImageWithEnhancedFallback } from './enhancedImageHandler.ts'
 import { buildImageContext, ImageContext } from './imageContextBuilder.ts'
@@ -27,7 +27,7 @@ export async function generateAndUploadRecipeImage(
   supabaseAdmin: ReturnType<typeof createClient>
 ): Promise<string> {
   try {
-    console.log("=== 🚀 ENHANCED IMAGE GENERATION SYSTEM ===");
+    console.log("=== 🚀 TIME-PERIOD AWARE IMAGE GENERATION SYSTEM ===");
     
     // Step 1: Build image context from payload and saved recipe
     const imageContext = buildImageContext(payload, savedRecipe);
@@ -37,57 +37,60 @@ export async function generateAndUploadRecipeImage(
       timeline: imageContext.timelineTheme
     });
     
-    // Step 2: Generate simplified prompt with negative prompts
-    console.log("📝 Building simplified prompt...");
-    const { prompt, negativePrompt } = buildSimplifiedPrompt({
+    // Step 2: Generate detailed time-period-specific prompt
+    console.log("📝 Building time-period-specific prompt...");
+    const prompt = generateImagePrompt({
+      timelineTheme: imageContext.timelineTheme,
+      emotionalContext: imageContext.emotionalContext,
       dumplingShape: imageContext.dumplingShape,
       flavor: imageContext.flavor,
-      timelineTheme: imageContext.timelineTheme,
       ingredientsList: imageContext.ingredientsList,
       recipeTitle: imageContext.recipeTitle
     });
     
-    console.log("✅ Prompts generated:");
-    console.log("- Main prompt length:", prompt.length);
-    console.log("- Negative prompt elements:", negativePrompt.split(', ').length);
-    console.log("- Main prompt preview:", prompt.substring(0, 150));
+    console.log("✅ Time-period-specific prompt generated:");
+    console.log("- Prompt length:", prompt.length);
+    console.log("- Timeline theme:", imageContext.timelineTheme);
+    console.log("- Prompt preview:", prompt.substring(0, 200));
     
-    // Step 2.5: Save the simplified prompt to the database
+    // Step 2.5: Save the time-period-specific prompt to the database
     try {
       const { updateRecipeWithImagePrompt } = await import('./databaseOperations.ts');
       await updateRecipeWithImagePrompt(supabaseAdmin, recipeId, prompt);
-      console.log("✅ Simplified prompt saved to database");
+      console.log("✅ Time-period-specific prompt saved to database");
     } catch (error) {
       console.error("❌ Failed to save prompt:", error);
       // Don't fail the whole process
     }
     
-    // Step 3: Generate image with enhanced system
-    console.log("🎨 Starting enhanced image generation...");
+    // Step 3: Generate image with enhanced system using detailed prompt
+    console.log("🎨 Starting enhanced image generation with time-period-specific prompt...");
     const { imageData, usedModel, attempts } = await generateImageWithEnhancedFallback(
       prompt,
-      negativePrompt,
+      "text, writing, letters, words, labels, watermarks, logos, signatures, copyright, blurred, low quality, distorted, deformed, ugly, bad anatomy, extra limbs, missing parts, duplicate, multiple dumplings, plate, bowl, utensils, background elements", // Standard negative prompt
       imageContext
     );
     
-    console.log(`✅ Image generated successfully!`);
+    console.log(`✅ Time-period-aware image generated successfully!`);
     console.log(`- Model used: ${usedModel.toUpperCase()}`);
     console.log(`- Total attempts: ${attempts}`);
     console.log(`- Image data size: ${imageData.length}`);
+    console.log(`- Timeline: ${imageContext.timelineTheme}`);
     
     // Step 4: Upload to Supabase
     console.log("📤 Uploading to Supabase...");
     const imageUrl = await uploadImageToSupabase(imageData, recipeId, supabaseAdmin);
     
-    console.log("🎉 ENHANCED GENERATION COMPLETE!");
+    console.log("🎉 TIME-PERIOD-AWARE GENERATION COMPLETE!");
     console.log(`- Final URL: ${imageUrl}`);
     console.log(`- Model: ${usedModel.toUpperCase()}`);
+    console.log(`- Timeline: ${imageContext.timelineTheme}`);
     console.log(`- Attempts: ${attempts}`);
     
     return imageUrl || '/placeholder.svg';
     
   } catch (error) {
-    console.error("❌ ENHANCED IMAGE GENERATION FAILED:", error);
+    console.error("❌ TIME-PERIOD-AWARE IMAGE GENERATION FAILED:", error);
     console.error("Error details:", {
       name: error.name,
       message: error.message,
@@ -96,7 +99,7 @@ export async function generateAndUploadRecipeImage(
     });
     
     // Log for monitoring
-    console.error("ENHANCED_IMAGE_GENERATION_FAILURE", {
+    console.error("TIME_PERIOD_IMAGE_GENERATION_FAILURE", {
       recipeId,
       recipeTitle: savedRecipe.title,
       errorType: error.name,

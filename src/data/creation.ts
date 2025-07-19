@@ -186,11 +186,21 @@ export const steps: Step[] = [
         title: "Presentation and Final Emotion",
         description: "Your dish is almost ready.\nIt has been created with memory, emotion, and care. If this dish could be served in a specific time period, when would that be?",
         options: [
-            { title: "Distant Past", description: "Traditional recipes featuring ancestral techniques, heritage ingredients, and time-honored methods passed down through generations.", value: "Past 1" },
-            { title: "Recent Past", description: "Classic approaches with familiar ingredients and established cooking methods, celebrating culinary traditions from the last century.", value: "Past 2" },
-            { title: "Present Day", description: "Contemporary cooking balancing traditional techniques with modern innovations, using seasonally available ingredients.", value: "Present" },
-            { title: "Near Future", description: "Forward-thinking recipes incorporating emerging techniques, sustainable practices, and novel ingredient combinations.", value: "Future 1" },
-            { title: "Distant Future", description: "Experimental cuisine featuring innovative proteins, molecular gastronomy, cutting-edge techniques, and unexpected flavor pairings.", value: "Future 2" }
+            { 
+                title: "Past", 
+                description: "Traditional recipes featuring ancestral techniques, heritage ingredients, and time-honored methods passed down through generations with authentic historical preparation.", 
+                value: "Past" 
+            },
+            { 
+                title: "Present", 
+                description: "Contemporary cooking balancing traditional techniques with modern innovations, using seasonally available ingredients and current culinary trends.", 
+                value: "Present" 
+            },
+            { 
+                title: "Future", 
+                description: "Experimental cuisine featuring innovative proteins, molecular gastronomy, cutting-edge techniques, and unexpected flavor pairings with futuristic presentation.", 
+                value: "Future" 
+            }
         ]
     }
 ];
