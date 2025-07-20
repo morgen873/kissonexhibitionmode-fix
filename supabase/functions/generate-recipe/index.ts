@@ -89,11 +89,23 @@ serve(async (req) => {
       throw new Error('Failed to save recipe');
     }
 
-    // Generate contextual image prompt based on user inputs
-    const imagePrompt = `A beautifully presented ${controlValues.shape || 'round'} dumpling recipe inspired by ${timelineTheme} era, reflecting "${emotionalContext}" emotional context, with ${controlValues.flavor || 'balanced'} flavor profile. Professional food photography, appetizing, restaurant quality, beautifully plated, high resolution`;
+    // Import simplified prompt builder
+    const { buildSimplifiedPrompt } = await import('./utils/simplifiedPromptBuilder.ts');
     
-    console.log('Generating image with contextual prompt:', imagePrompt);
-    console.log('User inputs - Timeline:', timelineTheme, 'Emotional context:', emotionalContext, 'Shape:', controlValues.shape, 'Flavor:', controlValues.flavor);
+    // Generate enhanced prompt with solid black background
+    const promptParams = {
+      dumplingShape: controlValues.shape || 'round',
+      flavor: controlValues.flavor || 'balanced',
+      timelineTheme: timelineTheme,
+      ingredientsList: [], // Not needed for this simplified approach
+      recipeTitle: parsedRecipe.title
+    };
+    
+    const { prompt: imagePrompt, negativePrompt } = buildSimplifiedPrompt(promptParams);
+    
+    console.log('Generating image with enhanced prompt:', imagePrompt);
+    console.log('Negative prompt:', negativePrompt);
+    console.log('User inputs - Timeline:', timelineTheme, 'Shape:', controlValues.shape, 'Flavor:', controlValues.flavor);
     
     try {
       const imageResponse = await fetch('https://api.openai.com/v1/images/generations', {
