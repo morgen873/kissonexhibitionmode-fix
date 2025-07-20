@@ -53,7 +53,11 @@ serve(async (req) => {
     console.log("✅ Rate limit check passed");
 
     console.log("🚀 GENERATING RECIPE...");
-    const openAI = new OpenAI({ apiKey: Deno.env.get('OPENAI_API_KEY') });
+    const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+    if (!openAIApiKey) {
+      throw new Error("Missing OPENAI_API_KEY");
+    }
+    const openAI = new OpenAI({ apiKey: openAIApiKey });
     const generatedRecipe = await generateRecipeWithOpenAI(openAI, payload);
     console.log("✅ Recipe generated:", generatedRecipe.title);
 
