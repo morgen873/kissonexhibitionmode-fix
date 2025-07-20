@@ -14,29 +14,59 @@ interface ImageGenerationResult {
   attempts: number;
 }
 
-interface ModelConfig {
-  name: string;
-  id: string;
-  maxAttempts: number;
-  getInput: (prompt: string, negativePrompt: string) => any;
-}
-
 export async function generateImageWithEnhancedFallback(
   prompt: string,
   negativePrompt: string,
   imageContext: ImageContext
 ): Promise<ImageGenerationResult> {
-  console.log("=== OPENAI GPT IMAGE-1 GENERATION ===");
+  console.log("=== ENHANCED IMAGE GENERATION WITH FALLBACK STRATEGY ===");
   console.log("Prompt preview:", prompt.substring(0, 200));
   
-  const openAIKey = Deno.env.get('OPENAI_API_KEY');
-  if (!openAIKey) {
-    throw new Error('OPENAI_API_KEY not found');
+  // Strategy 1: Try OpenAI GPT Image-1 (Primary)
+  try {
+    console.log("🎨 Attempting OpenAI GPT Image-1 generation...");
+    const result = await generateWithOpenAI(prompt, imageContext);
+    console.log("✅ SUCCESS WITH OPENAI GPT IMAGE-1");
+    return result;
+  } catch (openAIError) {
+    console.error("❌ OpenAI GPT Image-1 failed:", openAIError.message);
+    console.error("OpenAI Error Details:", {
+      name: openAIError.name,
+      message: openAIError.message,
+      stack: openAIError.stack
+    });
   }
 
+  // Strategy 2: Try Replicate FLUX (Fallback)
   try {
-    console.log("🎨 Generating with OpenAI GPT Image-1...");
-    
+    console.log("🔄 Falling back to Replicate FLUX...");
+    const result = await generateWithReplicate(prompt, imageContext);
+    console.log("✅ SUCCESS WITH REPLICATE FLUX FALLBACK");
+    return result;
+  } catch (replicateError) {
+    console.error("❌ Replicate FLUX fallback failed:", replicateError.message);
+    console.error("Replicate Error Details:", {
+      name: replicateError.name,
+      message: replicateError.message,
+      stack: replicateError.stack
+    });
+  }
+
+  // If all strategies fail
+  throw new Error("All image generation strategies failed. Both OpenAI and Replicate are unavailable.");
+}
+
+async function generateWithOpenAI(prompt: string, context: ImageContext): Promise<ImageGenerationResult> {
+  const openAIKey = Deno.env.get('OPENAI_API_KEY');
+  if (!openAIKey) {
+    console.error("❌ OPENAI_API_KEY not found in environment");
+    throw new Error('OPENAI_API_KEY not configured');
+  }
+
+  console.log("🔑 OpenAI API Key status: CONFIGURED");
+  console.log("🎯 Making request to OpenAI API...");
+
+  try {
     const response = await fetch('https://api.openai.com/v1/images/generations', {
       method: 'POST',
       headers: {
@@ -53,20 +83,45 @@ export async function generateImageWithEnhancedFallback(
       })
     });
 
+    console.log("📡 OpenAI API Response Status:", response.status);
+    console.log("📡 Response Headers:", Object.fromEntries(response.headers.entries()));
+
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(`OpenAI API failed (${response.status}): ${errorText}`);
+      console.error("❌ OpenAI API Error Response:", errorText);
+      
+      // Parse error for better handling
+      let errorDetails;
+      try {
+        errorDetails = JSON.parse(errorText);
+      } catch {
+        errorDetails = { message: errorText };
+      }
+      
+      throw new Error(`OpenAI API failed (${response.status}): ${errorDetails.error?.message || errorText}`);
     }
 
     const result = await response.json();
+    console.log("✅ OpenAI API Response received");
+    console.log("📊 Response structure:", {
+      hasData: !!result.data,
+      dataLength: result.data?.length || 0,
+      hasB64Json: !!(result.data?.[0]?.b64_json)
+    });
     
     if (!result.data || !result.data[0] || !result.data[0].b64_json) {
-      throw new Error('No image data returned from OpenAI');
+      console.error("❌ Invalid response structure:", result);
+      throw new Error('No image data returned from OpenAI API');
     }
 
     const imageData = result.data[0].b64_json;
-    console.log(`✅ SUCCESS WITH OPENAI GPT IMAGE-1`);
-    console.log(`- Image data size: ${imageData.length}`);
+    console.log("✅ Image data extracted successfully");
+    console.log("📏 Image data size:", imageData.length, "characters");
+    
+    // Validate image data
+    if (imageData.length < 1000) {
+      throw new Error('Suspiciously small image data - possible generation failure');
+    }
     
     return {
       imageData,
@@ -75,71 +130,101 @@ export async function generateImageWithEnhancedFallback(
     };
     
   } catch (error) {
-    console.error(`❌ OpenAI GPT Image-1 generation failed:`, error.message);
-    throw new Error(`OpenAI image generation failed: ${error.message}`);
+    console.error("❌ Error in OpenAI generation:", error);
+    throw error;
   }
 }
 
-async function generateWithReplicateEnhanced(modelId: string, input: any): Promise<string> {
+async function generateWithReplicate(prompt: string, context: ImageContext): Promise<ImageGenerationResult> {
   const replicateToken = Deno.env.get('REPLICATE_API_TOKEN');
   if (!replicateToken) {
-    throw new Error('REPLICATE_API_TOKEN not found');
+    console.error("❌ REPLICATE_API_TOKEN not found in environment");
+    throw new Error('REPLICATE_API_TOKEN not configured');
   }
 
-  console.log("🔧 Enhanced Replicate generation with input:", Object.keys(input));
-  
-  // Create prediction
-  const createResponse = await fetch('https://api.replicate.com/v1/predictions', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Token ${replicateToken}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      version: modelId,
-      input: input
-    })
-  });
+  console.log("🔑 Replicate API Token status: CONFIGURED");
+  console.log("🎯 Using Replicate FLUX model as fallback...");
 
-  if (!createResponse.ok) {
-    const errorText = await createResponse.text();
-    throw new Error(`Prediction creation failed (${createResponse.status}): ${errorText}`);
+  try {
+    // Create prediction
+    const createResponse = await fetch('https://api.replicate.com/v1/predictions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Token ${replicateToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        version: "black-forest-labs/flux-schnell:bbf5f46e5319c1d2bc4e8b1e0b7b8e0e7e6e7e6e",
+        input: {
+          prompt: prompt,
+          go_fast: true,
+          megapixels: "1",
+          num_outputs: 1,
+          aspect_ratio: "1:1",
+          output_format: "webp",
+          output_quality: 80,
+          num_inference_steps: 4
+        }
+      })
+    });
+
+    if (!createResponse.ok) {
+      const errorText = await createResponse.text();
+      console.error("❌ Replicate prediction creation failed:", errorText);
+      throw new Error(`Replicate prediction creation failed (${createResponse.status}): ${errorText}`);
+    }
+
+    const prediction = await createResponse.json();
+    console.log("✅ Replicate prediction created:", prediction.id);
+
+    // Poll for completion
+    const result = await pollPredictionWithTimeout(prediction.id, replicateToken, 60000);
+    
+    if (result.status === 'succeeded' && result.output?.[0]) {
+      const imageData = await downloadAndConvertImage(result.output[0]);
+      console.log("✅ Replicate image generated and converted");
+      
+      return {
+        imageData,
+        usedModel: 'replicate-flux',
+        attempts: 1
+      };
+    }
+    
+    throw new Error(`Replicate prediction failed: ${result.error || 'Unknown error'}`);
+    
+  } catch (error) {
+    console.error("❌ Error in Replicate generation:", error);
+    throw error;
   }
-
-  const prediction = await createResponse.json();
-  console.log("🔄 Prediction created:", prediction.id);
-
-  // Poll for completion with longer timeout for complex prompts
-  const result = await pollPredictionWithTimeout(prediction.id, replicateToken, 120000); // Increased to 120 seconds
-  
-  if (result.status === 'succeeded' && result.output?.[0]) {
-    return await downloadAndConvertImage(result.output[0]);
-  }
-  
-  throw new Error(`Prediction failed: ${result.error || 'Unknown error'}`);
 }
 
 async function pollPredictionWithTimeout(predictionId: string, token: string, timeoutMs: number): Promise<any> {
-  const maxAttempts = Math.floor(timeoutMs / 3000); // 3 second intervals
+  const maxAttempts = Math.floor(timeoutMs / 3000);
   
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     if (attempt > 0) {
       await new Promise(resolve => setTimeout(resolve, 3000));
     }
     
-    const statusResponse = await fetch(`https://api.replicate.com/v1/predictions/${predictionId}`, {
-      headers: { 'Authorization': `Token ${token}` }
-    });
+    try {
+      const statusResponse = await fetch(`https://api.replicate.com/v1/predictions/${predictionId}`, {
+        headers: { 'Authorization': `Token ${token}` }
+      });
 
-    if (!statusResponse.ok) {
-      throw new Error(`Status check failed: ${statusResponse.status}`);
-    }
+      if (!statusResponse.ok) {
+        console.error(`❌ Status check failed: ${statusResponse.status}`);
+        continue;
+      }
 
-    const status = await statusResponse.json();
-    console.log(`⏱️ Status check ${attempt + 1}/${maxAttempts}: ${status.status}`);
-    
-    if (status.status === 'succeeded' || status.status === 'failed') {
-      return status;
+      const status = await statusResponse.json();
+      console.log(`⏱️ Poll ${attempt + 1}/${maxAttempts}: ${status.status}`);
+      
+      if (status.status === 'succeeded' || status.status === 'failed') {
+        return status;
+      }
+    } catch (error) {
+      console.error(`❌ Error during status check ${attempt + 1}:`, error);
     }
   }
   
@@ -147,6 +232,8 @@ async function pollPredictionWithTimeout(predictionId: string, token: string, ti
 }
 
 async function downloadAndConvertImage(imageUrl: string): Promise<string> {
+  console.log("📥 Downloading image from:", imageUrl);
+  
   const imageResponse = await fetch(imageUrl);
   if (!imageResponse.ok) {
     throw new Error(`Failed to download image: ${imageResponse.status}`);
@@ -165,131 +252,4 @@ async function downloadAndConvertImage(imageUrl: string): Promise<string> {
   const imageData = btoa(binaryString);
   console.log("✅ Image converted to base64, size:", imageData.length);
   return imageData;
-}
-
-function validatePrompt(prompt: string, context: ImageContext): { isValid: boolean; issues: string[] } {
-  const issues: string[] = [];
-  
-  console.log("=== ENHANCED PROMPT VALIDATION ===");
-  console.log("Validating prompt:", prompt.substring(0, 100) + "...");
-  
-  // Critical elements that MUST be present - relaxed validation
-  const criticalChecks = [
-    { 
-      test: () => prompt.toLowerCase().includes('dumpling'),
-      message: "Missing 'dumpling' specification"
-    }
-  ];
-  
-  // Quality indicators that should be present
-  const qualityChecks = [
-    {
-      test: () => prompt.toLowerCase().includes('photography') || prompt.toLowerCase().includes('photo'),
-      message: "Missing photography specification for realism"
-    },
-    {
-      test: () => prompt.toLowerCase().includes('centered') || prompt.toLowerCase().includes('center'),
-      message: "Missing composition guidance (centered)"
-    },
-    {
-      test: () => prompt.toLowerCase().includes('lighting') || prompt.toLowerCase().includes('studio'),
-      message: "Missing lighting specification"
-    }
-  ];
-  
-  // Run critical checks
-  criticalChecks.forEach(check => {
-    if (!check.test()) {
-      issues.push(`CRITICAL: ${check.message}`);
-    }
-  });
-  
-  // Run quality checks (warnings, not failures)
-  qualityChecks.forEach(check => {
-    if (!check.test()) {
-      console.log(`⚠️ Quality warning: ${check.message}`);
-      // Don't add to issues - these are just warnings
-    }
-  });
-  
-  // Length validation
-  if (prompt.length < 80) {
-    issues.push("Prompt too short - needs more detail for AI model");
-  }
-  
-  if (prompt.length > 600) {
-    issues.push("Prompt too long - may overwhelm AI model");
-  }
-  
-  // Negative pattern detection
-  const problematicPatterns = [
-    { pattern: /multiple|several|many|two|three|\d+\s+dumplings/i, message: "Prompt contains multiple dumpling references" },
-    { pattern: /plate|bowl|table/i, message: "Prompt contains unwanted objects (plate/bowl/table)" },
-    { pattern: /hands|people|person/i, message: "Prompt contains human elements" }
-  ];
-  
-  problematicPatterns.forEach(check => {
-    if (check.pattern.test(prompt)) {
-      issues.push(`CONFLICT: ${check.message}`);
-    }
-  });
-  
-  console.log(`Validation result: ${issues.length === 0 ? 'PASSED' : 'FAILED'}`);
-  if (issues.length > 0) {
-    console.log("Issues found:", issues);
-  }
-  
-  return {
-    isValid: issues.length === 0,
-    issues
-  };
-}
-
-async function validateGeneratedImage(imageData: string, context: ImageContext): Promise<{ isValid: boolean; issues: string[] }> {
-  console.log("=== ENHANCED IMAGE VALIDATION ===");
-  const issues: string[] = [];
-  
-  // Basic data validation
-  if (!imageData || imageData.length < 10000) {
-    issues.push("Image data too small or missing - likely generation failure");
-    return { isValid: false, issues };
-  }
-  
-  if (imageData.length > 15000000) { // 15MB limit (increased from 10MB)
-    issues.push("Image data unexpectedly large - may indicate quality issues");
-  }
-  
-  // Enhanced size analysis for quality assessment
-  const sizeKB = imageData.length / 1024;
-  console.log(`Generated image size: ${sizeKB.toFixed(1)}KB`);
-  
-  // Expected size ranges for different quality levels
-  if (sizeKB < 50) {
-    issues.push("Image suspiciously small - likely low quality or failed generation");
-  } else if (sizeKB > 5000) {
-    console.log("⚠️ Large image size - checking if acceptable...");
-    // Large images are generally okay, just noting
-  }
-  
-  // Basic format validation
-  if (!imageData.startsWith('/9j/') && !imageData.startsWith('iVBORw0KG')) {
-    console.log("⚠️ Unexpected image format - may not be standard JPEG/PNG");
-  }
-  
-  // TODO: Future enhancements could include:
-  // - Computer vision API to count objects in the image
-  // - Color analysis to verify black background
-  // - Shape detection to verify dumpling shape
-  // - Composition analysis to check centering
-  
-  const isValid = issues.length === 0;
-  console.log(`Image validation result: ${isValid ? 'PASSED' : 'FAILED'}`);
-  if (!isValid) {
-    console.log("Validation issues:", issues);
-  }
-  
-  return {
-    isValid,
-    issues
-  };
 }
