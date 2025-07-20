@@ -64,7 +64,21 @@ async function generateWithOpenAI(prompt: string, context: ImageContext): Promis
   }
 
   console.log("🔑 OpenAI API Key status: CONFIGURED");
+  console.log("🔑 API Key length:", openAIKey.length);
+  console.log("🔑 API Key prefix:", openAIKey.substring(0, 8) + "...");
   console.log("🎯 Making request to OpenAI API...");
+  console.log("📝 Prompt length:", prompt.length);
+
+  const requestBody = {
+    model: 'gpt-image-1',
+    prompt: prompt,
+    n: 1,
+    size: '1024x1024',
+    quality: 'high',
+    response_format: 'b64_json'
+  };
+
+  console.log("📤 Request body:", JSON.stringify(requestBody, null, 2));
 
   try {
     const response = await fetch('https://api.openai.com/v1/images/generations', {
@@ -73,14 +87,7 @@ async function generateWithOpenAI(prompt: string, context: ImageContext): Promis
         'Authorization': `Bearer ${openAIKey}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        model: 'gpt-image-1',
-        prompt: prompt,
-        n: 1,
-        size: '1024x1024',
-        quality: 'high',
-        response_format: 'b64_json'
-      })
+      body: JSON.stringify(requestBody)
     });
 
     console.log("📡 OpenAI API Response Status:", response.status);
@@ -89,12 +96,19 @@ async function generateWithOpenAI(prompt: string, context: ImageContext): Promis
     if (!response.ok) {
       const errorText = await response.text();
       console.error("❌ OpenAI API Error Response:", errorText);
+      console.error("❌ Request that failed:");
+      console.error("- URL: https://api.openai.com/v1/images/generations");
+      console.error("- Method: POST");
+      console.error("- Headers: Authorization: Bearer [REDACTED], Content-Type: application/json");
+      console.error("- Body:", JSON.stringify(requestBody, null, 2));
       
       // Parse error for better handling
       let errorDetails;
       try {
         errorDetails = JSON.parse(errorText);
-      } catch {
+        console.error("❌ Parsed error details:", JSON.stringify(errorDetails, null, 2));
+      } catch (parseError) {
+        console.error("❌ Failed to parse error response:", parseError);
         errorDetails = { message: errorText };
       }
       
