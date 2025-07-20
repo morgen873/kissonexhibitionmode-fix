@@ -19,8 +19,10 @@ export async function generateImageWithEnhancedFallback(
   negativePrompt: string,
   imageContext: ImageContext
 ): Promise<ImageGenerationResult> {
+  console.log("🚨 ENHANCED HANDLER CALLED - NEW VERSION WITH DETAILED LOGGING 🚨");
   console.log("=== ENHANCED IMAGE GENERATION WITH FALLBACK STRATEGY ===");
   console.log("Prompt preview:", prompt.substring(0, 200));
+  console.log("🔍 Image context:", JSON.stringify(imageContext, null, 2));
   
   // Strategy 1: Try OpenAI GPT Image-1 (Primary)
   try {
