@@ -1,8 +1,7 @@
-
 interface RecipePayload {
   questions: { [key: string]: string };
   timeline: { [key: string]: string };
-  controls: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } };
+  controls: { [key: string]: any };
 }
 
 interface SavedRecipe {
@@ -27,105 +26,44 @@ export function buildImageContext(
   payload: RecipePayload,
   savedRecipe: SavedRecipe
 ): ImageContext {
-  console.log("📋 BUILDING IMAGE CONTEXT...");
-  console.log("🔍 FULL PAYLOAD DEBUG:");
-  console.log("- Complete payload:", JSON.stringify(payload, null, 2));
+  // Extract timeline theme
+  const timelineTheme = Object.values(payload.timeline || {})[0] || 'Present';
   
-  // Step 1: Extract timeline theme with enhanced debugging
-  const timelineValues = Object.values(payload.timeline);
-  const timelineKeys = Object.keys(payload.timeline);
-  const timelineTheme = timelineValues.length > 0 ? timelineValues[0] : 'present day';
+  // Extract emotional context from questions
+  const emotionalContext = Object.values(payload.questions || {}).join(' and ');
   
-  console.log("🕐 ENHANCED TIMELINE EXTRACTION:");
-  console.log("- Timeline object keys:", timelineKeys);
-  console.log("- Timeline object values:", timelineValues);
-  console.log("- Full timeline object:", JSON.stringify(payload.timeline, null, 2));
-  console.log("- Selected timeline theme:", `"${timelineTheme}"`);
-  console.log("- Timeline theme type:", typeof timelineTheme);
-  console.log("- Timeline theme length:", timelineTheme.length);
+  // Extract control values
+  const controlValues = Object.values(payload.controls || {})[0] || {};
   
-  // Step 2: Extract other context with enhanced debugging
-  const questionValues = Object.values(payload.questions);
-  const fullEmotionalContext = questionValues.join(' and ');
-  
-  console.log("❓ QUESTIONS EXTRACTION:");
-  console.log("- Question keys:", Object.keys(payload.questions));
-  console.log("- Question values:", questionValues);
-  console.log("- Combined emotional context:", `"${fullEmotionalContext}"`);
-  
-  const controlValues = Object.values(payload.controls)[0] || {
-    shape: 'round',
-    flavor: 'savory',
-    temperature: 200,
-    enhancer: 'none'
-  };
-  
-  console.log("🎛️ CONTROLS EXTRACTION:");
-  console.log("- Control keys:", Object.keys(payload.controls));
-  console.log("- Control values:", JSON.stringify(controlValues, null, 2));
-  
-  // Step 3: Extract ingredients
-  const ingredientsList = extractIngredientsFromSavedRecipe(savedRecipe.ingredients);
+  // Extract ingredients list from saved recipe
+  const ingredientsList: string[] = [];
+  if (savedRecipe.ingredients && typeof savedRecipe.ingredients === 'object') {
+    for (const category of Object.values(savedRecipe.ingredients)) {
+      if (Array.isArray(category)) {
+        for (const ingredient of category) {
+          if (typeof ingredient === 'string') {
+            // Clean up ingredient string (remove measurements, keep just the ingredient name)
+            const cleanIngredient = ingredient
+              .replace(/^\d+(\.\d+)?\s*(cups?|tablespoons?|teaspoons?|lbs?|pounds?|ounces?|oz|grams?|g)\s*/i, '')
+              .replace(/^(a|an|the)\s+/i, '')
+              .trim();
+            if (cleanIngredient) {
+              ingredientsList.push(cleanIngredient);
+            }
+          }
+        }
+      }
+    }
+  }
   
   const imageContext: ImageContext = {
     timelineTheme,
-    emotionalContext: fullEmotionalContext,
-    dumplingShape: controlValues.shape,
-    flavor: controlValues.flavor,
+    emotionalContext,
+    dumplingShape: controlValues.shape || 'round',
+    flavor: controlValues.flavor || 'balanced',
     ingredientsList,
     recipeTitle: savedRecipe.title
   };
   
-  console.log("📋 FINAL IMAGE CONTEXT CREATED:");
-  console.log(JSON.stringify(imageContext, null, 2));
-  
   return imageContext;
-}
-
-function extractIngredientsFromSavedRecipe(ingredients: any): string[] {
-  console.log("🔍 EXTRACTING INGREDIENTS FROM:", JSON.stringify(ingredients, null, 2));
-  
-  const ingredientsList: string[] = [];
-  
-  if (ingredients && typeof ingredients === 'object') {
-    if (Array.isArray(ingredients)) {
-      ingredients.forEach((item: any) => {
-        if (typeof item === 'string') {
-          const cleaned = cleanIngredientName(item);
-          if (cleaned.length > 2) {
-            ingredientsList.push(cleaned);
-          }
-        }
-      });
-    } else {
-      Object.entries(ingredients).forEach(([key, categoryItems]: [string, any]) => {
-        if (Array.isArray(categoryItems)) {
-          categoryItems.forEach((item: any) => {
-            const itemStr = typeof item === 'string' ? item : String(item);
-            const cleaned = cleanIngredientName(itemStr);
-            if (cleaned.length > 2) {
-              ingredientsList.push(cleaned);
-            }
-          });
-        } else if (typeof categoryItems === 'string') {
-          const cleaned = cleanIngredientName(categoryItems);
-          if (cleaned.length > 2) {
-            ingredientsList.push(cleaned);
-          }
-        }
-      });
-    }
-  }
-  
-  console.log("✅ FINAL INGREDIENTS LIST:", ingredientsList);
-  return ingredientsList;
-}
-
-function cleanIngredientName(item: string): string {
-  return item
-    .replace(/^\d+[\s\w]*\s+/, '')
-    .split(',')[0]
-    .split('(')[0]
-    .trim()
-    .toLowerCase();
 }
