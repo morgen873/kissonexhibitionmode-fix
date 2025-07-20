@@ -1,74 +1,74 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
+import { corsHeaders } from '../_shared/cors.ts'
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+    return new Response('ok', { headers: corsHeaders })
   }
 
   try {
-    console.log("=== TEST IMAGE GENERATION FUNCTION ===");
+    const openAIApiKey = Deno.env.get('OPENAI_API_KEY')!
     
-    // Check if Replicate token exists
-    const replicateToken = Deno.env.get('REPLICATE_API_TOKEN');
-    console.log("Replicate token exists:", !!replicateToken);
-    console.log("Token length:", replicateToken ? replicateToken.length : 0);
-    
-    if (!replicateToken) {
-      throw new Error('REPLICATE_API_TOKEN not found');
+    if (!openAIApiKey) {
+      return new Response(JSON.stringify({ error: "Missing OPENAI_API_KEY" }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 400,
+      })
     }
 
-    // Test a simple API call to Replicate
-    console.log("Testing Replicate API connection...");
+    console.log('Testing OpenAI image generation...')
     
-    const createResponse = await fetch('https://api.replicate.com/v1/predictions', {
+    // Test with DALL-E 3 which is more reliable
+    const response = await fetch('https://api.openai.com/v1/images/generations', {
       method: 'POST',
       headers: {
-        'Authorization': `Token ${replicateToken}`,
+        'Authorization': `Bearer ${openAIApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        version: 'black-forest-labs/flux-schnell',
-        input: {
-          prompt: 'a simple test dumpling',
-          num_outputs: 1,
-          aspect_ratio: "1:1",
-          output_format: "png"
-        }
-      })
+        model: 'dall-e-3',
+        prompt: 'A delicious dumpling with professional food photography',
+        n: 1,
+        size: '1024x1024',
+        quality: 'standard',
+        response_format: 'url'
+      }),
     });
 
-    console.log("Replicate response status:", createResponse.status);
-    const responseText = await createResponse.text();
-    console.log("Response:", responseText.substring(0, 500));
-
-    if (!createResponse.ok) {
-      throw new Error(`Replicate API failed: ${createResponse.status} - ${responseText}`);
+    console.log('Response status:', response.status)
+    
+    if (!response.ok) {
+      const errorText = await response.text()
+      console.error('OpenAI API error:', errorText)
+      return new Response(JSON.stringify({ 
+        error: 'OpenAI API error', 
+        status: response.status, 
+        details: errorText 
+      }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 500,
+      })
     }
+
+    const data = await response.json()
+    console.log('OpenAI response data:', JSON.stringify(data, null, 2))
 
     return new Response(JSON.stringify({ 
       success: true, 
-      replicateWorking: true,
-      status: createResponse.status,
-      response: responseText.substring(0, 200)
+      imageUrl: data.data?.[0]?.url,
+      fullResponse: data
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+    })
 
   } catch (error) {
-    console.error('Test function error:', error);
+    console.error('Error:', error)
     return new Response(JSON.stringify({ 
-      success: false, 
-      error: error.message,
-      replicateWorking: false
+      error: error.message, 
+      stack: error.stack 
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 500,
-    });
+    })
   }
-});
+})

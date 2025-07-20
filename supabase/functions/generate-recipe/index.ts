@@ -89,75 +89,56 @@ serve(async (req) => {
       throw new Error('Failed to save recipe');
     }
 
-    // Generate image using OpenAI
+    // Generate image using OpenAI DALL-E 3
     const imagePrompt = `A delicious ${controlValues.shape || 'round'} dumpling with ${controlValues.flavor || 'balanced'} flavor, professional food photography, appetizing, high quality`;
     
     console.log('Generating image with prompt:', imagePrompt);
     
     try {
-      const imageResponse = await openAI.images.generate({
-        model: 'gpt-image-1',
-        prompt: imagePrompt,
-        n: 1,
-        size: '1024x1024',
-        quality: 'high',
-        response_format: 'b64_json'
+      const imageResponse = await fetch('https://api.openai.com/v1/images/generations', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${openAIApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'dall-e-3',
+          prompt: imagePrompt,
+          n: 1,
+          size: '1024x1024',
+          quality: 'standard',
+          response_format: 'url'
+        }),
       });
 
-      console.log('Image response received:', !!imageResponse.data[0]);
+      console.log('Image response status:', imageResponse.status);
       
-      if (imageResponse.data?.[0]?.b64_json) {
-        console.log('Processing base64 image data...');
+      if (!imageResponse.ok) {
+        const errorText = await imageResponse.text();
+        console.error('OpenAI image API error:', errorText);
+      } else {
+        const imageData = await imageResponse.json();
+        console.log('Image response received:', !!imageData.data?.[0]);
         
-        // Convert base64 to blob
-        const imageB64 = imageResponse.data[0].b64_json;
-        const byteCharacters = atob(imageB64);
-        const byteNumbers = new Array(byteCharacters.length);
-        
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-        
-        const byteArray = new Uint8Array(byteNumbers);
-        const blob = new Blob([byteArray], { type: 'image/png' });
-        
-        console.log('Uploading to Supabase storage...');
-        
-        const fileName = `recipe_${newRecipe.id}.png`;
-        const { data: uploadData, error: uploadError } = await supabaseAdmin.storage
-          .from('recipe_images')
-          .upload(fileName, blob, {
-            cacheControl: '3600',
-            upsert: true,
-            contentType: 'image/png'
-          });
-
-        if (uploadError) {
-          console.error('Upload error:', uploadError);
-        } else {
-          console.log('Image uploaded successfully:', fileName);
+        if (imageData.data?.[0]?.url) {
+          const imageUrl = imageData.data[0].url;
+          console.log('Generated image URL:', imageUrl);
           
-          const { data: urlData } = supabaseAdmin.storage
-            .from('recipe_images')
-            .getPublicUrl(fileName);
-          
-          console.log('Public URL:', urlData.publicUrl);
-          
-          // Update recipe with image URL
+          // Update recipe with image URL directly
           const { error: updateError } = await supabaseAdmin
             .from('recipes')
-            .update({ image_url: urlData.publicUrl })
+            .update({ image_url: imageUrl })
             .eq('id', newRecipe.id);
           
           if (updateError) {
             console.error('Update error:', updateError);
           } else {
-            newRecipe.image_url = urlData.publicUrl;
-            console.log('Recipe updated with image URL');
+            newRecipe.image_url = imageUrl;
+            console.log('Recipe updated with image URL successfully');
           }
+        } else {
+          console.log('No image URL in response');
         }
-      } else {
-        console.log('No image data in response');
       }
     } catch (imageError) {
       console.error('Image generation failed:', imageError);
