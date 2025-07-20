@@ -96,14 +96,6 @@ const RecipeImageDisplay: React.FC<RecipeImageDisplayProps> = ({ recipe }) => {
                     onLoad={handleImageLoad}
                     onError={handleImageError}
                 />
-                {/* Debug info in development */}
-                {process.env.NODE_ENV === 'development' && (
-                    <div className="mt-2 text-xs text-gray-500 max-w-full break-all">
-                        <p>URL: {finalImageUrl.substring(0, 50)}...</p>
-                        <p>State: {imageLoadState}</p>
-                        <p>Is placeholder: {finalImageUrl === '/placeholder.svg' ? 'Yes' : 'No'}</p>
-                    </div>
-                )}
             </div>
         </div>
     );
