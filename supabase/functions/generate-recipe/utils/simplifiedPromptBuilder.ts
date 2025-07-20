@@ -38,15 +38,18 @@ export function buildSimplifiedPrompt(params: SimplifiedPromptParams): { prompt:
   
   const mappedFlavor = flavorMapping[flavor] || flavor;
   
-  // Core visual elements - more specific and direct
+  // Core visual elements - STRICT requirements for solid black background
   const coreElements = [
-    "ultra-realistic food photography",
+    "SOLID BLACK BACKGROUND ONLY",
+    "pure black background #000000",
+    "NO OTHER BACKGROUND ELEMENTS",
     `ONE single ${mappedShape} dumpling`,
     `${mappedFlavor} filling`,
-    "perfectly centered",
-    "solid black background",
+    "perfectly centered on black",
     "professional studio lighting",
-    "macro lens detail"
+    "macro lens detail",
+    "isolated dumpling",
+    "black void background"
   ];
   
   // Enhanced timeline-specific styling
@@ -64,16 +67,19 @@ export function buildSimplifiedPrompt(params: SimplifiedPromptParams): { prompt:
   // Build enhanced prompt with emphasis on single dumpling
   const prompt = `${coreElements.join(', ')}, ${styleModifier}, 8K resolution, sharp focus, award-winning photography`;
   
-  // Comprehensive negative prompt with emphasis on quantity control
+  // Comprehensive negative prompt with emphasis on BLACK BACKGROUND ONLY
   const negativePrompt = [
-    // Quantity control (most important)
+    // BACKGROUND CONTROL - MOST IMPORTANT
+    "white background", "gray background", "grey background", "colored background", 
+    "textured background", "wooden background", "marble background", "fabric background", 
+    "surface patterns", "background textures", "background patterns", "kitchen background",
+    "restaurant background", "table surface", "countertop", "cutting board", "bamboo",
+    "wood grain", "stone texture", "ceramic", "metal surface", "glass surface",
+    
+    // Quantity control
     "multiple dumplings", "more than one dumpling", "two dumplings", "three dumplings", 
     "several dumplings", "many dumplings", "group of dumplings", "dumpling collection",
     "dumpling set", "pairs of dumplings", "dozen dumplings", "few dumplings",
-    
-    // Background control
-    "background textures", "background patterns", "colored background", "textured background",
-    "wooden background", "marble background", "fabric background", "surface patterns",
     
     // Unwanted objects
     "plate", "bowl", "table", "tablecloth", "utensils", "chopsticks", "fork", "spoon",
