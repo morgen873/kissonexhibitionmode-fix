@@ -4,7 +4,7 @@ import { corsHeaders } from '../_shared/cors.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import OpenAI from 'https://esm.sh/openai@4.24.1'  // Still needed for recipe generation
 import { generateRecipeWithOpenAI } from './utils/recipeGenerator.ts'
-import { generateSimpleImage } from './utils/simpleImageGenerator.ts'
+// import { generateSimpleImage } from './utils/simpleImageGenerator.ts'
 import { insertRecipe, updateRecipeImageUrl } from './utils/databaseOperations.ts'
 import { checkRateLimit } from './utils/rateLimiter.ts'
 import { validateRecipeContent } from './utils/contentValidator.ts'
