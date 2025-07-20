@@ -4,7 +4,7 @@ import { corsHeaders } from '../_shared/cors.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import OpenAI from 'https://esm.sh/openai@4.24.1'  // Still needed for recipe generation
 import { generateRecipeWithOpenAI } from './utils/recipeGenerator.ts'
-import { generateAndUploadRecipeImage } from './utils/imageGenerator.ts'
+import { generateSimpleImage } from './utils/simpleImageGenerator.ts'
 import { insertRecipe, updateRecipeImageUrl } from './utils/databaseOperations.ts'
 import { checkRateLimit } from './utils/rateLimiter.ts'
 import { validateRecipeContent } from './utils/contentValidator.ts'
@@ -82,11 +82,7 @@ serve(async (req) => {
 
     const openai = new OpenAI({ apiKey: openAIKey });
     
-    // Check for Replicate API token for image generation
-    const replicateToken = Deno.env.get('REPLICATE_API_TOKEN');
-    if (!replicateToken) {
-        throw new Error("Missing REPLICATE_API_TOKEN environment variable for image generation.");
-    }
+    // Note: Image generation now uses OpenAI API only
     
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
@@ -140,12 +136,7 @@ serve(async (req) => {
     console.log("- SAVED recipe data from database (title, ingredients)");
     console.log("- Recipe ID:", newRecipe.id);
     
-    const imageUrl = await generateAndUploadRecipeImage(
-      payload,      // Original user input
-      newRecipe,    // COMPLETE saved recipe data from database
-      newRecipe.id,
-      supabaseAdmin
-    );
+    const imageUrl = await generateSimpleImage(newRecipe, supabaseAdmin);
 
     // STEP 6: Update recipe with final image URL only if we got a real image
     if (imageUrl !== '/placeholder.svg') {
