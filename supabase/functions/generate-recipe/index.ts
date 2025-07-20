@@ -89,10 +89,11 @@ serve(async (req) => {
       throw new Error('Failed to save recipe');
     }
 
-    // Generate image using OpenAI DALL-E 3
-    const imagePrompt = `A delicious ${controlValues.shape || 'round'} dumpling with ${controlValues.flavor || 'balanced'} flavor, professional food photography, appetizing, high quality`;
+    // Generate contextual image prompt based on user inputs
+    const imagePrompt = `A beautifully presented ${controlValues.shape || 'round'} dumpling recipe inspired by ${timelineTheme} era, reflecting "${emotionalContext}" emotional context, with ${controlValues.flavor || 'balanced'} flavor profile. Professional food photography, appetizing, restaurant quality, beautifully plated, high resolution`;
     
-    console.log('Generating image with prompt:', imagePrompt);
+    console.log('Generating image with contextual prompt:', imagePrompt);
+    console.log('User inputs - Timeline:', timelineTheme, 'Emotional context:', emotionalContext, 'Shape:', controlValues.shape, 'Flavor:', controlValues.flavor);
     
     try {
       const imageResponse = await fetch('https://api.openai.com/v1/images/generations', {
