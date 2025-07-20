@@ -136,7 +136,15 @@ serve(async (req) => {
     console.log("- SAVED recipe data from database (title, ingredients)");
     console.log("- Recipe ID:", newRecipe.id);
     
-    const imageUrl = await generateSimpleImage(newRecipe, supabaseAdmin);
+    console.log("🎨 Starting image generation...");
+    let imageUrl = '/placeholder.svg';
+    try {
+      imageUrl = await generateSimpleImage(newRecipe, supabaseAdmin);
+      console.log("🎨 Image generation result:", imageUrl);
+    } catch (imageError) {
+      console.log("❌ Image generation failed:", imageError);
+      imageUrl = '/placeholder.svg';
+    }
 
     // STEP 6: Update recipe with final image URL only if we got a real image
     if (imageUrl !== '/placeholder.svg') {
