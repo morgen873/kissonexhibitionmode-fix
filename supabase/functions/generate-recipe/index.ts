@@ -23,6 +23,7 @@ interface RecipePayload {
 }
 
 serve(async (req) => {
+  console.log("🚀 EDGE FUNCTION CALLED! Method:", req.method);
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
