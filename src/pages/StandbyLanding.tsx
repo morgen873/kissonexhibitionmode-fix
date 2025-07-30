@@ -17,7 +17,7 @@ const StandbyLanding: React.FC = () => {
     setFlameInteractions(prev => prev + 1);
     toast({
       title: "OUCH! BE CAREFUL!",
-      description: `WARNING HOT SURFACE! (${flameInteractions + 1} total)`,
+      description: `WARNING HOT SURFACE!,
       duration: 2000,
     });
   };
@@ -47,7 +47,7 @@ const StandbyLanding: React.FC = () => {
             style={{
               top: '70%', // Adjust these percentages based on where flames appear in your video
               left: '70%',
-              transform: 'translate(-50%, -50%)'
+              transform: 'translate(-100%, -100%)'
             }}
             onClick={() => handleFlameTouch('left-flame')}
             onTouchStart={() => handleFlameTouch('left-flame')}
@@ -59,7 +59,7 @@ const StandbyLanding: React.FC = () => {
             style={{
               top: '70%', // Adjust these percentages based on where flames appear in your video
               right: '70%',
-              transform: 'translate(50%, -50%)'
+              transform: 'translate(100%, -100%)'
             }}
             onClick={() => handleFlameTouch('right-flame')}
             onTouchStart={() => handleFlameTouch('right-flame')}
