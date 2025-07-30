@@ -1,13 +1,25 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { useNavigate } from 'react-router-dom';
+import { useToast } from "@/hooks/use-toast";
 
 const StandbyLanding: React.FC = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const [flameInteractions, setFlameInteractions] = useState(0);
 
   const handleEnter = () => {
     navigate('/creation');
+  };
+
+  const handleFlameTouch = (flameId: string) => {
+    setFlameInteractions(prev => prev + 1);
+    toast({
+      title: "🔥 Flame Touched!",
+      description: `You discovered the hidden flame! (${flameInteractions + 1} total)`,
+      duration: 2000,
+    });
   };
 
   return (
@@ -26,6 +38,45 @@ const StandbyLanding: React.FC = () => {
           loop
           playsInline
         />
+        
+        {/* Interactive Flame Zones - Invisible overlays */}
+        <div className="absolute inset-0 pointer-events-none">
+          {/* Left flame area - adjust position based on your video */}
+          <div 
+            className="absolute w-20 h-24 pointer-events-auto cursor-pointer hover:bg-orange-500/20 transition-colors duration-200 rounded-full"
+            style={{
+              top: '45%', // Adjust these percentages based on where flames appear in your video
+              left: '35%',
+              transform: 'translate(-50%, -50%)'
+            }}
+            onClick={() => handleFlameTouch('left-flame')}
+            onTouchStart={() => handleFlameTouch('left-flame')}
+          />
+          
+          {/* Right flame area - adjust position based on your video */}
+          <div 
+            className="absolute w-20 h-24 pointer-events-auto cursor-pointer hover:bg-orange-500/20 transition-colors duration-200 rounded-full"
+            style={{
+              top: '45%', // Adjust these percentages based on where flames appear in your video
+              right: '35%',
+              transform: 'translate(50%, -50%)'
+            }}
+            onClick={() => handleFlameTouch('right-flame')}
+            onTouchStart={() => handleFlameTouch('right-flame')}
+          />
+          
+          {/* Center flame area - add more zones as needed */}
+          <div 
+            className="absolute w-24 h-28 pointer-events-auto cursor-pointer hover:bg-orange-500/20 transition-colors duration-200 rounded-full"
+            style={{
+              top: '40%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)'
+            }}
+            onClick={() => handleFlameTouch('center-flame')}
+            onTouchStart={() => handleFlameTouch('center-flame')}
+          />
+        </div>
       </div>
       
       {/* Bottom button optimized for 32-inch touch */}
