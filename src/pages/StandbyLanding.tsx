@@ -16,8 +16,8 @@ const StandbyLanding: React.FC = () => {
   const handleFlameTouch = (flameId: string) => {
     setFlameInteractions(prev => prev + 1);
     toast({
-      title: "🔥 Flame Touched!",
-      description: `You discovered the hidden flame! (${flameInteractions + 1} total)`,
+      title: "OUCH! BE CAREFUL!",
+      description: `WARNING HOT SURFACE! (${flameInteractions + 1} total)`,
       duration: 2000,
     });
   };
@@ -45,8 +45,8 @@ const StandbyLanding: React.FC = () => {
           <div 
             className="absolute w-20 h-24 pointer-events-auto cursor-pointer hover:bg-orange-500/20 transition-colors duration-200 rounded-full"
             style={{
-              top: '45%', // Adjust these percentages based on where flames appear in your video
-              left: '35%',
+              top: '70%', // Adjust these percentages based on where flames appear in your video
+              left: '70%',
               transform: 'translate(-50%, -50%)'
             }}
             onClick={() => handleFlameTouch('left-flame')}
@@ -57,8 +57,8 @@ const StandbyLanding: React.FC = () => {
           <div 
             className="absolute w-20 h-24 pointer-events-auto cursor-pointer hover:bg-orange-500/20 transition-colors duration-200 rounded-full"
             style={{
-              top: '45%', // Adjust these percentages based on where flames appear in your video
-              right: '35%',
+              top: '70%', // Adjust these percentages based on where flames appear in your video
+              right: '70%',
               transform: 'translate(50%, -50%)'
             }}
             onClick={() => handleFlameTouch('right-flame')}
