@@ -64,8 +64,8 @@ const StandbyLanding: React.FC = () => {
             onClick={() => handleFlameTouch('right-flame')}
             onTouchStart={() => handleFlameTouch('right-flame')}
           />
-          
-         
+        </div>
+      </div>
       
       {/* Bottom button optimized for 32-inch touch */}
       <div className="absolute bottom-8 touch:bottom-16 left-1/2 transform -translate-x-1/2 flex flex-col items-center touch-safe-area">
