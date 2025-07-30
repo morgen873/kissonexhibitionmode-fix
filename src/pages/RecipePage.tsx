@@ -120,7 +120,21 @@ const RecipePage = () => {
                         </div>
                         <div>
                             <h3 className="responsive-heading-md mb-2 border-b-2 border-border pb-2 text-primary">Cooking Instructions</h3>
-                            <pre className="text-muted-foreground bg-card p-3 rounded-lg whitespace-pre-wrap font-sans mt-3 responsive-text-sm">{recipe.cooking_recipe}</pre>
+                            <div className="text-muted-foreground bg-muted/30 p-4 rounded-lg mt-3 responsive-text-sm leading-relaxed">
+                                {recipe.cooking_recipe
+                                    ?.replace(/^["']|["']$/g, '') // Remove leading/trailing quotes
+                                    ?.replace(/\\"/g, '"') // Replace escaped quotes
+                                    ?.replace(/\\n/g, '\n') // Convert literal \n to actual newlines
+                                    ?.split('\n')
+                                    .filter(step => step.trim()) // Remove empty lines
+                                    .map((step, index) => (
+                                        <div key={index} className="mb-3 last:mb-0">
+                                            <span className="font-medium text-primary">{index + 1}. </span>
+                                            {step.trim()}
+                                        </div>
+                                    ))
+                                }
+                            </div>
                         </div>
                     </CardContent>
                 </Card>
