@@ -57,9 +57,9 @@ const StandbyLanding: React.FC = () => {
           <div 
             className="absolute w-60 h-60 pointer-events-auto cursor-pointer hover:bg-orange-500/20 transition-colors duration-200 rounded-full"
             style={{
-              top: '-80%', // Adjust these percentages based on where flames appear in your video
-              right: '80%',
-              transform: 'translate(50%, -50%)'
+              top: '50%', // Adjust these percentages based on where flames appear in your video
+              right: '70%',
+              transform: 'translate(-100%, 50%)'
             }}
             onClick={() => handleFlameTouch('right-flame')}
             onTouchStart={() => handleFlameTouch('right-flame')}
