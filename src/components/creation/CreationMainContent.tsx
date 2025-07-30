@@ -11,7 +11,7 @@ interface CreationMainContentProps {
     stepData: any;
     answers: { [key: number]: string | string[] };
     customAnswers: { [key: number]: string };
-    controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } };
+    controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; dietary: { vegan: boolean; vegetarian: boolean; allergies: string; specialDiet: boolean; }; } };
     theme: {
         optionSelectedBorder: string;
         optionSelectedShadow: string;
@@ -24,6 +24,7 @@ interface CreationMainContentProps {
     onShapeChange: (value: number) => void;
     onFlavorChange: (value: number) => void;
     onEnhancerChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+    onDietaryChange: (field: 'vegan' | 'vegetarian' | 'allergies' | 'specialDiet', value: boolean | string) => void;
     onAutoAdvance?: () => void;
 }
 
@@ -39,6 +40,7 @@ const CreationMainContent: React.FC<CreationMainContentProps> = ({
     onShapeChange,
     onFlavorChange,
     onEnhancerChange,
+    onDietaryChange,
     onAutoAdvance
 }) => {
     // Create a profanity-filtered enhancer change handler
@@ -93,6 +95,7 @@ const CreationMainContent: React.FC<CreationMainContentProps> = ({
                 onShapeChange={onShapeChange} 
                 onFlavorChange={onFlavorChange} 
                 onEnhancerChange={handleEnhancerChange} 
+                onDietaryChange={onDietaryChange}
             />
         );
     }

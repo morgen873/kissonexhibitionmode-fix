@@ -41,6 +41,12 @@ export interface ControlsStep {
             placeholder: string;
             defaultValue: string;
         };
+        dietary?: {
+            vegan: boolean;
+            vegetarian: boolean;
+            allergies: string;
+            specialDiet: boolean;
+        };
     };
 }
 

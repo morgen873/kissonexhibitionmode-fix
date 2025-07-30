@@ -5,6 +5,7 @@ import EnhancerInput from './EnhancerInput';
 import ControlsLabels from './controls/ControlsLabels';
 import ControlsKnobs from './controls/ControlsKnobs';
 import ControlsValues from './controls/ControlsValues';
+import DietaryOptions from './controls/DietaryOptions';
 
 interface ControlsScreenProps {
   stepData: ControlsStep;
@@ -13,11 +14,18 @@ interface ControlsScreenProps {
     shape: string;
     flavor: string;
     enhancer: string;
+    dietary: {
+      vegan: boolean;
+      vegetarian: boolean;
+      allergies: string;
+      specialDiet: boolean;
+    };
   };
   onTemperatureChange: (value: number) => void;
   onShapeChange: (value: number) => void;
   onFlavorChange: (value: number) => void;
   onEnhancerChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onDietaryChange: (field: 'vegan' | 'vegetarian' | 'allergies' | 'specialDiet', value: boolean | string) => void;
 }
 
 const ControlsScreen: React.FC<ControlsScreenProps> = ({
@@ -26,7 +34,8 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
   onTemperatureChange,
   onShapeChange,
   onFlavorChange,
-  onEnhancerChange
+  onEnhancerChange,
+  onDietaryChange
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const {
@@ -67,6 +76,12 @@ const ControlsScreen: React.FC<ControlsScreenProps> = ({
 
       {/* Parameter Values Row */}
       <ControlsValues controls={controls} controlValues={controlValues} />
+
+      {/* Dietary Options */}
+      <DietaryOptions 
+        dietaryValues={controlValues.dietary}
+        onDietaryChange={onDietaryChange}
+      />
 
       {/* Enhancer Input */}
       <div className="w-full bg-black/20 backdrop-blur-sm border-2 border-green-400/20 rounded-2xl touch-padding shadow-lg shadow-green-400/5">

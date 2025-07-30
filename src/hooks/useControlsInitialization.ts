@@ -5,8 +5,8 @@ import { ControlsStep } from '@/types/creation';
 
 interface UseControlsInitializationProps {
     currentStep: number;
-    controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } };
-    setControlValues: (controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } } | ((prev: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } }) => { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } })) => void;
+    controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; dietary: { vegan: boolean; vegetarian: boolean; allergies: string; specialDiet: boolean; }; } };
+    setControlValues: (controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; dietary: { vegan: boolean; vegetarian: boolean; allergies: string; specialDiet: boolean; }; } } | ((prev: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; dietary: { vegan: boolean; vegetarian: boolean; allergies: string; specialDiet: boolean; }; } }) => { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; dietary: { vegan: boolean; vegetarian: boolean; allergies: string; specialDiet: boolean; }; } })) => void;
 }
 
 export const useControlsInitialization = ({
@@ -25,6 +25,12 @@ export const useControlsInitialization = ({
                     shape: controls.shape.defaultValue,
                     flavor: controls.flavor.defaultValue,
                     enhancer: '',
+                    dietary: {
+                        vegan: false,
+                        vegetarian: false,
+                        allergies: '',
+                        specialDiet: false,
+                    }
                 }
             }));
         }

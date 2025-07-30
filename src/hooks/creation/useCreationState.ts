@@ -4,13 +4,13 @@ import { useState } from 'react';
 export interface CreationState {
   answers: { [key: number]: string | string[] };
   customAnswers: { [key: number]: string };
-  controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } };
+  controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; dietary: { vegan: boolean; vegetarian: boolean; allergies: string; specialDiet: boolean; }; } };
 }
 
 export const useCreationState = () => {
   const [answers, setAnswers] = useState<{ [key: number]: string | string[] }>({});
   const [customAnswers, setCustomAnswers] = useState<{ [key: number]: string }>({});
-  const [controlValues, setControlValues] = useState<{ [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } }>({});
+  const [controlValues, setControlValues] = useState<{ [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; dietary: { vegan: boolean; vegetarian: boolean; allergies: string; specialDiet: boolean; }; } }>({});
 
   const resetState = () => {
     setAnswers({});

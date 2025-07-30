@@ -34,6 +34,7 @@ const Creation = () => {
     handleTemperatureChange,
     handleShapeChange,
     handleFlavorChange,
+    handleDietaryChange,
     nextStep: nextCreationStep,
     prevStep: prevCreationStep,
     handleSubmit,
@@ -179,6 +180,7 @@ const Creation = () => {
             onShapeChange={handleShapeChange}
             onFlavorChange={handleFlavorChange}
             onEnhancerChange={handleEnhancerChange}
+            onDietaryChange={handleDietaryChange}
             nextIntroStep={nextIntroStep}
             prevIntroStep={prevIntroStep}
             prevCreationStep={prevCreationStep}

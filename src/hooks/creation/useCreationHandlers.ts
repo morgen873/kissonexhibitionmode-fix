@@ -7,7 +7,7 @@ interface UseCreationHandlersProps extends CreationState {
   currentStep: number;
   setAnswers: (answers: { [key: number]: string | string[] }) => void;
   setCustomAnswers: (customAnswers: { [key: number]: string }) => void;
-  setControlValues: (controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } } | ((prev: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } }) => { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } })) => void;
+  setControlValues: (controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; dietary: { vegan: boolean; vegetarian: boolean; allergies: string; specialDiet: boolean; }; } } | ((prev: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; dietary: { vegan: boolean; vegetarian: boolean; allergies: string; specialDiet: boolean; }; } }) => { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; dietary: { vegan: boolean; vegetarian: boolean; allergies: string; specialDiet: boolean; }; } })) => void;
 }
 
 export const useCreationHandlers = ({
@@ -31,7 +31,8 @@ export const useCreationHandlers = ({
     handleEnhancerChange,
     handleTemperatureChange,
     handleShapeChange,
-    handleFlavorChange
+    handleFlavorChange,
+    handleDietaryChange
   } = useAnswerHandlers({
     answers,
     customAnswers,
@@ -48,6 +49,7 @@ export const useCreationHandlers = ({
     handleEnhancerChange,
     handleTemperatureChange,
     handleShapeChange,
-    handleFlavorChange
+    handleFlavorChange,
+    handleDietaryChange
   };
 };

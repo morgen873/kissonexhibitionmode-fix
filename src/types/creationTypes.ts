@@ -6,12 +6,13 @@ export interface CreationContentHandlers {
   onShapeChange: (value: number) => void;
   onFlavorChange: (value: number) => void;
   onEnhancerChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onDietaryChange: (field: 'vegan' | 'vegetarian' | 'allergies' | 'specialDiet', value: boolean | string) => void;
 }
 
 export interface CreationContentState {
   answers: { [key: number]: string | string[] };
   customAnswers: { [key: number]: string };
-  controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } };
+  controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; dietary: { vegan: boolean; vegetarian: boolean; allergies: string; specialDiet: boolean; }; } };
   recipeResult: any;
   recipeId: string | null;
   isCreatingRecipe: boolean;

@@ -5,10 +5,10 @@ import { ControlsStep } from '@/types/creation';
 interface UseAnswerHandlersProps {
     answers: { [key: number]: string | string[] };
     customAnswers: { [key: number]: string };
-    controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } };
+    controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; dietary: { vegan: boolean; vegetarian: boolean; allergies: string; specialDiet: boolean; }; } };
     setAnswers: (answers: { [key: number]: string | string[] }) => void;
     setCustomAnswers: (customAnswers: { [key: number]: string }) => void;
-    setControlValues: (controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } } | ((prev: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } }) => { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } })) => void;
+    setControlValues: (controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; dietary: { vegan: boolean; vegetarian: boolean; allergies: string; specialDiet: boolean; }; } } | ((prev: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; dietary: { vegan: boolean; vegetarian: boolean; allergies: string; specialDiet: boolean; }; } }) => { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; dietary: { vegan: boolean; vegetarian: boolean; allergies: string; specialDiet: boolean; }; } })) => void;
     currentStep: number;
 }
 
@@ -108,12 +108,29 @@ export const useAnswerHandlers = ({
         }
     };
 
+    const handleDietaryChange = (field: 'vegan' | 'vegetarian' | 'allergies' | 'specialDiet', value: boolean | string) => {
+        const currentStepData = steps[currentStep];
+        if (currentStepData.type === 'controls') {
+            setControlValues(prev => ({
+                ...prev,
+                [currentStepData.id]: {
+                    ...prev[currentStepData.id],
+                    dietary: {
+                        ...prev[currentStepData.id].dietary,
+                        [field]: value
+                    }
+                }
+            }));
+        }
+    };
+
     return {
         handleAnswerSelect,
         handleCustomAnswerChange,
         handleEnhancerChange,
         handleTemperatureChange,
         handleShapeChange,
-        handleFlavorChange
+        handleFlavorChange,
+        handleDietaryChange
     };
 };

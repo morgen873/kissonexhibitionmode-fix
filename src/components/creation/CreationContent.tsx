@@ -37,6 +37,7 @@ const CreationContent: React.FC<CreationContentProps> = ({
   onShapeChange,
   onFlavorChange,
   onEnhancerChange,
+  onDietaryChange,
   nextIntroStep,
   prevIntroStep,
   prevCreationStep,
@@ -84,6 +85,7 @@ const CreationContent: React.FC<CreationContentProps> = ({
           onShapeChange={onShapeChange}
           onFlavorChange={onFlavorChange}
           onEnhancerChange={onEnhancerChange}
+          onDietaryChange={onDietaryChange}
           onAutoAdvance={nextCreationStep}
         />
       )}

@@ -30,7 +30,8 @@ export const useCreationForm = () => {
     handleEnhancerChange,
     handleTemperatureChange,
     handleShapeChange,
-    handleFlavorChange
+    handleFlavorChange,
+    handleDietaryChange
   } = useCreationHandlers({
     currentStep,
     answers,
@@ -77,6 +78,7 @@ export const useCreationForm = () => {
     handleTemperatureChange,
     handleShapeChange,
     handleFlavorChange,
+    handleDietaryChange,
     nextStep,
     prevStep,
     handleSubmit,
