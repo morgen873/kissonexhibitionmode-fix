@@ -17,7 +17,7 @@ const StandbyLanding: React.FC = () => {
     setFlameInteractions(prev => prev + 1);
     toast({
       title: "OUCH! BE CAREFUL!",
-      description: `WARNING HOT SURFACE!,
+      description: `WARNING HOT SURFACE!`,
       duration: 2000,
     });
   };
