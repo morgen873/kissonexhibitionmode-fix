@@ -43,11 +43,11 @@ const StandbyLanding: React.FC = () => {
         <div className="absolute inset-0 pointer-events-none">
           {/* Left flame area - adjust position based on your video */}
           <div 
-            className="absolute w-20 h-24 pointer-events-auto cursor-pointer hover:bg-orange-500/20 transition-colors duration-200 rounded-full"
+            className="absolute w-60 h-60 pointer-events-auto cursor-pointer hover:bg-orange-500/20 transition-colors duration-200 rounded-full"
             style={{
-              top: '70%', // Adjust these percentages based on where flames appear in your video
-              left: '70%',
-              transform: 'translate(-100%, -100%)'
+              top: '50%', // Adjust these percentages based on where flames appear in your video
+              left: '30%',
+              transform: 'translate(-50%, -50%)'
             }}
             onClick={() => handleFlameTouch('left-flame')}
             onTouchStart={() => handleFlameTouch('left-flame')}
@@ -55,11 +55,11 @@ const StandbyLanding: React.FC = () => {
           
           {/* Right flame area - adjust position based on your video */}
           <div 
-            className="absolute w-20 h-24 pointer-events-auto cursor-pointer hover:bg-orange-500/20 transition-colors duration-200 rounded-full"
+            className="absolute w-40 h-48 pointer-events-auto cursor-pointer hover:bg-orange-500/20 transition-colors duration-200 rounded-full"
             style={{
-              top: '70%', // Adjust these percentages based on where flames appear in your video
-              right: '70%',
-              transform: 'translate(100%, -100%)'
+              top: '60%', // Adjust these percentages based on where flames appear in your video
+              right: '90%',
+              transform: 'translate(50%, -50%)'
             }}
             onClick={() => handleFlameTouch('right-flame')}
             onTouchStart={() => handleFlameTouch('right-flame')}
