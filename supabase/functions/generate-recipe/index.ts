@@ -43,11 +43,37 @@ serve(async (req) => {
     const emotionalContext = Object.values(payload.questions).join(' and ');
     const controlValues = Object.values(payload.controls)[0] || {};
     
+    // Extract dietary information
+    const dietaryInfo = controlValues.dietary || {};
+    const isVegan = dietaryInfo.vegan;
+    const isVegetarian = dietaryInfo.vegetarian;
+    const allergies = dietaryInfo.allergies || '';
+    const hasSpecialDiet = dietaryInfo.specialDiet;
+    
+    // Build dietary requirements string
+    let dietaryRequirements = '';
+    if (isVegan) {
+      dietaryRequirements += 'STRICTLY VEGAN - NO animal products, dairy, eggs, or any animal-derived ingredients. ';
+    } else if (isVegetarian) {
+      dietaryRequirements += 'VEGETARIAN - No meat or fish, but dairy and eggs are allowed. ';
+    }
+    if (allergies) {
+      dietaryRequirements += `ALLERGIES: Avoid all ingredients containing or related to: ${allergies}. `;
+    }
+    if (hasSpecialDiet) {
+      dietaryRequirements += 'SPECIAL DIET - Consider additional dietary restrictions. ';
+    }
+    
     const prompt = `Create a dumpling recipe based on:
     - Timeline: ${timelineTheme}
     - Emotional context: ${emotionalContext}
     - Shape: ${controlValues.shape || 'round'}
     - Flavor: ${controlValues.flavor || 'balanced'}
+    - Special Ingredient: ${controlValues.enhancer || 'none'}
+    
+    ${dietaryRequirements ? `CRITICAL DIETARY REQUIREMENTS: ${dietaryRequirements}` : ''}
+    
+    ${dietaryRequirements ? 'ENSURE ALL INGREDIENTS AND COOKING METHODS STRICTLY COMPLY WITH THE DIETARY REQUIREMENTS ABOVE.' : ''}
     
     Return a JSON object with title, description, cooking_recipe, and ingredients (organized by category).`;
 

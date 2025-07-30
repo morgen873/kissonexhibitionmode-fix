@@ -4,10 +4,32 @@ import OpenAI from 'https://esm.sh/openai@4.24.1'
 interface RecipePayload {
   questions: { [key: string]: string };
   timeline: { [key: string]: string };
-  controls: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } };
+  controls: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; dietary: { vegan: boolean; vegetarian: boolean; allergies: string; specialDiet: boolean; }; } };
 }
 
 export async function generateRecipeWithOpenAI(payload: RecipePayload, openai: OpenAI) {
+  // Extract dietary information from controls
+  const controlValues = Object.values(payload.controls)[0] || {};
+  const dietaryInfo = controlValues.dietary || {};
+  const isVegan = dietaryInfo.vegan;
+  const isVegetarian = dietaryInfo.vegetarian;
+  const allergies = dietaryInfo.allergies || '';
+  const hasSpecialDiet = dietaryInfo.specialDiet;
+  
+  // Build dietary requirements string
+  let dietaryRequirements = '';
+  if (isVegan) {
+    dietaryRequirements += 'STRICTLY VEGAN - NO animal products, dairy, eggs, or any animal-derived ingredients whatsoever. ';
+  } else if (isVegetarian) {
+    dietaryRequirements += 'VEGETARIAN - No meat or fish, but dairy and eggs are allowed. ';
+  }
+  if (allergies) {
+    dietaryRequirements += `ALLERGIES: Must completely avoid all ingredients containing or related to: ${allergies}. `;
+  }
+  if (hasSpecialDiet) {
+    dietaryRequirements += 'SPECIAL DIET - Consider additional dietary restrictions carefully. ';
+  }
+
   const prompt = `
     You are a creative chef specializing in "Memory KissOn" dumplings for a public culinary exhibition. 
     A user has provided the following inputs to create a unique, family-friendly recipe suitable for all audiences.
@@ -17,6 +39,9 @@ export async function generateRecipeWithOpenAI(payload: RecipePayload, openai: O
     - Questions & Answers: ${JSON.stringify(payload.questions, null, 2)}
     - Timeline selection: ${JSON.stringify(payload.timeline, null, 2)}
     - Control settings: ${JSON.stringify(payload.controls, null, 2)}
+
+    ${dietaryRequirements ? `CRITICAL DIETARY REQUIREMENTS: ${dietaryRequirements}` : ''}
+    ${dietaryRequirements ? 'YOU MUST ENSURE ALL INGREDIENTS AND COOKING METHODS STRICTLY COMPLY WITH THE DIETARY REQUIREMENTS ABOVE. THIS IS NON-NEGOTIABLE.' : ''}
 
     **Crucial Instructions:**
     The "Timeline selection" is the most important input. It defines the entire theme of the dumpling.
