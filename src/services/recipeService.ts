@@ -6,14 +6,14 @@ import { QuestionStep } from '@/types/creation';
 export interface RecipePayload {
   questions: { [key: string]: string };
   timeline: { [key: string]: string };
-  controls: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } };
+  controls: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; dietary: { vegan: boolean; vegetarian: boolean; allergies: string; specialDiet: boolean; }; } };
 }
 
 export class RecipeService {
   static processAnswers(
     answers: { [key: number]: string | string[] },
     customAnswers: { [key: number]: string },
-    controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } },
+    controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; dietary: { vegan: boolean; vegetarian: boolean; allergies: string; specialDiet: boolean; }; } },
     timelineValue?: string
   ): RecipePayload {
     const questionAnswers: { [key: string]: string } = {};

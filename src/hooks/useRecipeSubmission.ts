@@ -12,7 +12,7 @@ export const useRecipeSubmission = () => {
   const handleSubmit = async (
     answers: { [key: number]: string | string[] },
     customAnswers: { [key: number]: string },
-    controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; } },
+    controlValues: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; dietary: { vegan: boolean; vegetarian: boolean; allergies: string; specialDiet: boolean; }; } },
     timelineValue?: string
   ) => {
     setIsCreatingRecipe(true);
