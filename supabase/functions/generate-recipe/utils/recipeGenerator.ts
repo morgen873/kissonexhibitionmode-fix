@@ -126,30 +126,59 @@ export async function generateRecipeWithOpenAI(payload: RecipePayload, openai: O
   console.log("Raw OpenAI response received");
   
   try {
-    // Comprehensive JSON cleaning to remove ALL artifacts
+    // Aggressive JSON cleaning to remove ALL artifacts
     let cleanedContent = rawContent
       ?.replace(/```json\s*/g, '')
       ?.replace(/```\s*/g, '')
-      ?.replace(/^[^{]*{/, '{')  // Remove anything before the first {
-      ?.replace(/}[^}]*$/, '}')  // Remove anything after the last }
-      ?.trim();
+      ?.replace(/^[^{]*{/, '{')
+      ?.replace(/}[^}]*$/, '}')
+      ?.replace(/^\s*|\s*$/g, '') // Remove whitespace
+      ?.replace(/\n\s*\n/g, '\n'); // Remove extra newlines
     
     if (!cleanedContent) {
       throw new Error('Empty response from OpenAI');
     }
     
+    console.log('🧹 Cleaned content for parsing:', cleanedContent.substring(0, 200) + '...');
+    
     const recipeContent = JSON.parse(cleanedContent);
     console.log("✅ Comprehensive recipe generated with ALL user data:", recipeContent.title);
     
-    // Clean cooking recipe from any remaining JSON artifacts
+    // AGGRESSIVE cleaning of cooking recipe to remove ALL JSON artifacts
     if (recipeContent.cooking_recipe) {
-      recipeContent.cooking_recipe = recipeContent.cooking_recipe
-        .replace(/\\"/g, '"')     // Fix escaped quotes
-        .replace(/\\n/g, '\n')    // Convert literal \n to newlines
-        .replace(/\\\\/g, '\\')   // Fix double backslashes
-        .replace(/^["']|["']$/g, '') // Remove wrapping quotes
-        .replace(/^\s*{\s*"[^"]*":\s*"|"\s*}\s*$/g, '') // Remove JSON wrapper patterns
+      let cleanedRecipe = recipeContent.cooking_recipe;
+      
+      // Handle different input formats
+      if (typeof cleanedRecipe === 'object') {
+        // If it's an object with numbered steps, convert to string
+        if (typeof cleanedRecipe === 'object' && cleanedRecipe !== null) {
+          const steps = Object.keys(cleanedRecipe)
+            .sort((a, b) => {
+              const numA = parseInt(a.replace(/\D/g, '')) || 0;
+              const numB = parseInt(b.replace(/\D/g, '')) || 0;
+              return numA - numB;
+            })
+            .map(key => cleanedRecipe[key])
+            .filter(step => step && typeof step === 'string');
+          cleanedRecipe = steps.join('\n');
+        }
+      }
+      
+      // Clean string-based recipe instructions
+      cleanedRecipe = cleanedRecipe
+        .replace(/\\"/g, '"')           // Fix escaped quotes
+        .replace(/\\n/g, '\n')          // Convert literal \n to newlines
+        .replace(/\\\\/g, '\\')         // Fix double backslashes
+        .replace(/^["']|["']$/g, '')    // Remove wrapping quotes
+        .replace(/^\s*{\s*|\s*}\s*$/g, '') // Remove JSON wrapper braces
+        .replace(/\"step\d+\":\s*\"/g, '') // Remove step labels
+        .replace(/\",\s*\"/g, '\n')     // Convert JSON comma separators to newlines
+        .replace(/\"$/g, '')            // Remove trailing quote
+        .replace(/^\"/g, '')            // Remove leading quote
         .trim();
+      
+      recipeContent.cooking_recipe = cleanedRecipe;
+      console.log('🧹 Cleaned cooking recipe:', cleanedRecipe.substring(0, 100) + '...');
     }
     
     // Validate required fields
@@ -162,18 +191,36 @@ export async function generateRecipeWithOpenAI(payload: RecipePayload, openai: O
     console.error('❌ JSON parsing error:', parseError);
     console.error('Raw content:', rawContent);
     
-    // Fallback with user data incorporated
+    // ENHANCED fallback with STRICT dietary compliance
+    const veganFilling = [
+      "2 cups finely chopped shiitake mushrooms",
+      "1 cup crumbled firm tofu",
+      "2 green onions, minced",
+      "1 tsp fresh ginger, grated",
+      "2 tbsp soy sauce",
+      "1 tsp sesame oil",
+      "1/2 cup finely chopped cabbage",
+      "1 carrot, finely diced"
+    ];
+    
+    const regularFilling = [
+      "1 cup ground pork or chicken",
+      "1 cup napa cabbage, finely chopped",
+      "2 green onions, minced",
+      "1 tsp fresh ginger, grated",
+      "2 tbsp soy sauce",
+      "1 tsp sesame oil"
+    ];
+    
     return {
       title: `${timelineSelection} Memory Dumplings`,
-      description: `Personalized dumplings inspired by your ${timelineSelection} timeline journey${dietaryRequirements ? ' with dietary considerations' : ''}.`,
+      description: `Personalized dumplings inspired by your ${timelineSelection} timeline journey${dietaryRequirements ? ' with strict dietary compliance' : ''}.`,
       ingredients: {
-        "Dough": ["2 cups flour", "3/4 cup warm water", "1 tsp salt"],
-        "Filling": dietaryRequirements.includes('VEGAN') 
-          ? ["2 cups chopped mushrooms", "1 cup firm tofu", "2 green onions", "1 tsp ginger"]
-          : ["1 cup ground protein", "1 cup vegetables", "2 green onions", "1 tsp ginger"],
-        "Sauce": ["2 tbsp soy sauce", "1 tsp sesame oil", "1 tsp rice vinegar"]
+        "Dough": ["2 cups all-purpose flour", "3/4 cup warm water", "1 tsp salt", "1 tbsp vegetable oil"],
+        "Filling": isVegan ? veganFilling : regularFilling,
+        "Sauce": ["3 tbsp soy sauce", "1 tsp sesame oil", "1 tsp rice vinegar", "1/2 tsp chili oil (optional)"]
       },
-      cooking_recipe: `1. Mix dough ingredients and knead until smooth\\n2. Prepare filling by combining all ingredients\\n3. Roll dough into ${controlValues.shape} shapes\\n4. Fill and seal dumplings\\n5. Cook at ${controlValues.temperature}°C until golden`
+      cooking_recipe: `1. Mix flour, salt, and oil in a large bowl. Gradually add warm water, stirring until dough forms.\n2. Knead dough for 8-10 minutes until smooth and elastic. Cover and rest for 30 minutes.\n3. Prepare filling by combining all filling ingredients in a bowl and mixing well.\n4. Roll dough into small balls and flatten into ${controlValues.shape || 'round'} wrappers.\n5. Place 1 tablespoon of filling in center of each wrapper and seal edges.\n6. Steam dumplings for 12-15 minutes at ${controlValues.temperature || 180}°C until cooked through.\n7. Serve hot with dipping sauce.`
     };
   }
 }
