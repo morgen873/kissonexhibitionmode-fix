@@ -31,7 +31,7 @@ const CreationContainer: React.FC<CreationContainerProps> = ({
   children
 }) => {
   return (
-    <div className={`min-h-screen w-full bg-gradient-to-br ${theme.bg} transition-all duration-500 relative overflow-hidden touch-container-32`}>
+    <div className={`min-h-screen w-full bg-gradient-to-br ${theme.bg} transition-all duration-500 relative overflow-hidden touch-container-32 touch-32-safe-area`}>
       {/* Network Background */}
       <NetworkBackground className="z-0" />
       
@@ -60,16 +60,16 @@ const CreationContainer: React.FC<CreationContainerProps> = ({
 
         {/* Main Content Card - Centered with responsive sizing */}
         <div className="flex-1 flex items-center justify-center touch-container-32 touch-spacing">
-          <Card className={`w-full responsive-container-xl bg-card ${theme.cardShadow} transition-all duration-500 backdrop-blur-2xl border-2 border-border shadow-2xl touch-card-32`}>
+          <Card className={`w-full responsive-container-xl bg-card ${theme.cardShadow} transition-all duration-500 backdrop-blur-2xl border-2 border-border shadow-2xl touch-card-32 touch-32-card`}>
             <CardHeader className="touch-padding py-0 px-0">
               {showTitle && (
-                <CardTitle className={`responsive-heading-lg text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent drop-shadow-lg touch-heading-32 flex items-center justify-center font-bold`}>
+                <CardTitle className={`responsive-heading-lg text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent drop-shadow-lg touch-heading-32 touch-32-heading flex items-center justify-center font-bold`}>
                   {title}
                 </CardTitle>
               )}
             </CardHeader>
             
-            <CardContent className="touch-padding touch-32-optimized">
+            <CardContent className="touch-padding touch-32-optimized touch-32-container">
               {children}
             </CardContent>
           </Card>
