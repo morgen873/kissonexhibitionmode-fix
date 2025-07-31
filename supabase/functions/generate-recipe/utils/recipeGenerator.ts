@@ -122,18 +122,17 @@ export async function generateRecipeWithOpenAI(payload: RecipePayload, openai: O
   console.log("Raw OpenAI response received");
   
   try {
-    // Clean any potential JSON artifacts
+    // Clean ONLY markdown artifacts, preserve JSON structure
     const cleanedContent = rawContent
       ?.replace(/```json\s*/g, '')
       ?.replace(/```\s*/g, '')
-      ?.replace(/^\s*[\{\[]/, '') // Remove leading braces if duplicated
-      ?.replace(/[\}\]]\s*$/, '') // Remove trailing braces if duplicated
       ?.trim();
     
-    // Ensure we have proper JSON structure
-    const finalContent = cleanedContent?.startsWith('{') ? cleanedContent : `{${cleanedContent}}`;
+    if (!cleanedContent) {
+      throw new Error('Empty response from OpenAI');
+    }
     
-    const recipeContent = JSON.parse(finalContent);
+    const recipeContent = JSON.parse(cleanedContent);
     console.log("✅ Comprehensive recipe generated with ALL user data:", recipeContent.title);
     
     // Validate required fields
