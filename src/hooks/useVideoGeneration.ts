@@ -34,16 +34,16 @@ export const useVideoGeneration = () => {
       console.log('📊 Video status check result:', data);
       
       // Check if video_url starts with ERROR to handle error cases
-      if (data?.video_url && data.video_url.startsWith('ERROR')) {
-        console.error('❌ Video generation failed:', data.video_url);
-        toast.error('Video generation failed: ' + data.video_url.replace('ERROR: ', ''));
+      if ((data as any)?.video_url && (data as any).video_url.startsWith('ERROR')) {
+        console.error('❌ Video generation failed:', (data as any).video_url);
+        toast.error('Video generation failed: ' + (data as any).video_url.replace('ERROR: ', ''));
         return 'ERROR';
       }
 
       // Return the video URL if it exists and is a valid URL
-      if (data?.video_url && data.video_url.startsWith('http')) {
-        console.log('✅ Found valid video URL:', data.video_url);
-        return data.video_url;
+      if ((data as any)?.video_url && (data as any).video_url.startsWith('http')) {
+        console.log('✅ Found valid video URL:', (data as any).video_url);
+        return (data as any).video_url;
       }
 
       console.log('⏳ No video URL found yet');

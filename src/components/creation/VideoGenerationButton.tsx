@@ -23,7 +23,7 @@ const VideoGenerationButton: React.FC<VideoGenerationButtonProps> = ({
     try {
       console.log('🎬 VideoGenerationButton: Starting video generation process');
       // Extract image prompt from recipe data if available
-      const imagePrompt = recipe.imagePrompt;
+      const imagePrompt = (recipe as any)?.imagePrompt;
       console.log('🎬 VideoGenerationButton: About to call generateVideo');
       const videoUrl = await generateVideo(recipe.imageUrl, recipeId, recipe.name, imagePrompt);
       console.log('🎬 VideoGenerationButton: generateVideo returned:', videoUrl);
