@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import type { Tables } from '@/integrations/supabase/types';
 
 interface VideoGenerationResponse {
   success: boolean;
@@ -24,7 +25,7 @@ export const useVideoGeneration = () => {
         .from('recipes')
         .select('video_url')
         .eq('id', recipeId)
-        .maybeSingle();
+        .maybeSingle() as { data: { video_url: string | null } | null; error: any };
 
       if (error) {
         console.error('❌ Error checking video status:', error);
