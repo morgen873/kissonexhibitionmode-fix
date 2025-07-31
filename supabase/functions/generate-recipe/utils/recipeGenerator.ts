@@ -186,6 +186,29 @@ export async function generateRecipeWithOpenAI(payload: RecipePayload, openai: O
       throw new Error('Missing required recipe fields');
     }
     
+    // VEGAN VALIDATION - Enforce 100% vegan compliance
+    if (isVegan) {
+      const nonVeganItems = [
+        'meat', 'beef', 'pork', 'chicken', 'turkey', 'lamb', 'fish', 'salmon', 'tuna', 'shrimp', 'crab', 'lobster', 'seafood',
+        'dairy', 'milk', 'cheese', 'butter', 'cream', 'yogurt', 'sour cream', 'cottage cheese', 'parmesan', 'mozzarella',
+        'eggs', 'egg', 'mayonnaise', 'honey', 'gelatin', 'lard', 'bacon', 'ham', 'sausage', 'pepperoni'
+      ];
+      
+      const allIngredients = JSON.stringify(recipeContent.ingredients).toLowerCase();
+      const instructions = recipeContent.cooking_recipe.toLowerCase();
+      
+      const foundNonVegan = nonVeganItems.find(item => 
+        allIngredients.includes(item) || instructions.includes(item)
+      );
+      
+      if (foundNonVegan) {
+        console.log(`❌ VEGAN VALIDATION FAILED: Found "${foundNonVegan}" in AI recipe - using vegan fallback`);
+        throw new Error(`Non-vegan ingredient detected: ${foundNonVegan}`);
+      }
+      
+      console.log('✅ VEGAN VALIDATION PASSED: Recipe is 100% vegan compliant');
+    }
+    
     return recipeContent;
   } catch (parseError) {
     console.error('❌ JSON parsing error:', parseError);
