@@ -150,6 +150,9 @@ serve(async (req) => {
     console.log('Negative prompt:', negativePrompt);
     console.log('User inputs - Timeline:', timelineTheme, 'Shape:', controlValues.shape, 'Flavor:', controlValues.flavor);
     
+    console.log('🎨 ATTEMPTING IMAGE GENERATION...');
+    console.log('API Key available:', !!openAIApiKey);
+    
     try {
       const imageResponse = await fetch('https://api.openai.com/v1/images/generations', {
         method: 'POST',
@@ -158,46 +161,85 @@ serve(async (req) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'dall-e-3',
+          model: 'gpt-image-1',
           prompt: imagePrompt,
           n: 1,
           size: '1024x1024',
-          quality: 'standard',
-          response_format: 'url'
+          quality: 'high'
         }),
       });
 
-      console.log('Image response status:', imageResponse.status);
+      console.log('🖼️ Image API Response Status:', imageResponse.status);
       
       if (!imageResponse.ok) {
         const errorText = await imageResponse.text();
-        console.error('OpenAI image API error:', errorText);
-      } else {
-        const imageData = await imageResponse.json();
-        console.log('Image response received:', !!imageData.data?.[0]);
-        
-        if (imageData.data?.[0]?.url) {
-          const imageUrl = imageData.data[0].url;
-          console.log('Generated image URL:', imageUrl);
-          
-          // Update recipe with image URL directly
-          const { error: updateError } = await supabaseAdmin
-            .from('recipes')
-            .update({ image_url: imageUrl })
-            .eq('id', newRecipe.id);
-          
-          if (updateError) {
-            console.error('Update error:', updateError);
-          } else {
-            newRecipe.image_url = imageUrl;
-            console.log('Recipe updated with image URL successfully');
-          }
-        } else {
-          console.log('No image URL in response');
-        }
+        console.error('❌ OpenAI Image API Error:', imageResponse.status, errorText);
+        throw new Error(`OpenAI API error: ${imageResponse.status} - ${errorText}`);
       }
+      
+      const imageData = await imageResponse.json();
+      console.log('📸 Image Data Structure:', {
+        hasData: !!imageData.data,
+        dataLength: imageData.data?.length || 0,
+        hasUrl: !!imageData.data?.[0]?.url,
+        hasB64: !!imageData.data?.[0]?.b64_json
+      });
+      
+      // Handle both URL and base64 responses
+      let imageUrl = null;
+      if (imageData.data?.[0]?.url) {
+        imageUrl = imageData.data[0].url;
+        console.log('✅ Image URL received:', imageUrl);
+      } else if (imageData.data?.[0]?.b64_json) {
+        // For gpt-image-1, we get base64 data - need to upload to storage
+        console.log('📤 Converting base64 to storage URL...');
+        const base64Data = imageData.data[0].b64_json;
+        
+        // Convert base64 to blob and upload to Supabase storage
+        const imageBuffer = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
+        const fileName = `recipe-${newRecipe.id}-${Date.now()}.png`;
+        
+        const { data: uploadData, error: uploadError } = await supabaseAdmin.storage
+          .from('recipe-images')
+          .upload(fileName, imageBuffer, {
+            contentType: 'image/png',
+            cacheControl: '3600'
+          });
+        
+        if (uploadError) {
+          console.error('❌ Storage upload error:', uploadError);
+          throw new Error(`Storage upload failed: ${uploadError.message}`);
+        }
+        
+        // Get public URL
+        const { data: { publicUrl } } = supabaseAdmin.storage
+          .from('recipe-images')
+          .getPublicUrl(fileName);
+        
+        imageUrl = publicUrl;
+        console.log('✅ Image uploaded to storage:', imageUrl);
+      }
+      
+      if (imageUrl) {
+        // Update recipe with image URL
+        const { error: updateError } = await supabaseAdmin
+          .from('recipes')
+          .update({ image_url: imageUrl })
+          .eq('id', newRecipe.id);
+        
+        if (updateError) {
+          console.error('❌ Database update error:', updateError);
+        } else {
+          newRecipe.image_url = imageUrl;
+          console.log('✅ Recipe updated with image URL successfully');
+        }
+      } else {
+        console.log('❌ No image data received from OpenAI');
+        throw new Error('No image data in OpenAI response');
+      }
+      
     } catch (imageError) {
-      console.error('Image generation failed:', imageError);
+      console.error('❌ IMAGE GENERATION COMPLETELY FAILED:', imageError.message || imageError);
     }
 
     return new Response(JSON.stringify({ recipe: newRecipe }), {
