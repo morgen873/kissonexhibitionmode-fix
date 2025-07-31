@@ -3,12 +3,19 @@ import OpenAI from 'https://esm.sh/openai@4.24.1'
 
 interface RecipePayload {
   questions: { [key: string]: string };
+  questionTitles: { [key: string]: string };
   timeline: { [key: string]: string };
   controls: { [key: number]: { temperature: number; shape: string; flavor: string; enhancer: string; dietary: { vegan: boolean; vegetarian: boolean; allergies: string; specialDiet: boolean; }; } };
+  userJourney: {
+    totalSteps: number;
+    completedAnswers: number;
+    selectedOptions: string[];
+    customInputs: string[];
+  };
 }
 
 export async function generateRecipeWithOpenAI(payload: RecipePayload, openai: OpenAI) {
-  // Extract dietary information from controls
+  // Extract ALL user data for comprehensive recipe generation
   const controlValues = Object.values(payload.controls)[0] || {};
   const dietaryInfo = controlValues.dietary || {};
   const isVegan = dietaryInfo.vegan;
@@ -16,64 +23,141 @@ export async function generateRecipeWithOpenAI(payload: RecipePayload, openai: O
   const allergies = dietaryInfo.allergies || '';
   const hasSpecialDiet = dietaryInfo.specialDiet;
   
-  // Build dietary requirements string
+  // Build comprehensive dietary requirements string
   let dietaryRequirements = '';
   if (isVegan) {
-    dietaryRequirements += 'STRICTLY VEGAN - NO animal products, dairy, eggs, or any animal-derived ingredients whatsoever. ';
+    dietaryRequirements += 'ABSOLUTELY VEGAN - ZERO animal products, dairy, eggs, honey, or ANY animal-derived ingredients. Use plant-based alternatives only. ';
   } else if (isVegetarian) {
-    dietaryRequirements += 'VEGETARIAN - No meat or fish, but dairy and eggs are allowed. ';
+    dietaryRequirements += 'STRICTLY VEGETARIAN - No meat, poultry, fish, or seafood. Dairy and eggs are acceptable. ';
   }
   if (allergies) {
-    dietaryRequirements += `ALLERGIES: Must completely avoid all ingredients containing or related to: ${allergies}. `;
+    dietaryRequirements += `SEVERE ALLERGIES - MUST completely eliminate all traces of: ${allergies}. Check all ingredients for cross-contamination. `;
   }
   if (hasSpecialDiet) {
-    dietaryRequirements += 'SPECIAL DIET - Consider additional dietary restrictions carefully. ';
+    dietaryRequirements += 'SPECIAL DIETARY NEEDS - Apply additional dietary restrictions with extreme care. ';
   }
 
+  // Extract all user journey data
+  const timelineSelection = Object.values(payload.timeline)[0] || 'Present';
+  const questionsData = payload.questions;
+  const questionTitles = payload.questionTitles;
+  const userJourney = payload.userJourney;
+  
+  // Create comprehensive context from ALL user inputs
+  const comprehensiveContext = {
+    timeline: timelineSelection,
+    emotionalJourney: Object.keys(questionsData).map(key => ({
+      question: questionTitles[key] || `Question ${key}`,
+      answer: questionsData[key]
+    })),
+    culinaryControls: {
+      temperature: controlValues.temperature || 180,
+      shape: controlValues.shape || 'round',
+      flavor: controlValues.flavor || 'balanced',
+      enhancer: controlValues.enhancer || 'traditional herbs',
+    },
+    userPreferences: {
+      selectedOptions: userJourney.selectedOptions,
+      customInputs: userJourney.customInputs,
+      journeyCompletion: `${userJourney.completedAnswers}/${userJourney.totalSteps}`
+    },
+    dietaryRestrictions: dietaryRequirements
+  };
+
+  console.log('🔍 COMPREHENSIVE RECIPE CONTEXT:', comprehensiveContext);
+
   const prompt = `
-    You are a creative chef specializing in "Memory KissOn" dumplings for a public culinary exhibition. 
-    A user has provided the following inputs to create a unique, family-friendly recipe suitable for all audiences.
-    Your task is to generate a dumpling recipe that incorporates all the user's choices while being appropriate for a public exhibition.
+    You are an expert chef creating "Memory KissOn" dumplings for a culinary exhibition. 
+    You have received COMPLETE user journey data and must use ALL of it to create a personalized recipe.
 
-    User Inputs:
-    - Questions & Answers: ${JSON.stringify(payload.questions, null, 2)}
-    - Timeline selection: ${JSON.stringify(payload.timeline, null, 2)}
-    - Control settings: ${JSON.stringify(payload.controls, null, 2)}
+    COMPLETE USER JOURNEY DATA:
+    ${JSON.stringify(comprehensiveContext, null, 2)}
 
-    ${dietaryRequirements ? `CRITICAL DIETARY REQUIREMENTS: ${dietaryRequirements}` : ''}
-    ${dietaryRequirements ? 'YOU MUST ENSURE ALL INGREDIENTS AND COOKING METHODS STRICTLY COMPLY WITH THE DIETARY REQUIREMENTS ABOVE. THIS IS NON-NEGOTIABLE.' : ''}
+    **CRITICAL DIETARY COMPLIANCE:**
+    ${dietaryRequirements ? `${dietaryRequirements}
+    
+    YOU MUST VERIFY EVERY SINGLE INGREDIENT COMPLIES WITH THESE RESTRICTIONS. NO EXCEPTIONS.
+    If vegan: NO animal products whatsoever - use plant milk, vegan butter, tofu, mushrooms, vegetables only.
+    If allergies mentioned: COMPLETELY eliminate those allergens from ALL ingredients.` : 'No specific dietary restrictions.'}
 
-    **Crucial Instructions:**
-    The "Timeline selection" is the most important input. It defines the entire theme of the dumpling.
-    - If the timeline is futuristic (e.g., "Future 1", "Future 2"), use innovative culinary techniques and modern ingredients. Focus on molecular gastronomy, lab-grown proteins, and futuristic cooking methods.
-    - If the timeline is historical (e.g., "Past 1", "Past 2"), use traditional ingredients and authentic historical cooking methods. Focus on heritage techniques and time-honored ingredients.
-    - If the timeline is present day ("Present"), use contemporary cooking techniques with modern, accessible ingredients.
-    - All other inputs (questions, controls) should be interpreted through the lens of the selected timeline.
+    **TIMELINE-DRIVEN RECIPE CREATION:**
+    Timeline: ${timelineSelection}
+    - FUTURE: Use molecular gastronomy, innovative techniques, lab-grown ingredients, futuristic presentation
+    - PAST: Use traditional methods, heritage ingredients, historical cooking techniques
+    - PRESENT: Use contemporary methods with modern, accessible ingredients
 
-    **Exhibition Guidelines:**
-    - Use only family-friendly, professional culinary language
-    - Focus on cooking techniques, ingredient combinations, and sensory descriptions
-    - Avoid any potentially controversial or inappropriate content
-    - Keep descriptions warm, welcoming, and suitable for all ages
-    - Emphasize the cultural and emotional aspects of cooking and sharing food
+    **USE ALL USER DATA:**
+    - Incorporate emotional responses: ${Object.values(questionsData).join(', ')}
+    - Apply ALL selected preferences: ${userJourney.selectedOptions.join(', ')}
+    - Include custom inputs: ${userJourney.customInputs.join(', ')}
+    - Match temperature setting: ${controlValues.temperature}°C cooking
+    - Create ${controlValues.shape} shaped dumplings
+    - Apply ${controlValues.flavor} flavor profile
+    - Enhance with: ${controlValues.enhancer}
 
-    Generate the following information in a JSON format. Do not include any text outside of the JSON object.
-    The JSON object should have these exact keys: "title", "description", "ingredients", "cooking_recipe".
-    - "title": A creative and appealing name for the dumpling recipe, fitting the timeline (maximum 100 characters)
-    - "description": A warm, family-friendly paragraph describing the dumplings and their connection to the timeline and emotions (maximum 500 characters)
-    - "ingredients": A JSON object where keys are categories (e.g., "Dough", "Filling") and values are arrays of strings, with each string being an ingredient with measurements
-    - "cooking_recipe": A string containing clear, numbered, step-by-step instructions using professional cooking terminology (use \\n for newlines between steps)
+    **OUTPUT REQUIREMENTS:**
+    Return ONLY a valid JSON object with NO extra text, markdown, or artifacts.
+    Structure:
+    {
+      "title": "Creative dumpling name reflecting timeline and user journey (max 80 chars)",
+      "description": "Warm description connecting timeline, emotions, and personal choices (max 400 chars)",
+      "ingredients": {
+        "Dough": ["ingredient with measurement", ...],
+        "Filling": ["ingredient with measurement", ...],
+        "Sauce": ["ingredient with measurement", ...]
+      },
+      "cooking_recipe": "Step-by-step instructions separated by \\n, incorporating temperature, shape, and all user preferences"
+    }
   `;
 
-  console.log("Generating exhibition-appropriate recipe with OpenAI...");
+  console.log("Generating comprehensive recipe with ALL user data...");
   const response = await openai.chat.completions.create({
-    model: 'gpt-4o-mini',
+    model: 'gpt-4.1-2025-04-14',
     messages: [{ role: 'user', content: prompt }],
     response_format: { type: 'json_object' },
+    temperature: 0.7,
   });
 
-  const recipeContent = JSON.parse(response.choices[0].message.content);
-  console.log("Exhibition-appropriate recipe generated successfully:", recipeContent.title);
+  const rawContent = response.choices[0].message.content;
+  console.log("Raw OpenAI response received");
   
-  return recipeContent;
+  try {
+    // Clean any potential JSON artifacts
+    const cleanedContent = rawContent
+      ?.replace(/```json\s*/g, '')
+      ?.replace(/```\s*/g, '')
+      ?.replace(/^\s*[\{\[]/, '') // Remove leading braces if duplicated
+      ?.replace(/[\}\]]\s*$/, '') // Remove trailing braces if duplicated
+      ?.trim();
+    
+    // Ensure we have proper JSON structure
+    const finalContent = cleanedContent?.startsWith('{') ? cleanedContent : `{${cleanedContent}}`;
+    
+    const recipeContent = JSON.parse(finalContent);
+    console.log("✅ Comprehensive recipe generated with ALL user data:", recipeContent.title);
+    
+    // Validate required fields
+    if (!recipeContent.title || !recipeContent.description || !recipeContent.ingredients || !recipeContent.cooking_recipe) {
+      throw new Error('Missing required recipe fields');
+    }
+    
+    return recipeContent;
+  } catch (parseError) {
+    console.error('❌ JSON parsing error:', parseError);
+    console.error('Raw content:', rawContent);
+    
+    // Fallback with user data incorporated
+    return {
+      title: `${timelineSelection} Memory Dumplings`,
+      description: `Personalized dumplings inspired by your ${timelineSelection} timeline journey${dietaryRequirements ? ' with dietary considerations' : ''}.`,
+      ingredients: {
+        "Dough": ["2 cups flour", "3/4 cup warm water", "1 tsp salt"],
+        "Filling": dietaryRequirements.includes('VEGAN') 
+          ? ["2 cups chopped mushrooms", "1 cup firm tofu", "2 green onions", "1 tsp ginger"]
+          : ["1 cup ground protein", "1 cup vegetables", "2 green onions", "1 tsp ginger"],
+        "Sauce": ["2 tbsp soy sauce", "1 tsp sesame oil", "1 tsp rice vinegar"]
+      },
+      cooking_recipe: `1. Mix dough ingredients and knead until smooth\\n2. Prepare filling by combining all ingredients\\n3. Roll dough into ${controlValues.shape} shapes\\n4. Fill and seal dumplings\\n5. Cook at ${controlValues.temperature}°C until golden`
+    };
+  }
 }

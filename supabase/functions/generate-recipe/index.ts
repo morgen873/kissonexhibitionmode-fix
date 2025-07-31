@@ -5,8 +5,15 @@ import OpenAI from 'https://esm.sh/openai@4.24.1'
 
 interface RecipePayload {
   questions: { [key: string]: string };
+  questionTitles: { [key: string]: string };
   timeline: { [key: string]: string };
   controls: { [key: string]: any };
+  userJourney: {
+    totalSteps: number;
+    completedAnswers: number;
+    selectedOptions: string[];
+    customInputs: string[];
+  };
 }
 
 serve(async (req) => {
@@ -17,13 +24,27 @@ serve(async (req) => {
   try {
     const payload: RecipePayload = await req.json()
     
-    // Quick validation
-    if (!payload.questions || !payload.timeline || !payload.controls) {
-      return new Response(JSON.stringify({ error: "Missing required data" }), {
+    // Comprehensive validation of ALL user data
+    if (!payload.questions || !payload.timeline || !payload.controls || !payload.userJourney) {
+      console.error('❌ INCOMPLETE PAYLOAD RECEIVED:', {
+        hasQuestions: !!payload.questions,
+        hasTimeline: !!payload.timeline,
+        hasControls: !!payload.controls,
+        hasUserJourney: !!payload.userJourney
+      });
+      return new Response(JSON.stringify({ error: "Missing required comprehensive user data" }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 400,
       })
     }
+
+    console.log('✅ COMPREHENSIVE PAYLOAD VALIDATION PASSED:', {
+      questionsCount: Object.keys(payload.questions).length,
+      timelineCount: Object.keys(payload.timeline).length,
+      controlsCount: Object.keys(payload.controls).length,
+      userJourneySteps: payload.userJourney.totalSteps,
+      completionRate: `${payload.userJourney.completedAnswers}/${payload.userJourney.totalSteps}`
+    });
 
     // Environment setup
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
@@ -38,72 +59,43 @@ serve(async (req) => {
     const supabaseAdmin = createClient(supabaseUrl, supabaseServiceRoleKey)
     const openAI = new OpenAI({ apiKey: openAIApiKey });
 
-    // Generate recipe
-    const timelineTheme = Object.values(payload.timeline)[0] || 'Present';
-    const emotionalContext = Object.values(payload.questions).join(' and ');
-    const controlValues = Object.values(payload.controls)[0] || {};
+    // Import the comprehensive recipe generator
+    const { generateRecipeWithOpenAI } = await import('./utils/recipeGenerator.ts');
     
-    // Extract dietary information
-    const dietaryInfo = controlValues.dietary || {};
-    const isVegan = dietaryInfo.vegan;
-    const isVegetarian = dietaryInfo.vegetarian;
-    const allergies = dietaryInfo.allergies || '';
-    const hasSpecialDiet = dietaryInfo.specialDiet;
-    
-    // Build dietary requirements string
-    let dietaryRequirements = '';
-    if (isVegan) {
-      dietaryRequirements += 'STRICTLY VEGAN - NO animal products, dairy, eggs, or any animal-derived ingredients. ';
-    } else if (isVegetarian) {
-      dietaryRequirements += 'VEGETARIAN - No meat or fish, but dairy and eggs are allowed. ';
-    }
-    if (allergies) {
-      dietaryRequirements += `ALLERGIES: Avoid all ingredients containing or related to: ${allergies}. `;
-    }
-    if (hasSpecialDiet) {
-      dietaryRequirements += 'SPECIAL DIET - Consider additional dietary restrictions. ';
-    }
-    
-    console.log('🔍 DEBUG: Dietary information received:', {
-      isVegan,
-      isVegetarian,
-      allergies,
-      hasSpecialDiet,
-      dietaryRequirements
-    });
-    
-    const prompt = `Create a dumpling recipe based on:
-    - Timeline: ${timelineTheme}
-    - Emotional context: ${emotionalContext}
-    - Shape: ${controlValues.shape || 'round'}
-    - Flavor: ${controlValues.flavor || 'balanced'}
-    - Special Ingredient: ${controlValues.enhancer || 'none'}
-    
-    ${dietaryRequirements ? `CRITICAL DIETARY REQUIREMENTS: ${dietaryRequirements}` : ''}
-    
-    ${dietaryRequirements ? 'ENSURE ALL INGREDIENTS AND COOKING METHODS STRICTLY COMPLY WITH THE DIETARY REQUIREMENTS ABOVE.' : ''}
-    
-    Return a JSON object with title, description, cooking_recipe, and ingredients (organized by category).`;
-
-    console.log('🔍 DEBUG: Full prompt sent to OpenAI:', prompt);
-
-    const completion = await openAI.chat.completions.create({
-      model: "gpt-4.1-2025-04-14",
-      messages: [{ role: "user", content: prompt }],
-      temperature: 0.7,
+    console.log('🚀 GENERATING COMPREHENSIVE RECIPE WITH ALL USER DATA...');
+    console.log('📊 Input Summary:', {
+      timeline: Object.values(payload.timeline)[0],
+      questionsAnswered: Object.keys(payload.questions).length,
+      userJourneyCompletion: `${payload.userJourney.completedAnswers}/${payload.userJourney.totalSteps}`,
+      hasControls: !!Object.keys(payload.controls).length,
+      selectedOptions: payload.userJourney.selectedOptions.length,
+      customInputs: payload.userJourney.customInputs.length
     });
 
-    const recipeContent = completion.choices[0].message.content;
+    // Generate comprehensive recipe using ALL user data
     let parsedRecipe;
-    
     try {
-      parsedRecipe = JSON.parse(recipeContent || '{}');
-    } catch {
+      parsedRecipe = await generateRecipeWithOpenAI(payload, openAI);
+      console.log('✅ COMPREHENSIVE RECIPE GENERATED SUCCESSFULLY:', parsedRecipe.title);
+    } catch (error) {
+      console.error('❌ Comprehensive recipe generation failed:', error);
+      
+      // Enhanced fallback with user data
+      const controlValues = Object.values(payload.controls)[0] || {};
+      const dietaryInfo = controlValues.dietary || {};
+      const timelineTheme = Object.values(payload.timeline)[0] || 'Present';
+      
       parsedRecipe = {
-        title: "Custom Dumpling Recipe",
-        description: "A delicious dumpling recipe",
-        cooking_recipe: "Cook the dumplings with care",
-        ingredients: { "Main": ["flour", "water", "filling"] }
+        title: `${timelineTheme} Memory Dumplings`,
+        description: `Personalized dumplings reflecting your ${timelineTheme} journey${dietaryInfo.vegan ? ' (Vegan)' : dietaryInfo.vegetarian ? ' (Vegetarian)' : ''}.`,
+        cooking_recipe: `1. Prepare dough according to traditional methods\\n2. Create filling with ${controlValues.flavor || 'balanced'} flavors\\n3. Shape into ${controlValues.shape || 'round'} dumplings\\n4. Cook at optimal temperature\\n5. Serve with complementary sauce`,
+        ingredients: {
+          "Dough": ["2 cups all-purpose flour", "3/4 cup warm water", "1 tsp salt"],
+          "Filling": dietaryInfo.vegan 
+            ? ["2 cups mixed mushrooms", "1 cup firm tofu", "2 green onions", "ginger", "garlic"]
+            : ["1 cup protein of choice", "1 cup vegetables", "seasonings"],
+          "Sauce": ["soy sauce", "sesame oil", "rice vinegar", "chili oil (optional)"]
+        }
       };
     }
 
@@ -125,6 +117,10 @@ serve(async (req) => {
       throw new Error('Failed to save recipe');
     }
 
+    // Extract control values for image generation
+    const controlValues = Object.values(payload.controls)[0] || {};
+    const timelineTheme = Object.values(payload.timeline)[0] || 'Present';
+    
     // Import simplified prompt builder
     const { buildSimplifiedPrompt } = await import('./utils/simplifiedPromptBuilder.ts');
     
