@@ -64,6 +64,14 @@ serve(async (req) => {
       dietaryRequirements += 'SPECIAL DIET - Consider additional dietary restrictions. ';
     }
     
+    console.log('🔍 DEBUG: Dietary information received:', {
+      isVegan,
+      isVegetarian,
+      allergies,
+      hasSpecialDiet,
+      dietaryRequirements
+    });
+    
     const prompt = `Create a dumpling recipe based on:
     - Timeline: ${timelineTheme}
     - Emotional context: ${emotionalContext}
@@ -77,8 +85,10 @@ serve(async (req) => {
     
     Return a JSON object with title, description, cooking_recipe, and ingredients (organized by category).`;
 
+    console.log('🔍 DEBUG: Full prompt sent to OpenAI:', prompt);
+
     const completion = await openAI.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-4.1-2025-04-14",
       messages: [{ role: "user", content: prompt }],
       temperature: 0.7,
     });
