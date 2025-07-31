@@ -109,18 +109,23 @@ export const useAnswerHandlers = ({
     };
 
     const handleDietaryChange = (field: 'vegan' | 'vegetarian' | 'allergies' | 'specialDiet', value: boolean | string) => {
+        console.log('🍽️ Dietary change event:', { field, value, currentStep });
         const currentStepData = steps[currentStep];
         if (currentStepData.type === 'controls') {
-            setControlValues(prev => ({
-                ...prev,
-                [currentStepData.id]: {
-                    ...prev[currentStepData.id],
-                    dietary: {
-                        ...prev[currentStepData.id].dietary,
-                        [field]: value
+            setControlValues(prev => {
+                const newControlValues = {
+                    ...prev,
+                    [currentStepData.id]: {
+                        ...prev[currentStepData.id],
+                        dietary: {
+                            ...prev[currentStepData.id].dietary,
+                            [field]: value
+                        }
                     }
-                }
-            }));
+                };
+                console.log('🔍 Updated control values after dietary change:', JSON.stringify(newControlValues, null, 2));
+                return newControlValues;
+            });
         }
     };
 

@@ -28,6 +28,8 @@ export const useRecipeSubmission = () => {
         hasTimeline: !!payload.timeline && Object.keys(payload.timeline).length > 0,
         hasControls: !!payload.controls && Object.keys(payload.controls).length > 0
       });
+      console.log("🔍 DEBUGGING - Control Values at submission:", JSON.stringify(controlValues, null, 2));
+      console.log("🔍 DEBUGGING - Dietary info in payload:", JSON.stringify(payload.controls, null, 2));
       
       console.log("🚀 Calling recipe generation service...");
       const newRecipe = await RecipeService.generateRecipe(payload);
