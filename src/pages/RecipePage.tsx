@@ -125,11 +125,12 @@ const RecipePage = () => {
                                     ?.replace(/^["']|["']$/g, '') // Remove leading/trailing quotes
                                     ?.replace(/\\"/g, '"') // Replace escaped quotes
                                     ?.replace(/\\n/g, '\n') // Convert literal \n to actual newlines
+                                    ?.replace(/\\\\/g, '\\') // Replace double backslashes
+                                    ?.replace(/^"(\d+)\./g, '$1.') // Remove quotes around step numbers
                                     ?.split('\n')
                                     .filter(step => step.trim()) // Remove empty lines
                                     .map((step, index) => (
                                         <div key={index} className="mb-3 last:mb-0">
-                                            <span className="font-medium text-primary">{index + 1}. </span>
                                             {step.trim()}
                                         </div>
                                     ))
