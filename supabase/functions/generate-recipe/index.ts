@@ -7,7 +7,18 @@ interface RecipePayload {
   questions: { [key: string]: string };
   questionTitles: { [key: string]: string };
   timeline: { [key: string]: string };
-  controls: { [key: string]: any };
+  controls: { [key: number]: { 
+    temperature: number; 
+    shape: string; 
+    flavor: string; 
+    enhancer: string; 
+    dietary: { 
+      vegan: boolean; 
+      vegetarian: boolean; 
+      allergies: string; 
+      specialDiet: boolean; 
+    }; 
+  } };
   userJourney: {
     totalSteps: number;
     completedAnswers: number;

@@ -73,12 +73,16 @@ export async function generateRecipeWithOpenAI(payload: RecipePayload, openai: O
     COMPLETE USER JOURNEY DATA:
     ${JSON.stringify(comprehensiveContext, null, 2)}
 
-    **CRITICAL DIETARY COMPLIANCE:**
+    **CRITICAL DIETARY COMPLIANCE - ABSOLUTELY MANDATORY:**
     ${dietaryRequirements ? `${dietaryRequirements}
     
-    YOU MUST VERIFY EVERY SINGLE INGREDIENT COMPLIES WITH THESE RESTRICTIONS. NO EXCEPTIONS.
-    If vegan: NO animal products whatsoever - use plant milk, vegan butter, tofu, mushrooms, vegetables only.
-    If allergies mentioned: COMPLETELY eliminate those allergens from ALL ingredients.` : 'No specific dietary restrictions.'}
+    🚨 DIETARY RESTRICTION ENFORCEMENT 🚨
+    - If VEGAN: ABSOLUTELY NO meat, poultry, fish, seafood, dairy, eggs, honey, gelatin, or ANY animal products
+    - Use ONLY: vegetables, fruits, grains, legumes, nuts, seeds, plant-based proteins (tofu, tempeh), plant milks
+    - If VEGETARIAN: NO meat, poultry, fish, or seafood. Dairy and eggs ARE allowed
+    - If ALLERGIES mentioned: COMPLETELY eliminate ALL traces of those allergens
+    - DOUBLE-CHECK every single ingredient before including it
+    - When in doubt, choose plant-based alternatives` : 'No specific dietary restrictions.'}
 
     **TIMELINE-DRIVEN RECIPE CREATION:**
     Timeline: ${timelineSelection}
@@ -122,10 +126,12 @@ export async function generateRecipeWithOpenAI(payload: RecipePayload, openai: O
   console.log("Raw OpenAI response received");
   
   try {
-    // Clean ONLY markdown artifacts, preserve JSON structure
-    const cleanedContent = rawContent
+    // Comprehensive JSON cleaning to remove ALL artifacts
+    let cleanedContent = rawContent
       ?.replace(/```json\s*/g, '')
       ?.replace(/```\s*/g, '')
+      ?.replace(/^[^{]*{/, '{')  // Remove anything before the first {
+      ?.replace(/}[^}]*$/, '}')  // Remove anything after the last }
       ?.trim();
     
     if (!cleanedContent) {
@@ -134,6 +140,17 @@ export async function generateRecipeWithOpenAI(payload: RecipePayload, openai: O
     
     const recipeContent = JSON.parse(cleanedContent);
     console.log("✅ Comprehensive recipe generated with ALL user data:", recipeContent.title);
+    
+    // Clean cooking recipe from any remaining JSON artifacts
+    if (recipeContent.cooking_recipe) {
+      recipeContent.cooking_recipe = recipeContent.cooking_recipe
+        .replace(/\\"/g, '"')     // Fix escaped quotes
+        .replace(/\\n/g, '\n')    // Convert literal \n to newlines
+        .replace(/\\\\/g, '\\')   // Fix double backslashes
+        .replace(/^["']|["']$/g, '') // Remove wrapping quotes
+        .replace(/^\s*{\s*"[^"]*":\s*"|"\s*}\s*$/g, '') // Remove JSON wrapper patterns
+        .trim();
+    }
     
     // Validate required fields
     if (!recipeContent.title || !recipeContent.description || !recipeContent.ingredients || !recipeContent.cooking_recipe) {
