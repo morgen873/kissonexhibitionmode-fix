@@ -1,6 +1,77 @@
 
 /* Responsive utility classes for consistent layouts */
 
+/* Mobile-first containers */
+.mobile-container {
+  @apply w-full mx-auto px-2 sm:px-3 md:px-4;
+  max-width: 100vw;
+}
+
+.mobile-container-sm {
+  @apply w-full mx-auto px-3 sm:px-4;
+  max-width: 95vw;
+}
+
+.mobile-safe-area {
+  @apply px-4 py-2 sm:px-6 sm:py-3;
+}
+
+/* Mobile spacing utilities */
+.mobile-padding {
+  @apply p-2 sm:p-3 md:p-4;
+}
+
+.mobile-gap {
+  @apply gap-2 sm:gap-3 md:gap-4;
+}
+
+.mobile-margin {
+  @apply m-2 sm:m-3 md:m-4;
+}
+
+/* Mobile typography */
+.mobile-heading-xl {
+  @apply text-lg sm:text-xl md:text-2xl font-bold font-mono;
+}
+
+.mobile-heading-lg {
+  @apply text-base sm:text-lg md:text-xl font-bold font-mono;
+}
+
+.mobile-heading-md {
+  @apply text-sm sm:text-base md:text-lg font-semibold font-mono;
+}
+
+.mobile-text {
+  @apply text-xs sm:text-sm md:text-base;
+}
+
+.mobile-text-sm {
+  @apply text-xs sm:text-sm;
+}
+
+/* Mobile buttons */
+.mobile-button {
+  @apply px-3 py-2 sm:px-4 sm:py-2 text-sm rounded-lg transition-all duration-200 min-h-[44px] min-w-[44px];
+}
+
+.mobile-button-lg {
+  @apply px-4 py-3 sm:px-6 sm:py-3 text-base rounded-lg transition-all duration-200 min-h-[48px] min-w-[48px];
+}
+
+.mobile-icon-button {
+  @apply w-10 h-10 sm:w-12 sm:h-12 rounded-lg transition-all duration-200;
+}
+
+/* Mobile cards */
+.mobile-card {
+  @apply rounded-lg shadow-md border border-gray-200/20;
+}
+
+.mobile-card-dark {
+  @apply bg-black/20 backdrop-blur-md border border-white/10 shadow-lg rounded-lg;
+}
+
 /* Container utilities */
 .responsive-container {
   @apply w-full max-w-7xl mx-auto px-3 sm:px-4 lg:px-8;
