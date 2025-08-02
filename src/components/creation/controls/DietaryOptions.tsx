@@ -21,7 +21,7 @@ const DietaryOptions: React.FC<DietaryOptionsProps> = ({
     <div className="w-full bg-black/20 backdrop-blur-sm border-2 border-green-400/20 rounded-2xl p-6 mb-6 shadow-lg shadow-green-400/5">
       <h3 className="text-center text-white/90 font-mono font-bold mb-4">Dietary Preferences</h3>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Vegan Option */}
         <div className="flex items-center space-x-2">
           <Checkbox 
@@ -64,7 +64,7 @@ const DietaryOptions: React.FC<DietaryOptionsProps> = ({
           value={dietaryValues.allergies}
           onChange={(e) => onDietaryChange('allergies', e.target.value)}
           placeholder="Please describe any food allergies or intolerances..."
-          className="bg-black/30 border-green-400/30 text-white/90 placeholder:text-white/50 focus:border-green-400 font-mono min-h-[80px]"
+          className="bg-black/30 border-green-400/30 text-white/90 placeholder:text-white/50 focus:border-green-400 font-mono min-h-[60px] max-h-[80px]"
         />
       </div>
     </div>
