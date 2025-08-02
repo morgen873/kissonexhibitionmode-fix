@@ -32,9 +32,8 @@ const EnhancerInput: React.FC<EnhancerInputProps> = ({
     return (
         <div className="touch-spacing">
             <textarea
-                rows={1}
-                className={`w-full bg-white/10 border-2 rounded-lg touch-padding responsive-text text-white block transition focus:ring-white focus:border-white font-mono text-center resize-none touch-target min-h-[60px] max-h-[80px] ${
-                    profanityWarning ? 'border-red-500' : 'border-white/20'
+                className={`w-full bg-black/30 border-green-400/30 text-white/90 placeholder:text-white/50 focus:border-green-400 font-mono min-h-[60px] max-h-[80px] rounded-lg px-3 py-2 text-center resize-none transition ${
+                    profanityWarning ? 'border-red-500' : ''
                 }`}
                 value={value}
                 onChange={handleTextChange}
