@@ -60,8 +60,8 @@ const CreationContainer: React.FC<CreationContainerProps> = ({
 
         {/* Main Content Card - Optimized for 32-inch no-scroll */}
         <div className="flex-1 flex items-center justify-center px-8 pb-16">
-          <Card className={`w-full max-w-none bg-card ${theme.cardShadow} transition-all duration-500 backdrop-blur-2xl border-2 border-border shadow-2xl touch-32-card max-h-[85vh] overflow-hidden`}>
-            <CardHeader className="px-8 py-4">
+          <Card className={`w-full max-w-none bg-card ${theme.cardShadow} transition-all duration-500 backdrop-blur-2xl border-2 border-border shadow-2xl touch-32-card h-fit max-h-[calc(100vh-120px)]`}>
+            <CardHeader className="px-8 py-4 flex-shrink-0">
               {showTitle && (
                 <CardTitle className={`touch-32-heading text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent drop-shadow-lg flex items-center justify-center font-bold`}>
                   {title}
@@ -69,8 +69,8 @@ const CreationContainer: React.FC<CreationContainerProps> = ({
               )}
             </CardHeader>
             
-            <CardContent className="px-8 pb-8 h-full overflow-hidden">
-              <div className="h-full overflow-y-auto touch-32-optimized">
+            <CardContent className="px-8 pb-8 flex-1 overflow-y-auto">
+              <div className="touch-32-optimized">
                 {children}
               </div>
             </CardContent>
