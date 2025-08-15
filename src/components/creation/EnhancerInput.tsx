@@ -32,7 +32,7 @@ const EnhancerInput: React.FC<EnhancerInputProps> = ({
     return (
         <div className="w-full">
             <textarea
-                className={`w-full bg-black/30 border-2 border-green-400/30 text-white/90 placeholder:text-white/50 focus:border-green-400 font-mono min-h-[60px] max-h-[80px] rounded-lg px-3 py-2 text-center resize-none transition focus:outline-none ${
+                className={`w-full bg-black/30 border-2 border-green-400/30 text-white/90 placeholder:text-white/50 focus:border-green-400 font-mono touch-32-textarea rounded-lg px-3 py-2 text-center resize-none transition focus:outline-none ${
                     profanityWarning ? 'border-red-500' : ''
                 }`}
                 value={value}
