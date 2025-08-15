@@ -50,7 +50,7 @@ const IntroNavigation: React.FC<IntroNavigationProps> = ({
                     <Button 
                         onClick={handlePrevClick} 
                         variant="ghost" 
-                        className="text-white hover:bg-white/10 disabled:opacity-50 font-sans text-sm w-full sm:w-auto sm:absolute sm:left-0 order-2 sm:order-1" 
+                        className="text-white hover:bg-white/10 disabled:opacity-50 font-sans text-lg px-8 py-4 w-full sm:w-auto sm:absolute sm:left-0 order-2 sm:order-1 touch-target" 
                         disabled={currentStep === 1}
                     >
                         Back
@@ -58,7 +58,7 @@ const IntroNavigation: React.FC<IntroNavigationProps> = ({
                     
                     <Button 
                         onClick={handleNextClick} 
-                        className="bg-gradient-to-r from-black to-gray-800 text-white font-sans text-sm hover:from-gray-800 hover:to-black w-full sm:w-auto order-1 sm:order-2"
+                        className="bg-gradient-to-r from-black to-gray-800 text-white font-sans text-lg px-8 py-4 hover:from-gray-800 hover:to-black w-full sm:w-auto order-1 sm:order-2 touch-target"
                     >
                         {buttonText}
                     </Button>
@@ -68,7 +68,7 @@ const IntroNavigation: React.FC<IntroNavigationProps> = ({
                     <Button 
                         onClick={handlePrevClick} 
                         variant="ghost" 
-                        className="text-white hover:bg-white/10 disabled:opacity-50 font-sans text-sm w-full sm:w-auto order-2 sm:order-1" 
+                        className="text-white hover:bg-white/10 disabled:opacity-50 font-sans text-lg px-8 py-4 w-full sm:w-auto order-2 sm:order-1 touch-target" 
                         disabled={currentStep === 1}
                     >
                         Back
@@ -78,7 +78,7 @@ const IntroNavigation: React.FC<IntroNavigationProps> = ({
                         {Array.from({ length: totalSteps - 1 }).map((_, index) => (
                             <div 
                                 key={index} 
-                                className={`w-2 h-2 rounded-full transition-colors ${
+                                className={`w-3 h-3 rounded-full transition-colors ${
                                     currentStep === index + 1 ? 'bg-white' : 'bg-white/30'
                                 }`} 
                             />
@@ -87,7 +87,7 @@ const IntroNavigation: React.FC<IntroNavigationProps> = ({
                     
                     <Button 
                         onClick={handleNextClick} 
-                        className="bg-gradient-to-r from-black to-gray-800 text-white font-sans text-sm hover:from-gray-800 hover:to-black w-full sm:w-auto order-1 sm:order-3"
+                        className="bg-gradient-to-r from-black to-gray-800 text-white font-sans text-lg px-8 py-4 hover:from-gray-800 hover:to-black w-full sm:w-auto order-1 sm:order-3 touch-target"
                     >
                         Next
                     </Button>
