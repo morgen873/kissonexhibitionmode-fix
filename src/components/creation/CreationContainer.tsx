@@ -31,46 +31,36 @@ const CreationContainer: React.FC<CreationContainerProps> = ({
   children
 }) => {
   return (
-    <div className={`min-h-screen w-full bg-gradient-to-br ${theme.bg} transition-all duration-500 relative`}>
-      {/* Network Background */}
+    <div className={`h-screen w-full bg-gradient-to-br ${theme.bg} transition-all duration-500 relative overflow-hidden`}>
       <NetworkBackground className="z-0" />
       
-      {/* Floating Animated Icons */}
       <div className="absolute inset-0 z-0 pointer-events-none hidden sm:block">
-        <AnimatedEggIcon className="absolute top-16 left-8 text-foreground opacity-30 touch-icon-32" />
-        <AnimatedLeafIcon className="absolute top-24 right-16 text-foreground opacity-40 touch-icon-32" />
-        <AnimatedChefHatIcon className="absolute bottom-32 left-16 text-foreground opacity-25 touch-icon-32" />
-        <AnimatedCarrotIcon className="absolute top-48 left-1/3 text-foreground opacity-35 touch-icon-32" />
-        <AnimatedAppleIcon className="absolute bottom-16 right-8 text-foreground opacity-30 touch-icon-32" />
-        <AnimatedEggIcon className="absolute top-1/2 right-1/4 text-foreground opacity-20 touch-icon-32" />
-        <AnimatedLeafIcon className="absolute bottom-48 left-1/2 text-foreground opacity-25 touch-icon-32" />
+        <AnimatedEggIcon className="absolute top-16 left-8 text-foreground opacity-30" />
+        <AnimatedLeafIcon className="absolute top-24 right-16 text-foreground opacity-40" />
+        <AnimatedChefHatIcon className="absolute bottom-32 left-16 text-foreground opacity-25" />
+        <AnimatedCarrotIcon className="absolute top-48 left-1/3 text-foreground opacity-35" />
+        <AnimatedAppleIcon className="absolute bottom-16 right-8 text-foreground opacity-30" />
       </div>
 
-      {/* Gradient overlays for depth */}
       <div className="absolute inset-0 bg-gradient-to-br from-black/10 via-transparent to-black/10 z-0"></div>
-      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent z-0"></div>
 
-      <div className="relative z-10 h-full flex flex-col">
-        {/* Progress Bar at top */}
-        <div className="w-full px-8 py-4">
-          <div className="w-full max-w-none mx-auto">
-            <ProgressBar progress={progress} theme={theme} />
-          </div>
+      <div className="relative z-10 h-full flex flex-col p-6">
+        <div className="w-full mb-4">
+          <ProgressBar progress={progress} theme={theme} />
         </div>
 
-        {/* Main Content Card - Optimized for 32-inch no-scroll */}
-        <div className="flex-1 flex items-center justify-center px-8 pb-16">
-          <Card className={`w-full max-w-none bg-card ${theme.cardShadow} transition-all duration-500 backdrop-blur-2xl border-2 border-border shadow-2xl touch-32-card h-fit max-h-[calc(100vh-120px)]`}>
-            <CardHeader className="px-8 py-4 flex-shrink-0">
-              {showTitle && (
-                <CardTitle className={`touch-32-heading text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent drop-shadow-lg flex items-center justify-center font-bold`}>
+        <div className="flex-1 flex items-center justify-center">
+          <Card className={`w-full max-w-6xl bg-card ${theme.cardShadow} backdrop-blur-2xl border-2 border-border shadow-2xl rounded-xl h-fit max-h-[calc(100vh-150px)] overflow-hidden`}>
+            {showTitle && (
+              <CardHeader className="px-8 py-6">
+                <CardTitle className={`text-4xl text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent font-bold`}>
                   {title}
                 </CardTitle>
-              )}
-            </CardHeader>
+              </CardHeader>
+            )}
             
-            <CardContent className="px-8 pb-8 flex-1 overflow-y-auto">
-              <div className="touch-32-optimized">
+            <CardContent className="px-8 pb-8 overflow-y-auto">
+              <div className="text-xl">
                 {children}
               </div>
             </CardContent>
