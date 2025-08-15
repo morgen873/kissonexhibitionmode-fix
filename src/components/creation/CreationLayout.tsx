@@ -35,7 +35,7 @@ const CreationLayout: React.FC<CreationLayoutProps> = ({
   const footerProps = hasStartedCreation ? { variant: "slide" as const, delay: 200 } : {};
 
   return (
-    <div className="h-screen max-h-screen overflow-hidden w-full touch-32-container">
+    <div className="min-h-screen w-full touch-32-container">
       <OuterWrapper {...outerProps}>
         <CreationContainer 
           progress={progress} 

@@ -31,7 +31,7 @@ const CreationContainer: React.FC<CreationContainerProps> = ({
   children
 }) => {
   return (
-    <div className={`h-screen max-h-screen w-full bg-gradient-to-br ${theme.bg} transition-all duration-500 relative overflow-hidden`}>
+    <div className={`min-h-screen w-full bg-gradient-to-br ${theme.bg} transition-all duration-500 relative`}>
       {/* Network Background */}
       <NetworkBackground className="z-0" />
       
