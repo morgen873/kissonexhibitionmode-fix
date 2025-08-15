@@ -50,17 +50,17 @@ const CreationContainer: React.FC<CreationContainerProps> = ({
         </div>
 
         <div className="flex-1 flex items-center justify-center">
-          <Card className={`w-full max-w-6xl bg-card ${theme.cardShadow} backdrop-blur-2xl border-2 border-border shadow-2xl rounded-xl h-fit max-h-[calc(100vh-150px)] overflow-hidden`}>
+          <Card className={`w-full max-w-6xl bg-card ${theme.cardShadow} backdrop-blur-2xl border-2 border-border shadow-2xl rounded-xl h-[85vh] overflow-y-auto`}>
             {showTitle && (
-              <CardHeader className="px-8 py-6">
-                <CardTitle className={`text-4xl text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent font-bold`}>
+              <CardHeader className="px-8 py-4">
+                <CardTitle className={`text-3xl text-center bg-gradient-to-r ${theme.title} bg-clip-text text-transparent font-bold`}>
                   {title}
                 </CardTitle>
               </CardHeader>
             )}
             
-            <CardContent className="px-8 pb-8 overflow-y-auto">
-              <div className="text-xl">
+            <CardContent className="px-6 pb-6 h-full overflow-y-auto">
+              <div className="text-lg">
                 {children}
               </div>
             </CardContent>
