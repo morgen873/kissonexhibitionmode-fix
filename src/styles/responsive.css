@@ -234,7 +234,7 @@
 
 @media (min-width: 1920px) {
   .touch-padding {
-    @apply p-8;
+    @apply p-4;
   }
 }
 
