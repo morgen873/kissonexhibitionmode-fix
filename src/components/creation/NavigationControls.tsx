@@ -41,7 +41,7 @@ const NavigationControls: React.FC<NavigationControlsProps> = ({
         onClick={handlePrevClick} 
         disabled={currentStep === 0} 
         variant="ghost" 
-        className="text-white hover:bg-white/10 disabled:opacity-50 font-mono text-sm w-full sm:w-auto order-2 sm:order-1"
+        className="text-white hover:bg-white/10 disabled:opacity-50 font-mono text-lg px-8 py-4 w-full sm:w-auto order-2 sm:order-1 touch-target"
       >
         Back
       </Button>
@@ -50,15 +50,15 @@ const NavigationControls: React.FC<NavigationControlsProps> = ({
         <Button 
           onClick={handleSubmitClick} 
           disabled={isNextDisabled} 
-          className="bg-gradient-to-r from-black to-gray-800 text-white font-mono text-sm hover:from-gray-800 hover:to-black w-full sm:w-auto order-1 sm:order-2"
+          className="bg-gradient-to-r from-black to-gray-800 text-white font-mono text-lg px-8 py-4 hover:from-gray-800 hover:to-black w-full sm:w-auto order-1 sm:order-2 touch-target"
         >
-          Create Recipe <Zap className="ml-2 h-4 w-4" />
+          Create Recipe <Zap className="ml-2 h-5 w-5" />
         </Button>
       ) : (
         <Button 
           onClick={handleNextClick} 
           disabled={isNextDisabled} 
-          className="px-6 bg-gradient-to-r from-black to-gray-800 text-white font-mono text-sm hover:from-gray-800 hover:to-black w-full sm:w-auto order-1 sm:order-2"
+          className="px-8 py-4 bg-gradient-to-r from-black to-gray-800 text-white font-mono text-lg hover:from-gray-800 hover:to-black w-full sm:w-auto order-1 sm:order-2 touch-target"
         >
           Continue
         </Button>

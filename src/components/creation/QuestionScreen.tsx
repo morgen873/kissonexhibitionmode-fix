@@ -85,7 +85,7 @@ const QuestionScreen: React.FC<QuestionScreenProps> = ({
 
             {/* Continue button for multi-select questions */}
             {stepData.multiSelect && <div className="w-full mb-6 flex justify-center">
-                    <Button onClick={() => onAutoAdvance?.()} variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20 hover:border-white/50 px-8 py-3 text-lg font-mono" disabled={(() => {
+                    <Button onClick={() => onAutoAdvance?.()} variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20 hover:border-white/50 px-12 py-4 text-lg font-mono touch-target" disabled={(() => {
         const currentAnswers = Array.isArray(answers[stepData.id]) ? answers[stepData.id] as string[] : [];
         return currentAnswers.length === 0;
       })()}>
