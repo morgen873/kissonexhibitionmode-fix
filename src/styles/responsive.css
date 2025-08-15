@@ -234,7 +234,7 @@
 
 @media (min-width: 1920px) {
   .touch-padding {
-    @apply p-4;
+    @apply p-2;
   }
 }
 
@@ -537,7 +537,7 @@
 
 @media (min-width: 1920px) {
   .touch-target {
-    @apply min-h-[80px] min-w-[80px];
+    @apply min-h-[60px] min-w-[60px];
   }
 }
 
@@ -569,7 +569,7 @@
 
 @media (min-width: 1920px) {
   .touch-grid {
-    @apply grid-cols-3 gap-8;
+    @apply grid-cols-3 gap-4;
   }
 }
 
