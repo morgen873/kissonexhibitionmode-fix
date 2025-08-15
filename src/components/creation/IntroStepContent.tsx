@@ -4,14 +4,27 @@ import { Button } from "@/components/ui/button";
 interface IntroStepContentProps {
   step: any;
   onNext: () => void;
+  onPrev?: () => void;
+  currentStep?: number;
+  isFirstStep?: boolean;
+  isLastStep?: boolean;
 }
 const IntroStepContent: React.FC<IntroStepContentProps> = ({
   step,
-  onNext
+  onNext,
+  onPrev,
+  currentStep,
+  isFirstStep,
+  isLastStep
 }) => {
   const handleNextClick = () => {
     console.log('IntroStepContent: Next button clicked');
     onNext();
+  };
+  
+  const handlePrevClick = () => {
+    console.log('IntroStepContent: Prev button clicked');
+    onPrev?.();
   };
   const renderStepContent = () => {
     switch (step.type) {
@@ -40,9 +53,28 @@ const IntroStepContent: React.FC<IntroStepContentProps> = ({
                     {(step.title as string[])[1]}
                   </span>
                 </h3>
-                <p className="text-white font-sans leading-relaxed font-extralight text-base">
+                <p className="text-white font-sans leading-relaxed font-extralight text-base mb-8">
                   {step.description}
                 </p>
+                
+                {/* Navigation buttons inside the card */}
+                <div className="flex justify-between items-center mt-6">
+                  <Button 
+                    onClick={handlePrevClick} 
+                    variant="ghost" 
+                    className="text-white hover:bg-white/10 disabled:opacity-50 font-sans text-lg px-8 py-4 touch-target" 
+                    disabled={isFirstStep}
+                  >
+                    Back
+                  </Button>
+                  
+                  <Button 
+                    onClick={handleNextClick} 
+                    className="bg-gradient-to-r from-black to-gray-800 text-white font-sans text-lg px-8 py-4 hover:from-gray-800 hover:to-black touch-target"
+                  >
+                    Next
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           </div>;
@@ -53,9 +85,28 @@ const IntroStepContent: React.FC<IntroStepContentProps> = ({
                 {step.title}
               </span>
             </blockquote>
-            <p className="text-lg sm:text-xl text-white font-black font-sans leading-relaxed px-4">
+            <p className="text-lg sm:text-xl text-white font-black font-sans leading-relaxed px-4 mb-8">
               {step.description}
             </p>
+            
+            {/* Navigation buttons for quote step */}
+            <div className="flex justify-center items-center gap-4">
+              <Button 
+                onClick={handlePrevClick} 
+                variant="ghost" 
+                className="text-white hover:bg-white/10 disabled:opacity-50 font-sans text-lg px-8 py-4 touch-target" 
+                disabled={isFirstStep}
+              >
+                Back
+              </Button>
+              
+              <Button 
+                onClick={handleNextClick} 
+                className="bg-gradient-to-r from-black to-gray-800 text-white font-sans text-lg px-8 py-4 hover:from-gray-800 hover:to-black touch-target"
+              >
+                {step.buttonText || 'Next'}
+              </Button>
+            </div>
           </div>;
       default:
         return null;

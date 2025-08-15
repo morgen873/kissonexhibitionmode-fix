@@ -71,6 +71,10 @@ const CreationContent: React.FC<CreationContentProps> = ({
         <IntroStepContent 
           step={introSteps[currentIntroStep]} 
           onNext={nextIntroStep}
+          onPrev={prevIntroStep}
+          currentStep={currentIntroStep}
+          isFirstStep={currentIntroStep === 0}
+          isLastStep={currentIntroStep === introSteps.length - 1}
         />
       ) : (
         <CreationMainContent
@@ -91,30 +95,15 @@ const CreationContent: React.FC<CreationContentProps> = ({
       )}
       
       {/* Navigation Controls - Hidden for question and timeline steps */}
-      {!shouldHideNavigation && (
-        <>
-          {!hasStartedCreation && introSteps[currentIntroStep].type !== 'hero' && (
-            <IntroNavigation
-              currentStep={currentIntroStep}
-              totalSteps={4}
-              onPrev={prevIntroStep}
-              onNext={nextIntroStep}
-              isFirstStep={currentIntroStep === 0}
-              isLastStep={currentIntroStep === introSteps.length - 1}
-              buttonText={introSteps[currentIntroStep].buttonText || 'Next'}
-            />
-          )}
-          {hasStartedCreation && (
-            <NavigationControls 
-              currentStep={creationStep} 
-              stepsLength={steps.length} 
-              prevStep={prevCreationStep} 
-              nextStep={nextCreationStep} 
-              handleSubmit={handleSubmit}
-              isNextDisabled={isNextDisabled} 
-            />
-          )}
-        </>
+      {!shouldHideNavigation && hasStartedCreation && (
+        <NavigationControls 
+          currentStep={creationStep} 
+          stepsLength={steps.length} 
+          prevStep={prevCreationStep} 
+          nextStep={nextCreationStep} 
+          handleSubmit={handleSubmit}
+          isNextDisabled={isNextDisabled} 
+        />
       )}
     </div>
   );
