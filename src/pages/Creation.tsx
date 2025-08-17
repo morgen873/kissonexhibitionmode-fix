@@ -147,6 +147,8 @@ const Creation = () => {
               onComplete={completeTransition}
               duration={3000}
               isCreatingRecipe={isCreatingRecipe}
+              overlayText="Creating Magic..."
+              overlaySubtext="Your culinary adventure is about to begin"
             />
           ) : (
             <GifTransition
