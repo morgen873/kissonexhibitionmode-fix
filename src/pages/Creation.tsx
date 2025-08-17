@@ -12,12 +12,23 @@ import CreationContent from '@/components/creation/CreationContent';
 import GifTransition from '@/components/creation/GifTransition';
 import VideoTransition from '@/components/creation/VideoTransition';
 import { detectTransitionFileType, isVideoFile } from '@/utils/fileTypeDetector';
+import { HealthChecker } from '@/components/ui/HealthChecker';
 
 interface OutletContextType {
   setHeaderVisible: (visible: boolean) => void;
 }
 
 const Creation = () => {
+  // Add a debug flag to show health checker
+  const showHealthChecker = new URLSearchParams(window.location.search).get('health') === 'true';
+  
+  if (showHealthChecker) {
+    return (
+      <div className="min-h-screen bg-background p-8">
+        <HealthChecker />
+      </div>
+    );
+  }
   const {
     currentStep: creationStep,
     currentStepData: creationStepData,

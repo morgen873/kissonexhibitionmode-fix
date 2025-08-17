@@ -1,1 +1,26 @@
 project_id = "ofhteeexidattwcdilpw"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[functions.api-health-check]
+verify_jwt = false
+
+[functions.send-recipe-email]
+verify_jwt = false
+
+[functions.generate-recipe]
+verify_jwt = false
+
+[functions.generate-360-video]
+verify_jwt = false
+
+[functions.generate-360-video-replicate]
+verify_jwt = false
+
+[functions.test-image-generation]
+verify_jwt = false
