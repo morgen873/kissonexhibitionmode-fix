@@ -135,6 +135,52 @@ const Creation = () => {
   const transitionFileType = detectTransitionFileType(transitionGifUrl);
   const useVideoTransition = isVideoFile(transitionFileType);
 
+  // Get transition text based on current step and transition URL
+  const getTransitionText = () => {
+    if (transitionGifUrl.includes('3d-kisson.mp4')) {
+      return {
+        overlayText: "Welcome to Kisson",
+        overlaySubtext: "Where memories become recipes"
+      };
+    }
+    if (transitionGifUrl.includes('01step.mp4')) {
+      return {
+        overlayText: "Gathering Memories",
+        overlaySubtext: "Your story becomes our inspiration"
+      };
+    }
+    if (transitionGifUrl.includes('02step.mp4')) {
+      return {
+        overlayText: "Mixing Emotions",
+        overlaySubtext: "Blending feelings into flavors"
+      };
+    }
+    if (transitionGifUrl.includes('03step.mp4')) {
+      return {
+        overlayText: "Adding Love",
+        overlaySubtext: "Dedicating this creation with care"
+      };
+    }
+    if (transitionGifUrl.includes('04step.mp4')) {
+      return {
+        overlayText: "Fine Tuning",
+        overlaySubtext: "Perfecting every detail"
+      };
+    }
+    if (transitionGifUrl.includes('05step.mp4')) {
+      return {
+        overlayText: "Creating Magic",
+        overlaySubtext: "Your culinary masterpiece awaits"
+      };
+    }
+    return {
+      overlayText: "Transforming",
+      overlaySubtext: "Creating something beautiful"
+    };
+  };
+
+  const { overlayText, overlaySubtext } = getTransitionText();
+
   return (
     <>
       {/* Transition Overlay - Dynamic based on file type */}
@@ -147,8 +193,8 @@ const Creation = () => {
               onComplete={completeTransition}
               duration={3000}
               isCreatingRecipe={isCreatingRecipe}
-              overlayText="Creating Magic..."
-              overlaySubtext="Your culinary adventure is about to begin"
+              overlayText={overlayText}
+              overlaySubtext={overlaySubtext}
             />
           ) : (
             <GifTransition
