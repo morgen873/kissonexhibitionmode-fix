@@ -10,6 +10,8 @@ interface VideoTransitionProps {
   fallbackVariant?: 'geometric' | 'particle' | 'wave';
   duration?: number;
   isCreatingRecipe?: boolean;
+  overlayText?: string;
+  overlaySubtext?: string;
 }
 
 const VideoTransition: React.FC<VideoTransitionProps> = ({
@@ -19,7 +21,9 @@ const VideoTransition: React.FC<VideoTransitionProps> = ({
   onError,
   fallbackVariant = 'geometric',
   duration = 2000,
-  isCreatingRecipe = false
+  isCreatingRecipe = false,
+  overlayText,
+  overlaySubtext
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -145,6 +149,22 @@ const VideoTransition: React.FC<VideoTransitionProps> = ({
         <source src={videoUrl.replace('.mp4', '.webm')} type="video/webm" />
         Your browser does not support video playback.
       </video>
+      
+      {/* Text overlay on top of video */}
+      {(overlayText || overlaySubtext) && !isLoading && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-10 pointer-events-none">
+          {overlayText && (
+            <h2 className="text-white text-4xl md:text-6xl font-bold text-center mb-4 drop-shadow-2xl animate-fade-in">
+              {overlayText}
+            </h2>
+          )}
+          {overlaySubtext && (
+            <p className="text-white/90 text-lg md:text-xl text-center max-w-2xl px-6 drop-shadow-lg animate-fade-in" style={{ animationDelay: '0.5s' }}>
+              {overlaySubtext}
+            </p>
+          )}
+        </div>
+      )}
     </div>
   );
 };
