@@ -127,7 +127,11 @@ const VideoTransition: React.FC<VideoTransitionProps> = ({
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-black">
           <LoadingSpinner size="lg" variant="spin" />
           <p className="text-white text-lg font-mono mt-4 animate-pulse text-center max-w-md">
-            {isLoading ? 'Loading transition...' : 'Kisson is creating your recipe. be patient, it will take a while, but remember- memories last forever!'}
+            {isLoading ? 'Loading transition...' : 
+             videoUrl.includes('05step.mp4') ? 
+               'Kisson is creating your recipe. be patient, it will take a while, but remember- memories last forever!' :
+               'Creating your recipe...'
+            }
           </p>
         </div>
       )}
