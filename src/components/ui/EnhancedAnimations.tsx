@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { VideoLoadingSpinner } from './VideoLoadingSpinner';
 
 interface AnimatedContainerProps {
   children: React.ReactNode;
@@ -115,6 +116,10 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   color = 'text-green-400',
   variant = 'spin'
 }) => {
+  // Use video spinner for recipe creation
+  if (variant === 'spin' && size === 'lg') {
+    return <VideoLoadingSpinner size={size} />;
+  }
   const sizeClasses = {
     sm: 'w-4 h-4',
     md: 'w-8 h-8',
