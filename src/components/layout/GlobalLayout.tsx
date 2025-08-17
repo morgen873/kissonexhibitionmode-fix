@@ -14,8 +14,8 @@ const GlobalLayout: React.FC<GlobalLayoutProps> = ({
   showHeader = true 
 }) => {
   return (
-    <div className="h-screen overflow-hidden bg-background text-foreground">
-      <div className="w-full h-full bg-black">
+    <div className="min-h-screen bg-background text-foreground">
+      <div className="w-full min-h-screen bg-black">
         {children}
       </div>
     </div>
