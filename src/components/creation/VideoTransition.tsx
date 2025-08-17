@@ -154,8 +154,8 @@ const VideoTransition: React.FC<VideoTransitionProps> = ({
         Your browser does not support video playback.
       </video>
       
-      {/* Text overlay on top of video */}
-      {(overlayText || overlaySubtext) && !isLoading && (
+      {/* Text overlay on top of video - only show during actual video playback */}
+      {(overlayText || overlaySubtext) && !isLoading && !(videoCompleted && isCreatingRecipe) && (
         <div className="absolute inset-0 flex flex-col items-center justify-center z-10 pointer-events-none">
           {overlayText && (
             <h2 className="text-white text-4xl md:text-6xl font-bold text-center mb-4 drop-shadow-2xl animate-fade-in">
