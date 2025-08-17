@@ -114,6 +114,42 @@ const RecipePage = () => {
                             <h3 className="responsive-heading-md mb-2 border-b-2 border-border pb-2 text-primary">Description</h3>
                             <p className="text-muted-foreground mt-3 responsive-text-sm">{recipe.description}</p>
                         </div>
+                        
+                        {/* Recipe Story Section */}
+                        {recipe.recipe_data && typeof recipe.recipe_data === 'object' && (
+                            <div>
+                                <h3 className="responsive-heading-md mb-2 border-b-2 border-border pb-2 text-primary">Your Recipe Story</h3>
+                                <div className="bg-primary/5 p-4 rounded-lg mt-3 space-y-3">
+                                    {(() => {
+                                        const recipeData = recipe.recipe_data as any;
+                                        const questions = recipeData?.questions;
+                                        const questionTitles = recipeData?.questionTitles;
+                                        const timeline = recipeData?.timeline;
+                                        
+                                        return (
+                                            <>
+                                                {questions && Object.entries(questions).map(([key, answer]) => {
+                                                    const questionTitle = questionTitles?.[key];
+                                                    return questionTitle ? (
+                                                        <div key={key} className="border-l-2 border-primary/20 pl-3">
+                                                            <p className="responsive-text-sm font-medium text-primary/80">{String(questionTitle)}</p>
+                                                            <p className="responsive-text-sm text-muted-foreground italic">"{String(answer)}"</p>
+                                                        </div>
+                                                    ) : null;
+                                                })}
+                                                {timeline && Object.values(timeline).map((time, index) => (
+                                                    <div key={index} className="border-l-2 border-primary/20 pl-3">
+                                                        <p className="responsive-text-sm font-medium text-primary/80">Timeline</p>
+                                                        <p className="responsive-text-sm text-muted-foreground italic">"{String(time)}"</p>
+                                                    </div>
+                                                ))}
+                                            </>
+                                        );
+                                    })()}
+                                </div>
+                            </div>
+                        )}
+                        
                          <div>
                             <h3 className="responsive-heading-md mb-2 border-b-2 border-border pb-2 text-primary">Ingredients</h3>
                             <IngredientsList ingredients={recipe.ingredients} />
