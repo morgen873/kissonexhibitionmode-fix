@@ -1,5 +1,5 @@
 
-import { useEffect } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 import { steps } from '@/data/creation';
 import { ControlsStep } from '@/types/creation';
 
@@ -14,11 +14,19 @@ export const useControlsInitialization = ({
     controlValues,
     setControlValues
 }: UseControlsInitializationProps) => {
+    const initializationRef = useRef(new Set<number>());
+
+    const memoizedSetControlValues = useCallback(setControlValues, [setControlValues]);
+
     useEffect(() => {
         const currentStepData = steps[currentStep];
-        if (currentStepData.type === 'controls' && !controlValues[currentStepData.id]) {
+        if (currentStepData.type === 'controls' && 
+            !controlValues[currentStepData.id] && 
+            !initializationRef.current.has(currentStepData.id)) {
+            
+            initializationRef.current.add(currentStepData.id);
             const { controls } = currentStepData as ControlsStep;
-            setControlValues(prev => ({
+            memoizedSetControlValues(prev => ({
                 ...prev,
                 [currentStepData.id]: {
                     temperature: controls.temperature.defaultValue,

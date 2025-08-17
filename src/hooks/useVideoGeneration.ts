@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
@@ -15,6 +15,7 @@ export const useVideoGeneration = () => {
   const [isGeneratingVideo, setIsGeneratingVideo] = useState(false);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [isPolling, setIsPolling] = useState(false);
+  const [pollInterval, setPollInterval] = useState<NodeJS.Timeout | null>(null);
 
   const checkVideoStatus = async (recipeId: string): Promise<string | null> => {
     try {
@@ -55,12 +56,12 @@ export const useVideoGeneration = () => {
   };
 
   const startPolling = (recipeId: string, onVideoReady: (videoUrl: string) => void, onError: (error: string) => void) => {
-    if (isPolling) return;
+    if (isPolling || pollInterval) return;
     
     console.log('🔄 Starting video polling for recipe:', recipeId);
     setIsPolling(true);
     
-    const pollInterval = setInterval(async () => {
+    const interval = setInterval(async () => {
       console.log('📡 Polling for video status...');
       const videoUrl = await checkVideoStatus(recipeId);
       
@@ -68,7 +69,10 @@ export const useVideoGeneration = () => {
         // Error case - stop polling
         setIsGeneratingVideo(false);
         setIsPolling(false);
-        clearInterval(pollInterval);
+        if (pollInterval) {
+          clearInterval(pollInterval);
+          setPollInterval(null);
+        }
         onError('Video generation failed');
         return;
       }
@@ -79,7 +83,10 @@ export const useVideoGeneration = () => {
         setVideoUrl(videoUrl);
         setIsGeneratingVideo(false);
         setIsPolling(false);
-        clearInterval(pollInterval);
+        if (pollInterval) {
+          clearInterval(pollInterval);
+          setPollInterval(null);
+        }
         toast.success('360° video is ready!');
         console.log('🎯 Calling onVideoReady callback...');
         onVideoReady(videoUrl);
@@ -89,13 +96,21 @@ export const useVideoGeneration = () => {
       }
     }, 5000); // Check every 5 seconds
 
+    setPollInterval(interval);
+
     // Stop polling after 10 minutes (video generation timeout)
-    setTimeout(() => {
-      clearInterval(pollInterval);
+    const timeout = setTimeout(() => {
+      if (pollInterval) {
+        clearInterval(pollInterval);
+        setPollInterval(null);
+      }
       setIsGeneratingVideo(false);
       setIsPolling(false);
       onError('Video generation timed out. Please try again.');
     }, 600000); // 10 minutes
+    
+    // Store timeout for cleanup
+    return timeout;
   };
 
   const generateVideo = async (imageUrl: string, recipeId: string, recipeTitle: string, imagePrompt?: string) => {
@@ -154,10 +169,23 @@ export const useVideoGeneration = () => {
   };
 
   const resetVideo = () => {
+    if (pollInterval) {
+      clearInterval(pollInterval);
+      setPollInterval(null);
+    }
     setVideoUrl(null);
     setIsGeneratingVideo(false);
     setIsPolling(false);
   };
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (pollInterval) {
+        clearInterval(pollInterval);
+      }
+    };
+  }, [pollInterval]);
 
   return {
     generateVideo,

@@ -204,6 +204,8 @@ async function generateWithReplicate(prompt: string, modelVersion: string): Prom
 async function pollPredictionStatusV2(predictionId: string, token: string): Promise<ReplicateResponse> {
   const maxAttempts = 30;
   const pollInterval = 3000; // 3 seconds
+  let consecutiveErrors = 0;
+  const maxConsecutiveErrors = 5;
   
   console.log(`🔄 Starting enhanced polling for prediction ${predictionId}`);
   
@@ -224,8 +226,18 @@ async function pollPredictionStatusV2(predictionId: string, token: string): Prom
       if (!statusResponse.ok) {
         const errorText = await statusResponse.text();
         console.error(`❌ Status request failed (${statusResponse.status}):`, errorText);
-        throw new Error(`Status request failed: ${statusResponse.status} - ${errorText}`);
+        consecutiveErrors++;
+        
+        if (consecutiveErrors >= maxConsecutiveErrors) {
+          throw new Error(`Too many consecutive errors (${consecutiveErrors}). Last error: ${statusResponse.status} - ${errorText}`);
+        }
+        
+        // Continue to next iteration on non-fatal errors
+        continue;
       }
+      
+      // Reset error count on successful request
+      consecutiveErrors = 0;
 
       const status: ReplicateResponse = await statusResponse.json();
       console.log(`🔄 STATUS CHECK ${attempt + 1}/${maxAttempts}: ${status.status}`);
