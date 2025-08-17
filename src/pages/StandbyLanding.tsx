@@ -28,7 +28,7 @@ const StandbyLanding: React.FC = () => {
       {/* Full screen video */}
       <div className="flex-1 relative overflow-hidden">
         <video 
-          src="https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//stove.mp4" 
+          src="https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos/stove.mp4" 
           className="w-full h-full object-cover touch-video" 
           style={{
             objectFit: 'cover',

@@ -30,7 +30,7 @@ const IntroStepContent: React.FC<IntroStepContentProps> = ({
     switch (step.type) {
       case 'hero':
         return <div className="flex flex-col items-center justify-center text-center px-4 py-4 space-y-4 sm:space-y-6 sm:py-0 sm:px-0">
-            <img src="https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//stove.mp4" alt="Cooking on stovetop" className="w-full max-w-4xl h-auto max-h-[60vh] object-cover rounded-lg mb-2" />
+            <img src="https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos/stove.mp4" alt="Cooking on stovetop" className="w-full max-w-4xl h-auto max-h-[60vh] object-cover rounded-lg mb-2" />
             
             <p className="text-base sm:text-lg lg:text-xl text-white font-bold font-sans leading-relaxed max-w-md sm:max-w-lg px-4">
               Our AI transforms your feelings into delicious, one-of-a-kind dumpling recipes.

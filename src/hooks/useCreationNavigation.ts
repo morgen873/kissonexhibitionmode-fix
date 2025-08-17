@@ -18,29 +18,29 @@ const getTransitionMedia = (fromStep: number, isIntro: boolean, hasStartedCreati
     // Intro step transitions (now starting from step 1, not 0)
     if (fromStep === 4) { // Quote Step -> Creation begins
       console.log('Returning 3d-kisson media for quote step transition');
-      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//3d-kisson.mp4";
+      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos/3d-kisson.mp4";
     }
   } else if (hasStartedCreation) {
     // Creation step transitions
     if (fromStep === 1) { // Memory Question step
       console.log('Returning 01step media for creation step 1');
-      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//01step.mp4";
+      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos/01step.mp4";
     }
     if (fromStep === 3) { // Emotional Ingredients step
       console.log('Returning 02step media for creation step 3');
-      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//02step.mp4";
+      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos/02step.mp4";
     }
     if (fromStep === 5) { // Dedication Question step
       console.log('Returning 03step media for creation step 5');
-      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//03step.mp4";
+      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos/03step.mp4";
     }
     if (fromStep === 6) { // Controls Step
       console.log('Returning 04step media for creation step 6');
-      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//04step.mp4";
+      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos/04step.mp4";
     }
     if (fromStep === 7) { // Timeline Selection step - final step
       console.log('Returning 05step media for final timeline step');
-      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos//05step.mp4";
+      return "https://ofhteeexidattwcdilpw.supabase.co/storage/v1/object/public/videos/05step.mp4";
     }
   }
   
