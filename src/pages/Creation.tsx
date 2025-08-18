@@ -139,38 +139,38 @@ const Creation = () => {
   const getTransitionText = () => {
     if (transitionGifUrl.includes('3d-kisson.mp4')) {
       return {
-        overlayText: "Welcome to Kisson",
-        overlaySubtext: "Where memories become recipes"
+        overlayText: "A Recipe Is An Edible Algorithm",
+        overlaySubtext: ""
       };
     }
     if (transitionGifUrl.includes('01step.mp4')) {
       return {
-        overlayText: "Gathering Memories",
-        overlaySubtext: "Your story becomes our inspiration"
+        overlayText: "Choosing The Memory",
+        overlaySubtext: ""
       };
     }
     if (transitionGifUrl.includes('02step.mp4')) {
       return {
-        overlayText: "Mixing Emotions",
-        overlaySubtext: "Blending feelings into flavors"
+        overlayText: "Preparing The Ingredients",
+        overlaySubtext: ""
       };
     }
     if (transitionGifUrl.includes('03step.mp4')) {
       return {
-        overlayText: "Adding Love",
-        overlaySubtext: "Dedicating this creation with care"
+        overlayText: "Cooking And Dedication",
+        overlaySubtext: ""
       };
     }
     if (transitionGifUrl.includes('04step.mp4')) {
       return {
-        overlayText: "Fine Tuning",
-        overlaySubtext: "Perfecting every detail"
+        overlayText: "Adjusting And Wrapping",
+        overlaySubtext: ""
       };
     }
     if (transitionGifUrl.includes('05step.mp4')) {
       return {
-        overlayText: "Creating Magic",
-        overlaySubtext: "Your culinary masterpiece awaits"
+        overlayText: "Presentation And Final Emotions",
+        overlaySubtext: ""
       };
     }
     return {
