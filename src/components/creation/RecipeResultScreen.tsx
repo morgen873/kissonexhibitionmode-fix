@@ -7,6 +7,7 @@ import RecipeLabelPreview from './RecipeLabelPreview';
 import RecipeActionButtons from './RecipeActionButtons';
 import VideoGenerationButton from './VideoGenerationButton';
 import VideoDisplay from './VideoDisplay';
+import { EnhancedVideoPopup } from '@/utils/enhancedVideoPopup';
 
 interface RecipeResultScreenProps {
     recipe: RecipeResult;
@@ -46,25 +47,15 @@ const RecipeResultScreen: React.FC<RecipeResultScreenProps> = ({ recipe, recipeI
                         ) : (
                             <button
                                 onClick={() => {
-                                    const popup = window.open('', '_blank', 'width=800,height=600,resizable=yes,scrollbars=yes');
-                                    if (popup) {
-                                        popup.document.write(`
-                                            <html>
-                                                <head><title>360° Recipe Video</title></head>
-                                                <body style="margin:0;padding:20px;background:#000;display:flex;justify-content:center;align-items:center;height:100vh;">
-                                                     <video controls autoplay loop muted style="max-width:100%;max-height:100%;">
-                                                        <source src="${videoUrl}" type="video/mp4">
-                                                        Your browser does not support the video tag.
-                                                    </video>
-                                                </body>
-                                            </html>
-                                        `);
-                                        popup.document.close();
-                                    }
+                                    EnhancedVideoPopup.openEnhancedVideo(
+                                        videoUrl, 
+                                        recipe.name || 'KissOn Recipe',
+                                        true // Prefer secondary screen
+                                    );
                                 }}
                                 className="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-3 rounded-lg font-medium transition-colors"
                             >
-                                🎬 Play 360° Video
+                                🎬 Play 360° Video (Fullscreen)
                             </button>
                         )}
                     </div>
