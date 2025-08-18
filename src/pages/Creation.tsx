@@ -140,37 +140,37 @@ const Creation = () => {
     if (transitionGifUrl.includes('3d-kisson.mp4')) {
       return {
         overlayText: "A Recipe Is An Edible Algorithm",
-        overlaySubtext: ""
+        overlaySubtext: "Now Choose Your Memory..."
       };
     }
     if (transitionGifUrl.includes('01step.mp4')) {
       return {
-        overlayText: "Choosing The Memory",
-        overlaySubtext: ""
+        overlayText: "Step 1 Completed",
+        overlaySubtext: "Now Prepare The Ingredients..."
       };
     }
     if (transitionGifUrl.includes('02step.mp4')) {
       return {
-        overlayText: "Preparing The Ingredients",
-        overlaySubtext: ""
+        overlayText: "Step 2 Completed",
+        overlaySubtext: "Now Cook And Dedicate..."
       };
     }
     if (transitionGifUrl.includes('03step.mp4')) {
       return {
-        overlayText: "Cooking And Dedication",
-        overlaySubtext: ""
+        overlayText: "Step 3 Completed",
+        overlaySubtext: "Now Adjust And Wrap..."
       };
     }
     if (transitionGifUrl.includes('04step.mp4')) {
       return {
-        overlayText: "Adjusting And Wrapping",
-        overlaySubtext: ""
+        overlayText: "Step 4 Completed",
+        overlaySubtext: "Now Set The Presentation..."
       };
     }
     if (transitionGifUrl.includes('05step.mp4')) {
       return {
-        overlayText: "Presentation And Final Emotions",
-        overlaySubtext: ""
+        overlayText: "Step 5 Completed",
+        overlaySubtext: "Now Wait..."
       };
     }
     return {
