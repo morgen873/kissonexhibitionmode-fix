@@ -1,3 +1,9 @@
+/* Test environment setup stubs to satisfy TypeScript during app builds */
+declare var jest: any;
+declare function beforeAll(handler: (...args: any[]) => void): void;
+declare function afterEach(handler: (...args: any[]) => void): void;
+declare function afterAll(handler: (...args: any[]) => void): void;
+
 import '@testing-library/jest-dom';
 import { server } from './mocks/server';
 
@@ -30,17 +36,18 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 });
 
-// Mock localStorage
-const localStorageMock = {
-  getItem: jest.fn(),
-  setItem: jest.fn(),
-  removeItem: jest.fn(),
+// Mock localStorage and sessionStorage
+const localStorageMock: Storage = {
+  length: 0,
   clear: jest.fn(),
+  getItem: jest.fn(),
+  key: jest.fn(),
+  removeItem: jest.fn(),
+  setItem: jest.fn(),
 };
-global.localStorage = localStorageMock;
+(globalThis as any).localStorage = localStorageMock;
+(globalThis as any).sessionStorage = localStorageMock;
 
-// Mock sessionStorage
-global.sessionStorage = localStorageMock;
 
 // Mock navigator.vibrate
 Object.defineProperty(navigator, 'vibrate', {
