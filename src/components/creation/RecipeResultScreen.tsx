@@ -49,8 +49,7 @@ const RecipeResultScreen: React.FC<RecipeResultScreenProps> = ({ recipe, recipeI
                                 onClick={() => {
                                     EnhancedVideoPopup.openEnhancedVideo(
                                         videoUrl, 
-                                        recipe.name || 'KissOn Recipe',
-                                        true // Prefer secondary screen
+                                        recipe.name || 'KissOn Recipe'
                                     );
                                 }}
                                 className="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-3 rounded-lg font-medium transition-colors"
